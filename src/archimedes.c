@@ -229,6 +229,16 @@ static char *progname;
 #include "readinputfile.h"
 //#include "SaveRappture.h"
 
+// provide extern declarations of functions to fix compiler error
+extern inline real rnd(void);
+extern inline void creation(int i,real t,int edge);
+extern inline real MM(real a,real b);
+extern inline real MM2(real x,real a,real b);
+extern inline real sign(real a,real b);
+extern inline real minimus(real x,real y);
+extern inline real maximus(real x,real y);
+
+
 int 
 main(int argc,char* argv[])
 {
