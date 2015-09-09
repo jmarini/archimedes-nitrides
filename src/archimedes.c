@@ -31,17 +31,17 @@
 // System of Measure : M.K.S.C. System
 // =================================================================
 
-#include<getopt.h>
-#include<stdio.h>
-#include<unistd.h>
-#include<stdlib.h>
-#include<math.h>
-#include<memory.h>
-#include<time.h>
+#include <getopt.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <math.h>
+#include <memory.h>
+#include <time.h>
 #ifdef	HAVE_STRING_H
-#include<string.h>
+    #include <string.h>
 #else
-#include<strings.h>
+    #include <strings.h>
 #endif
 
 // #include "rappture.h"
@@ -239,7 +239,7 @@ extern inline real minimus(real x,real y);
 extern inline real maximus(real x,real y);
 
 
-int 
+int
 main(int argc,char* argv[])
 {
 
@@ -272,7 +272,7 @@ main(int argc,char* argv[])
         lose = 1;
         break;
       }
-  
+
   if (optind == argc - 1)
     z = 1;
   else if (lose || optind < argc)
@@ -381,7 +381,7 @@ For more information about these matters, see the file named COPYING.\n",
      EPSR[GAP]=11.10;           // see http://www.ioffe.ru/SVA/NSM/Semicond/GaP/basic.html
      EPSR[GASB]=15.69;          // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
      EPSR[INAS]=15.15;          // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
-     EPSR[INP]=12.50;           // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html 
+     EPSR[INP]=12.50;           // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
 // III-V semiconductor compounds high frequency dieletric constant
 // HIGH FREQUENCY
 // ==============
@@ -498,7 +498,7 @@ For more information about these matters, see the file named COPYING.\n",
 // Band minimum energy
 // first valley
      EMIN[SILICON][1]=0.0;     // Sellier, Fischetti, etc.
-     EMIN[GERMANIUM][1]=0.173; 
+     EMIN[GERMANIUM][1]=0.173;
      EMIN[GAAS][1]=0.0;        // Tomizawa
      EMIN[INSB][1]=0.0;
      EMIN[ALSB][1]=0.507;
@@ -781,7 +781,7 @@ For more information about these matters, see the file named COPYING.\n",
 
 //   rpResult(lib);
 //   rpFreeLibrary(&lib);
-//   exit(0);   
+//   exit(0);
   }
     /* Print greeting message and exit. */
    binarytime=time(NULL);
