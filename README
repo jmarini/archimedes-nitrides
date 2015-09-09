@@ -1,0 +1,16 @@
+I am pleased to announce the version 2.0.0 release of Archimedes.
+
+Even if the author has worked hardly and accurately on this project, surely, some bugs are still present.
+
+The GNU implementation of this advanced program is brought to you by
+the efforts of Jean Michel D. Sellier.
+
+The basic algorithms implemented in this simulator are described in the documentation of GNU Archimedes.
+
+See the file INSTALL for building and installation instructions.
+
+Please send all bug reports by electronic mail to:
+    jeanmichel.sellier@gmail.com
+    jsellier@purdue.edu
+
+GNU archimedes is free software.  See the file COPYING for copying conditions.

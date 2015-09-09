@@ -1,0 +1,104 @@
+%%
+%% This is file `dblfont.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% dblfont.dtx 
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% You are *not* allowed to modify this file.
+%% 
+%% You are *not* allowed to distribute this file.
+%% For distribution of the original source see the terms
+%% for copying and modification in the file dblfont.dtx.
+%% 
+%%\iffalse % MetaComment
+%%
+%% + - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+%% | Copyright(C), by Francesco Bosisio (FB), 1997-1998      |
+%% | E-mail:   bosisio@mate.polimi.it                        |
+%% | Web page: http://ftp.mate.polimi.it/~bosisio/LaTeX      |
+%% | CTAN location: macros/latex/contrib/supported/bosisio/  |
+%% + - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+%%
+%%\fi
+\def\filename{dblfont}
+\def\fileversion{1.2}
+\def\filedate{1997/11/17}
+\def\docdate{1997/11/07}
+\def\filedescr{Blackboard-bold symbols (BF)}
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{\filename}[\filedate\space v\fileversion\space\filedescr]
+
+\newfont{\DblFont}{msbm10 scaled \magstep1}
+
+\newcommand\DeclareDblFontSymbol[1]{%
+\expandafter\def\csname #1\endcsname{\mbox{\DblFont #1}}%
+}
+\newcommand\dECLAREdBLfONTsYMBOL[1]{%
+\expandafter\def\csname #1#1\endcsname{\mbox{\DblFont #1}}%
+}
+
+\DeclareOption{A}{\DeclareDblFontSymbol{A}}
+\DeclareOption{B}{\DeclareDblFontSymbol{B}}
+\DeclareOption{C}{\DeclareDblFontSymbol{C}}
+\DeclareOption{D}{\DeclareDblFontSymbol{D}}
+\DeclareOption{E}{\DeclareDblFontSymbol{E}}
+\DeclareOption{F}{\DeclareDblFontSymbol{F}}
+\DeclareOption{G}{\DeclareDblFontSymbol{G}}
+\DeclareOption{H}{\let\BackDoubleH=\H \DeclareDblFontSymbol{H}}
+\DeclareOption{I}{\DeclareDblFontSymbol{I}}
+\DeclareOption{J}{\DeclareDblFontSymbol{J}}
+\DeclareOption{K}{\DeclareDblFontSymbol{K}}
+\DeclareOption{L}{\let\BackDoubleL=\L \DeclareDblFontSymbol{L}}
+\DeclareOption{M}{\DeclareDblFontSymbol{M}}
+\DeclareOption{N}{\DeclareDblFontSymbol{N}}
+\DeclareOption{O}{\let\BackDoubleO=\O \DeclareDblFontSymbol{O}}
+\DeclareOption{P}{\let\BackDoubleP=\P \DeclareDblFontSymbol{P}}
+\DeclareOption{Q}{\DeclareDblFontSymbol{Q}}
+\DeclareOption{R}{\DeclareDblFontSymbol{R}}
+\DeclareOption{S}{\let\BackDoubleS=\S \DeclareDblFontSymbol{S}}
+\DeclareOption{T}{\DeclareDblFontSymbol{T}}
+\DeclareOption{U}{\DeclareDblFontSymbol{U}}
+\DeclareOption{V}{\DeclareDblFontSymbol{V}}
+\DeclareOption{W}{\DeclareDblFontSymbol{W}}
+\DeclareOption{X}{\DeclareDblFontSymbol{X}}
+\DeclareOption{Y}{\DeclareDblFontSymbol{Y}}
+\DeclareOption{Z}{\DeclareDblFontSymbol{Z}}
+
+\DeclareOption{AA}{\dECLAREdBLfONTsYMBOL{A}}
+\DeclareOption{BB}{\dECLAREdBLfONTsYMBOL{B}}
+\DeclareOption{CC}{\dECLAREdBLfONTsYMBOL{C}}
+\DeclareOption{DD}{\dECLAREdBLfONTsYMBOL{D}}
+\DeclareOption{EE}{\dECLAREdBLfONTsYMBOL{E}}
+\DeclareOption{FF}{\dECLAREdBLfONTsYMBOL{F}}
+\DeclareOption{GG}{\dECLAREdBLfONTsYMBOL{G}}
+\DeclareOption{HH}{\dECLAREdBLfONTsYMBOL{H}}
+\DeclareOption{II}{\dECLAREdBLfONTsYMBOL{I}}
+\DeclareOption{JJ}{\dECLAREdBLfONTsYMBOL{J}}
+\DeclareOption{KK}{\dECLAREdBLfONTsYMBOL{K}}
+\DeclareOption{LL}{\dECLAREdBLfONTsYMBOL{L}}
+\DeclareOption{MM}{\dECLAREdBLfONTsYMBOL{M}}
+\DeclareOption{NN}{\dECLAREdBLfONTsYMBOL{N}}
+\DeclareOption{OO}{\dECLAREdBLfONTsYMBOL{O}}
+\DeclareOption{PP}{\dECLAREdBLfONTsYMBOL{P}}
+\DeclareOption{QQ}{\dECLAREdBLfONTsYMBOL{Q}}
+\DeclareOption{RR}{\dECLAREdBLfONTsYMBOL{R}}
+\DeclareOption{SS}{\let\BackDoubleSS=\SS \dECLAREdBLfONTsYMBOL{S}}
+\DeclareOption{TT}{\dECLAREdBLfONTsYMBOL{T}}
+\DeclareOption{UU}{\dECLAREdBLfONTsYMBOL{U}}
+\DeclareOption{VV}{\dECLAREdBLfONTsYMBOL{V}}
+\DeclareOption{WW}{\dECLAREdBLfONTsYMBOL{W}}
+\DeclareOption{XX}{\dECLAREdBLfONTsYMBOL{X}}
+\DeclareOption{YY}{\dECLAREdBLfONTsYMBOL{Y}}
+\DeclareOption{ZZ}{\dECLAREdBLfONTsYMBOL{Z}}
+\DeclareOption{RT}{\DeclareDblFontSymbol{RT}}
+\ProcessOptions
+\endinput
+%%
+%% End of file `dblfont.sty'.

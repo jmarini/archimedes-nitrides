@@ -1,0 +1,1917 @@
+\documentclass[12pt]{book}
+\setlength{\topmargin}{0 cm}
+\setlength{\oddsidemargin}{0 cm}
+\setlength{\evensidemargin}{0 cm}
+\setlength{\textwidth}{170 mm}
+\setlength{\textheight}{216 mm}
+%
+\usepackage{times}
+\usepackage{minitoc}
+\usepackage[mathscr]{eucal}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage[dvips] {graphics}
+\usepackage {epsfig}
+\usepackage[R,Z,N]{dblfont}
+\usepackage{fancybox,epsfig,colordvi}
+\setcounter{tocdepth}{1}
+\setlength{\mtcindent}{24pt}
+\renewcommand{\mtcfont}{\small\rm}
+\setcounter{minitocdepth}{2}
+\def\blanc{}
+\def\rouge{}
+\def\verte{}
+\def\jaune{}
+\def\cyan{}
+\def\bleue{}
+\def\magenta{}
+\def\rouges{}
+\def\vertes{}
+\def\jaunes{}
+\def\bleues{}
+\def\magentas{}
+\def\noir{}
+
+
+\begin{document}
+
+\title{\bf{Archimedes}, the Free 2D Semicondutor Device Simulator}
+
+\author{Documentation 1.0 for Archimedes 0.8.0 \\ Jean Michel Sellier \\ GNU Archimedes \\ Via dei Narcisi 28, 96010 Cassibile (SR), Italy \\ jeanmichel.sellier@gmail.com \\  www.gnu.org/software/archimedes}
+
+\maketitle
+
+
+\dominitoc
+\tableofcontents
+\baselineskip=8mm
+%
+%
+
+
+% =========================================================================
+
+\chapter{Copying}
+
+This file documents for the \textbf{Archimedes} program for simulation of  submicron semiconductor devices.
+\\
+Copyright \copyright 2004, 2005, 2006, 2007 Jean Michel Sellier.
+\\
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+\\
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+\\
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+\\
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by the Foundation.
+
+\newpage
+
+\chapter{GNU Free Documentation License}
+%\label{label_fdl}
+
+ \begin{center}
+
+       Version 1.2, November 2002
+
+
+ Copyright \copyright 2000,2001,2002  Free Software Foundation, Inc.
+ 
+ \bigskip
+ 
+     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  
+ \bigskip
+ 
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+\end{center}
+
+
+\begin{center}
+{\bf\large Preamble}
+\end{center}
+
+The purpose of this License is to make a manual, textbook, or other
+functional and useful document "free" in the sense of freedom: to
+assure everyone the effective freedom to copy and redistribute it,
+with or without modifying it, either commercially or noncommercially.
+Secondarily, this License preserves for the author and publisher a way
+to get credit for their work, while not being considered responsible
+for modifications made by others.
+
+This License is a kind of "copyleft", which means that derivative
+works of the document must themselves be free in the same sense.  It
+complements the GNU General Public License, which is a copyleft
+license designed for free software.
+
+We have designed this License in order to use it for manuals for free
+software, because free software needs free documentation: a free
+program should come with manuals providing the same freedoms that the
+software does.  But this License is not limited to software manuals;
+it can be used for any textual work, regardless of subject matter or
+whether it is published as a printed book.  We recommend this License
+principally for works whose purpose is instruction or reference.
+
+
+\begin{center}
+{\Large\bf 1. APPLICABILITY AND DEFINITIONS}
+\addcontentsline{toc}{section}{1. APPLICABILITY AND DEFINITIONS}
+\end{center}
+
+This License applies to any manual or other work, in any medium, that
+contains a notice placed by the copyright holder saying it can be
+distributed under the terms of this License.  Such a notice grants a
+world-wide, royalty-free license, unlimited in duration, to use that
+work under the conditions stated herein.  The \textbf{"Document"}, below,
+refers to any such manual or work.  Any member of the public is a
+licensee, and is addressed as \textbf{"you"}.  You accept the license if you
+copy, modify or distribute the work in a way requiring permission
+under copyright law.
+
+A \textbf{"Modified Version"} of the Document means any work containing the
+Document or a portion of it, either copied verbatim, or with
+modifications and/or translated into another language.
+
+A \textbf{"Secondary Section"} is a named appendix or a front-matter section of
+the Document that deals exclusively with the relationship of the
+publishers or authors of the Document to the Document's overall subject
+(or to related matters) and contains nothing that could fall directly
+within that overall subject.  (Thus, if the Document is in part a
+textbook of mathematics, a Secondary Section may not explain any
+mathematics.)  The relationship could be a matter of historical
+connection with the subject or with related matters, or of legal,
+commercial, philosophical, ethical or political position regarding
+them.
+
+The \textbf{"Invariant Sections"} are certain Secondary Sections whose titles
+are designated, as being those of Invariant Sections, in the notice
+that says that the Document is released under this License.  If a
+section does not fit the above definition of Secondary then it is not
+allowed to be designated as Invariant.  The Document may contain zero
+Invariant Sections.  If the Document does not identify any Invariant
+Sections then there are none.
+
+The \textbf{"Cover Texts"} are certain short passages of text that are listed,
+as Front-Cover Texts or Back-Cover Texts, in the notice that says that
+the Document is released under this License.  A Front-Cover Text may
+be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+A \textbf{"Transparent"} copy of the Document means a machine-readable copy,
+represented in a format whose specification is available to the
+general public, that is suitable for revising the document
+straightforwardly with generic text editors or (for images composed of
+pixels) generic paint programs or (for drawings) some widely available
+drawing editor, and that is suitable for input to text formatters or
+for automatic translation to a variety of formats suitable for input
+to text formatters.  A copy made in an otherwise Transparent file
+format whose markup, or absence of markup, has been arranged to thwart
+or discourage subsequent modification by readers is not Transparent.
+An image format is not Transparent if used for any substantial amount
+of text.  A copy that is not "Transparent" is called \textbf{"Opaque"}.
+
+Examples of suitable formats for Transparent copies include plain
+ASCII without markup, Texinfo input format, LaTeX input format, SGML
+or XML using a publicly available DTD, and standard-conforming simple
+HTML, PostScript or PDF designed for human modification.  Examples of
+transparent image formats include PNG, XCF and JPG.  Opaque formats
+include proprietary formats that can be read and edited only by
+proprietary word processors, SGML or XML for which the DTD and/or
+processing tools are not generally available, and the
+machine-generated HTML, PostScript or PDF produced by some word
+processors for output purposes only.
+
+The \textbf{"Title Page"} means, for a printed book, the title page itself,
+plus such following pages as are needed to hold, legibly, the material
+this License requires to appear in the title page.  For works in
+formats which do not have any title page as such, "Title Page" means
+the text near the most prominent appearance of the work's title,
+preceding the beginning of the body of the text.
+
+A section \textbf{"Entitled XYZ"} means a named subunit of the Document whose
+title either is precisely XYZ or contains XYZ in parentheses following
+text that translates XYZ in another language.  (Here XYZ stands for a
+specific section name mentioned below, such as \textbf{"Acknowledgements"},
+\textbf{"Dedications"}, \textbf{"Endorsements"}, or \textbf{"History"}.)  
+To \textbf{"Preserve the Title"}
+of such a section when you modify the Document means that it remains a
+section "Entitled XYZ" according to this definition.
+
+The Document may include Warranty Disclaimers next to the notice which
+states that this License applies to the Document.  These Warranty
+Disclaimers are considered to be included by reference in this
+License, but only as regards disclaiming warranties: any other
+implication that these Warranty Disclaimers may have is void and has
+no effect on the meaning of this License.
+
+
+\begin{center}
+{\Large\bf 2. VERBATIM COPYING}
+\addcontentsline{toc}{section}{2. VERBATIM COPYING}
+\end{center}
+
+You may copy and distribute the Document in any medium, either
+commercially or noncommercially, provided that this License, the
+copyright notices, and the license notice saying this License applies
+to the Document are reproduced in all copies, and that you add no other
+conditions whatsoever to those of this License.  You may not use
+technical measures to obstruct or control the reading or further
+copying of the copies you make or distribute.  However, you may accept
+compensation in exchange for copies.  If you distribute a large enough
+number of copies you must also follow the conditions in section 3.
+
+You may also lend copies, under the same conditions stated above, and
+you may publicly display copies.
+
+
+\begin{center}
+{\Large\bf 3. COPYING IN QUANTITY}
+\addcontentsline{toc}{section}{3. COPYING IN QUANTITY}
+\end{center}
+
+
+If you publish printed copies (or copies in media that commonly have
+printed covers) of the Document, numbering more than 100, and the
+Document's license notice requires Cover Texts, you must enclose the
+copies in covers that carry, clearly and legibly, all these Cover
+Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on
+the back cover.  Both covers must also clearly and legibly identify
+you as the publisher of these copies.  The front cover must present
+the full title with all words of the title equally prominent and
+visible.  You may add other material on the covers in addition.
+Copying with changes limited to the covers, as long as they preserve
+the title of the Document and satisfy these conditions, can be treated
+as verbatim copying in other respects.
+
+If the required texts for either cover are too voluminous to fit
+legibly, you should put the first ones listed (as many as fit
+reasonably) on the actual cover, and continue the rest onto adjacent
+pages.
+
+If you publish or distribute Opaque copies of the Document numbering
+more than 100, you must either include a machine-readable Transparent
+copy along with each Opaque copy, or state in or with each Opaque copy
+a computer-network location from which the general network-using
+public has access to download using public-standard network protocols
+a complete Transparent copy of the Document, free of added material.
+If you use the latter option, you must take reasonably prudent steps,
+when you begin distribution of Opaque copies in quantity, to ensure
+that this Transparent copy will remain thus accessible at the stated
+location until at least one year after the last time you distribute an
+Opaque copy (directly or through your agents or retailers) of that
+edition to the public.
+
+It is requested, but not required, that you contact the authors of the
+Document well before redistributing any large number of copies, to give
+them a chance to provide you with an updated version of the Document.
+
+
+\begin{center}
+{\Large\bf 4. MODIFICATIONS}
+\addcontentsline{toc}{section}{4. MODIFICATIONS}
+\end{center}
+
+You may copy and distribute a Modified Version of the Document under
+the conditions of sections 2 and 3 above, provided that you release
+the Modified Version under precisely this License, with the Modified
+Version filling the role of the Document, thus licensing distribution
+and modification of the Modified Version to whoever possesses a copy
+of it.  In addition, you must do these things in the Modified Version:
+
+\begin{itemize}
+\item[A.] 
+   Use in the Title Page (and on the covers, if any) a title distinct
+   from that of the Document, and from those of previous versions
+   (which should, if there were any, be listed in the History section
+   of the Document).  You may use the same title as a previous version
+   if the original publisher of that version gives permission.
+   
+\item[B.]
+   List on the Title Page, as authors, one or more persons or entities
+   responsible for authorship of the modifications in the Modified
+   Version, together with at least five of the principal authors of the
+   Document (all of its principal authors, if it has fewer than five),
+   unless they release you from this requirement.
+   
+\item[C.]
+   State on the Title page the name of the publisher of the
+   Modified Version, as the publisher.
+   
+\item[D.]
+   Preserve all the copyright notices of the Document.
+   
+\item[E.]
+   Add an appropriate copyright notice for your modifications
+   adjacent to the other copyright notices.
+   
+\item[F.]
+   Include, immediately after the copyright notices, a license notice
+   giving the public permission to use the Modified Version under the
+   terms of this License, in the form shown in the Addendum below.
+   
+\item[G.]
+   Preserve in that license notice the full lists of Invariant Sections
+   and required Cover Texts given in the Document's license notice.
+   
+\item[H.]
+   Include an unaltered copy of this License.
+   
+\item[I.]
+   Preserve the section Entitled "History", Preserve its Title, and add
+   to it an item stating at least the title, year, new authors, and
+   publisher of the Modified Version as given on the Title Page.  If
+   there is no section Entitled "History" in the Document, create one
+   stating the title, year, authors, and publisher of the Document as
+   given on its Title Page, then add an item describing the Modified
+   Version as stated in the previous sentence.
+   
+\item[J.]
+   Preserve the network location, if any, given in the Document for
+   public access to a Transparent copy of the Document, and likewise
+   the network locations given in the Document for previous versions
+   it was based on.  These may be placed in the "History" section.
+   You may omit a network location for a work that was published at
+   least four years before the Document itself, or if the original
+   publisher of the version it refers to gives permission.
+   
+\item[K.]
+   For any section Entitled "Acknowledgements" or "Dedications",
+   Preserve the Title of the section, and preserve in the section all
+   the substance and tone of each of the contributor acknowledgements
+   and/or dedications given therein.
+   
+\item[L.]
+   Preserve all the Invariant Sections of the Document,
+   unaltered in their text and in their titles.  Section numbers
+   or the equivalent are not considered part of the section titles.
+   
+\item[M.]
+   Delete any section Entitled "Endorsements".  Such a section
+   may not be included in the Modified Version.
+   
+\item[N.]
+   Do not retitle any existing section to be Entitled "Endorsements"
+   or to conflict in title with any Invariant Section.
+   
+\item[O.]
+   Preserve any Warranty Disclaimers.
+\end{itemize}
+
+If the Modified Version includes new front-matter sections or
+appendices that qualify as Secondary Sections and contain no material
+copied from the Document, you may at your option designate some or all
+of these sections as invariant.  To do this, add their titles to the
+list of Invariant Sections in the Modified Version's license notice.
+These titles must be distinct from any other section titles.
+
+You may add a section Entitled "Endorsements", provided it contains
+nothing but endorsements of your Modified Version by various
+parties--for example, statements of peer review or that the text has
+been approved by an organization as the authoritative definition of a
+standard.
+
+You may add a passage of up to five words as a Front-Cover Text, and a
+passage of up to 25 words as a Back-Cover Text, to the end of the list
+of Cover Texts in the Modified Version.  Only one passage of
+Front-Cover Text and one of Back-Cover Text may be added by (or
+through arrangements made by) any one entity.  If the Document already
+includes a cover text for the same cover, previously added by you or
+by arrangement made by the same entity you are acting on behalf of,
+you may not add another; but you may replace the old one, on explicit
+permission from the previous publisher that added the old one.
+
+The author(s) and publisher(s) of the Document do not by this License
+give permission to use their names for publicity for or to assert or
+imply endorsement of any Modified Version.
+
+
+\begin{center}
+{\Large\bf 5. COMBINING DOCUMENTS}
+\addcontentsline{toc}{section}{5. COMBINING DOCUMENTS}
+\end{center}
+
+
+You may combine the Document with other documents released under this
+License, under the terms defined in section 4 above for modified
+versions, provided that you include in the combination all of the
+Invariant Sections of all of the original documents, unmodified, and
+list them all as Invariant Sections of your combined work in its
+license notice, and that you preserve all their Warranty Disclaimers.
+
+The combined work need only contain one copy of this License, and
+multiple identical Invariant Sections may be replaced with a single
+copy.  If there are multiple Invariant Sections with the same name but
+different contents, make the title of each such section unique by
+adding at the end of it, in parentheses, the name of the original
+author or publisher of that section if known, or else a unique number.
+Make the same adjustment to the section titles in the list of
+Invariant Sections in the license notice of the combined work.
+
+In the combination, you must combine any sections Entitled "History"
+in the various original documents, forming one section Entitled
+"History"; likewise combine any sections Entitled "Acknowledgements",
+and any sections Entitled "Dedications".  You must delete all sections
+Entitled "Endorsements".
+
+\begin{center}
+{\Large\bf 6. COLLECTIONS OF DOCUMENTS}
+\addcontentsline{toc}{section}{6. COLLECTIONS OF DOCUMENTS}
+\end{center}
+
+You may make a collection consisting of the Document and other documents
+released under this License, and replace the individual copies of this
+License in the various documents with a single copy that is included in
+the collection, provided that you follow the rules of this License for
+verbatim copying of each of the documents in all other respects.
+
+You may extract a single document from such a collection, and distribute
+it individually under this License, provided you insert a copy of this
+License into the extracted document, and follow this License in all
+other respects regarding verbatim copying of that document.
+
+
+\begin{center}
+{\Large\bf 7. AGGREGATION WITH INDEPENDENT WORKS}
+\addcontentsline{toc}{section}{7. AGGREGATION WITH INDEPENDENT WORKS}
+\end{center}
+
+
+A compilation of the Document or its derivatives with other separate
+and independent documents or works, in or on a volume of a storage or
+distribution medium, is called an "aggregate" if the copyright
+resulting from the compilation is not used to limit the legal rights
+of the compilation's users beyond what the individual works permit.
+When the Document is included in an aggregate, this License does not
+apply to the other works in the aggregate which are not themselves
+derivative works of the Document.
+
+If the Cover Text requirement of section 3 is applicable to these
+copies of the Document, then if the Document is less than one half of
+the entire aggregate, the Document's Cover Texts may be placed on
+covers that bracket the Document within the aggregate, or the
+electronic equivalent of covers if the Document is in electronic form.
+Otherwise they must appear on printed covers that bracket the whole
+aggregate.
+
+
+\begin{center}
+{\Large\bf 8. TRANSLATION}
+\addcontentsline{toc}{section}{8. TRANSLATION}
+\end{center}
+
+
+Translation is considered a kind of modification, so you may
+distribute translations of the Document under the terms of section 4.
+Replacing Invariant Sections with translations requires special
+permission from their copyright holders, but you may include
+translations of some or all Invariant Sections in addition to the
+original versions of these Invariant Sections.  You may include a
+translation of this License, and all the license notices in the
+Document, and any Warranty Disclaimers, provided that you also include
+the original English version of this License and the original versions
+of those notices and disclaimers.  In case of a disagreement between
+the translation and the original version of this License or a notice
+or disclaimer, the original version will prevail.
+
+If a section in the Document is Entitled "Acknowledgements",
+"Dedications", or "History", the requirement (section 4) to Preserve
+its Title (section 1) will typically require changing the actual
+title.
+
+
+\begin{center}
+{\Large\bf 9. TERMINATION}
+\addcontentsline{toc}{section}{9. TERMINATION}
+\end{center}
+
+
+You may not copy, modify, sublicense, or distribute the Document except
+as expressly provided for under this License.  Any other attempt to
+copy, modify, sublicense or distribute the Document is void, and will
+automatically terminate your rights under this License.  However,
+parties who have received copies, or rights, from you under this
+License will not have their licenses terminated so long as such
+parties remain in full compliance.
+
+
+\begin{center}
+{\Large\bf 10. FUTURE REVISIONS OF THIS LICENSE}
+\addcontentsline{toc}{section}{10. FUTURE REVISIONS OF THIS LICENSE}
+\end{center}
+
+
+The Free Software Foundation may publish new, revised versions
+of the GNU Free Documentation License from time to time.  Such new
+versions will be similar in spirit to the present version, but may
+differ in detail to address new problems or concerns.  See
+http://www.gnu.org/copyleft/.
+
+Each version of the License is given a distinguishing version number.
+If the Document specifies that a particular numbered version of this
+License "or any later version" applies to it, you have the option of
+following the terms and conditions either of that specified version or
+of any later version that has been published (not as a draft) by the
+Free Software Foundation.  If the Document does not specify a version
+number of this License, you may choose any version ever published (not
+as a draft) by the Free Software Foundation.
+
+
+\begin{center}
+{\Large\bf ADDENDUM: How to use this License for your documents}
+\addcontentsline{toc}{section}{ADDENDUM: How to use this License for your documents}
+\end{center}
+
+To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and
+license notices just after the title page:
+
+\bigskip
+\begin{quote}
+    Copyright \copyright  YEAR  YOUR NAME.
+    Permission is granted to copy, distribute and/or modify this document
+    under the terms of the GNU Free Documentation License, Version 1.2
+    or any later version published by the Free Software Foundation;
+    with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+    A copy of the license is included in the section entitled "GNU
+    Free Documentation License".
+\end{quote}
+\bigskip
+    
+If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+replace the "with...Texts." line with this:
+
+\bigskip
+\begin{quote}
+    with the Invariant Sections being LIST THEIR TITLES, with the
+    Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST.
+\end{quote}
+\bigskip
+    
+If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of
+free software license, such as the GNU General Public License,
+to permit their use in free software.
+
+%---------------------------------------------------------------------
+
+
+
+
+
+
+\chapter{Why \textbf{Archimedes}? A brief history...}
+
+Coding a working program is an astonishingly beautiful challenge. Every hacker who starts to write a code will have different reasons to do that. The followings are my reasons.
+
+\section{The Scientifical and Industrial Motivations}
+
+In today semiconductor technology, the miniaturization of devices is more and more progressing. In this context, it is easy to see that numerical simulations play an important role at every level of device manufacture. In fact, the cost of designing and physically constructing prototypes for VLSI semiconductor devices is very high and without the availability of advanced simulators the efforts for devices miniaturization would, likely, be brought to a halt. From assessing the performance of individual transistors, to circuits and systems, and, consequently, with the promise of improved device performance, industries are encouraged to keep on miniaturizing with lower manufacture costs.
+
+But, unfortunately, such simulations are not whithout their challenges... A first consequence of device miniaturization is that simulations of submicron semicondutor devices requires advanced transport models. Because of the presence of very high and rapidly varying electric field, phenomena occur which cannot be described by means of the well-known drift-diffusion models, which do not incorporate energy as a dynamical variable. That is why some generalization has been sought in order to obtain more physically accurate models, like energy-transport and hydrodynamical models. The energy-transport models which are implemented in commercial simulators are based on phenomenological constitutive equations for the particle flux and energy flux depending on a set of parameters which are fitted to homogeneous bulk material Monte Carlo simulations. So, this is not, certainly, a satisfactory physical description of the internal electronic dynamics in a semiconductor device.
+
+As current device technologies quickly approach the scales whereby quantum effects due to strong confinement of carriers and direct source-drain tunneling will begin to dominate, new simulation techniques are required in order to fully understand and acurately simulate the physics behind the technology operation. 
+
+Of all the simulation methods currently employed, ensemble Monte Carlo has always been, both in the accademic and industrial community, the most vigorous and trusted method for device simulation, as it is proven to be reliable and predictive, as one can easily see from the vast bibliography on this subject. However, as Monte Carlo relies on the particle nature of the electron (in fact we consider an electron like a 'biliard ball'), quantum effects associated with the wave-like nature of electrons cannot fully incorporated into the actual simulators, i.e. the ensemble Monte Carlo have to be lightly (or strongly, it depends on the point of view and on the methods implemented...) modified to take into account the quantum effects, at least at a first order of approximation, which is certainly enough to take into account correctly all the relevant quantum effects present in the present-day semiconductor devices (till 2015 probably...). In order to take into account the wave-like nature of electrons we use a recently introduced quantum theory, the so-called Bohm effective potential theory.
+
+So it is challenging and very interesting to develop such a code for 2D quantum submicron semiconductor devices. This is why I have decided to implement this code, but these are not the only motivations... 
+
+
+\section{The Ethical Motivations}
+The very sad situation you quickly observe working in a semiconductor industry, but also in all places in which researches about semiconductor devices are made, the only codes for simulation you can find are not free and are proprietary codes. That is a very bad situation because, at the present time, if you need to develop your own code for the purpose of simulating a device it is IMPOSSIBLE to obtain an advanced one in a short time, and, trust me, this is EXTREMELY BAD for scientific research... (Immagine if you had to re-discover the Newtonian laws every time you need them...) So, you can find a huge amount of papers describing a lot of numerical methods for simulating, in a very advanced way, semiconductor devices (even in the quantum case), but nobody will give you a code on which you can construct your own method (with the unlikely exception that at least one of the programmers is a friend of yours :) ).
+
+Even worst, if you are a semiconductor device designer and you want to simulate "realistically" a new device, you have to pay (at very high costs!) a BINARY (just a binary and not the code!) from some well-known software industry. This binary will certainly have some bugs (because it is coded by humans which are not perfect...) and you will never have the possibility of fix them on your own. Of course, you can write to the software house and tell them that there is a bug, but, how many time do you will wait for a new release without those bugs? I don't think it will be a short time...
+
+My impression is that, after a long research on the Web for a Free Software dealing with advanced 2D semiconductor device simulation, there was not a free code for the purpose of semiconductor devices simulation (i mean under GPL license). To be sure about it, I asked to the great Richard Stallman (by mail) if it will be worth to do a code like this and he encouraged me to code it, because there wasn't a code like this as free. So I decided to write this code.. 
+
+\section{A Short Remark on Acknowledgments}
+
+If you use \textbf{Archimedes} as a benchmark for your codes, or if you put some of the results obtained by it in your papers, it would be very nice if you write in your papers some aknowledgments or references to it.
+\\
+For example, you can write a sentence like the followings
+\\
+\textsl{"The author wants to thank the author of \textbf{Archimedes} (GNU package), Jean Michel Sellier, for giving it under GPL license..."}
+\\
+or in your figure captions
+\\
+\textsl{"This results have been obtained by \textbf{Archimedes} (GNU package)..."}
+\\
+or a reference to the web site of \textbf{Archimedes}
+\\
+\textsl{"You can download \textbf{Archimedes} under GPL license at the following web site www.gnu.org/software/archimedes"}
+\\
+This will be very encouraging for me in developping new and more powerfull versions of \textbf{Archimedes}. So, many thanks, for everybody will reference to me, or to \textbf{Archimedes}, in his/her papers! \\
+It will, also, be very nice if you send me a copy of your paper, in order to understand exactly in what contexts this code is being used. This will help me to understand in what direction I can go in the next versions. You can send any copy of your papers which use \textbf{Archimedes} results at
+\begin{verbatim}
+jeanmichel.sellier@gmail.com
+\end{verbatim}
+Every eventual comment, suggestion and advice on this code will be welcome.
+
+\section{Do you want to support \textbf{Archimedes}?}
+\textbf{Archimedes} has been developed as a volunteer project and it took months for the first release development of a trustable and predictive code, a code which can certainly be an alternative to the proprietary simulation programs used in industry and/or research (certainly a better alternative if you to use a code on which construct your own code/method). So if you use it and like it, and you are an company researcher, a university researcher, a researcher in other organisations, or if you are a private and just want to encourage my efforts in doing something important for the scientifical/industrial community, please think about the possibility of buying the Archimedes DISTRIBUTION, in order to support and encourage my efforts in releasing new versions of \textbf{Archimedes}. It is very important for the community and for the future of the technology and science to support Free Software, so, in the case you want the distribution or you just want to make a donation write to me at :
+\begin{verbatim}
+jeanmichel.sellier@gmail.com
+
+\end{verbatim}
+You will receive the distribution which means that you will receive the last version of the printed manual along with the last version of \textbf{Archimedes} code (SOURCES and binaries). Furthermore, if you give your email address, you will be informed by the author (me) in case of new downloadable releases :) 
+
+
+\chapter{Introduction}
+
+\section{Overview}
+
+The GNU package \textbf{Archimedes} is a 2D Quantum Monte Carlo simulator for semiconductor devices. At the present time it can simulate the transport of electrons and holes in Silicon, Gallium Arsenide, Germanium, InSb, AlSb, AlAs and the two compounds $Al_xIn_xSb$ and $Al_xIn_{(1-x)}Sb$, and, in the next versions, the author will implement some mopre different materials like InP, GaP and so on (actually the purpose is reaching the possibility of simulating a quite big range of materials belonging to the cubic group IV of the diamond structure and to the III-V semiconductors of the zincblende structure along with all the heterostructures possible). In this version \textbf{Archimedes} can simulate electrons for both Silicon, GaAs, Germanium, InSb, AlSb, AlAs and the two compounds $Al_xIn_xSb$ and $Al_xIn_{(1-x)}Sb$, and heavy holes for Silicon.
+
+\textbf{Archimedes} uses the well-known ensemble Monte Carlo method for the simulations. It can simulate both the transient and the steady state solution (even if the transient can be quite noisy, due to the statistical approach). The particles dynamics is coupled to the electrostatic potential by means of the simulation of a "non stationary" Poisson equation. This last equation is simulated by a simple, but very robust, finite difference method.
+In this present version of \textbf{Archimedes} you can choose the physics of the various contacts present on the device. So, for example, you can decide if an edge (or a part of it) is an insulator, or a Schottky contact or even an Ohmic one. In addition, the quantum effects are taken into account by means of the recent effective potential method, which is starting to be used by the accademic community, as you can see from scientifical papers. Furthermore, up to the release 0.0.4, you can simulate a simplified MEP (Maximum Entropy Principle) model which is very usefull for making Archimedes faster than the precedent release, as you will see in the next chapters. Starting from version 0.0.8, the user can simulate even a fixed constant magnetic field and/or the self-consistent magnetic field by means of the Faraday's equation. This is a quite rare feature in semiconductor simulator that Archimedes is already able to implement.
+
+
+All the particles in this code have a `statistical weight' which is made a piecwise-function of the position. You can choose the number of particle used in the simulation, even if this last will vary during the simulation, but it is not allowed to be more than 10 milions. If you want a bigger number you have to change it in the code (modifying the definition of NPMAXIMUM in the file "archimedes.c" and recompiling it). I have choosed to not dynamically allocate the memory because the number of particles in the devices can vary very rapidly (depending on the device structure, obviously) and this can enormousely tax the velocity of the simulation, which is very undesirable in a Monte Carlo simulation!
+
+The GNU package \textbf{Archimedes} was written by Jean Michel Sellier (jeanmichel.sellier@gmail.com). Because it is protected by the GNU General Public License, users are free to share and change it. You can download it at the following web page:
+www.gnu.org/software/archimedes
+
+Let us see, now, a first example of definition for a device...
+
+\section{A First Example: The $n^+$-$n$-$n^+$ Diode}
+
+In this section I introduce a first example of semiconductor device simulated by \textbf{Archimedes} in order to show how it is easy to define a new general device. Let us report, in the following, the definition of a device which is the benchmark in semiconductor simulation: the $n^+$-$n$-$n^+$ Silicon diode.
+
+\begin{verbatim}
+
+# Silicon DIODE test-1
+# created on 30 sep.2004, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+# This file simulate a Silicon Diode.
+# To run it type:
+# archimedes diode.input
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 5.5e-12
+TIMESTEP 0.0015e-12
+
+XLENGTH 1.0e-6
+YLENGTH 0.1e-6
+
+XSPATIALSTEP 100
+YSPATIALSTEP 25
+
+# device is made only in Silicon
+MATERIAL X 0.0 1.0e-6   Y 0.0 0.1e-6  SILICON
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.    1.0e-6    0.1e-6    2.e21
+DONORDENSITY    0.       0.    0.3e-6    0.1e-6    5.e23
+DONORDENSITY    0.7e-6   0.    1.0e-6    0.1e-6    5.e23
+ACCEPTORDENSITY 0.       0.    1.0e-6    0.1e-6    1.e20
+
+# Definition of the various contacts
+# ==================================
+CONTACT LEFT  0.0    0.1e-6 OHMIC     0.0    5.e23
+CONTACT RIGHT 0.0    0.1e-6 OHMIC     1.0    5.e23
+CONTACT UP    0.0    1.0e-6 INSULATOR 0.0
+CONTACT DOWN  0.0    1.0e-6 INSULATOR 0.0
+
+NOQUANTUMEFFECTS
+MAXIMINI
+# SAVEEACHSTEP
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 1500
+
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1
+
+\end{verbatim}
+
+The name of this file is "diode.input" and you can find it in the distribution directory :
+\begin{verbatim}
+archimedes-0.1.0/tests/DIODE
+\end{verbatim}
+If you run it by typing in the shell command line
+\begin{verbatim}
+# archimedes diode.input
+\end{verbatim}
+You will get, after the computation and plotting the results, the pictures (which are cuts on y=0.05 micron) you can find in figures (\ref{diode1})-(\ref{diode5}).
+\begin{figure}[htb!]
+\centerline{\psfig{figure=diode_pictures/dens.eps, width=10cm,height=10cm}} 
+\caption{\small Density Profile obtained by \textbf{Archimedes}}
+\label{diode1}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=diode_pictures/vel.eps, width=10cm,height=10cm}} 
+\caption{\small Electron Velocity obtained by \textbf{Archimedes}}
+\label{diode2}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=diode_pictures/energy.eps, width=10cm,height=10cm}} 
+\caption{\small Electronic Energy obtained by \textbf{Archimedes}}
+\label{diode3}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=diode_pictures/potential.eps, width=10cm,height=10cm}} 
+\caption{\small Potential Profile obtained by \textbf{Archimedes}}
+\label{diode4}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=diode_pictures/efield.eps, width=10cm,height=10cm}} 
+\caption{\small Electric Field obtained by \textbf{Archimedes}}
+\label{diode5}
+\end{figure}
+
+
+As we will see soon, it is very easy to define a new semiconductor device. First of all, we see that the rows starting by the symbol "\#" are just comments. Let us analyze, now, some keywords present in this example. For more informations about all the syntax commands of \textbf{Archimedes} you must read the chapter related on this topic.
+
+\begin{enumerate}
+\item
+The keyword \textbf{MATERIAL}.
+This keyword is easy to understand. Invoking it, you choose the material which your device is made of. At the present time, \textbf{Archimedes} accept Silicon, Germanium, GaAs, InSb, AlSb, AlAs and the two compounds $Al_xIn_xSb$ and $Al_xIn_{(1-x)}Sb$, but in the very next future the list of possible materials will be a wide list of III-V semiconductor materials. So, at the present time, the correct uses you can do of \textbf{MATERIAL} are the following :
+\begin{verbatim}
+ MATERIAL X xi xf   Y yi yf   SILICON
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL X xi xf   Y yi yf   GERMANIUM
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    GAAS
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    INSB
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    ALSB
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    ALAS
+\end{verbatim}
+
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    ALxINxSB value_of_x
+\end{verbatim}
+and
+\begin{verbatim}
+ MATERIAL  X xi xf   Y yi yf    ALxIN1-xSB value_of_x
+\end{verbatim}
+
+Pay attention to the fact that this syntax has changed from version 0.0.8 on.
+
+\item 
+The keyword \textbf{TRANSPORT}. Also this one is easy to understand. By this command, you choose what kind of charge transport you want, including the mathematical model for the transport (Monte Carlo or simplified model). In this case you can choose between only electrons, only holes, or bipolar transport (from release 0.0.4 on, it is possible to simulate all this particles). Pay attention to the fact that the syntax for this command has been changed in the release 0.0.4.
+
+\item 
+The keyword \textbf{FINALTIME}. Nothing is easier to understand :) By this command, you choose the final time at which you want to stop the simulation and save the results.
+
+\item
+The Keyword \textbf{TIMESTEP}. When you start a simulation and you have to reach the choosed final time, you have to proceed by time step. The time step you choose have to respect an appropriate condition, i.e. it must be not too big, in order to avoid unphysical effects during the simulation. We will describe this conditions better in a next paragraph.
+
+\item
+The Keywords \textbf{XLENGTH} and \textbf{YLENGTH}. Also these keywords are easy to understand. If one think of our simulated device as a simple rectangle, then we have to specify the length of the edges in the x-direction and the y-direction. This is done by these two keywords. Even if not all semiconductor devices are rectangular, in this first release of \textbf{Archimedes} we can simulate only rectangular domains. This will be improved in some next version.
+
+\item
+The keywords \textbf{XSPATIALSTEP} and \textbf{YSPATIALSTEP}. These commands are invoked when one want to define the number of cells in the x-direction and the y-direction of a rectangular domain.
+
+\item
+The keyword \textbf{DONORDENSITY}. This keyword is needed when one wants to define a rectangular sub-domain in which one defines a certain donor density. This command is more complex than the precedent one (but, don't worry, quite easy to understand). See the paragraph related to this command to known more about it.
+
+\item
+The keyword \textbf{ACCEPTORDENSITY}. This is the same as the precedent keyword (i.e. \textbf{DONORDENSITY}), but for the holes. Pay attention to the fact that even if you are not simulating the transport of holes, you need to fix a value of the holes concentration on the devices. This is needed by the Poisson equation which take into account the accpetor density, in order to solve accurately the electric field. See the paragraph related to this topic for more informations.
+
+\item
+The keyword \textbf{CONTACT}. By this command, you choose where are positioned the various contacts. Furthermore, you can specify what kind of contact it is, chossing among ohmic, insulator and Schottky contact. When desired you can specify the applied voltage on the contact.
+
+\item
+The keyword \textbf{NOQUANTUMEFFECTS}. This command is invoked when you know, a priori, that the quantum effects are negligible, and so you don't want \textbf{Archimedes} compute them (for example when the electronic wave lenght is negligible with respect to the caracteristic length of the device). This is important when you want to get a smaller run-time with respect to the run-time of a full-effects simulation.
+
+\item
+The keyword \textbf{MAXIMINI}. This is a simple command for the visualisation of the maximum and minimum of some macroscopic values in real-time, i.e. during the simulation. Avoid to invoke this command if you want to obtain a shorter run-time.
+
+\item
+The keyword \textbf{SAVEEACHSTEP}. This is needed when you want to save all the solutions at each time step. This is a very usefull command in the case you want to follow the transient behaviour of a device in real-time or when you want to create a movie showing the transient dynamics of a simulated device.
+
+\item
+The keyword \textbf{LATTICETEMPERATURE}. It is easy to understand that you have to fix a temperature of the lattice of the device simulated. This is done by this simple command.
+
+\item
+The keyword \textbf{STATISTICALWEIGHT}. By this command you choose the statistical weight of the particles. Pay attention to the fact that the statistical weight is a piecewise-function of the position, so the statistical weight coincides to the number of super-particles per cell only in the most doped sub-domain of the device.
+
+\item
+The keyword \textbf{MEDIA}. As \textbf{Archimedes} is a Monte Carlo simulator, it is impossible to avoid the noise in the solutions. The noise is intrinsic to the method. So, in order to get less noisy solutions, it is necessary to take an average mean in time of the values simulated. Fixing a value to MEDIA means that you will take the mean average of the solution over the last MEDIA time steps.
+
+\item
+The keyword \textbf{OUTPUTFORMAT}. By this command, you choose the format of the output, i.e. the output files generated by \textbf{Archimedes} during or the end of a simulation.
+
+\end{enumerate}
+
+These are only some keywords (or commands) you can use in \textbf{Archimedes} to describe the geometry and the physical characteristics of a simulated device. As you can see, they are simple to understand and very general. So it is easy to define a device with quite general characteristics.
+
+\chapter{Physical Models employed in \textbf{Archimedes}}
+
+This chapter describes the physical models employed in \textbf{Archimedes}. It is important to fully understand this chapter in order to fully exploit the possibility offered by this code. Obviously, everything here is a brief review of what you can find in papers and books on the Monte Carlo subject. So, if you don't understand some aspects of this chapter, don't esitate to read the papers reported in this chapter. We will, also, describe the simplified MEP (Maximum Entropy Principle) model, which is a simplified version of the MEP model. This model has been developped by A.M.Anile and V.Romano, two professors of the Department of Mathematics and Computer Sciences of the University of Catania. It is a very good model, which is able to give very accurate results, compared to the other hydrodynamical models. 
+
+In the present release of \textbf{Archimedes} we use a simplified version because it is enough for our purpose, i.e. the coupling of MEP model and Monte Carlo method in order to obtain very accurate simulation results in very short running times.
+
+In the following we report a (i hope) complete list of usefull papers for people interested in the complete MEP model:
+\\
+"Non parabolic band transport in semiconductors: closure of the moment equations", A.M. Anile, V. Romano, Continuum Mechanics and Thermodynamics, 1999, 11:307-325.
+\\
+"Non parabolic band transport in semiconductors: closure of the production terms in the moment equations", V. Romano, Cont.Mech.Thermodyn., 1999, 12:31-51.
+\\
+"Non-parabolic band hydrodynamical model of silicon semiconductors and simulation of electron devices", V.Romano, Mathematical methods in the applied sciences, 2001, 24:439-471.
+\\
+"2D Simulation of a Silicon MESFET with a Nonpoarabolic Hydrodynamical Model Based on the Maximum Entropy Principle", V.Romano, Journal of Computational Physics, 176, 70-92 (2002)
+\\
+"Numerical simulation of 2D Silicon MESFET and MOSFET described by the MEP based energy-transport model with a mixed finite elements scheme", A.M. Anile, A. Marrocco, V. Romano, J.M. Sellier, Rapport de recherche, INRIA, N.5095.
+\\
+"Numerical Simulation of the 2D Non-Parabolic MEP Energy-Transport Model with a Mixed Finite Elements Scheme", A. Marrocco, V. Romano, J.M. Sellier, N.5103.
+\\
+"Two dimensional MESFET simulation of transients and steady state with kinetic based hydrodynamical models", A.M. Anile, S.F. Liotta, G. Mascali, S. Rinaudo.
+\\
+"Parabolic hydrodynamical model for bipolar semiconductors devices and low field hole mobility ", G. Mascali, V. Romano, J.M. Sellier, submitted to Continuum Mechanics and Thermodynamics.
+\\
+"Numerical Simulation of the 2D Non-Parabolic MEP energy-transport model with a mixed finite elements scheme", A.M. Anile, A. Marrocco, V. Romano, J.M. Sellier, submitted to Journal of Computational Electronics.
+\\
+
+\section{The Semiclassical Approach}
+
+When we talk about semiclassical approach then we talk about a well-defined group of approximations. Let us briefly review these last ones in the following list.
+\begin{enumerate}
+\item
+\textbf{Quantum size effects}. First of all, the dimensions of the device simulated have to be such that the envelope wavelength of the carriers (in our case electrons or holes) are negligible with respect to the characteristic length of the device. In that case, the particles can be described by wave-packets well-localised in the phase-space. In this case, we can consider the particles as "biliard balls".
+
+\item
+\textbf{Slow Physical Phenomena}. This means that the phenomena simulated in \textbf{Archimedes}, i.e. the dynamics of electrons or holes, are significantly slow with respect to the dynamics of the electric and/or magnetic field. This means that we work in a physical context in which it is justified to use electrostatic instead of full set of Maxwell's equations. Then we simulate only the Poisson equation, neglecting the potential retardation effects and the coupling with the photons.
+
+\item
+\textbf{The effective mass approximation}. It is well-known, both from the quantum theory of matter and from physical experiments, that a particle moving in a periodic potential, as the potential experienced by a particle in a lattice, can be described as a free particle with a mass lightly smaller than the original one. Then if an electron move in a semiconductor lattice, its mass will be smaller by a well-defined factor. This is the approximation we will adopt in \textbf{Archimedes}, in order to take into account the effects of the lattice on the particles.
+
+\item
+\textbf{The scattering events}. The scattering are considered as semiclassical, i.e. they are obtained from quantum theory of scatterings, but the scattering events are considered instantaneous, uncorrelated and localised in space and time.
+
+\item
+\textbf{The Many Body effects}. In our simulations, we neglect the Pauli principle, i.e. all the particles in the simulation have interation with each other. Probably, the Pauli principle will be taken into account in a next version of \textbf{Archimedes}, even if it seems, from experiments, that in the real world and for enough diluted doping concentrations, the electrons don't interact with other electrons, i.e. there are no collisions between electrons.
+\end{enumerate}
+
+\section{The Quantum Effects}
+
+Concerning the quantum effects, while we consider the particles as semiclassical objects, we want to have the possibility of simulating relevant quantum effects in today manufactured semiconductor devices (like the diode tunnel, or the nanoscopic MOSFETs). This is a quite difficult goal, because we need an accurate solution of the Wigner equation to simulate these effects correctly. Unfortunately, the solution of the Wigner equation is a very difficult challenge, both from the point of view of numerical analysis and the point of view of computer resources, because it is an integro-differential equation, with a non-local term for the potential, which is very difficult to solve numerically, even in the one-dimensional case and the solution of such an equation is a function of the phase-space variables and time, which means that it is an enormously expensive solution from the point of view of computer memory. So, we have to use an other approach than the Wigner equation one.
+
+For this purpose, recently, a new interpretation of quantum mechanics has been presented which is, at least at first order, equivalent to the Wigner quantum approach (and to the density gradient approach): this approach is known as @samp{the effective potential method}. While in the Wigner, but even in the Schroedinger, quantum theory we consider the particles as wave-like objects (with very strange and unphysical properties, like negative probability, or non-locality...), in the effective potential we keep on considering particles as well-positioned particles in the phase-space, which is actually what we experience in the real world. So, instead  of giving a new "definition" of particles we redefine the electrostatic potential. In order to do it we compute the classical electrostatic potential by means of the classical and widely used Poisson equation
+\begin{equation}
+ \nabla \cdot [ \epsilon ({\bf{x}}) \nabla \phi_{cl} ({\bf{x}},t) ] = 
+ - q [ N_D({\bf{x}}) - N_A({\bf{x}}) - n({\bf{x}},t) + p({\bf{x}},t)]
+\end{equation}
+where $\nabla$ is the gradient operator, $\epsilon$ the material dielectric constant, $N_D$ and $N_A$ the donor and acceptor densities respectively, $q$ the elementary charge, $n$ and $p$ the electron and hole densities respectively.
+Then we transform the precedently obtained classical potential in a quantum one in the following fashion
+\begin{equation}
+ \phi_{quant} = \frac{1}{\sqrt{2 \pi} a} \int_{\R^n}
+ \phi_{cl} ({\bf{x}}+{\bf{\xi}},t) exp(-\frac{\xi^2}{2 a^2}) d\xi
+\end{equation}
+where $n$ is the dimension of the spatial space (in \textbf{Archimedes} $n=2$), $a=\frac{\hbar}{\sqrt{8 m^* k_B T_L}}$, being $\hbar$ the Planck constant divided by $2 \pi$,$m^*$ the precedently discussed effective mass, $k_B$ the Boltzmann constant and $T_L$ the lattice temperature.
+
+For more information about this recent method, see the following papers:
+\begin{enumerate}
+\item
+D.K.Ferry, R.Akis, D.Vasileska, "Quantum effects in MOSFETs: Use of an effective potential in 3D Monte Carlo simulation of ultra-short channel devices", IEDM Tech.Dig.,pp.287-290,2000
+
+\item
+S.M.Ramey, R.Akis, D.Vasileska, and D.K.Ferry, "Modeling of quantum effects in ultrasmall SOI MOSFETs with effective potentials", in Abst.of Silicon Nanoelectronics Workshop, 2001, pp.50-51.
+
+\item
+L.Shifren, R.Akis, and D.K.Ferry, "Correspondence between quantum and classical motion: Comparing Bohmian mechanics with a smoothed effective potential approach", Physics Letters A, vol.274, pp.75-83, Sep.2000.
+\end{enumerate}
+
+\section{The Particle Dynamics}
+The purpose of \textbf{Archimedes} is to solve the Boltzmann or the Wigner equation including the most accurate physical models, i.e. one of the following two equations (depending on including or not the quantum effects)
+\begin{eqnarray}
+& & \frac{\partial f}{\partial t} +\frac{1}{\hbar} \nabla_{{\bf{k}}} {\cal{E}} \cdot \nabla_{{\bf{x}}} f -\frac{q}{\hbar} {\bf{E}} \cdot \nabla_{{\bf{k}}} f = {\cal{C}}[f] ({\bf{k}},{\bf{x}},t) \\
+& &  \frac{\partial w}{\partial t} +\frac{\hbar {\bf{k}}}{m^*} \nabla_{{\bf{x}}} w \cdot \nabla_{{\bf{x}}} w -\frac{1}{2 \pi \hbar} \int_{\R} d {\bf{k}}^{'} V^{W} ({\bf{k}} - {\bf{k^{'}}}, {\bf{x}}) w({\bf{k^{'}}},{\bf{x}},t) = {\cal{C}}^{W} [w] ({\bf{k}},{\bf{x}},t)
+\end{eqnarray}
+with
+\begin{equation}
+ V^{W} ({\bf{k}},{\bf{x}})= i \int_{\R} d {\bf{\eta}} exp( i {\bf{\eta}} \cdot {\bf{k}} ) ( V({\bf{k}},{\bf{x}} + \frac{{\bf{\eta}}}{2})- V({\bf{k}},{\bf{x}} - \frac{{\bf{\eta}}}{2}))
+\end{equation}
+where $f=f(\bf{k},\bf{x},t)$ is the Boltzmann probability density function, $w=w(\bf{k},\bf{x},t)$ the Wigner probability density function, $\bf{k}$ the particle pseudo-wave vector, $\bf{x}$ the position vector, $\i$ the immaginary unity, $V(\bf{x},t)$ the classical electrostatic potential, ${\bf{E}} = - \nabla \phi$ the classical electric field, ${\cal{E}}={\cal{E}}({\bf{k}})$ the energy band relation. 
+The operators ${\cal{C}}[f]$ and ${\cal{C}}^{W}[w]$ are the collision kernel for the Boltzmann and the Wigner equation respectively. Let us note that both the collision terms are numerically very difficult to simulate (as we will see in the mathematical expression of them) and it has a not very mathematically clear expression (at the present time) for the Wigner equation. 
+These equations have to be simulated in order to get accurate and predictive results.
+
+In this section we report the basic models used in our simulations, in order to compute the solution of the two precedent equations.
+
+For more informations about the precedent two equations, please refer to the following papers
+\begin{enumerate}
+\item
+E.Wigner, "On the Quantum Correction For Thermodynamics Equilibrium", Physical Review, Vol.40, pp.749-759, 1932
+
+\item
+A.Bertoni, P.Bordone, R.Brunetti and C.Jacoboni, "The Wigner function for electron transport in mesoscopic systems", J.Phys.: Condens.Matter 11 (1999), pp.5999-6012
+
+\item
+E.Fatemi, F.Odeh, "Upwind finite difference solution of Boltzmann equation applied to electron transport in semiconductor devices", J.Comput.Phys. 108, (1993), pp.209-217
+
+\item
+A.Majorana, R.Pidatella, "A finite difference scheme solving the Boltzmann-Poisson system for semiconductor devices, J.Comput.Phys., 174 (2001) pp.649-668
+\end{enumerate}
+
+\subsection{The Band Structure}
+It is well-known from the crystallography that crystals can be described in terms of Bravais lattices, which means, physically, that the crystal lattice can be though as a periodic potential made of ions. The quantum mechanical dynamics of an electron in a periodic potential can be described by the following well-known Bloch's theorem.
+\textbf{Theorem}.\\ 
+Let us consider an electron whose motion is governed by the potential $V_L$ generated by the ions located at the points of the crystal lattice $L$. The Schroedinger equation is
+\begin{equation}
+ H \psi = {\cal{E}} \psi
+\end{equation}
+with the Hamiltonian $H$ given by
+$$ H = - \frac{\hbar^2}{2 m} \nabla^2 - q V_L $$
+Then, this theorem states that the bounded eigenstates have the following form:
+\begin{equation}
+ \psi(\bf{x}) = \exp(\i \bf{k} \cdot \bf{x}) u_k(\bf{x})
+\end{equation}
+and
+\begin{equation}
+ u_k(\bf{x} + \bf{X}) = u_k(\bf{x}) 
+\end{equation}
+with $\bf{x}$ beloging to $L$.
+Furthermore, it is possible to prove the existence of an infinite sequence of eigenpairs of solutions
+$$ {\cal{E}}_l(\bf{k}), u_{k,l} $$
+with $l$ belonging to the non negative integers set $\N$. The function ${\cal{E}}={\cal{E}}_l({\bf{k}})$ describes the $l$-th energy band of the crystal.
+\\
+The energy band of crystals can be obtained at the cost of intensive numerical calculations by the quantum theory of solids. However, in order to describe electron and hole transport, for most applications, a simplified description is adopted which is based on simple analytical models. These are the effective mass approximation and the Kane dispersion relation, which are used in \textbf{Archimedes} simulations. In the approximation of the Kane dispersion relation, which takes into account the non-parabolicity at high energy, the energy still depends only on the modulus of the pseudo-wave vector, but we have the following relation
+\begin{equation}
+ {\cal{E}}(k)[1+ \alpha {\cal{E}}(k)] = \frac{\hbar^2 k^2}{2 m^*} 
+\end{equation}
+where $\alpha$ is the non-parabolicity parameter.
+\\
+It is possible to choose other energy band relations, but they are actually not implemented in \textbf{Archimedes}. Anyway, it seems, from precedent experiment simulations, that the Kane dispersion relation is the best choice if we consider the accuracy of the electron energy and velocity along with velocity of computation.
+ 
+\subsection{The Drift Process}
+As seen previously, an electron moving in a crystal lattice moves just like a free electron, but with a change of mass. This fact justify us to use the classical equations of motion, in order to describe the motion of electrons and holes in a semiconductor device. We can, thus, use the Hamilton formalism to get the electron equations of motion. They read as follow
+\begin{eqnarray}
+& & \frac{d \bf{x}}{dt} = \frac{1}{\hbar} \nabla_{\bf{k}} H \\
+& & \frac{d \bf{k}}{dt} = -\frac{1}{\hbar} \nabla_{\bf{x}} H
+\end{eqnarray}
+where $H$ is the Hamiltonian of the system, i.e.
+$$ H = {\cal{E}}(\bf{k}) + V(\bf{x}) $$
+Then, if we use the Kane dispersion relation, we get, after some simple algebra, the following expression for the electron velocity
+\begin{equation}
+ {\bf{v}} = \frac{\hbar {\bf{k}}}{m^*} \frac{1}{\sqrt{1 + 4 \alpha \frac{\hbar^2 k^2}{2 m^*}}}
+\end{equation}
+
+\section{Initial Conditions}
+
+In this paragraph, we explain how \textbf{Archimedes} specifies the initial conditions for the super-particles. Concerning the spatial distribution, this is trivially done according to the donor (resp. acceptor) profile density specified by the user in the input file for the electrons (resp. holes). Concerning the distribution in the pseudo-wave vector space, things are a little bit more complex. We have to specify an initial particle distribution in the k-space. This is done in the following way.
+We consider all the particles, at the initial time of the simulation, nearly the thermal equilibrium, which means that the energy of a particle reads
+\begin{equation}
+ {\cal{E}}(k) = -\frac{3}{2} k_B T_L ln (r)
+\end{equation}
+where $r$ is a random number between 0 and 1.
+
+Once we have specified the energy of the electrons, then we can choose the pseudo-wave vectors of all particles. This is done, trivially, by the following algorithm.
+\begin{enumerate}
+\item
+We can, from the Kane dispersion relation, compute the modulus of the pseudo-wave vector. This is done by the following expression
+$$ k = \frac{\sqrt{2 m^* {\cal{E}}(k) [1 + \alpha {\cal{E}}(k)]}}{\hbar} $$
+
+\item
+We, then, generate two random numbers between 0 and 1, say $\theta$ and $\phi$ 
+
+\item
+We compute the three component of the pseudo-wave vector by
+\begin{eqnarray}
+ k_x &=& k \sin{\theta} \cos{\phi} \\
+ k_y &=& k \sin{\theta} \sin{\phi} \\
+ k_z &=& k \sin{\theta} 
+\end{eqnarray}
+
+\end{enumerate}
+
+\section{Contacts and Boundaries}
+
+In this section, we describe the various contacts we can choose in \textbf{Archimedes}. First of all, we can divide the contacts into three categories: Insulator boundary, Ohmic and Schottky contacts. In this code we immagine a contact, or a boundary, as a line on an edge of the device. In \textbf{Archimedes} there is no limit in the number of contacts, so you can specify whatever contacts you want.
+
+\subsection{Insulator Boundaries}
+
+This kind of boundary is considered as a "mirror boundary". This means that when a particle interact with such a contact it will simply be reflected by this one. This is necessitated when you want to simulate, for example, the insulator boundaries of a device. Furthermore, you can apply a non-zero potential on a boundary even if this is an insulator edge. This will be explained further in the paragraph concerning the keyword \textbf{CONTACT}.
+
+\subsection{Ohmic Contacts}
+
+Ohmic contacts are contacts which are open, i.e. particles can both go out from or enter in the device trough it, but also contacts which hold the neutrality charge condition, i.e. the charge have to be assigned constant on it. Thus we can be think of ohmic contacts as electron reservoirs from which the particles can go out from the device. 
+
+\subsection{Schottky Contacts}
+
+Schottky contacts are, as the ohmic ones, open contacts but they don't have an electron reservoir, which means that electrons (or more generally, particles) can go out through this it, but they are just absorbing contacts, so the neutrality charge condition have to hold on it.
+
+\section{The Scattering Process}
+
+At the term of the free flight of a particle, this one scatters with the phonons of the lattice (phonons are the quantization of the motion of ions of the lattice). So, at the end of the free flight, a scattering process have to be choosed. Let us see, how this happens in \textbf{Archimedes}.
+First of all, let us report the list of all scatterings taken into account in \textbf{Archimedes}. We note that, while the self-scattering is computed simply, the probability of scattering for acoustic and optical phonons are computed by means of the quantum mechanics and we will show all the details about them.
+
+\begin{enumerate}
+\item
+\textbf{Self-Scattering}. We introduce this scattering in order to determine the flight time. It is important to accurately compute this scattering, because it influences all process during the simulation. For more informations about this topic, read the book of K.Tomizawa, "Numerical Simulation of Submicron Semiconductor Devices", Artech House, Boston, London.
+Let us report, briefly, how the self-scattering is introduced in the simulation. If the various scatterings read
+$$ {\cal{W}}_i({\cal{E}}(k)) $$
+for $i=1,2,...,N$, where $N$ is the number of the scatterings taken into account in the simulation, then we define the following variable $\Gamma$ as follows
+\begin{equation}
+ \Gamma = \sum_{i=0}^{N} {\cal{W}}_i ({\cal{E}} (k) )
+\end{equation}
+Then the free flight $\tau$ of a particle will read
+\begin{equation}
+ \tau = -\frac{ln(r)}{\Gamma}
+\end{equation}
+where $r$ is a random number between $0$ and $1$.
+The factor $\Gamma$ will be used, as we will see at the end of this paragraph, to determine when the self-scattering occurs.
+
+\item
+\textbf{Elastic Acoustic Phonon Scattering}.
+From quantum mechanics, applying the Fermi's golden rule and some other approximations, it is possible to show that the probability that an electron with a starting pseudo-wave vector $\bf{k}$ scatters with an elastic acoustic phonon and having a final pseudo-wave vector ${\bf{k}}^{'}$, is
+\begin{equation}
+ S({\bf{k}},{\bf{k}}^{'}) = \frac{\pi \Xi^2 k_B T_L}{\hbar c_L \Omega}
+ \frac{k}{q_w {\cal{E}}(k)} \delta (\frac{q_w}{2 k} \pm \cos {\theta}^{'})
+\end{equation}
+where $\Xi$ is a proportionality constant called deformation potential, $c_L$ the elastic constant of the material, $\theta^{'}$ the polar angle between the two vectors ${\bf k}$ and ${\bf k}^{'}$, $q_w$ the modulus of the phonon wave vector and $\Omega$ the volume of the crystal.
+Now integrating on ${\bf{k}}^{'}$ one can easily obtain the probability that an electron of energy $\cal E$ scatters with an acoustic phonon. This last reads
+\begin{equation}
+{\cal{W}} ({\bf{k}}) = \frac{2 \pi \Xi^2 k_B T_L}{\hbar c_L} N({\cal{E}}_k)
+\end{equation}
+where $N({\cal E})$ is the density of states and reads
+\begin{equation}
+ N({\cal{E}}(k)) = \frac{(2 m^*)^{\frac{3}{2}} \sqrt{{\cal{E}}(k)}}{4 \pi^2 \hbar^3}
+\end{equation}
+
+\item
+\textbf{Non-Polar Optical Phonon Scattering}.
+Concerning the non-polar optical phonon, following the same rules as before we get the two probabilities
+\begin{eqnarray}
+& & S({\bf{k}},{\bf{k}}^{'}) = \frac{\pi D_{opt}^2}{\rho \omega_0 \Omega}
+   (n_0 +\frac{1}{2} \mp \frac{1}{2}) \delta (\frac{\hbar^2 q_w^2}{2 m^*} \pm \frac{\hbar^2 k q_w \cos \theta^{'}}{m^*} \mp \hbar \omega_0)\\
+& & {\cal{W}} ({\bf{k}}) = \frac{\pi D_{opt}^2}{\rho \omega_0} (n_0 + \frac{1}{2} \mp \frac{1}{2}) N({\cal{E}}(k) \pm \hbar \omega_0)
+\end{eqnarray}
+where $D_{opt}$ is the optical deformation potential constant, $\omega_0$ the phonon angular frequency, $n_0$ a value almost equal to the intrinsic density of the material. Pay attention that in \textbf{Archimedes} we take into all the six optical phonons for the Silicon-like materials. For more informations about this topic read the following paper
+C.Jacoboni, L.Reggiani, "The Monte Carlo method for the solution of charge transport insemiconductors with applications to covalent materials", Reviews of Modern Physics, Vol.55, No.3, July 1983
+
+\end{enumerate}
+
+\subsection{The Choice of the Scattering}
+In \textbf{Archimedes} the choice of the scattering is quite simple. First of all, we select randomly a scattering process and after this has been done, we compute the particle state after the scattering event. To this purpose we define the following functions 
+\begin{equation}
+ \Lambda_i ({\cal E}) = \frac{\sum_{j=1}^n {\cal W}_j ({\cal E})}{\Gamma}
+\end{equation}
+for $i=1,2,...,N$ where $N$ is, as before, the number of scattering taken into account during the simulation. A scattering mechanism is, then, choosed generating a number $r$ lying between $0$ and $1$ and doing the following comparison
+\begin{equation}
+ \Lambda_{i-1} ({\cal E}) < r <= \Lambda_i ({\cal E})
+\end{equation}
+for a particle with energy $\cal E$.
+
+\section{The Simplified MEP Model}
+From the vast literature, it is well known that Monte Carlo method is the best way for obtaining very accurate simulations for the transport of electrons in semiconductor devices. Even if this method is very accurate, it has the price of very high simulation time. This is why we introduce the MEP model in this release of \textbf{Archimedes}. In this way, as we will see, we will have the possibility of coupling MEP and Monte Carlo in order to make Monte Carlo method faster.
+
+As you can see from the precedent papers reported in the introduction of this chapter, the MEP model is a very advanced hydrodynamical model for both electrons and holes in Silicon devices. For our purpose we will need only a simplified version of it. This because, we only need simple initial conditions for the Monte Carlo method. In the following we report a sketch of this model. A paper is under construction and will be refered in the next versions of this manual. The MEP model is based on the closure of the semiclassical Boltzmann equation by means of the maximum entropy principle. Using the relaxation time approximation (for only the moments and not for the energy moment) and using the so-called Liotta-Mascali distribution function which has the following form
+\begin{equation}
+ f = (\frac{3 \hbar^2}{4 \pi m^* W})^(\frac{3}{2}) n e^{-\frac{3 \epsilon}{2 W}} + \frac{27 \hbar^3}{32 \pi \sqrt{2 m^*}} \frac{n}{W} \epsilon^{-\frac{1}{2}} e^{-frac{3 \epsilon}{2 W}} u^i v_i
+\end{equation}
+we get the following hydrodynamical model for electrons, which we will call the \textbf{Simplified MEP model}.
+\begin{eqnarray}
+ & & \frac{\partial n}{\partial t} + \frac{\partial n u^i}{\partial x^i} = C_n\\
+ & & \frac{n u^j}{\partial t} + \frac{n K_B T^{ij}}{\partial x^i} + q E^j \frac{n}{m^*} = - \frac{n u^i}{\tau_p}\\
+ & & \frac{\partial n W}{\partial t} + \frac{\partial n S^i}{\partial x^i}
+  + q E_i n u^i = - n \frac{W-W_0}{\tau_W}
+\end{eqnarray}
+where $\tau_W$ is a function of the electrons energy, as you can see from the precedent papers. This function is computed numerically and reads:
+\begin{equation}
+ \tau_W (W) = -\frac{W-\frac{3}{2} K_B T_L}{-7.24 \times 10^{10} W^5 + 5.13 \times 10^{11}W^4 - 1.36 \times 10^{12} W^3 + 3.69 \times 10^{11} W^2 - 3.07 \times 10^{12} W + 9.97 \times 10^{10}}
+\end{equation}
+Furthermore, we have the following relations:
+\begin{eqnarray}
+ K_B T^{ij} &=& \frac{2}{3} \frac{W}{m^*} \delta^{ij} \\
+ S^i &=& \frac{4}{3} W u^i
+\end{eqnarray}
+For the moment relaxation time we have the following relations which are taken from the Baccarani model:
+\begin{equation}
+ \tau_p = \frac{k_{\tau_p}}{T}
+\end{equation}
+where
+\begin{equation}
+ k_{\tau_p} = \frac{m^* \mu_0 T_L}{q}
+\end{equation}
+with $\mu_0$ the low field mobility and $T_L$ the lattice temperature.
+It is very easy to see how to adapt everything to Silicon heavy holes, so we do not report the Simplified MEP model for them.
+
+\subsection{Coupling Simplified MEP model and Monte Carlo method}
+
+In this section we show, in a cursory fashion, how it is possible to use the MEP simulation results to obtain faster Monte Carlo simulation.\\
+The method is surprisingly simple and gives very fast and accurate results as it will be possible to see in the example reported in a next chapter. First of all, we simulate a device by means of the simplified MEP model. When the simulation reaches the stationary solution, we save it and use it as a starting point for the Monte Carlo simulation. What it is done in \textbf{Archimedes} is very simple. It uses the electron density, the potential, and what is the most important, the electron energy as a starting point. Concerning the energy as a starting point, it is very easy but, surprinsingly, works very well. When we start the Monte Carlo simulation, we usually assign an electron energy which is proportional to $K_B T_L$, i.e. related to the lattice energy. Now, the only thing to do is to assign to the electrons the energy present in the cell $i,j$ which has been computed by means of simplified MEP model. Then we assign the same potential and the same density computed previously by MEP. The results are very interesting, as you will see in a next chapter in which we report it, and are the subject of a paper under preparation.
+
+
+
+\chapter{Coupling between Monte Carlo and Poisson}
+
+\section{Introduction}
+
+The most correct and predictive tool for the simulation of an electron gas in solid state matter coupled to its electrostatic potential, should be the Schroedinger-Poisson system. Even if some works have been done on this topic, it remains a very difficult and, somehow, open problem. For more informations, read the following very interesting book
+\\
+L.Ramdas Ram-Mohan, "Finite Element and Boundary Element Applications in Quantum Mechanics", Oxford University Press, 2002
+\\
+ Important problems still remains in the application of the boundary conditions for the Schroedinger equation, and it is very difficult, and for some process still impossible, to take into account all the relevant scattering events. Furthermore, solving Schroedinger-Poisson system is a very difficult task also from the numerical point of view, since the Schroedinger wave-function to be solved is a function in a $3 N_e$ space, where $N_e$ is the number of electrons simulated in the device. A solution like this, in realistic devices, is certainly a daunting task from the point of view of computer memory. This is why we use the Monte Carlo method for simulations in \textbf{Archimedes}.
+\\
+In Monte Carlo electron gas simulations, it is very important to solve correctly both the dynamics of the particles and the computation of the electric field raising from the electron-hole distribution and, eventually, from applied potentials. This is because the charge transport in semiconductor devices is strongly dependent on the electric field, so, if the mentioned electric field is not correctly coupled to the charge dynamics, and correctly computed, all the simulation will be of no utility. This is why, in this chapter, we will explain how the Monte Carlo simulations and the Poisson equation are coupled in \textbf{Archimedes}. This is an important topic for Monte Carlo simulations.
+
+\section{The Cloud-in-a-Cell algorithm}
+
+Since the number of particles in a simulation is quite limited, if compared to the number of particles in a real semiconductor device, noise will always be present in the solutions generated by \textbf{Archimedes}. That is why we have to use an advanced algorithm in order to avoid, as the best as possible, this noise, instead of simply counting the number of particles in the cells of the simulation. For this purpose, we use in \textbf{Archimedes} the well-known cloud-in-cell algorithm. For more informations about cloud-in-cell method and more advanced algorithms see the following papers
+\begin{enumerate}
+\item
+S.E.Laux, "On Particle-Mesh Coupling in Monte Carlo Semiconductor Device Simulation", IBM Research Report, RC 20101
+\item
+S.E.Laux, "On Particle-Mesh Coupling in Monte Carlo Semiconductor Device Simulation", IBM Research Report, RC 20081
+\end{enumerate}
+We report here a brief description of the cloud-in-cell method.
+\\
+Let us consider a finite difference mesh with the nodes located at $(x_i,y_j)$. Let us denote by $\Delta x$ and $\Delta y$ the constant spatial step in the $x$-direction and $y$-direction. Then, if we denote by $(x,y)$ the point coordinates in which one wants to compute the density charge, with $x_i<x<x_{i+1}$ and $y_i<y<y_{i+1}$, we compute the density in the following way
+\begin{eqnarray}
+ n_{i,j} &=& \frac{S_{i,j}}{A_{i,j}^2} (x_{i+1} - x) (y_{j+1} - y) \\
+ n_{i+1,j} &=& \frac{S_{i+1,j}}{A_{i+1,j}^2} (x - x_i) (y_{j+1} - y) \\
+ n_{i,j+1} &=& \frac{S_{i,j+1}}{A_{i,j+1}^2}(x_{i+1} - x) (y_{j+1} - y) \\
+ n_{i+1,j+1} &=& \frac{S_{i+1,j+1}}{A_{i+1,j+1}^2} (x-x_i) (y-y_j)
+\end{eqnarray}
+where $n_{i,j}$ is the density located at $(x_i,y_j)$, $S_{i,j}$ the statistical weight of the particles located at $(x_i,y_j)$ and $A_{i,j}= \Delta x_i \Delta y_j$.
+Methods do exist that avoid the problems of self-forces but they are necessary only when the grid is not regular and when we deal with heterostructures. They are not implemented, at the present time, in \textbf{Archimedes} because do not yet deal with such structures. They will be implemented in the next future.
+
+\section{The Stationary Poisson Equation}
+
+In semiconductor devices, the potential retardation effects are completely negligible so
+\begin{enumerate}
+\item
+We can neglect the computation of the magnetic field (at least for the majority of semiconductor devices, unless the user wants explicitly simulate it)
+\item
+We can adopt the stationary description of the electric potential, i.e. we select and calculate only the Poisson equation among the set of Maxwell's equations.
+\end{enumerate}
+We, thus, report the Poisson equation
+\begin{equation}
+ \nabla \cdot [ \epsilon ({\bf{x}}) \nabla \phi ({\bf{x}},t) ] = 
+ - q [ N_D({\bf{x}}) - N_A({\bf{x}}) - n({\bf{x}},t) + p({\bf{x}},t)]
+\end{equation}
+Actually, if we have a two-dimensional regular finite-difference grid,
+the discretization of the Poisson will give an algebraic system to solve, which is quite complicated to solve, because the boundary conditions are difficult to implement in a generic simulator such as textbf{Archimedes} and, furthermore, this algebraic system is consuming from the point of view of computer memory (even if we can use well-known methods applied to sparse matrices).
+\\
+These reasons have influenced the author of \textbf{Archimedes} to adopt a lightly different approach in the simulation of the electrostatic potential. (And for this, I thanks Vittorio Romano for his excellent advices).
+
+\section{The Non-Stationary Poisson Equation}
+
+We introduce in this section what I call the "non-stationary" Poisson equation, hereafter NSP equation. This equation is very easy to implment, in a very general numerical context, and very easy to and solve with simple, but very robust, numerical schemes. Let us report in the following the NSP equation
+\begin{equation}
+ \frac{1}{k_S} \frac{\partial \phi}{\partial t} + \nabla \cdot [ \epsilon ({\bf{x}}) \nabla \phi ({\bf{x}},t) ] = 
+ - q [ N_D({\bf{x}}) - N_A({\bf{x}}) - n({\bf{x}},t) + p({\bf{x}},t)]
+\end{equation}
+where $k_S$ is a constant for giving the right dimensions of the term $\frac{\partial \phi}{\partial t}$, and the other variables have the usual meaning.
+It is very easy to show that the solution of this equation will converge, in time, to the solution of the classical Poisson equation described in the precedent paragraph, whatever are the initial potential conditions and with the same boundary conditions. So, if we have a numerical solver for this equation, it will be very easy to get the solution of the classical Poisson equation, simply getting the solution of the NSP equation for very big final time.
+\\
+Actually it is trivial to develop and implement a numerical solver for NSP. In fact, in the context of finite difference, such a numerical scheme can be obtained applying finite-difference approximations of derivatives to the NSP equation. This is what we will see in the next paragraph.
+
+\subsection{Numerical Resolution of the NSP Equation}
+
+In the context of finite-difference approximations, we can trivially write
+\begin{eqnarray}
+& & \frac{\partial \phi}{\partial t} (x_i,y_j) = \frac{\phi^{n+1}_{i,j}-\phi^n_{i,j}}{\Delta t} \\
+& & \nabla^2 \phi (x_i,y_j,t^n) = \frac{\phi_{i+1,j}^n - 2 \phi_{i,j}^n + \phi_{i-1,j}^n}{\Delta x^2} + \frac{\phi_{i,j+1}^n - 2 \phi_{i,j}^n + \phi_{i,j-1}^n}{\Delta y^2}
+\end{eqnarray}
+where $\phi^n_{i,j}$ is the potential computed at time $t^n=t_i + n \Delta t$, in the point $(x_i,y_j)$.
+\\
+Applying these approximations to the NSP equation, one get the following numerical scheme
+\begin{equation}
+ \phi^{n+1}_{i,j} = \phi^n_{i,j} + \Delta t (- \epsilon_{i,j} (\frac{\phi_{i+1,j}^n - 2 \phi_{i,j}^n + \phi_{i-1,j}^n}{\Delta x^2} + \frac{\phi_{i,j+1}^n - 2 \phi_{i,j}^n + \phi_{i,j-1}^n}{\Delta y^2}) \\
+ - q [ {N_D}_{i,j} - {N_A}_{i,j} - n_{i,j}^n + p_{i,j}^n] )
+\end{equation}
+Note that the presented scheme is valid only in the case of homogeneous case, but it is easy to generalize it to the heterogeneous structures.
+\\
+As we can see, once we have the initial conditions and the boundary conditions, it is very easy to implement this equation in a generic semiconductor devices simulator, as it is done in \textbf{Archimedes}.
+
+\section{Electric Field Calculation}
+
+The electric field is easily computed once we have the solution of the static Poisson equation or the NSP equation. The definition of the electric field is as follows
+\begin{equation}
+ {\bf E} (x,y) = - \nabla \phi (x,y)
+\end{equation}
+So, in the context of finite-difference approximations, we compute the electric field in the various cells of the grid as follows
+\begin{eqnarray}
+ {E_x}_{i,j} &=& - \frac{\phi_{i+1,j}- \phi_{i-1,j}}{2 \Delta x} \\
+ {E_y}_{i,j} &=& - \frac{\phi_{i,j+1}- \phi_{i,j-1}}{2 \Delta y}
+\end{eqnarray}
+These simple expressions are used in \textbf{Archimedes} and, even if very simple, they are accurated and robust.
+
+\chapter{\textbf{Archimedes} Commands Syntax}
+
+In order to make a simulation of a new general device, in \textbf{Archimedes}, the user needs to describe this device by means of ASCII scripts using keywords belonging to Archimedes meta-language. This meta-language is very generic, so it gives the possibility of defining semiconductor devices of quite general structures. Furthermore, since the keywords are very simple to understand (and remember), it is possible to define devices in short amounts of time  and change them with small modifications in the input ASCII file, in case of, for example, optimisation process or similar.
+\\
+Thus, in this chapter, we describe the syntax of all the commands actually implemented in \textbf{Archimedes}. The number of elements in this list is increasing as long as new versions are released.
+\\
+The definition of a new device is done by means of a user defined ASCII input file, which is processed by \textbf{Archimedes}. This is done typing the following command line in a shell
+
+\begin{verbatim}
+# archimedes filename.extension
+\end{verbatim}
+where "filename.extension" is the name of the ASCII file in which the user have defined the device to be simulated. Some extra options are possible with \textbf{Archimedes}. For this type in a shell window
+\begin{verbatim}
+# archimedes --help
+\end{verbatim}
+
+\textbf{VERY IMPORTANT REMARK} : \textbf{Archimedes} is case sensitive so every command have to be written in capitols, otherwise it will not understand the command. Furthermore, all the unity of measure are taken from the international M.K.S.C. system.
+
+\section{ACCEPTORDENSITY}
+
+In the definition of a new device, even if the holes are considered as fixed in this version of \textbf{Archimedes}, we have to specify the acceptor density, i.e. the spatial distribution of the acceptors in the device. This is done in order to solve correctly the Poisson equation. In fact, this last equation needs both the donor and acceptor distribution, so it is necessary to specify them. If the user does not specify any constant value or distribution of the acceptors, \textbf{Archimedes} will consider that the acceptor distribution is constant on all the device and it is equal to the intrinsic density as default. Furthermore, if the user specify the value of the acceptor distribution only on a part of the device, the restant part will be considered equal to the intrinsic density.
+\\
+Let us see, now, how to specify the acceptor distribution on a device.
+In \textbf{Archimedes} a sub-domain (but also the entire device) on which we want to specify an acceptor value for the spatial distribution is just a simple rectangle. This means that we can specify the value of the acceptor density on a rectangle (the entire device or a part of it), specifying only five numbers i.e.
+\begin{enumerate}
+\item
+The x-coordinate value of the left-bottom vertex of the rectangle. Let us denote it by $x_{min}$
+\item
+The y-coordinate value of the left-bottom vertex of the rectangle. Let us denote it by $y_{min}$
+\item
+The x-coordinate value of the right-upper vertex of the rectangle. Let us denote it by $x_{max}$
+\item
+The y-coordinate value of the right-upper vertex of the rectangle. Let us denote it by $y_{max}$
+\item
+The value of the acceptor density on the rectangular sub-domain. Let us denote it by $N_A$
+\end{enumerate}
+Then we will have the acceptor density $N_A$ on the rectangle $[x_{min},x_{max}] \times [y_{min},y_{max}]$.\\
+
+An example will clarify everything.
+
+\begin{verbatim}
+# acceptor spatial distribution on the rectangle [0.0,1.0e-6]x[0.0,0.1e-6]
+# acceptor density on this rectangle is equal to 1.e20
+
+ACCEPTORDENSITY 0.       0.    1.0e-6    0.1e-6    1.e20
+
+\end{verbatim}
+
+\section{CIMP}
+Since the impurity scattering can be very relevant in the GaAs material, we have implemented it up to 0.0.4 release of \textbf{Archimedes}. In order to specify the density of impurity, you type, for example, as follows
+\begin{verbatim}
+CIMP 1.e23
+\end{verbatim}
+
+\section{COMMENTS}
+
+Like in every computer language, comments are very important for the clarity of a code. The user can make his/her own comments by simply preceding them by the \# symbol. So, for example, the following rows of an ASCII file processed by \textbf{Archimedes} will be interpreted as comments
+
+\begin{verbatim}
+# this is comment
+# MATERIAL X 0.0 1.0e-6   Y 0.0 0.1e-6   SILICON
+# even if the precedent row contains a command
+# this will never processed and it will be consider
+# simply a comment
+\end{verbatim}
+
+Pay attention to the fact that \textbf{everything} after the \# symbol is a comment even if this is a command usually recognised by \textbf{Archimedes}.
+
+\section{CONTACT}
+
+When a new device is defined, the user needs to specify where the edges are insulator, where there are ohmic contacts and where the Schottky contacts are positioned. Even, you can have the need of applying a potential on a isulator edge (for simulation purposes). All this definitions are possible by the use of only one command, i.e. \textbf{CONTACT}. Let us describe the syntax of this command.\\
+This command can be described as follows
+\begin{verbatim}
+CONTACT  place  init_pos  fin_pos  kind  pote  dens
+\end{verbatim}
+where \textsl{place} can be one of the following choice
+\begin{enumerate}
+\item
+\textbf{UP}. This in invoked when the contact have to be placed on the upper edge of the device.
+\item
+\textbf{DOWN}. This in invoked when the contact have to be placed on the bottom edge of the device.
+\item
+\textbf{RIGHT}. This in invoked when the contact have to be placed on the right edge of the device.
+\item
+\textbf{LEFT}. This in invoked when the contact have to be placed on the left edge of the device.
+\end{enumerate}
+Furthermore, \textsl{init\_pos} is the initial position of the contact, \textsl{fin\_pos} is the final position of the same contact.
+The choice \textsl{kind} can be one of the following
+\begin{enumerate}
+\item
+\textbf{INSULATOR}. This is invoked in the case the contact is of insulator type. In this case, the contact will be a "reflective mirror" for the particles, i.e. the particles can not go out or inside the device through that contact.
+\item
+\textbf{OHMIC}. This is invoked in the case the contact is of ohmic type. This kind of contact can be considered as a gate through which the particles can go out. Furthermore, it can be considered as a particle reservoir from which particles can go into the device.
+\item
+\textbf{SCHOTTKY}. This is invoked in the case the contact is of Schottky type. This kind of contact is the same as the ohmic one with the ecception that this is not a particle reservoir, so this contact is only a absorbing one.
+\end{enumerate}
+The choice \textsl{pote} is the potential which is applied to this contact. In the case the edge, or a part of it, is of insulator type and there is no potential applied there, then it have to be put to 0.\\
+
+The choice \textsl{dens} is the density of the particle reservoir, so it has to be specified only in the ohmic contact case.\\
+
+When an edge, or part of it, will not be specified by the user, it will be considered as of insulator type with zero potential applied, as default.\\
+
+Here we report some examples.\\
+
+If we want to specify that the upper edge is of insulator type, with no applied potential, in a diode with x-direction length 1.0 micron, than the user have to write
+\begin{verbatim}
+ CONTACT   0.0   1.0e-6   INSULATOR   0.0
+\end{verbatim}
+
+If we want to specify that the left edge is of ohmic type, with zero applied potential and $\frac{1.e23}{m^3}$, in a diode with y-direction length 0.1 micron, than the user have to write
+\begin{verbatim}
+ CONTACT   0.0   0.1e-6   OHMIC   0.0   1.e23
+\end{verbatim}
+
+Finally, if a user wants to specify that a part of the upper edge is of Schottky type, with $-0.8$ Volts applied potential starting from $0.2 \times 10^{-6}$ to $0.4 \times 10^{-6}$, in a MESFET, than the user have to write
+\begin{verbatim}
+ CONTACT   0.2e-6   0.4e-6   SCHOTTKY   -0.8
+\end{verbatim}
+
+\section{DONORDENSITY}
+
+In the definition of a new device, we have to specify the donor density, i.e. the spatial distribution of the donors in the device. This is done in order to solve correctly the Poisson equation. In fact, this last equation needs both the donor and acceptor distribution, so it is necessary to specify them. If the user does not specify any constant value or distribution of the donors, \textbf{Archimedes} will consider that the donor distribution is constant on all the device and it is equal to the intrinsic density as default. Furthermore, if the user specify the value of the donor distribution only on a part of the device, the restant part will be considered equal to the intrinsic density.
+\\
+Let us see, now, how to specify the donor distribution on a device.
+In \textbf{Archimedes} a sub-domain (but also the entire device) on which we want to specify an donor value for the spatial distribution is just a simple rectangle. This means that we can specify the value of the donor density on a rectangle (the entire device or a part of it), specifying only five numbers i.e.
+\begin{enumerate}
+\item
+The x-coordinate value of the left-bottom vertex of the rectangle. Let us denote it by $x_{min}$
+\item
+The y-coordinate value of the left-bottom vertex of the rectangle. Let us denote it by $y_{min}$
+\item
+The x-coordinate value of the right-upper vertex of the rectangle. Let us denote it by $x_{max}$
+\item
+The y-coordinate value of the right-upper vertex of the rectangle. Let us denote it by $y_{max}$
+\item
+The value of the donor density on the rectangular sub-domain. Let us denote it by $N_A$
+\end{enumerate}
+Then we will have the donor density $N_A$ on the rectangle $[x_{min},x_{max}] \times [y_{min},y_{max}]$.\\
+
+An example will clarify everything.
+
+\begin{verbatim}
+# donor spatial distribution on the rectangle [0.0,1.0e-6]x[0.0,0.1e-6]
+# donor density on this rectangle is equal to 1.e20
+
+DONORDENSITY 0.       0.    1.0e-6    0.1e-6    1.e20
+
+\end{verbatim}
+
+\section{LEID}
+This is a very powerfull command. This command is invoked when the user wants to obtain Monte Carlo simulations in a very fast way. Let us suppose that the reader have simulated a device by means of the simplified MEP model. Then we can use the results obtained by this model as a starting point for the Monte Carlo simulation. All it has to be done is to save the electron density, the electron energy and the potential in files named respectively
+\begin{verbatim}
+ density_start.xyz
+ energy_start.xyz
+ potential_start.xyz
+\end{verbatim}
+Then the user have to invoke the command \textbf{LEID} (LEID stands for Load Electrons Initial Data). Pay attention to the fact that the input files have to be of the same dimension of the grid for the Monte Carlo simulation.
+
+\section{MATERIAL}
+
+\textbf{ATTENTION : The syntax of this command has been radically changed from version 0.0.9 on. This means that the precedent input files have to be modified in order to be syntaxically correct with respect to this command!} (This is due to the fact that starting from version 0.0.9, \textbf{Archimedes} is able to deal with heterostructure devices)
+
+When you simulate a new device, the user has the freedom to choose to simulate an heterostructure. The user should specify which zone is made of a certain semiconductor material (like Silicon, Gallium Arsenide, Germanium, InSb, AlSb, AlAs and so on..).
+
+This is done by using the command \textbf{MATERIAL}. The syntax of this command is as follows
+\begin{verbatim}
+ MATERIAL X xi xf   Y yi yf semmat
+\end{verbatim}
+
+where $(xi,yi)$ and $(xf,yf)$ are the initial and final corners of a rectangle made of $semmat$. In the present version, $semmat$ can be one fo the following choice :
+\begin{verbatim}
+ SILICON
+ GAAS
+ GERMANIUM
+ INSB
+ ALSB
+ ALAS
+ ALxINxSB
+ ALxIN1-xSB
+\end{verbatim}
+(this list will certainly increases as long as new versions are released).
+
+\section{FARADAY}
+Up to version 0.0.8, it is possible to simulate the self consistent magnetic field produced by the charged particles in the device. This is obtained by simulating the well-known Faraday equation which deals with dynamic magnetic fields due to the moving charged particles.
+
+As default, the simulation of the self-consistent magnetic field is NOT taken into account (since it is usually negligible in the majority of simulated devices). If the user wants to simulate it, he has to specify it by means of the command \textbf{FARADAY}.
+
+The syntax of this command is straight simple, being
+\begin{verbatim}
+ FARADAY ON/OFF
+\end{verbatim}
+In other words, the user decides, by means of this command, to switch on or off the self-consistent magnetic field.
+
+\section{BCONSTANT}
+Starting from version 0.0.8 on, it is possible to simulate the presence of an externally applied magnetic field. This is done by means of the command \textbf{CONSTANTMAGNETICFIELD} (in this case, it is strongly suggested to switch off the \textbf{FARADAY} command).
+
+The syntax of this command is straightforward :
+\begin{verbatim}
+ CONSTANTMAGNETICFIELD xi yi xf yf B
+\end{verbatim}
+where $(xi,yi)$ and $(xf,yf)$ are the corners of the rectangle where the magnetic field $B$ is applied ($B$ is in $Weber/m^2$ units, i.e. a Newton / (Ampere * meter )).
+
+\section{TRANSPORT}
+
+Pay attention to the fact that this command has a different syntax respect to the previous releases!!
+When the device is defined, the user has to choose what kind of transport \textbf{Archimedes} have to simulate, i.e. if the transport is unipolar, bipolar and what kind of particles have to be simulated. This is done by the command \textbf{TRANSPORT}. The following list shows the choice the user can make. The only choices which is still not implemented is the Monte Carlo simulation of heavy holes. They are simulated by means of a simplified MEP model since they can be considered as almost fixed and do not contribute to the total device current.
+First of all, after typing the command \textbf{TRANSPORT} the user has to specify the model (i.e. Monte Carlo or MEP). This is done typing one of the following two choices
+\begin{enumerate}
+\item
+\textbf{MC}. This is invoked when we want to simulate a device by means of Monte Carlo method.
+\item
+\textbf{MEP}. This is invoked when we want to simulate a device by means of the simplified MEP model.
+\end{enumerate}
+Once the method has been specified, the user has to choose what particles have to be simulated. This is done choosing between the followings:
+\begin{enumerate}
+\item
+\textbf{ELECTRONS}. This is invoked when the transport is unipolar and made of only electrons.
+\item
+\textbf{HOLES}. This is invoked when the transport is unipolar and made of only holes.
+\item
+\textbf{BIPOLAR}. This is invoked when the transport is bipolar and made of both electrons and holes.
+\end{enumerate}
+So, some examples of this command, in the present version of \textbf{Archimedes}, are
+\begin{verbatim}
+# Monte Carlo simulation of only electrons
+ TRANSPORT MC ELECTRONS
+# Simplified MEP simulation of only electrons
+ TRANSPORT MEP ELECTRONS
+# Monte Carlo for electrons and MEP for heavy holes
+ TRANSPORT MC BIPOLAR
+# Simplified MEP model for both electrons and holes
+ TRANSPORT MEP BIPOLAR
+\end{verbatim}
+
+\section{MOSFET}
+See the file MOSFET.input in the tests directory of Archimedes for more informations.
+
+\section{FINALTIME}
+
+It is important to choose the final time of a simulation. In fact, if the user wants to simulate the stationary solution of a semiconductor device, he have to choose an appropriate final time, in order to get the stationary state but without waiting for not-necessary long simulation run-time. At the moment, there is no algorithm which can predict the final time in order to get the stationary state of a device, so the freedom of choosing this final time is given to the user. This is also useful in the case in which the user want to study and simulate the trasient behaviour of a semiconductor device.
+So, for example, if the user wants to set the final time to 5 picoseconds, this will be done by the following line of the input file
+\begin{verbatim}
+ FINALTIME 5e-12
+\end{verbatim}
+
+\section{TAUW}
+This command is only needed if the user is using the simplified MEP model for electrons. Indeed, in this case the relaxation time approximation for the electrons energy can be equal to zero (as the reader can see from the definition of the function $\tau_W$) comporting the presence of NaN. This is avoided by specifying a value for $tau_W$ that will be used in the case it is equal to zero. The command is invoked as it follows
+\begin{verbatim}
+ TAUW value
+\end{verbatim}
+where $value$ is the value specified. Usually a good value is $0.4$ picoseconds. We report an example
+\begin{verbatim}
+ TAUW 0.4e-12
+\end{verbatim}
+As the reader can see from the example, the unit of measure is the second.
+
+\section{TIMESTEP}
+
+It is very important to choose correctly the time step of a simulation. This is a very important topic of a simulation. This have to be done in a very accurate manner, in order to avoid unphysical phenomena like strange oscillations in electric field or too much scattering effects and so on...
+Actually, algorithm based on the plasma oscillations of a gas of charged particles exists which are usefull in the choice of a correct time step. This is not implemented, at the moment, so the user have to specify it. This is done in the following fashion. For example, if the user wants to set the time step to 0.01 picoseconds, the following command line in the input file is needed
+\begin{verbatim}
+ TIMESTEP 0.01e-12
+\end{verbatim}
+
+\section{XLENGTH}
+
+In this actual version of \textbf{Archimedes}, the device is defined as a rectangular domain. So the user have to specify the x-direction and the y-direction length of this rectangular domain. Concerning the x-direction length, this is setted by the following command line. For example, if the x-length is 5 micron, one have to write
+\begin{verbatim}
+ XLENGTH 5.e-6
+\end{verbatim}
+
+\section{YLENGTH}
+
+In this actual version of \textbf{Archimedes}, the device is defined as a rectangular domain. So the user have to specify the x-direction and the y-direction length of this rectangular domain. Concerning the y-direction length, this is setted by the following command line. For example, if the y-length is 1 micron, one have to write
+\begin{verbatim}
+ YLENGTH 1.e-6
+\end{verbatim}
+
+\section{XSPATIALSTEP}
+
+Once the x-direction length of the new device is defined, the user have, obviously, to define the number of cells in the x-direction. This is done in order to solve every equations of the simulation in the finite-difference approximation context. The bigger is the number of cells in the x-direction the best will be the accuracy in that direction (at least for the specific equations the author have implemented in this actual version of \textbf{Archimedes}), but the user will pay the better accuracy in a more long run-time. So, pay attention in the choice of this number of cells. Usually, a grid of $100 \times 50$ is enough for the majority of devices, but it strongly depends on the device structure and the requirements of the user. To specify, for example, $100$ cells in the x-direction, the following line have to be typed in the input file
+\begin{verbatim}
+ XSPATIALSTEP 100
+\end{verbatim}
+
+\section{YSPATIALSTEP}
+
+Once the y-direction length of the new device is defined, the user have, obviously, to define the number of cells in the y-direction. This is done in order to solve every equations of the simulation in the finite-difference approximation context. The bigger is the number of cells in the y-direction the best will be the accuracy in that direction (at least for the specific equations the author have implemented in this actual version of \textbf{Archimedes}), but the user will pay the better accuracy in a more long run-time. So, pay attention in the choice of this number of cells. Usually, a grid of $100 \times 50$ is enough for the majority of devices, but it strongly depends on the device structure and the requirements of the user. To specify, for example, $50$ cells in the y-direction, the following line have to be typed in the input file
+\begin{verbatim}
+ YSPATIALSTEP 50
+\end{verbatim}
+
+\section{QUANTUMEFFECTS}
+
+As we have sayed in a precedent chapter, \textbf{Archimedes} is able to simulate, at least at first order, the quantum effects present in a semiconductor device, by means of the recently introduced effective potential method. So, if the user wants to take into account the quantum effects in the simulation, he/she have to tell to \textbf{Archimedes} in the input file. This is done in the following fashion
+\begin{verbatim}
+ QUANTUMEFFECTS
+\end{verbatim}
+Pay attention to the fact that taking into account the quantum effects can be numerically heavy, so you will need to wait for more long run-time to get the solution. So attention have to be putted in this choice. If the user knowns, \textsl{a priori}, that the quantum effects are not relevant in that type of device (because, for example, the characteristic length of the device is bigger than 1 micron), it is probably a good choice to avoid these extra calculations.
+
+\section{NOQUANTUMEFFECTS}
+
+In the case the user wants to avoid the calculations of the quantum effects, it is necessary to set it into the input file processed by \textbf{Archimedes}. This is done in the following way
+\begin{verbatim}
+ NOQUANTUMEFFECTS
+\end{verbatim}
+
+\section{MAXIMINI}
+
+During the simulation computations, it is, sometimes, important to see in a very rapid way, how the macroscopic variables evolves. This can be very usefull in the debugging process of a new defined (and not yet well-defined) semiconductor device. \textbf{Archimedes} gives a simple way of doing it. When the user inserts the following line in an input file, it will get some interesting information about the macroscopic evolution of the devices.
+\begin{verbatim}
+ MAXIMINI
+\end{verbatim}
+This will give, for example, in the case of the precedently presented diode the following output, which is very usefull
+\begin{verbatim}
+ Max. Potential = 1
+ Min. Potential = 0
+ Max. x-elec.field = 0
+ Min. x-elec.field = -3.57578e+06
+ Max. y-elec.field = -0
+ Min. y-elec.field = -0
+ Max. Density = 5.14954e+23
+ Min. Density = 1.33122e+21
+\end{verbatim}
+As we can see from the precedent example, the informations of MAXIMINI are about the maximum and minimum of the following macroscopic variables
+\begin{enumerate}
+\item Electrostatic Potential
+\item x-Component of the Electric Field
+\item y-Component of the Electric Field
+\item Electronic Density
+\end{enumerate}
+Pay attention to the fact that the calculation of this informations can be, in some cases (for example, for highly refined grid), computationaly heavy. So use it only in the case it is necessary or not heavy for the simulation, in order to avoid too big run-time.
+
+\section{NOMAXIMINI}
+
+In the case the user wants to avoid to have extra informations about the macroscopic evolution of some variables, this have to be specified in the input file processed by \textbf{Archimedes}. This is done by the following row
+\begin{verbatim}
+ NOMAXIMINI
+\end{verbatim}
+This will be usefull in the case the user already know the transient macroscopic behaviour of the device and does not need such informations, in order to not tax the computer run-time.
+
+\section{SAVEEACHSTEP}
+
+When it is required to simulate the transient behaviour of a semicondutor device, it is very usefull to save all the solutions at each time step of the simulation. In this way, it is possible to create movies which show the transient behaviour of the density, or of the electrostatic potential, for examples. This movies are very good in the comprehension of the transient states of a new semiconductor device. The user have not to run and stop at different time the simulation (which is a very annoying task :) ). The only thing to do is to put the following line in the input file processed by \textbf{Archimedes}
+\begin{verbatim}
+ SAVEEACHSTEP
+\end{verbatim}
+This will save all the solution, in the choosed format, with the following convention: the file are named in increasing order, i.e., for density, density001.xyz, density002.xyz, density003.xyz, ... ,density010.xyz and so on. Instead, the last final step will be saved with the suffix '000'.
+\\
+Pay attention to the fact that the savings of all this informations can be, in some cases (for example, for highly refined grid), computationaly heavy. So use it only in the case it is necessary or not heavy for the simulation, in order to avoid too big run-time.
+
+\section{LATTICETEMPERATURE}
+
+\textbf{Archimedes} is a semicondutor device simulator in a quite general context. So when you simulate a new device, you have to specify the lattice temperature. If the user does not specify this value, the room temperature will be taken as default (i.e. $300$ Kelvin degrees). All the temperatures are given in Kelvin. So if the user deal with a cryogenic device, i.e. working at $77$ Kelvin degrees, he have to specify the following row in the input file
+\begin{verbatim}
+ LATTICETEMPERATURE 77
+\end{verbatim}
+
+\section{STATISTICALWEIGHT}
+
+The method implemented in \textbf{Archimedes} is the Monte Carlo one. So every particle carries a statistical weight which is a piecewise-function of the position. The greater is the statistical weight, the greater is the number of super-particles in a cell. In this version of \textbf{Archimedes}, the statistical weigth the user can specify is that of the cell in which the density is at maximum. In the other cells, the statistical weigth is opportunely calculated. If the user, for example, wants to set the statistical weight equal to 1500, he/she have to write in the input file
+\begin{verbatim}
+ STATISTICALWEIGHT 1500
+\end{verbatim}
+Pay attention to the fact that the bigger is the statistical weight the longer will be simulation run-time.
+
+\section{MEDIA}
+
+Monte Carlo method is a statistical one. So, in order to get the macroscopic variables at a certain time, we need to compute the average mean value of this variable on a enough long period of time. This is done, in \textbf{Archimedes}, by specifying on how many final time step the mean average value have to be computed. So, for example, if the user wants to compute the average mean value of the macroscopic variables on the last $500$ time steps of the simulation, one have to type in the input file processed by \textbf{Archimedes}
+\begin{verbatim}
+ MEDIA 500
+\end{verbatim}
+
+\section{OUTPUTFORMAT}
+
+When \textbf{Archimedes} saves the various solution outputs, it have to know in which format to do it. This is specified by the user in the following way, in the input file
+\begin{verbatim}
+ OUTPUTFORMAT formattype
+\end{verbatim}
+where \textsl{formattype} can be one of the following two choices
+\begin{enumerate}
+\item 
+\textbf{GNUPLOT}. This sets that the output files will finish by the extension \textsl{xyz} which means that the file will be in the following format\\
+$$ x_i \quad y_j \quad v(x_i,y_j) $$
+$$ x_{i+1} \quad y_j \quad v(x_{i+1},y_j) $$
+$$ x_{i+2} \quad y_j \quad v(x_{i+2},y_j) $$
+$$ x_{i+3} \quad y_j \quad v(x_{i+3},y_j) $$
+$$ ... $$
+$$ x_{N_x} \quad y_j \quad v(x_{N_x},y_j) $$
+$$ ... $$
+$$ x_i \quad y_{j+1} \quad v(x_i,y_{j+1}) $$
+$$ x_{i+1} \quad y_{j+1} \quad v(x_{i+1},y_{j+1}) $$
+$$ x_{i+2} \quad y_{j+1} \quad v(x_{i+2},y_{j+1}) $$
+$$ x_{i+3} \quad y_{j+1} \quad v(x_{i+3},y_{j+1}) $$
+$$ ... $$
+$$ x_{N_x} \quad y_{N_y} \quad v(x_{N_x},y_{N_y}) $$
+\item
+\textbf{MESH}. The \textsl{MESH} format is a little bit more complex than the \textsl{GNUPLOT} one. In this case, we have a file which describes the mesh and another which describes the solution on that mesh.\\
+Concerning the mesh file, it have a file structure like the following
+\begin{verbatim}
+ MeshVersionFormatted 1
+ Dimension 2
+ Vertices
+ number of vertices
+ x1 y1 0
+ x2 y1 0
+ x3 y1 0
+ ...
+ xn y1 0
+ ...
+ xn yn 0
+ Quadrilaterals
+ number of quadrilaterals
+ v1_1 v2_1 v3_1 v4_1 0
+ v1_2 v2_2 v3_2 v4_2 0
+ ...
+ v1_N v2_N v3_N v4_N 0
+\end{verbatim}
+
+Concerning the file for the solution on the mesh, the file have the following structure
+\begin{verbatim}
+ 2 1 number of vertices 2
+ solution on the 1-st vertex
+ solution on the 2-nd vertex
+ solution on the 3-th vertex
+ solution on the 4-th vertex
+ ...
+ solution on the last vertex
+\end{verbatim}
+This kind of format is becoming very popular in the scientific/numerical community, that is why the author has tought being important to implement it in \textbf{Archimedes}.
+\end{enumerate}
+
+
+\chapter{Example: The MESFET device.}
+
+We report, in this chapter, some examples of 2D Silicon MESFET device simulations. This is a benchmark case which is very usefull in assessing the functionality of a semiconductor device simulator, and so also for \textbf{Archimedes}.\\
+
+\section{The Monte Carlo MESFET simulation}
+
+You can find the following example in the official ditribution of \textbf{Archimedes} in the \textsl{test/MESFET} directory.
+\begin{verbatim}
+
+# Silicon MESFET test-1
+# created on 22 sep.2004, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 5.5e-12
+TIMESTEP 0.0015e-12
+
+XLENGTH 0.6e-6
+YLENGTH 0.2e-6
+
+XSPATIALSTEP 96
+YSPATIALSTEP 32
+
+MATERIAL X 0.0 0.6e-6 Y 0.0 0.2e-6 SILICON
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+DONORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    5.e23
+DONORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    5.e23
+ACCEPTORDENSITY 0.       0.         0.6e-6    0.2e-6    1.e20
+
+# Definition of the various contacts
+# ==================================
+CONTACT DOWN  0.0    0.6e-6 INSULATOR 0.0
+CONTACT LEFT  0.0    0.2e-6 INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6 INSULATOR 0.0
+CONTACT UP    0.1e-6 0.2e-6 INSULATOR 0.0
+CONTACT UP    0.4e-6 0.5e-6 INSULATOR 0.0
+CONTACT UP    0.0    0.1e-6 OHMIC     0.0 5.e23
+CONTACT UP    0.2e-6 0.4e-6 SCHOTTKY -0.8
+CONTACT UP    0.5e-6 0.6e-6 OHMIC     1.0 5.e23
+
+NOQUANTUMEFFECTS
+MAXIMINI
+# SAVEEACHSTEP
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 1500
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1
+
+\end{verbatim}
+
+We report in the following pictures (\ref{MESFET1})-(\ref{MESFET5})the results obtained by \textbf{Archimedes} release 0.0.4.
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/density.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET Density Profile computed by \textbf{Archimedes}.}
+\label{MESFET1}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/x_velocity.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET x-component velocity computed by \textbf{Archimedes}.}
+\label{MESFET2}
+\centerline{\psfig{figure=mesfet_pictures/y_velocity.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET y-component velocity computed by \textbf{Archimedes}.}
+\label{MESFET3}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/energy.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET Electron Energy computed by \textbf{Archimedes}.}
+\label{MESFET4}
+\centerline{\psfig{figure=mesfet_pictures/potential.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET Electrostatic Potential computed by \textbf{Archimedes}.}
+\label{MESFET5}
+\end{figure}
+
+\section{The Fast Monte Carlo MESFET simulation}
+
+In this section we want to show how to obtain faster simulation than the previous section. First of all we simulate the MESFET device by means of the simplified MEP model. This is done by the following script
+\begin{verbatim}
+# Silicon MESFET test-1
+# created on 27 feb.2005, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+# Simplified MEP model
+
+TRANSPORT MEP ELECTRONS
+
+FINALTIME 5.0e-12
+TIMESTEP 0.001e-12
+
+XLENGTH 0.6e-6
+YLENGTH 0.2e-6
+
+XSPATIALSTEP 90
+YSPATIALSTEP 20
+
+MATERIAL X 0.0 0.6e-6 Y 0.0 0.2e-6 SILICON
+
+# Energy relaxation time
+# ======================
+TAUW 0.4e-12
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+DONORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    3.e23
+DONORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    3.e23
+ACCEPTORDENSITY 0.       0.         0.6e-6    0.2e-6    1.e20
+# ACCEPTORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+# ACCEPTORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    3.e23
+# ACCEPTORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    3.e23
+
+# Definition of the various contacts
+# ==================================
+CONTACT DOWN  0.0    0.6e-6 INSULATOR 0.0
+CONTACT LEFT  0.0    0.2e-6 INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6 INSULATOR 0.0
+CONTACT UP    0.1e-6 0.2e-6 INSULATOR 0.0
+CONTACT UP    0.4e-6 0.5e-6 INSULATOR 0.0
+CONTACT UP    0.0    0.1e-6 OHMIC     0.0 3.e23 1.e20
+CONTACT UP    0.2e-6 0.4e-6 SCHOTTKY -0.8
+CONTACT UP    0.5e-6 0.6e-6 OHMIC     1.0 3.e23 1.e20
+
+NOQUANTUMEFFECTS
+MAXIMINI
+# SAVEEACHSTEP
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 100
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1
+
+\end{verbatim}
+
+Then we copy the density, energy and potential files with the following names
+\begin{verbatim}
+ density_start.xyz
+ energy_start.xyz
+ potential_start.xyz
+\end{verbatim}
+and run the following script
+\begin{verbatim}
+# Silicon MESFET test-1
+# created on 27 feb.2005, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+# Fast Monte Carlo method
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 1.e-12
+TIMESTEP 0.001e-12
+
+XLENGTH 0.6e-6
+YLENGTH 0.2e-6
+
+XSPATIALSTEP 90
+YSPATIALSTEP 20
+
+MATERIAL X 0.0 0.6e-6 Y 0.0 0.2e-6 SILICON
+
+# Energy relaxation time
+# ======================
+TAUW 0.4e-12
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+DONORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    3.e23
+DONORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    3.e23
+ACCEPTORDENSITY 0.       0.         0.6e-6    0.2e-6    1.e20
+
+# Definition of the various contacts
+# ==================================
+CONTACT DOWN  0.0    0.6e-6 INSULATOR 0.0
+CONTACT LEFT  0.0    0.2e-6 INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6 INSULATOR 0.0
+CONTACT UP    0.1e-6 0.2e-6 INSULATOR 0.0
+CONTACT UP    0.4e-6 0.5e-6 INSULATOR 0.0
+CONTACT UP    0.0    0.1e-6 OHMIC     0.0 3.e23 1.e20
+CONTACT UP    0.2e-6 0.4e-6 SCHOTTKY -0.8
+CONTACT UP    0.5e-6 0.6e-6 OHMIC     1.0 3.e23 1.e20
+
+NOQUANTUMEFFECTS
+MAXIMINI
+
+# Load Electron Initial Data
+LEID
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 100
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1
+
+\end{verbatim}
+As the reader can note from the following script, we only need $1$ picosecond for the Monte Carlo method. This is done because we load the initial conditions from the previous MEP simulation. This is a very fast way to obtain fast Monte Carlo simulations.
+We report, in the following some interesting results.
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/MEPenergy.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET MEP Energy Profile computed by \textbf{Archimedes}.}
+\label{MESFET10}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/MCenergy.ps, width=18cm,height=15cm, angle=90}} 
+\caption{\small MESFET Fast Monte Carlo Energy Profile computed by \textbf{Archimedes}.}
+\label{MESFET11}
+\end{figure}
+
+\begin{figure}[htb!]
+\centerline{\psfig{figure=mesfet_pictures/MEPpotential.ps, width=18cm,height=15cm, angle=90}} 
+\caption{\small MESFET MEP potential computed by \textbf{Archimedes}.}
+\label{MESFET4}
+\centerline{\psfig{figure=mesfet_pictures/MCpotential.ps, width=18cm,height=15cm}} 
+\caption{\small MESFET Fast Monte Carlo Potential computed by \textbf{Archimedes}.}
+\label{MESFET5}
+\end{figure}
+
+\chapter{Acknowledgments}
+
+In this very short chapter I want to thank the people who has helped and encouraged me in creating \textbf{Archimedes}
+
+\begin{enumerate}
+\item
+\textbf{Richard M. Stallman}. Thanks a lot for all the advices, suggestions and encouraging in creating this code.
+\item
+\textbf{Karl Berry}. Thanks a lot for all the advice, suggestions and patience in aswering to all my boring and, sometimes, stupid and trivial questions :)
+\item
+\textbf{Vittorio Romano}. Thanks a lot for all your entusiasm and support during the creation stage and development period of \textbf{Archimedes}
+\item
+\textbf{A. Marcello Anile}. Thanks a lot for everything you taught me. Without your lessons this code will never exist.
+\end{enumerate}
+
+%\chapter{Evidence that we live in a computer simulation}
+
+%There are strong evidences, from the Bohr interpretation of the quantum mechanics (but even from the Bohm's one), that we leave in a computer simulation. Let us sketch here some of these evidences...
+
+
+\end{document}

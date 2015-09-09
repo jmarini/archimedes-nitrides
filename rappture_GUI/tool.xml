@@ -1,0 +1,1196 @@
+<?xml version="1.0"?>
+<!-- 
+=============================================
+== name : archimedes-gui
+== author : Jean Michel Sellier, Purdue
+== Creation : 05 jan. 2009, JM Sellier, Purdue
+== Last modified : 01 apr. 2009, JM Sellier, Purdue
+== Purpose : This is a GUI for archimedes 0.8.0
+==           made by Rappture.
+=============================================
+
+   This file is part of GNU Archimedes 0.9.0
+
+   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Jean Michel Sellier
+   <jeanmichel.sellier@gmail.com>
+ 
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<run>
+  <tool>
+
+   <title>Archimedes 0.8.0</title>
+
+   <about>Archimedes - 2D Monte Carlo simulator for submicron semiconductor devices</about>
+
+   <command>archimedes-read-gui @driver</command>
+
+  </tool>
+
+  <input>
+   <phase id="two">
+    <about><label>Geometry and Device</label></about>
+    <group id="time">
+    <about><label>Times of Simulation</label></about>
+    <number id="finaltime">
+     <about>
+      <label>Final Time</label>
+      <description>The final time of simulation (in seconds)</description>
+     </about>
+     <min>0.0</min>
+     <max>5.e12</max>
+     <default>3.5e-12</default>
+    </number>
+    <number id="timestep">
+     <about>
+      <label>Time Step</label>
+      <description>The time step for simulation (in seconds)</description>
+     </about>
+     <min>0.0</min>
+     <max>5.e12</max>
+     <default>0.015e-12</default>
+    </number>
+    </group>
+    <group id="lenghts">
+    <about><label>Device Geometry</label></about>
+    <number id="xlenght">
+     <about>
+      <label>Device lenght (x-direction)</label>
+      <description>The lenght of device in the x-direction (in meters)</description>
+     </about>
+     <min>0.0</min>
+     <max>1.0</max>
+     <default>0.75e-6</default>
+    </number>
+    <number id="ylenght">
+     <about>
+      <label>Device width (y-direction)</label>
+      <description>The width of device in the y-direction (in meters)</description>
+     </about>
+     <min>0.0</min>
+     <max>1.0</max>
+     <default>0.2e-6</default>
+    </number>
+    <number id="xspatialstep">
+     <about>
+      <label>Number of cells in X direction</label>
+      <description>Specify it in meters</description>
+     </about>
+     <min>0.0</min>
+     <max>300</max>
+     <default>75</default>
+    </number>
+    <number id="yspatialstep">
+     <about>
+      <label>Number of cells in Y direction</label>
+      <description>Specify it in meters</description>
+     </about>
+     <min>0.0</min>
+     <max>300</max>
+     <default>50</default>
+    </number>
+    </group>
+    <group id="temperature">
+     <about><label>Lattice Temperature</label></about>
+     <number id="latticetemperature">
+      <about><label>Lattice Temperature</label></about>
+      <units>K</units>
+      <min>0K</min>
+      <max>5000K</max>
+      <default>300K</default>
+     </number>
+    </group>
+   </phase>
+
+   <phase id="one">
+    <about><label>Material and Transport</label></about>
+    <group id="material">
+    <about>
+     <label>Material</label>
+     <description>Specify the material the device is made of</description>
+    </about>
+     <group id="materiale1">
+     <about><label>Material Area 1</label></about>
+     <choice id="material1">
+      <about><label>Material</label></about>
+      <option><about><label>Silicon</label></about></option>
+      <option><about><label>GaAs</label></about></option>
+<!--      <option><about><label>Germanium</label></about></option>
+      <option><about><label>InSb</label></about></option>
+      <option><about><label>AlSb</label></about></option>
+      <option><about><label>AlAs</label></about></option>
+      <option><about><label>AlP</label></about></option>
+      <option><about><label>GaP</label></about></option>
+      <option><about><label>GaSb</label></about></option>
+      <option><about><label>InAs</label></about></option>
+      <option><about><label>InP</label></about></option>
+      <option><about><label>AlxInxSb</label></about></option>
+      <option><about><label>AlxIn1-xSb</label></about></option>
+      <option><about><label>InxGa1-xAs</label></about></option>
+      <option><about><label>InxAl1-xAs</label></about></option> -->
+      <default>Silicon</default>
+     </choice>
+     <boolean id="materialflag1">
+      <about><label>Area 1</label></about>
+      <default>yes</default>
+     </boolean>
+     <number id="materialxi1">
+      <about><label>Initial X</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialyi1">
+      <about><label>Initial Y</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialxf1">
+      <about><label>Final X</label><description>To be specified in meters</description></about>
+      <default>0.75e-6</default>
+     </number>
+     <number id="materialyf1">
+      <about><label>Final Y</label><description>To be specified in meters</description></about>
+      <default>0.2e-6</default>
+     </number>
+     <number id="materialx1">
+      <about><label>X</label><description>Stechiometric value (if required)</description></about>
+      <min>0</min>
+      <max>1</max>
+      <default>1.0</default>
+     </number>
+     </group>
+     <group id="materiale2">
+     <about><label>Material Area 2</label></about>
+     <choice id="material2">
+      <about><label>Material</label></about>
+      <option><about><label>Silicon</label></about></option>
+      <option><about><label>GaAs</label></about></option>
+<!--      <option><about><label>InSb</label></about></option>
+      <option><about><label>Germanium</label></about></option>
+      <option><about><label>AlSb</label></about></option>
+      <option><about><label>AlAs</label></about></option>
+      <option><about><label>AlP</label></about></option>
+      <option><about><label>GaP</label></about></option>
+      <option><about><label>GaSb</label></about></option>
+      <option><about><label>InAs</label></about></option>
+      <option><about><label>InP</label></about></option>
+      <option><about><label>AlxInxSb</label></about></option>
+      <option><about><label>AlxIn1-xSb</label></about></option>
+      <option><about><label>InxGa1-xAs</label></about></option>
+      <option><about><label>InxAl1-xAs</label></about></option>-->
+      <default>Silicon</default>
+     </choice>
+     <boolean id="materialflag2">
+      <about><label>Area 2</label></about>
+      <default>no</default>
+     </boolean>
+     <number id="materialxi2">
+      <about><label>Initial X</label><description>To be specified in meters</description></about>
+      <default>0.25e-6</default>
+     </number>
+     <number id="materialyi2">
+      <about><label>Initial Y</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialxf2">
+      <about><label>Final X</label><description>To be specified in meters</description></about>
+      <default>0.5e-6</default>
+     </number>
+     <number id="materialyf2">
+      <about><label>Final Y</label><description>To be specified in meters</description></about>
+      <default>0.1e-6</default>
+     </number>
+     <number id="materialx2">
+      <about><label>X</label><description>Stechiometric value (if required)</description></about>
+      <min>0</min>
+      <max>1</max>
+      <default>0.5</default>
+     </number>
+     </group>
+     <group id="materiale3">
+     <about><label>Material Area 3</label></about>
+     <choice id="material3">
+      <about><label>Material</label></about>
+      <option><about><label>Silicon</label></about></option>
+<!--      <option><about><label>Germanium</label></about></option>-->
+      <option><about><label>GaAs</label></about></option>
+<!--      <option><about><label>InSb</label></about></option>
+      <option><about><label>AlSb</label></about></option>
+      <option><about><label>AlAs</label></about></option>
+      <option><about><label>AlP</label></about></option>
+      <option><about><label>GaP</label></about></option>
+      <option><about><label>GaSb</label></about></option>
+      <option><about><label>InAs</label></about></option>
+      <option><about><label>InP</label></about></option>
+      <option><about><label>AlxInxSb</label></about></option>
+      <option><about><label>AlxIn1-xSb</label></about></option>
+      <option><about><label>InxGa1-xAs</label></about></option>
+      <option><about><label>InxAl1-xAs</label></about></option> -->
+      <default>Silicon</default>
+     </choice>
+     <boolean id="materialflag3">
+      <about><label>Area 3</label></about>
+      <default>no</default>
+     </boolean>
+     <number id="materialxi3">
+      <about><label>Initial X</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialyi3">
+      <about><label>Initial Y</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialxf3">
+      <about><label>Final X</label><description>To be specified in meters</description></about>
+      <default>0.6e-6</default>
+     </number>
+     <number id="materialyf3">
+      <about><label>Final Y</label><description>To be specified in meters</description></about>
+      <default>0.2e-6</default>
+     </number>
+     <number id="materialx3">
+      <about><label>X</label><description>Stechiometric value (if required)</description></about>
+      <min>0</min>
+      <max>1</max>
+      <default>0.5</default>
+     </number>
+     </group>
+     <group id="materiale4">
+     <about><label>Material Area 4</label></about>
+     <choice id="material4">
+      <about><label>Material</label></about>
+      <option><about><label>Silicon</label></about></option>
+<!--      <option><about><label>Germanium</label></about></option> -->
+      <option><about><label>GaAs</label></about></option>
+<!--      <option><about><label>InSb</label></about></option>
+      <option><about><label>AlSb</label></about></option>
+      <option><about><label>AlAs</label></about></option>
+      <option><about><label>AlP</label></about></option>
+      <option><about><label>GaP</label></about></option>
+      <option><about><label>GaSb</label></about></option>
+      <option><about><label>InAs</label></about></option>
+      <option><about><label>InP</label></about></option>
+      <option><about><label>AlxInxSb</label></about></option>
+      <option><about><label>AlxIn1-xSb</label></about></option>
+      <option><about><label>InxGa1-xAs</label></about></option>
+      <option><about><label>InxAl1-xAs</label></about></option> -->
+      <default>Silicon</default>
+     </choice>
+     <boolean id="materialflag4">
+      <about><label>Area 4</label></about>
+      <default>no</default>
+     </boolean>
+     <number id="materialxi4">
+      <about><label>Initial X</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialyi4">
+      <about><label>Initial Y</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialxf4">
+      <about><label>Final X</label><description>To be specified in meters</description></about>
+      <default>0.6e-6</default>
+     </number>
+     <number id="materialyf4">
+      <about><label>Final Y</label><description>To be specified in meters</description></about>
+      <default>0.2e-6</default>
+     </number>
+     <number id="materialx4">
+      <about><label>X</label><description>Stechiometric value (if required)</description></about>
+      <min>0</min>
+      <max>1</max>
+      <default>0.5</default>
+     </number>
+     </group>
+     <group id="materiale5">
+     <about><label>Material Area 5</label></about>
+     <choice id="material5">
+      <about><label>Material</label></about>
+      <option><about><label>Silicon</label></about></option>
+<!--      <option><about><label>Germanium</label></about></option> -->
+      <option><about><label>GaAs</label></about></option>
+<!--      <option><about><label>InSb</label></about></option>
+      <option><about><label>AlSb</label></about></option>
+      <option><about><label>AlAs</label></about></option>
+      <option><about><label>AlP</label></about></option>
+      <option><about><label>GaP</label></about></option>
+      <option><about><label>GaSb</label></about></option>
+      <option><about><label>InAs</label></about></option>
+      <option><about><label>InP</label></about></option>
+      <option><about><label>AlxInxSb</label></about></option>
+      <option><about><label>AlxIn1-xSb</label></about></option>
+      <option><about><label>InxGa1-xAs</label></about></option>
+      <option><about><label>InxAl1-xAs</label></about></option> -->
+      <default>Silicon</default>
+     </choice>
+     <boolean id="materialflag5">
+      <about><label>Area 5</label></about>
+      <default>no</default>
+     </boolean>
+     <number id="materialxi5">
+      <about><label>Initial X</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialyi5">
+      <about><label>Initial Y</label><description>To be specified in meters</description></about>
+      <default>0.0</default>
+     </number>
+     <number id="materialxf5">
+      <about><label>Final X</label><description>To be specified in meters</description></about>
+      <default>0.6e-6</default>
+     </number>
+     <number id="materialyf5">
+      <about><label>Final Y</label><description>To be specified in meters</description></about>
+      <default>0.2e-6</default>
+     </number>
+     <number id="materialx5">
+      <about><label>X</label><description>Stechiometric value (if required)</description></about>
+      <min>0</min>
+      <max>1</max>
+      <default>0.5</default>
+     </number>
+     </group>
+    </group>
+    <group id="transport">
+    <about>
+     <label>Transport Model</label>
+     <description>Specify the particles and the model to be simulated</description>
+    </about>
+    <choice id="transportmodel">
+     <about>
+      <label>Transport model</label>
+     </about>
+     <option><about><label>MC</label></about></option>
+     <option><about><label>MEP</label></about></option>
+     <default>MC</default>
+    </choice>
+    <choice id="transportparticles">
+     <about>
+      <label>Transport Particles</label>
+     </about>
+     <option><about><label>ELECTRONS</label></about></option>
+     <option><about><label>HOLES</label></about></option>
+     <option><about><label>BIPOLAR</label></about></option>
+     <default>ELECTRONS</default>
+    </choice>
+    </group>
+    <group id="leid">
+     <about><label>Load Initial Datas</label></about>
+     <boolean id="leid">
+      <about><label>Load Energy Initial Datas</label><description>See the manual ofr infos (LEID command)</description></about>
+      <default>no</default>
+     </boolean>
+    </group>
+   </phase>
+
+   <phase id="three">
+    <about><label>Doping Concentration</label></about>
+    <group id="donors">
+     <about>
+      <label>Donor Density - Xi Yi Xf Yf dens</label>
+      <description>Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density</description>
+     </about>
+     <string id="donordensity1">
+      <about>
+       <label>Donor density 1</label>
+      <description>Area 1: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+      <default>0. 0. 0.25e-6 0.2e-6 1.e24</default>
+     </string>
+     <string id="donordensity2">
+      <about>
+       <label>Donor density 2</label>
+      <description>Area 2: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+      <default>0.25e-6 0. 0.5e-6 0.2e-6 1.e20</default>
+     </string>
+     <string id="donordensity3">
+      <about>
+       <label>Donor density 3</label>
+      <description>Area 3: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+      <default>0.5e-6 0. 0.75e-6 0.2e-6 1.e24</default>
+     </string>
+     <string id="donordensity4">
+      <about>
+       <label>Donor density 4</label>
+      <description>Area 3: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity5">
+      <about>
+       <label>Donor density 5</label>
+      <description>Area 5: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity6">
+      <about>
+       <label>Donor density 6</label>
+      <description>Area 6: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity7">
+      <about>
+       <label>Donor density 7</label>
+      <description>Area 7: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity8">
+      <about>
+       <label>Donor density 8</label>
+      <description>Area 8: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity9">
+      <about>
+       <label>Donor density 9</label>
+      <description>Area 9: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="donordensity10">
+      <about>
+       <label>Donor density 10</label>
+      <description>Area 10: Describe the donor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+    </group>
+    <group id="acceptors">
+     <about>
+      <label>Acceptor Density - Xi Yi Xf Yf dens</label>
+      <description>Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density</description>
+     </about>
+     <string id="acceptordensity1">
+      <about>
+       <label>Acceptor density 1</label>
+      <description>Area 1: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity2">
+      <about>
+       <label>Acceptor density 2</label>
+      <description>Area 2: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity3">
+      <about>
+       <label>Acceptor density 3</label>
+      <description>Area 3: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity4">
+      <about>
+       <label>Acceptor density 4</label>
+      <description>Area 3: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity5">
+      <about>
+       <label>Acceptor density 5</label>
+      <description>Area 5: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity6">
+      <about>
+       <label>Acceptor density 6</label>
+      <description>Area 6: Describe the Acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity7">
+      <about>
+       <label>Acceptor density 7</label>
+      <description>Area 7: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity8">
+      <about>
+       <label>Acceptor density 8</label>
+      <description>Area 8: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity9">
+      <about>
+       <label>Acceptor density 9</label>
+      <description>Area 9: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+     <string id="acceptordensity10">
+      <about>
+       <label>Acceptor density 10</label>
+      <description>Area 10: Describe the acceptor density of the device specifying the opposite vertices of a rectangle (Xi,Yi)-(Xf,Yf), units are the meter for lenghts and 1/meters^3 for density. If nothing is specified this box will be not taken into account in the simulation.</description>
+      </about>
+     </string>
+    </group>
+   </phase>
+
+   <phase id="four">
+    <about><label>Contacts description</label></about>
+     <group id="contact1">
+      <about>
+      <label>Contact 1</label>
+      </about>
+      <choice id="contactposition1">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>LEFT</default>
+      </choice>
+      <string id="xicontact1">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+       <default>0.</default>
+      </string>
+      <string id="xfcontact1">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+       <default>0.2e-6</default>
+      </string>
+      <choice id="contacttype1">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>OHMIC</default>
+      </choice>
+      <number id="contactvoltage1">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity1">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+       <default>1.e24</default>
+      </string>
+     </group>
+     <group id="contact2">
+      <about>
+      <label>Contact 2</label>
+      </about>
+      <choice id="contactposition2">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>RIGHT</default>
+      </choice>
+      <string id="xicontact2">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+       <default>0.</default>
+      </string>
+      <string id="xfcontact2">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+       <default>0.2e-6</default>
+      </string>
+      <choice id="contacttype2">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>OHMIC</default>
+      </choice>
+      <number id="contactvoltage2">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>2.0</default>
+      </number>
+      <string id="contactdensity2">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+       <default>1.e24</default>
+      </string>
+     </group>
+     <group id="contact3">
+      <about>
+      <label>Contact 3</label>
+      </about>
+      <choice id="contactposition3">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact3">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact3">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype3">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage3">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity3">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact4">
+      <about>
+      <label>Contact 4</label>
+      </about>
+      <choice id="contactposition4">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact4">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact4">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype4">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage4">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity4">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact5">
+      <about>
+      <label>Contact 5</label>
+      </about>
+      <choice id="contactposition5">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact5">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact5">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype5">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage5">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity5">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact6">
+      <about>
+      <label>Contact 6</label>
+      </about>
+      <choice id="contactposition6">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact6">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact6">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype6">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage6">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity6">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact7">
+      <about>
+      <label>Contact 7</label>
+      </about>
+      <choice id="contactposition7">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact7">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact7">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype7">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage7">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity7">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact8">
+      <about>
+      <label>Contact 8</label>
+      </about>
+      <choice id="contactposition8">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact8">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact8">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype8">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage8">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity8">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact9">
+      <about>
+      <label>Contact 9</label>
+      </about>
+      <choice id="contactposition9">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact9">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact9">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype9">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage9">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity9">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+     <group id="contact10">
+      <about>
+      <label>Contact 10</label>
+      </about>
+      <choice id="contactposition10">
+       <about><label>Contact Position</label><description>Specify the side of the device</description></about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <default>NONE</default>
+      </choice>
+      <string id="xicontact10">
+       <about>
+       <label>Initial Position</label>
+       <description>Xi or Yi specified in meters</description>
+       </about>
+      </string>
+      <string id="xfcontact10">
+       <about>
+       <label>Final Position</label>
+       <description>Xf or Yf specified in meters</description>
+       </about>
+      </string>
+      <choice id="contacttype10">
+       <about><label>Contact Type</label><description>Specify the type of contact</description></about>
+       <option><about><label>INSULATOR</label></about></option>
+       <option><about><label>OHMIC</label></about></option>
+       <option><about><label>SCHOTTKY</label></about></option>
+       <default>INSULATOR</default>
+      </choice>
+      <number id="contactvoltage10">
+       <about>
+        <label>Applied Voltage</label>
+        <description>Applied voltage on the contact</description>
+       </about>
+       <units>V</units>
+       <min>-100</min>
+       <max>100</max>
+       <default>0</default>
+      </number>
+      <string id="contactdensity10">
+       <about>
+        <label>Contact density (only for ohmic contacts)</label>
+        <description>In 1/meter^3</description>
+       </about>
+      </string>
+     </group>
+   </phase>
+
+   <phase id="fives">
+    <about><label>Statistics, Effects and Output</label></about>
+    <group id="statistics">
+     <about><label>Statistics</label></about>     
+     <number id="statisticalweight">
+      <about>
+       <label>Statistical Weight</label>
+       <description>The statistical weight assigned to super-particles</description>
+      </about>
+      <min>1</min>
+      <default>250</default>
+     </number>
+     <number id="media">
+      <about>
+       <label>Mean Average</label>
+       <description>The number of iterations for the mean average value of macroscopic variables</description>
+      </about>
+      <min>1</min>
+      <default>500</default>
+     </number>
+    </group>
+    <group id="oxide">
+     <about><label>SiO2 Oxide</label></about>
+     <choice id="oxideposition">
+      <about>
+      <label>SiO2 Position</label>
+      <description>Silicon Oxide Position</description>
+      </about>
+       <option><about><label>NONE</label></about></option>
+       <option><about><label>UP</label></about></option>
+       <option><about><label>DOWN</label></about></option>
+       <option><about><label>RIGHT</label></about></option>
+       <option><about><label>LEFT</label></about></option>
+       <default>NONE</default>
+     </choice>
+     <string id="oxidexi">
+      <about>
+       <label>Initial Position</label>
+       <description>SiO2 Initial Position</description>
+      </about>
+     </string>
+     <string id="oxidexf">
+      <about>
+       <label>Final Position</label>
+       <description>SiO2 Final Position</description>
+      </about>
+     </string>
+     <string id="oxidethickness">
+      <about>
+       <label>Thickness</label>
+       <description>Oxide thickness</description>
+      </about>
+     </string>
+     <number id="oxidevoltage">
+      <about>
+       <label>Applied Voltage</label>
+       <description>Applied voltage on oxide</description>
+      </about>
+      <units>V</units>
+      <min>-100</min>
+      <max>100</max>
+      <default>0</default>
+     </number>
+    </group>    
+    <group id="Flags">
+     <about><label>Additional effects</label></about>
+     <group id="uno">
+     <about><label>Additional effects</label></about>
+     <boolean id="quantum">
+      <about>
+      <label>Quantum Effects</label>
+      <description>If yes, the simulation will take into account the quantum effects by means of Bohm potential</description>
+      </about>
+      <default>no</default>
+     </boolean>
+     <boolean id="faraday">
+      <about>
+      <label>Faraday Field</label>
+      <description>If yes, the simulation will take into account the Faraday equation for the magnetic field</description>
+      </about>
+      <default>no</default>
+     </boolean>
+     <number id="tauw">
+      <about>
+       <label>TauW</label>
+       <description>Relaxation time for the energy term in MEP (in seconds)</description>
+      </about>
+      <min>0</min>
+      <default>0.4e-12</default>
+     </number>
+     <number id="cimp">
+      <about>
+       <label>Cimp</label>
+       <description>Impurity density for impurity collision term in MEP (in 1/meter^3)</description>
+      </about>
+      <min>0</min>
+      <default>1.0e20</default>
+     </number>
+     </group>
+     <group id="due">
+      <about><label>Constant Magnetic Field</label></about>
+      <boolean id="magneticflag">
+      <about><label>Constant Magnetic Field</label></about>
+      <default>no</default>
+      </boolean>
+      <number id="xiconstantmagneticfield">
+       <about><label>Xi</label></about>
+       <default>0</default>
+      </number>
+      <number id="yiconstantmagneticfield">
+       <about><label>Yi</label></about>
+       <default>0</default>
+      </number>
+      <number id="xfconstantmagneticfield">
+       <about><label>Xf</label></about>
+       <default>0</default>
+      </number>
+      <number id="yfconstantmagneticfield">
+       <about><label>Yf</label></about>
+       <default>0</default>
+      </number>
+      <number id="valueconstantmagneticfield">
+       <about><label>Magnetic Field</label><description>Magnetic Field in Tesla (Volt/sec*meter^2)</description></about>
+       <default>0</default>
+      </number>
+     </group>
+     </group>
+     <group id="outputformats">
+      <about><label>Output format</label></about>
+      <boolean id="maximini">
+      <about>
+       <label>MaxiMini output</label>
+       <description>If yes, it will show calculation details during the simulation</description>
+      </about>
+      <default>yes</default>
+     </boolean>
+<!--      <boolean id="saveeachstep">
+      <about>
+       <label>Save output at every single time step</label>
+       <description>If yes, it will save all the simulation results at every single step</description>
+      </about>
+      <default>no</default>
+     </boolean>-->
+     <choice id="outputformat">
+      <about>
+       <label>Save output format</label>
+       <description>Specify the file format for the simulation output file</description>
+      </about>
+      <option><about><label>GNUPLOT</label></about></option>
+      <option><about><label>MESH</label></about></option>
+      <default>GNUPLOT</default>
+     </choice>
+    </group>
+   </phase>
+
+
+  </input>
+
+  <output>
+  </output>
+
+</run>

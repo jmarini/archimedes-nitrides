@@ -1,0 +1,139 @@
+2004-10-12  Jean Michel Sellier  <sellier@dmi.unict.it>
+
+        * Necessary Algorithms developped for the 2D Quantum Monte Carlo
+          Electron Transport in Doped Silicon
+        * Necessary Algorithms developped for the Non-Stationary-Poisson
+          equation
+        * Documentation version 0.0.1 for GNU/Archimedes release 0.0.1.
+	* GNU Archimedes release 0.0.1.
+
+2005-02-19  Jean Michel Sellier  <sellier@dmi.unict.it>
+
+	* Bugs fixed in the quantum effective potential
+	* GaAs material implemented
+        * Various new commands implemented
+        * Output Saving changed to take into accoutn GaAs valleys
+	* GNU Archimedes release 0.0.2.
+
+2005-03-01  Jean Michel Sellier <sellier@dmi.unict.it>,
+            Didier Link <didier.link@wanadoo.fr>
+
+	* Automake installation implemented
+	* Some bugs fixed
+	* GNU Archimedes release 0.0.3.
+
+2005-03-15  Jean Michel Sellier <sellier@dmi.unict.it>
+
+	* Simple MEP model implemented
+	* Fast Monte Carlo implemented
+	* GNU Archimedes release 0.0.4.
+
+2005-04-05  Jean Michel Sellier  <sellier@dmi.unict.it>
+
+        * Schroedinger-Poisson system implemented
+        * Mixed-states boundary conditions implemented
+        * GNU Archimedes release 0.0.5.
+	
+2006-12-23  Jean Michel Sellier  <sellier@dmi.unict.it>
+	* New subroutine developped for the simulation of SiO2
+	
+2006-12-24  Jean Michel Sellier  <sellier@dmi.unict.it>
+	* Bugs removed from source files (mcparameters.h)
+	* GNU Archimedes release 0.0.6
+
+2006-12-27  Jean Michel Sellier  <sellier@dmi.unict.it>
+	* Germanium material implemented
+	* New test for Ge MESFET
+	* GNU Archimedes release 0.0.7
+
+2007-09-10  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * III-V semiconductor materials
+        * Heterostructures
+        * Magnetic Fields (Faraday)
+        * External Magnetic Fields 
+        * GNU Archimedes release 0.1.0
+
+2007-09-11  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * InSb material
+        * bugs fixed in media.h
+        * GNU Archimedes release 0.1.1
+
+2007-09-13  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * AlSb material
+        * bugs fixed in drift.h
+        * bugs fixed in scattering.h
+        * GNU Archimedes release 0.1.2
+
+2007-09-14  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * AlxInxSb material
+        * AlxIn(1-x)Sb material
+        * GNU Archimedes release 0.1.3
+
+2007-09-15  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * AlAs material
+        * GNU Archimedes release 0.1.4
+
+2007-09-23  Jean Michel Sellier  <sellier@dmi.unict.it>
+                                 <archimedes@southnovel.eu>
+        * AlP material
+        * GaP material
+        * GaSb material
+        * InAs material
+        * InP material
+        * InxGa(1-x)As material
+        * InxAl(1-x)As material
+        * Archimedes is now open to further semiconductor materials
+        * GNU Archimedes release 0.7.0
+
+2008-06-22  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+
+        * bugs fixed in archimedes.c
+        * GNU Archimedes release 0.8.0
+
+2009-10-13  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+
+	* GUI based on Rappture package has been implemented
+	* GNU Archimedes release 0.9.0
+
+2009-12-12  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+
+	* A reference to SaveRappture() has been fixed
+	* GNU Archimedes release 0.9.1
+
+2010-08-14  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+                                <jsellier@purdue.edu>
+	* The material parameters have been checked and modified
+	* Benchmark tests have been done to check the validity of the code
+	* GNU Archimedes release 1.0.0
+
+2011-09-01  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+                                <jsellier@purdue.edu>
+	* Code cleanings
+	* Scattering phonons can be set to ON or OFF
+	* Support for Full band approach implemented
+	* GNU archimedes release 1.2.0
+
+2011-09-15  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+				<jsellier@purdue.edu>
+	* Bugs fixed in the Full band approach
+	* Parabolic, Kane and Full band checked
+	* Full band Parameters for all materials
+	* GNU archimedes release 1.5.0
+
+2011-10-01  Jean Michel Sellier <jeanmichel.sellier@gmail.com>
+				<jsellier@purdue.edu>
+	* Started to implement the FEM for Poisson
+	* Quantum Effective Potential modified
+	* Bohm Potential Model implemented
+	* Calibrated Bohm Model implemented
+	* Density Gradient corrected and tested
+	* Full effective potential model implemented
+	* New tests created
+	* GNU archimedes releae 2.0.0
+
+ChangeLog ends here

@@ -1,0 +1,125 @@
+--- GNU archimedes release 2.0.0
+    01 October 2011, J.M.D. Sellier, jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+    --- Started to implement the FEM for Poisson
+    --- Quantum Effective Potential modified
+    --- Bohm Potential Model implemented
+    --- Calibrated Bohm Model implemented
+    --- Density Gradient corrected and tested
+    --- Full effective potential model implemented
+    --- New tests created
+
+--- GNU archimedes release 1.5.0
+    15 September 2011, J.M.D. Sellier, jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+    --- Bugs fixed in the Full band approach
+    --- Parabolic, Kane and Full band checked
+    --- Full band Parameters for all materials
+
+--- GNU archimedes release 1.2.0
+    01 September 2011, J.M.D. Sellier, jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+    --- Code cleanings
+    --- Scattering phonons can be set to ON and OFF
+    --- Support to Full Band approach
+
+--- GNU Archimedes release 1.0.0
+    14 August 2011, J.M. Sellier, jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+    --- Material Parameters checked and modified
+
+--- GNU Archimedes release 0.9.1
+    12 December 2009, J.M.Sellier, jeanmichel.sellier@gmail.com
+    --- A reference to SaveRappture() has been fixed in archimedes.c
+
+--- GNU Archimedes release 0.9.0
+    14 October 2009, J.M.Sellier, jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+    --- GUI implemented using Rappture
+
+--- GNU Archimedes release 0.8.0
+    22 june 2008, J.M.Sellier, jeanmichel.sellier@gmail.com
+    --- fixed bugs in archimedes.c
+
+--- GNU Archimedes release 0.7.0
+    23 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- AlP material
+    --- GaP material
+    --- GaSb material
+    --- InAs material
+    --- InP material
+    --- InxGa(1-x)As material
+    --- InxAl(1-x)As material
+    --- Archimedes is now open to further semiconductor materials
+
+--- GNU Archimedes release 0.1.4
+    15 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- AlAs implemented
+    --- documentation has been updated
+
+--- GNU Archimedes release 0.1.3
+    14 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- AlxInxSb implemented
+    --- AlxIn(1-x)Sb implemented
+    --- documentation has been updated
+
+--- GNU Archimedes release 0.1.2
+    13 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- fixed bugs in drift.h
+    --- fixed bugs in scattering.h
+    --- AlSb implemented
+    --- documentation has been updated
+
+--- GNU Archimedes release 0.1.1
+    11 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- fixed bugs in media.h
+    --- InSb implemented
+    --- documentation has been updated
+
+--- GNU Archimedes release 0.1.0
+    10 Sept.2007, J.M.Sellier, sellier@dmi.unict.it, archimedes@southnovel.eu
+    --- Several Bug fixes for heterostructures
+    --- Documentation updated
+
+--- GNU Archimedes release 0.0.9
+    07 Sept.2007, J.M.Sellier, sellier@dmi.unict.it
+    --- Heterostructures can be, now, simulated
+    --- The command MATERIAL is not any longer 
+        compatible with previous versions
+
+--- GNU Archimedes release 0.0.8
+    20 Aug.2007, J.M.Sellier, sellier@dmi.unict.it
+    --- Faraday's equation is now implemented
+    --- Constant applied magnetic field in z-direction
+
+--- GNU Archimedes release 0.0.7
+    27 Dec.2006, J.M.Sellier, sellier@dmi.unict.it
+    --- Germanium material is now implemented
+
+--- GNU Archimedes release 0.0.6
+
+    24 Dec.2006, J.M.Sellier, sellier@dmi.unict.it
+    --- Bugs removed in the calculation of scattering rates in GaAs
+
+
+--- GNU Archimedes release 0.0.5
+    
+    23 Dec.2006, J.M.Sellier, sellier@dmi.unict.it
+
+    --- New subroutine for the simulation fo SiO2
+    --- Manual slightly modified
+
+
+--- GNU Archimedes release 0.0.5
+
+    07 Apr.2005, J.M.Sellier, sellier@dmi.unict.it
+
+    --- Silicon Oxyde (SiO2) implementation
+    --- OXYDE command implemented
+
+
+--- GNU Archimedes release 0.0.4
+
+    22 Mar.2004, J.M.Sellier, sellier@dmi.unict.it
+
+    --- Simplified MEP model for electrons
+    --- Simplified MEP model for heavy holes
+    --- LEID command
+    --- TAUW command
+    --- Automake 
+

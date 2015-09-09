@@ -1,0 +1,59 @@
+# Silicon MESFET test-1
+# created on 27 feb.2005, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+
+TRANSPORT MC BIPOLAR
+
+FINALTIME 1.e-12
+TIMESTEP 0.001e-12
+
+XLENGTH 0.6e-6
+YLENGTH 0.2e-6
+
+XSPATIALSTEP 60
+YSPATIALSTEP 20
+
+# definition of the material (all the device is made of Silicon)
+MATERIAL X 0.0 0.6e-6    Y 0.0 0.2e-6  SILICON
+
+# Energy relaxation time
+# ======================
+TAUW 0.4e-12
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+DONORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    3.e23
+DONORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    3.e23
+ACCEPTORDENSITY 0.       0.         0.6e-6    0.2e-6    1.e20
+# ACCEPTORDENSITY    0.       0.         0.6e-6    0.2e-6    1.e23
+# ACCEPTORDENSITY    0.       0.15e-6    0.1e-6    0.2e-6    3.e23
+# ACCEPTORDENSITY    0.5e-6   0.15e-6    0.6e-6    0.2e-6    3.e23
+
+# Definition of the various contacts
+# ==================================
+CONTACT DOWN  0.0    0.6e-6 INSULATOR 0.0
+CONTACT LEFT  0.0    0.2e-6 INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6 INSULATOR 0.0
+CONTACT UP    0.1e-6 0.2e-6 INSULATOR 0.0
+CONTACT UP    0.4e-6 0.5e-6 INSULATOR 0.0
+CONTACT UP    0.0    0.1e-6 OHMIC     0.0 3.e23 1.e20
+CONTACT UP    0.2e-6 0.4e-6 SCHOTTKY -0.8
+CONTACT UP    0.5e-6 0.6e-6 OHMIC     1.0 3.e23 1.e20
+
+# Load the initial data for electrons
+# ===================================
+LEID
+
+NOQUANTUMEFFECTS
+MAXIMINI
+# SAVEEACHSTEP
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 2000
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1

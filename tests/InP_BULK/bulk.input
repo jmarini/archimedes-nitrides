@@ -1,0 +1,45 @@
+# Silicon DIODE test-1
+# created on 11 sep.2007, J.M.Sellier
+# modified on 19 sep.2007, J.M.Sellier
+# This file simulate the InP bulk.
+# To run it type:
+# archimedes bulk.input
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 0.5e-12
+TIMESTEP 0.0015e-12
+
+XLENGTH 1.0e-6
+YLENGTH 0.1e-6
+
+XSPATIALSTEP 100
+YSPATIALSTEP 25
+
+# definition of the material (all the device is made of InP)
+MATERIAL X 0.0 1.0e-6    Y 0.0 0.1e-6  INP
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.    1.0e-6    0.1e-6    5.e23
+
+# Definition of the various contacts
+# ==================================
+CONTACT LEFT  0.0    0.1e-6 OHMIC     0.0    5.e23
+CONTACT RIGHT 0.0    0.1e-6 OHMIC     1.0    5.e23
+CONTACT UP    0.0    1.0e-6 INSULATOR 0.0
+CONTACT DOWN  0.0    1.0e-6 INSULATOR 0.0
+
+NOQUANTUMEFFECTS
+MAXIMINI
+# SAVEEACHSTEP
+
+LATTICETEMPERATURE 77.
+
+STATISTICALWEIGHT 350
+
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1

@@ -1,0 +1,41 @@
+# Silicon BULK test-1
+# created on 30 sep.2004, J.M.Sellier
+# modified on 07 sep.2007, J.M.Sellier
+
+# This file is for the simulation of 
+# a Silicon BULK device. To run it type:
+# archimedes bulk.input
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 2.0e-12
+TIMESTEP 0.001e-12
+
+XLENGTH 0.2e-6
+YLENGTH 1.0e-6
+
+XSPATIALSTEP 64
+YSPATIALSTEP 32
+
+# definition of the material (all the device is made of Silicon)
+MATERIAL X 0.0 0.2e-6    Y 0.0 1.0e-6  SILICON
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.       0.         0.2e-6    1.0e-6    1.e23
+ACCEPTORDENSITY 0.       0.         0.2e-6    1.0e-6    1.e20
+
+# Definition of the various contacts
+# ==================================
+CONTACT LEFT  0.0    0.2e-6  INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6  INSULATOR 0.0
+CONTACT DOWN  0.0    1.0e-6 OHMIC     0.0 1.e23
+CONTACT UP    0.0    1.0e-6 OHMIC     0.2 1.e23
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 1000
+
+OUTPUTFORMAT GNUPLOT
+
+# end of BULK test-1

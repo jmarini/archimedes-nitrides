@@ -1,0 +1,23 @@
+Jean Michel Sellier, Siracusa, Italy
+sellier@dmi.unict.it
+
+Computation started Thu Oct 7  11:40:27 2004
+Starting number of particles 2.293.350
+
+At the end of the simulation:
+
+Actual number of electron super-particles = 2297614
+Computation of macroscopic mean values
+ 3667   TIME =        5.5  (picosec)
+Max. Potential = 1.01598
+Min. Potential = -0.0657795
+Max. x-elec.field = 2.32601e+06
+Min. x-elec.field = -5.4385e+06
+Max. y-elec.field = 106798
+Min. y-elec.field = -141098
+Max. Density = 6.16633e+23
+Min. Density = 5.57752e+21
+Right Edge : Current on contact #1 = -15.2083 (A/m)
+Left Edge : Current on contact #1 = -10.8221 (A/m)
+Final Output has been saved
+Computation Finished at Thu Oct  7 19:04:18 2004

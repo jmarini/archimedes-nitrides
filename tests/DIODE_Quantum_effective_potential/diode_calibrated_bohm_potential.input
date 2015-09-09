@@ -1,0 +1,58 @@
+# Silicon DIODE
+# created on 01 sep.2011, J.M.Sellier
+# modified on 13 sept.2011, J.M.Sellier
+# This file simulate a Silicon Diode.
+# To run it type:
+# archimedes diode_calibrated_bohm_potential.input
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 1.0e-12
+TIMESTEP 0.0001e-12
+
+XLENGTH 30.0e-9
+YLENGTH 30.0e-9
+
+XSPATIALSTEP 100
+YSPATIALSTEP 25
+
+# Phonons scattering
+ACOUSTICSCATTERING ON
+OPTICALSCATTERING ON
+
+CONDUCTIONBAND PARABOLIC
+
+# definition of the material (all the device is made of Silicon)
+MATERIAL X 0.0 30.0e-9    Y 0.0 30.0e-9  SILICON
+
+# Definition of the doping concentration
+# ======================================
+DONORDENSITY    0.0       0.0    30.0e-9    30.0e-9    5.e25
+DONORDENSITY    0.0       0.0    4.50e-9    30.0e-9    1.e26
+DONORDENSITY    25.5e-9   0.0    30.0e-9    30.0e-9    1.e26
+ACCEPTORDENSITY 0.0       0.0    30.0e-9    30.0e-9    1.e20
+
+# Definition of the various contacts
+# ==================================
+CONTACT LEFT  0.0    30.0e-9 OHMIC     0.0     1.e26
+CONTACT RIGHT 0.0    30.0e-9 OHMIC     0.25    1.e26
+CONTACT UP    0.0    30.0e-9 INSULATOR 0.0
+CONTACT DOWN  0.0    30.0e-9 INSULATOR 0.0
+
+# Quantum effective potential
+# ===========================
+QEP ON
+QEP_MODEL CALIBRATED_BOHM
+QEP_PARAMETERS 0.5 1.089
+
+MAXIMINI
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 750
+
+MEDIA 500
+
+OUTPUTFORMAT GNUPLOT
+
+# end of MESFET test-1

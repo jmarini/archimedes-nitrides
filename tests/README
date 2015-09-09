@@ -1,0 +1,52 @@
+
+14 oct.2009 -- J.M.Sellier -- jeanmichel.sellier@gmail.com, jsellier@purdue.edu
+
+This directory contains some directory tests to show the features of GNU Archimedes release 0.9.0. To run these tests you have to go in one of the directory present here and type (obviously, after the installation of Archimedes...)
+
+archimedes name_of_test.input
+
+The tests finish by ".input", so it is esay to recognize them.
+
+Here is a list of the directory you can find here.
+
+-- DIODE (Silicon Diode)
+
+-- MESFET (Silicon MESFET)
+
+-- MOSFET (Silicon MOSFET)
+
+-- GaAsMESFET (GaAs MESFET)
+
+-- mep_diode (Silicon Diode MEP simulation)
+
+-- mep_mesfet (Silicon MESFET MEP simulation)
+
+-- mep_MC (MESFET Fast Monte Carlo simulation)
+
+-- faraday (Silicon self-consistent magnetic field)
+
+-- constant_B (Silicon external applied magnetic field)
+
+-- SiGeHeterostructure (Silicon-Germanium heterostructure)
+
+-- Si_BULK (Silicon Bulk)
+
+-- InSb_BULK (InSb Bulk)
+
+-- AlSb_BULK (AlSb Bulk)
+
+-- AlAs_BULK (AlAs Bulk)
+
+-- AlP_BULK (AlP Bulk)
+
+-- GaP_BULK (GaP Bulk)
+
+-- GaSb_BULK (GaSb Bulk)
+
+-- InAs_BULK (InAs Bulk)
+
+-- InP_BULK (InP Bulk)
+
+-- AlInSb_test (AlxInxSb/AlIn(1-x)Sb simple test)
+
+end of README
