@@ -540,17 +540,17 @@ For more information about these matters, see the file named COPYING.\n",
      LATTCONST[INAS]=605.83e-12;       // CODATA
      LATTCONST[INSB]=647.9e-12;        // CODATA
 // sp3s* Conduction Band calculated parameters for full band simulations
-#include "Silicon.h"
-#include "GaAs.h"
-#include "Germanium.h"
-#include "AlP.h"
-#include "AlAs.h"
-#include "AlSb.h"
-#include "GaP.h"
-#include "GaSb.h"
-#include "InP.h"
-#include "InAs.h"
-#include "InSb.h"
+#include "materials/Silicon.h"
+#include "materials/GaAs.h"
+#include "materials/Germanium.h"
+#include "materials/AlP.h"
+#include "materials/AlAs.h"
+#include "materials/AlSb.h"
+#include "materials/GaP.h"
+#include "materials/GaSb.h"
+#include "materials/InP.h"
+#include "materials/InAs.h"
+#include "materials/InSb.h"
 // ======================================================
 // ======================================================
 
