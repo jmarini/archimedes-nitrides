@@ -50,9 +50,9 @@
 #define real double
 #define ON 1
 #define OFF 0
-#define KANE 0
-#define PARABOLIC 1
-#define FULL 2
+#define KANE 0                 // conduction band model, kane model
+#define PARABOLIC 1            // conduction band model, parabolic approximation
+#define FULL 2                 // conduction band model, full band model
 #define QEP_BOHM 0
 #define QEP_CALIBRATED_BOHM 1
 #define QEP_FULL 2
@@ -61,19 +61,19 @@
 #define NXM 308
 #define NYM 308
 #define DIME 1003
-#define ITMAX 10000000
-#define POISSONITMAX 1500
+#define ITMAX 10000000         // maximum number of monte carlo iterations
+#define POISSONITMAX 1500      // maximum number of poisson iterations
 #define SMALL 1.e-5
 #define VMAX 1000000
-#define NPMAX 10000000 // maximum number of super-particles
-#define MCE 0  // MCE stands for MC for electrons only
-#define MCH 1  // MCH stands for MC for holes only
-#define MCEH 2 // MCEH stands for MC both for electrons and holes
-#define MEPE 3 // MEPE stands for MEP model for electrons only
-#define MEPH 4 // MEPH stands for MEP model for holes only
-#define MEPEH 5 // MEPEH stands for MEP model for electrons and holes
-#define GNUPLOTFORMAT 0 // output file in GNUPLOT format
-#define MESHFORMAT 1 // output file in Mesh format
+#define NPMAX 10000000         // maximum number of super-particles
+#define MCE 0                  // MCE stands for MC for electrons only
+#define MCH 1                  // MCH stands for MC for holes only
+#define MCEH 2                 // MCEH stands for MC both for electrons and holes
+#define MEPE 3                 // MEPE stands for MEP model for electrons only
+#define MEPH 4                 // MEPH stands for MEP model for holes only
+#define MEPEH 5                // MEPEH stands for MEP model for electrons and holes
+#define GNUPLOTFORMAT 0        // output file in GNUPLOT format
+#define MESHFORMAT 1           // output file in Mesh format
 
 // definition of the material reference table
 #define NOAMTIA 17   // Number Of All Material Taken Into Account (excluding SiO2)
@@ -109,46 +109,67 @@
 // ===============================
 
 // All integers here...
-int NUM_VERT,NUM_EXAHEDRA,MEDIA,MAXIMINI;
-int SAVEALWAYS;
-int nx,ny;
-int ISEED,NP1,INUM,IV;
-int c,Model_Number,File_Format,Quantum_Flag;
-int NG,NE;
-int leid_flag;
-int SIO2_UP_FLAG;
-int SIO2_DOWN_FLAG;
-int FARADAYFLAG;
+int NUM_VERT;            // number of vertices in the meshing
+int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
+int MEDIA;               // number of time steps macroscopic variables will be computed over, defaults to 500
+int MAXIMINI;            // boolean, whether to save max & min values of macroscopic variables during simulation, defaults to 0
+int SAVEALWAYS;          // boolean, whether to save information at each step, defaults to 0
+int nx;                  // number of cells in x-direction
+int ny;                  // number of cells in y-direction
+int ISEED;               // seed for random number generator, starts at 38467
+int NP1;                 // number of particles in n+ cell, defaults to 2500
+int INUM;                // number of electrons sumulated
+int IV;                  // index of which valley a particle is in, 9 means eliminated
+int c;
+int Model_Number;        // enum, controls which simulation model is used, values include MCE, MCH, MCEH, MEPE, MEPH, MEPEH, defaults to MCE
+int File_Format;         // enum, controls which file format to output to, values include GNUPLOTFORMAT and MESHFORMAT, defaults to GNUPLOTFORMAT
+int Quantum_Flag;        // boolean, controls whether quantum effects are simulated using effective potential method, defaults to 0
+int NG;                  // number of mesh nodes
+int NE;                  // number of mesh triangles
+int leid_flag;           // boolean, controls whether starting point used previously saved results, defaults to 0
+int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
+int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
+int FARADAYFLAG;         // boolean, controls whether evolution of magnetic field will be calculated, defaults to 0
 int i_dom[NXM+1][NYM+1];
-int NOVALLEY[NOAMTIA+1];
-int ACOUSTICPHONONS;
-int OPTICALPHONONS;
-int IMPURITYPHONONS;
-int CONDUCTION_BAND;
-int SAVE_MESH;
-int NODE_GEO[3][(NXM+1)*(NYM+1)];
+int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
+int ACOUSTICPHONONS;     // boolean, controls whether acoustic phonon scattering is used, defaults to 1
+int OPTICALPHONONS;      // boolean, controls whether optical phonon scattering is used, defaults to 1
+int IMPURITYPHONONS;     // boolean, controls whether impurity scattering is used, defaults to 1
+int CONDUCTION_BAND;     // enum, controls which band structure model is used, values include PARABOLIC, KANE, FULL, defaults to KANE
+int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to 0
+int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 3 array
 
 // All "real"'s here...
 real u2d[NXM+1][NYM+1][MN3+1];
 real h2d[NXM+1][NYM+1][MN3+1];
-real PSI[NXM+1][NYM+1],E[NXM+1][NYM+1][2];
-real N_D[NXM+1][NYM+1],N_H[NXM+1][NYM+1];
-real dx,dy;
-real TEMPO=0.,TF;
-real LX,LY;
-real TL,DT;
-real mstar2;
-real BKTQ,QH;
+real PSI[NXM+1][NYM+1];
+real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
+real N_D[NXM+1][NYM+1];
+real N_H[NXM+1][NYM+1];
+real dx,dy;                         // length of cells in x & y directions
+real TEMPO=0.;
+real TF;                            // final time, defaults to 5e-12
+real LX, LY;                        // length of device in x & y directions
+real TL;                            // lattice temperature
+real DT;                            // time step, defaults to 0.001e-12
+real mstar2;                        // UNUSED
+real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
+real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];
-real HHM[NOAMTIA+1][3];
-real HM[NOAMTIA+1][3];
+real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / m*, array indexed by material and valley number
+real HM[NOAMTIA+1][3];              // precomputed constant, hbar / m*, array indexed by material and valley number
 real GM[NOAMTIA+1];
 real SWK[NOAMTIA+1][3][14][DIME+1];
 real P[NPMAX+1][7];
-real KX,KY,KZ,X,Y;
-real TS,EPP,DDmax;
+real KX, KY, KZ;                    // particle Kx, Ky, Kz
+real X, Y;                          // particle x & y
+real TS;
+real EPP;
+real DDmax;
 real EDGE[4][NXM+NYM+1][4];
-real CIMP,QD2,TAUW;
+real CIMP;                          // impurity concentration
+real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
+real TAUW;                          // energy relaxation time, defaults to 0.4e-12
 real EPSRSIO2;
 real bufx2d[NXM+1][NYM+1];
 real bufy2d[NXM+1][NYM+1];
@@ -160,26 +181,27 @@ real fx2d[NXM+1][NYM+1][MN3+1];
 real gy2d[NXM+1][NYM+1][MN3+1];
 real c11[7],c12[7],c21[7],c22[7];
 real u[7],f[7],g[7],cw[7];
-real SIO2_INI[NUMSIO2],SIO2_FIN[NUMSIO2];
+real SIO2_INI[NUMSIO2];
+real SIO2_FIN[NUMSIO2];
 real SIO2_POT[NUMSIO2];
 real SIO2_THICKNESS[NUMSIO2];
 real SIO2[NUMSIO2][NXM+1][NYM+1];
-real B[NXM+1][NYM+1];
-real EPSR[NOAMTIA+1];
-real EPF[NOAMTIA+1];
-real MSTAR[NOAMTIA+1][6];
-real alphaK[NOAMTIA+1][4];
-real EG[NOAMTIA+1];
-real HWO[NOAMTIA+1][6];
-real DTK[NOAMTIA+1][6];
-real ZF[NOAMTIA+1][6];
-real RHO[NOAMTIA+1];
-real DA[NOAMTIA+1];
-real UL[NOAMTIA+1];
-real EMIN[NOAMTIA+1][4];
-real XVAL[NOAMTIA+1];
-real LATTCONST[NOAMTIA+1];
-real CB_FULL[NOAMTIA+1][11];
+real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
+real EPSR[NOAMTIA+1];         // static dielectric constant, array indexed by material
+real EPF[NOAMTIA+1];          // high frequency dielectric constant, array indexed by material
+real MSTAR[NOAMTIA+1][6];     // effective mass, array indexed by material and by valley number
+real alphaK[NOAMTIA+1][4];    // valley non-parabolicity, array indexed by material annd by valley number
+real EG[NOAMTIA+1];           // band gap, array indexed by material
+real HWO[NOAMTIA+1][6];       // optical phonon scattering energy, array indexed by material and up to 6 different values
+real DTK[NOAMTIA+1][6];       // optical coupling constant, array indexed by material and by up to 6 different values
+real ZF[NOAMTIA+1][6];        // optical phonon z-factor, array indexed by material and by up to 6 different values
+real RHO[NOAMTIA+1];          // crystal density, array indexed by material
+real DA[NOAMTIA+1];           // acoustic deformation potential, array indexed by material
+real UL[NOAMTIA+1];           // longitudinal sound velocity, array indexed by material
+real EMIN[NOAMTIA+1][4];      // energy difference between valley minimum and CB minimum, array indexed by material and by valley number
+real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
+real LATTCONST[NOAMTIA+1];    // lattice constant, array indexed by material
+real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
 real QEP_ALPHA;
 real QEP_GAMMA;
 real QEP_MODEL;
