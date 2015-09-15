@@ -76,7 +76,7 @@
 #define MESHFORMAT 1 // output file in Mesh format
 
 // definition of the material reference table
-#define NOAMTIA 16   // Number Of All Material Taken Into Account (excluding SiO2)
+#define NOAMTIA 17   // Number Of All Material Taken Into Account (excluding SiO2)
 // ********************
 #define iSIO2 -1     // reference number to Silicon Oxide
 #define SILICON 0    // reference number to Silicon
@@ -95,6 +95,7 @@
 #define INXGA1XAS 13 // reference number to In_x Ga_(1-x) As
 #define INXAL1XAS 14 // reference number to In_x Al_(1-x) As
 #define INXGAXXAS 15 // reference number to In_x Ga_(1-x) As (second zone)
+#define GAN 16       // reference number to GaN
 // ********************
 
 #define NUMSIO2 2 // maximum number of SiO2 interfaces
@@ -366,6 +367,7 @@ For more information about these matters, see the file named COPYING.\n",
      NOVALLEY[INXGA1XAS]=1;  // only G-valley
      NOVALLEY[INXAL1XAS]=1;  // G-valley
      NOVALLEY[INXGAXXAS]=1;  // only G-valley
+     NOVALLEY[GAN]=3;        // G-1, G-2, L-M
 // Dielectric constant for Silicon Oxide SiO2
      EPSRSIO2=3.9*EPS0;         // see http://en.wikipedia.org/wiki/Relative_permittivity
 // Dielectric constant for Semiconducting materials
@@ -382,6 +384,7 @@ For more information about these matters, see the file named COPYING.\n",
      EPSR[GASB]=15.69;          // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
      EPSR[INAS]=15.15;          // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
      EPSR[INP]=12.50;           // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
+     EPSR[GAN]=8.9;
 // III-V semiconductor compounds high frequency dieletric constant
 // HIGH FREQUENCY
 // ==============
@@ -394,6 +397,7 @@ For more information about these matters, see the file named COPYING.\n",
      EPF[GASB]=14.44;           // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
      EPF[INAS]=12.3;            // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
      EPF[INP]=9.61;             // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
+     EPF[GAN]=5.35;
      int ii;
      for(ii=0;ii<NOAMTIA;ii++){
        int i;
@@ -420,6 +424,7 @@ For more information about these matters, see the file named COPYING.\n",
      HWO[GASB][0]=0.02529;      // Fischetti
      HWO[INAS][0]=0.03008;      // Fischetti
      HWO[INP][0]=0.04240;       // Fischetti
+     HWO[GAN][0]=0.0912;
 // Optical coupling constants (eV/m)
      DTK[SILICON][0]=0.05e11;     // Jacoboni Reggiani
      DTK[SILICON][1]=0.08e11;     // Jacoboni Reggiani
@@ -459,6 +464,7 @@ For more information about these matters, see the file named COPYING.\n",
      ZF[GASB][0]=1.;      // see ???
      ZF[INAS][0]=1.;      // see ???
      ZF[INP][0]=1.;       // see ???
+     ZF[GAN][0]=1.;       // guess for correct value
 // Crystal Density (Kg/m^3)
      RHO[SILICON]=2.33e3;   // Fischetti conversations
      RHO[GERMANIUM]=5.32e3; // Fischetti conversations
@@ -471,6 +477,7 @@ For more information about these matters, see the file named COPYING.\n",
      RHO[GASB]=5.61e3;      // Fischetti conversations
      RHO[INAS]=5.67e3;      // Fischetti conversations
      RHO[INP]=4.81e3;       // Fischetti conversations
+     RHO[GAN]=6.15e3;
 // Acoustic deformation potential (Joule)
      DA[SILICON]=9.*Q;      // Fischetti -- Jacoboni Reggiani
      DA[GERMANIUM]=9.*Q;    // Fischetti -- Jacoboni Reggiani
@@ -483,6 +490,7 @@ For more information about these matters, see the file named COPYING.\n",
      DA[GASB]=9.*Q;         // Fischetti
      DA[INAS]=8.2*Q;        // Fischetti
      DA[INP]=6.2*Q;         // Fischetti
+     DA[GAN]=8.3*Q;
 // Longitudinal sound velocity (m/sec)
      UL[SILICON]=9.18e3;   // Fischetti
      UL[GERMANIUM]=5.4e3;  // Fischetti
@@ -495,6 +503,7 @@ For more information about these matters, see the file named COPYING.\n",
      UL[GASB]=3.97e3;      // Fischetti
      UL[INAS]=4.28e3;      // Fischetti
      UL[INP]=5.13e3;       // Fischetti
+     UL[GAN]=6.56e3;
 // Band minimum energy
 // first valley
      EMIN[SILICON][1]=0.0;     // Sellier, Fischetti, etc.
@@ -508,8 +517,12 @@ For more information about these matters, see the file named COPYING.\n",
      EMIN[GASB][1]=0.0;
      EMIN[INAS][1]=0.0;
      EMIN[INP][1]=0.0;
+     EMIN[GAN][1]=0.0;
 // eventual second valley
      EMIN[GAAS][2]=0.323;
+     EMIN[GAN][2]=1.9;
+// third valley
+     EMIN[GAN][3]=2.1;
 
 // Definition of effective mass for all materials in all valleys
      MSTAR[SILICON][1]=0.32;     // see Sellier, Tomizawa, etc.
@@ -524,9 +537,13 @@ For more information about these matters, see the file named COPYING.\n",
      MSTAR[GASB][1]=0.039;       // Gamma-valley -- see Ram-Mohan
      MSTAR[INAS][1]=0.026;       // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
      MSTAR[INP][1]=0.0795;       // Gamma-valley -- see Ram-Mohan
+     MSTAR[GAN][1]=0.2;
+     MSTAR[GAN][2]=1.0;
+     MSTAR[GAN][3]=1.0;
 // non-parabolicity coefficients
      alphaK[SILICON][1]=0.5;    // see Sellier, Tomizawa
      alphaK[GERMANIUM][1]=0.3;  // Gamma valley - Jacoboni Reggiani
+     alphaK[GAN][1]=0.189;      // Gamma-1
 // Lattice constants
      LATTCONST[GAAS]=565.35e-12;       // CODATA
      LATTCONST[SILICON]=543.102e-12;   // CODATA
@@ -539,6 +556,7 @@ For more information about these matters, see the file named COPYING.\n",
      LATTCONST[INP]=586.87e-12;        // CODATA
      LATTCONST[INAS]=605.83e-12;       // CODATA
      LATTCONST[INSB]=647.9e-12;        // CODATA
+     LATTCONST[GAN]=318.9e-12;         // a lattice constant
 // sp3s* Conduction Band calculated parameters for full band simulations
 #include "materials/Silicon.h"
 #include "materials/GaAs.h"
@@ -551,6 +569,7 @@ For more information about these matters, see the file named COPYING.\n",
 #include "materials/InP.h"
 #include "materials/InAs.h"
 #include "materials/InSb.h"
+#include "materials/GaN.h"
 // ======================================================
 // ======================================================
 
@@ -594,6 +613,8 @@ For more information about these matters, see the file named COPYING.\n",
      printf("EG[INAS]         = %g\n",EG[INAS]);
      EG[INP]=1.445-3.296e-4*TL;
      printf("EG[INP]         = %g\n",EG[INP]);
+     EG[GAN]=3.47 - 7.7e-4 * TL * TL / (TL + 600);
+     printf("EG[GAN]         = %g\n", EG[GAN]);
      printf("\n");
 
      if(CONDUCTION_BAND==KANE || CONDUCTION_BAND==PARABOLIC || CONDUCTION_BAND==FULL){
@@ -630,6 +651,9 @@ For more information about these matters, see the file named COPYING.\n",
 // non-parabolicity coefficient for InP in the GAMMA-valley
       alphaK[INP][1]=pow(1.-MSTAR[INP][1],2.)/(EG[INP]+EMIN[INP][1]);
       printf("alphaK_gamma[InP] = %g\n",alphaK[INP][1]);
+
+      alphaK[GAN][1] = pow(1. - MSTAR[GAN][1], 2.) / (EG[GAN] + EMIN[GAN][1]); // expected value = 0.189
+      printf("alphaK_gamma1[GAN] = %g\n", alphaK[GAN][1]);
      }
 
 // Semiconductor compounds
