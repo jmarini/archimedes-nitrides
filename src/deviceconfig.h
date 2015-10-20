@@ -34,7 +34,7 @@
 void
 MCdevice_config(void)
 {
-  long int n=0; 
+  long int n=0;
   int i,j,np,m;
   real c1,c2,c3,c4,c5,c6,c7;
 

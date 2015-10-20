@@ -134,6 +134,7 @@ Processing the input file\n\
     else if(strcmp(s,"GASB")==0) type=GASB;
     else if(strcmp(s,"INAS")==0) type=INAS;
     else if(strcmp(s,"INP")==0) type=INP;
+    else if(strcmp(s,"GAN")==0) type=GAN;
     else if(strcmp(s,"ALxINxSB")==0){
       real dum;
       type=ALXINXSB;

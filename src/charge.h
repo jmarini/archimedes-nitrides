@@ -53,7 +53,7 @@ Charge(void)
     j=(int)(y+1.);
 // Cloud in cell method
     u2d[i][j][1]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-    if(i<=nx) 
+    if(i<=nx)
       u2d[i+1][j][1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
     if(j<=ny)
       u2d[i][j+1][1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));
@@ -87,7 +87,7 @@ Charge(void)
 // Gamma-valley
     if(P[n][0]==1){
       DG[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-      if(i<=nx) 
+      if(i<=nx)
         DG[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
       if(j<=ny)
         DG[i][j+1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));
@@ -97,7 +97,7 @@ Charge(void)
 // L-valley
     if(P[n][0]==2){
       DL[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-      if(i<=nx) 
+      if(i<=nx)
         DL[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
       if(j<=ny)
         DL[i][j+1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));

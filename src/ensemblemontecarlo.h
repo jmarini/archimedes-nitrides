@@ -52,29 +52,30 @@ EMC(void)
     Y=P[n][6];
     ti=TEMPO;
 
+    // while the particle's time is less than the time for the step...
     while(TS<=tdt){
-       tau=TS-ti;
-       drift(tau);
-       i=(int)(X/dx)+1;
-       j=(int)(Y/dy)+1;
-       if(i<=1)  i=1;
-       if(j<=1)  j=1;
-       if(i>=nx) i=nx;
-       if(j>=ny) j=ny;
-       scat(i_dom[i][j]);
-       ti=TS;
-       i=(int)(X/dx)+1;
-       j=(int)(Y/dy)+1;
-       if(i<=1)  i=1;
-       if(j<=1)  j=1;
-       if(i>=nx) i=nx;
-       if(j>=ny) j=ny;
+       tau=TS-ti;          // the dt for the current step
+       drift(tau);         // drift for dt
+       i=(int)(X/dx)+1;    // update cell position after drift -- i
+       j=(int)(Y/dy)+1;    //                                  -- j
+       if(i<=1)  i=1;      // make sure variables are in bound -- i
+       if(j<=1)  j=1;      //                                  -- j
+       if(i>=nx) i=nx;     //                                  -- nx
+       if(j>=ny) j=ny;     //                                  -- ny
+       scat(i_dom[i][j]);  // scatter particle
+       ti=TS;              // update the time
+       i=(int)(X/dx)+1;    // update cell position after scatter -- i
+       j=(int)(Y/dy)+1;    //                                    -- j
+       if(i<=1)  i=1;      // make sure variables are in bound -- i
+       if(j<=1)  j=1;      //                                  -- j
+       if(i>=nx) i=nx;     //                                  -- nx
+       if(j>=ny) j=ny;     //                                  -- ny
        TS=ti-log(rnd())/GM[i_dom[i][j]];
     }
-    tau=tdt-ti;
-    drift(tau);
+    tau=tdt-ti;            // calculate unused time in step
+    drift(tau);            // drift for unused time in step
 
-// check if a particle is going out from the right edge of the device
+    // check if a particle is going out from the right edge of the device
     if(IV!=9){
      i=(int)(X/dx+1.5);
      j=(int)(Y/dy+1.5);
@@ -90,7 +91,7 @@ EMC(void)
         }
       }
     }
-// check if a particle is going out from the left edge of the device
+    // check if a particle is going out from the left edge of the device
     if(IV!=9){
      i=(int)(X/dx+1.5);
      j=(int)(Y/dy+1.5);
@@ -106,7 +107,7 @@ EMC(void)
         }
       }
     }
-// check if a particle is going out from the bottom edge of the device
+    // check if a particle is going out from the bottom edge of the device
     if(IV!=9){
      i=(int)(X/dx+1.5);
      j=(int)(Y/dy+1.5);
@@ -122,7 +123,7 @@ EMC(void)
         }
       }
     }
-// check if a particle is going out from the upper edge of the device
+    // check if a particle is going out from the upper edge of the device
     if(IV!=9){
      i=(int)(X/dx+1.5);
      j=(int)(Y/dy+1.5);

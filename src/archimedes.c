@@ -53,17 +53,17 @@
 #define KANE 0                 // conduction band model, kane model
 #define PARABOLIC 1            // conduction band model, parabolic approximation
 #define FULL 2                 // conduction band model, full band model
-#define QEP_BOHM 0
-#define QEP_CALIBRATED_BOHM 1
-#define QEP_FULL 2
-#define QEP_DENSITY_GRADIENT 3
+#define QEP_BOHM 0             // quantum effective potential, bohm potential
+#define QEP_CALIBRATED_BOHM 1  // quantum effective potential, calibrated bohm potential
+#define QEP_FULL 2             // quantum effective potential, full effective potential
+#define QEP_DENSITY_GRADIENT 3 // quantum effective potential, density gradient
 #define MN3 4
-#define NXM 308
-#define NYM 308
-#define DIME 1003
+#define NXM 308                // maximum number of cells in x-direction
+#define NYM 308                // maximum number of cells in y-direction
+#define DIME 1003              // maximum number of points in energy mesh
 #define ITMAX 10000000         // maximum number of monte carlo iterations
 #define POISSONITMAX 1500      // maximum number of poisson iterations
-#define SMALL 1.e-5
+#define SMALL 1.e-5            // defines what is a "small" number/delta
 #define VMAX 1000000
 #define NPMAX 10000000         // maximum number of super-particles
 #define MCE 0                  // MCE stands for MC for electrons only
@@ -146,8 +146,8 @@ real PSI[NXM+1][NYM+1];
 real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
 real N_D[NXM+1][NYM+1];
 real N_H[NXM+1][NYM+1];
-real dx,dy;                         // length of cells in x & y directions
-real TEMPO=0.;
+real dx, dy;                        // length of cells in x & y directions
+real TEMPO=0.;                      // current time in simulation, starts at 0
 real TF;                            // final time, defaults to 5e-12
 real LX, LY;                        // length of device in x & y directions
 real TL;                            // lattice temperature
@@ -160,13 +160,18 @@ real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / m*, array 
 real HM[NOAMTIA+1][3];              // precomputed constant, hbar / m*, array indexed by material and valley number
 real GM[NOAMTIA+1];
 real SWK[NOAMTIA+1][3][14][DIME+1];
-real P[NPMAX+1][7];
-real KX, KY, KZ;                    // particle Kx, Ky, Kz
-real X, Y;                          // particle x & y
-real TS;
+real P[NPMAX+1][7];                 // particle information, array indexed by material and variable (see below), index 0 is IV (valley #)
+real KX, KY, KZ;                    // particle Kx, Ky, Kz  -- indices 1, 2, 3 for array P
+real TS;                            // time for particle    -- index 4 for array P
+real X, Y;                          // particle x & y       -- indices 5 & 6 for array P
 real EPP;
 real DDmax;
-real EDGE[4][NXM+NYM+1][4];
+real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
+                                    //                                               cell index (i or j),
+                                    //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
+                                    //                                                                 1=potential,
+                                    //                                                                 2=contact electron density,
+                                    //                                                                 3=contact hole density)
 real CIMP;                          // impurity concentration
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real TAUW;                          // energy relaxation time, defaults to 0.4e-12
@@ -389,7 +394,7 @@ For more information about these matters, see the file named COPYING.\n",
      NOVALLEY[INXGA1XAS]=1;  // only G-valley
      NOVALLEY[INXAL1XAS]=1;  // G-valley
      NOVALLEY[INXGAXXAS]=1;  // only G-valley
-     NOVALLEY[GAN]=3;        // G-1, G-2, L-M
+     NOVALLEY[GAN]=3;        // G-1, L-M, G-2
 // Dielectric constant for Silicon Oxide SiO2
      EPSRSIO2=3.9*EPS0;         // see http://en.wikipedia.org/wiki/Relative_permittivity
 // Dielectric constant for Semiconducting materials
@@ -406,7 +411,7 @@ For more information about these matters, see the file named COPYING.\n",
      EPSR[GASB]=15.69;          // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
      EPSR[INAS]=15.15;          // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
      EPSR[INP]=12.50;           // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
-     EPSR[GAN]=8.9;
+     EPSR[GAN]=9.7;             // E. Bellotti & F. Bertazzi
 // III-V semiconductor compounds high frequency dieletric constant
 // HIGH FREQUENCY
 // ==============
@@ -419,7 +424,7 @@ For more information about these matters, see the file named COPYING.\n",
      EPF[GASB]=14.44;           // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
      EPF[INAS]=12.3;            // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
      EPF[INP]=9.61;             // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
-     EPF[GAN]=5.35;
+     EPF[GAN]=5.28;             // E. Bellotti & F. Bertazzi
      int ii;
      for(ii=0;ii<NOAMTIA;ii++){
        int i;
@@ -446,7 +451,8 @@ For more information about these matters, see the file named COPYING.\n",
      HWO[GASB][0]=0.02529;      // Fischetti
      HWO[INAS][0]=0.03008;      // Fischetti
      HWO[INP][0]=0.04240;       // Fischetti
-     HWO[GAN][0]=0.0912;
+     HWO[GAN][0]=0.09212;       // LO -- E. Bellotti & F. Bertazzi
+     // HWO[GAN][1]=0.06955;       // TO -- E. Bellotti & F. Bertazzi
 // Optical coupling constants (eV/m)
      DTK[SILICON][0]=0.05e11;     // Jacoboni Reggiani
      DTK[SILICON][1]=0.08e11;     // Jacoboni Reggiani
@@ -469,6 +475,8 @@ For more information about these matters, see the file named COPYING.\n",
      DTK[GASB][0]=0.94e11; // see ???
      DTK[INAS][0]=3.59e11; // see ???
      DTK[INP][0]=2.46e11;  // see ???
+     DTK[GAN][0]=1.0e11;          // E. Bellotti & F. Bertazzi
+     // DTK[GAN][1]=1.0e11;          // E. Bellotti & F. Bertazzi
 // Optical phonon Z-factor
      ZF[SILICON][0]=1.;   // Sellier
      ZF[SILICON][1]=1.;   // Sellier
@@ -487,6 +495,7 @@ For more information about these matters, see the file named COPYING.\n",
      ZF[INAS][0]=1.;      // see ???
      ZF[INP][0]=1.;       // see ???
      ZF[GAN][0]=1.;       // guess for correct value
+     // ZF[GAN][1]=1.;       // guess for correct value
 // Crystal Density (Kg/m^3)
      RHO[SILICON]=2.33e3;   // Fischetti conversations
      RHO[GERMANIUM]=5.32e3; // Fischetti conversations
@@ -499,7 +508,7 @@ For more information about these matters, see the file named COPYING.\n",
      RHO[GASB]=5.61e3;      // Fischetti conversations
      RHO[INAS]=5.67e3;      // Fischetti conversations
      RHO[INP]=4.81e3;       // Fischetti conversations
-     RHO[GAN]=6.15e3;
+     RHO[GAN]=6.087e3;      // E. Bellotti & F. Bertazzi
 // Acoustic deformation potential (Joule)
      DA[SILICON]=9.*Q;      // Fischetti -- Jacoboni Reggiani
      DA[GERMANIUM]=9.*Q;    // Fischetti -- Jacoboni Reggiani
@@ -512,7 +521,7 @@ For more information about these matters, see the file named COPYING.\n",
      DA[GASB]=9.*Q;         // Fischetti
      DA[INAS]=8.2*Q;        // Fischetti
      DA[INP]=6.2*Q;         // Fischetti
-     DA[GAN]=8.3*Q;
+     DA[GAN]=8.3*Q;         // E. Bellotti & F. Bertazzi
 // Longitudinal sound velocity (m/sec)
      UL[SILICON]=9.18e3;   // Fischetti
      UL[GERMANIUM]=5.4e3;  // Fischetti
@@ -525,7 +534,7 @@ For more information about these matters, see the file named COPYING.\n",
      UL[GASB]=3.97e3;      // Fischetti
      UL[INAS]=4.28e3;      // Fischetti
      UL[INP]=5.13e3;       // Fischetti
-     UL[GAN]=6.56e3;
+     UL[GAN]=6.56e3;       // Foutz, O'Leary, Shur, Eastman
 // Band minimum energy
 // first valley
      EMIN[SILICON][1]=0.0;     // Sellier, Fischetti, etc.
@@ -539,12 +548,12 @@ For more information about these matters, see the file named COPYING.\n",
      EMIN[GASB][1]=0.0;
      EMIN[INAS][1]=0.0;
      EMIN[INP][1]=0.0;
-     EMIN[GAN][1]=0.0;
+     EMIN[GAN][1]=0.0;         // G-1
 // eventual second valley
      EMIN[GAAS][2]=0.323;
-     EMIN[GAN][2]=1.9;
+     EMIN[GAN][2]=1.9;         // L-M
 // third valley
-     EMIN[GAN][3]=2.1;
+     EMIN[GAN][3]=2.1;         // G-2
 
 // Definition of effective mass for all materials in all valleys
      MSTAR[SILICON][1]=0.32;     // see Sellier, Tomizawa, etc.
@@ -559,13 +568,15 @@ For more information about these matters, see the file named COPYING.\n",
      MSTAR[GASB][1]=0.039;       // Gamma-valley -- see Ram-Mohan
      MSTAR[INAS][1]=0.026;       // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
      MSTAR[INP][1]=0.0795;       // Gamma-valley -- see Ram-Mohan
-     MSTAR[GAN][1]=0.2;
-     MSTAR[GAN][2]=1.0;
-     MSTAR[GAN][3]=1.0;
+     MSTAR[GAN][1]=0.2;          // G-1 -- Foutz, O'Leary, Shur, Eastman
+     MSTAR[GAN][2]=0.4;          // L-M -- Bhapkar & Shur
+     MSTAR[GAN][3]=0.6;          // G-2 -- Bhapkar & Shur
 // non-parabolicity coefficients
      alphaK[SILICON][1]=0.5;    // see Sellier, Tomizawa
      alphaK[GERMANIUM][1]=0.3;  // Gamma valley - Jacoboni Reggiani
-     alphaK[GAN][1]=0.189;      // Gamma-1
+     alphaK[GAN][1]=0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
+     alphaK[GAN][2]=0.065;      // L-M -- Bhapkar & Shur
+     alphaK[GAN][3]=0.029;      // G-2 -- Bhapkar & Shur
 // Lattice constants
      LATTCONST[GAAS]=565.35e-12;       // CODATA
      LATTCONST[SILICON]=543.102e-12;   // CODATA
