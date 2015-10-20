@@ -43,14 +43,15 @@ EMC(void)
  tdt=TEMPO+DT;
 
  do{
-    IV=(int)(P[n][0]);
-    KX=P[n][1];
-    KY=P[n][2];
-    KZ=P[n][3];
-    TS=P[n][4];
-    X=P[n][5];
-    Y=P[n][6];
-    ti=TEMPO;
+    // information about particle n is set up in easy access variables
+    IV = P[n].valley;
+    KX = P[n].kx;
+    KY = P[n].ky;
+    KZ = P[n].kz;
+    TS = P[n].t;
+    X  = P[n].x;
+    Y  = P[n].y;
+    ti = TEMPO;
 
     // while the particle's time is less than the time for the step...
     while(TS<=tdt){
@@ -143,18 +144,18 @@ EMC(void)
 
 // ==============================================
      if(IV!=9){
-       P[n][0]=IV;
-       P[n][1]=KX;
-       P[n][2]=KY;
-       P[n][3]=KZ;
-       P[n][4]=TS;
-       P[n][5]=X;
-       P[n][6]=Y;
+       P[n].valley = IV;
+       P[n].kx = KX;
+       P[n].ky = KY;
+       P[n].kz = KZ;
+       P[n].t  = TS;
+       P[n].x  = X;
+       P[n].y  = Y;
        n++;
      }
 // if IV=9 then the super-particle has been eliminated
      if(IV==9){
-       for(i=1;i<=6;i++) P[n][i]=P[INUM][i];
+       P[n] = P[INUM]
        INUM--;
      }
   }while(n<INUM);
@@ -169,13 +170,13 @@ EMC(void)
       for(j=1;j<=ni;j++){
         n=INUM+j;
         creation(i,TEMPO,0);
-        P[n][0]=IV;
-        P[n][1]=KX;
-        P[n][2]=KY;
-        P[n][3]=KZ;
-        P[n][4]=TS;
-        P[n][5]=X;
-        P[n][6]=Y;
+        P[n].valley = IV;
+        P[n].kx = KX;
+        P[n].ky = KY;
+        P[n].kz = KZ;
+        P[n].t  = TS;
+        P[n].x  = X;
+        P[n].y  = Y;
       }
       INUM += ni;
     }
@@ -191,13 +192,13 @@ EMC(void)
       for(j=1;j<=ni;j++){
         n=INUM+j;
         creation(i,TEMPO,2);
-        P[n][0]=IV;
-        P[n][1]=KX;
-        P[n][2]=KY;
-        P[n][3]=KZ;
-        P[n][4]=TS;
-        P[n][5]=X;
-        P[n][6]=Y;
+        P[n].valley = IV;
+        P[n].kx = KX;
+        P[n].ky = KY;
+        P[n].kz = KZ;
+        P[n].t  = TS;
+        P[n].x  = X;
+        P[n].y  = Y;
       }
       INUM += ni;
     }
@@ -212,13 +213,13 @@ EMC(void)
       for(j=1;j<=ni;j++){
         n=INUM+j;
         creation(i,TEMPO,1);
-        P[n][0]=IV;
-        P[n][1]=KX;
-        P[n][2]=KY;
-        P[n][3]=KZ;
-        P[n][4]=TS;
-        P[n][5]=X;
-        P[n][6]=Y;
+        P[n].valley = IV;
+        P[n].kx = KX;
+        P[n].ky = KY;
+        P[n].kz = KZ;
+        P[n].t  = TS;
+        P[n].x  = X;
+        P[n].y  = Y;
       }
       INUM += ni;
     }
@@ -233,13 +234,13 @@ EMC(void)
       for(j=1;j<=ni;j++){
         n=INUM+j;
         creation(i,TEMPO,3);
-        P[n][0]=IV;
-        P[n][1]=KX;
-        P[n][2]=KY;
-        P[n][3]=KZ;
-        P[n][4]=TS;
-        P[n][5]=X;
-        P[n][6]=Y;
+        P[n].valley = IV;
+        P[n].kx = KX;
+        P[n].ky = KY;
+        P[n].kz = KZ;
+        P[n].t  = TS;
+        P[n].x  = X;
+        P[n].y  = Y;
       }
       INUM += ni;
     }

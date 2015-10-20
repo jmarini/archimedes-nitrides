@@ -47,8 +47,8 @@ Charge(void)
 //if(Material==SILICON || Material==GERMANIUM){
 // well known "cloud in cell" method
   for(n=1;n<=INUM;n++){
-    x=P[n][5]/dx;
-    y=P[n][6]/dy;
+    x=P[n].x/dx;
+    y=P[n].y/dy;
     i=(int)(x+1.);
     j=(int)(y+1.);
 // Cloud in cell method
@@ -79,13 +79,13 @@ Charge(void)
 /*if(Material==GAAS){
 // well known "cloud in cell" method
   for(n=1;n<=INUM;n++){
-    x=P[n][5]/dx;
-    y=P[n][6]/dy;
+    x=P[n].x/dx;
+    y=P[n].y/dy;
     i=(int)(x+1.);
     j=(int)(y+1.);
 // Cloud in cell method
 // Gamma-valley
-    if(P[n][0]==1){
+    if(P[n].valley==1){
       DG[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
       if(i<=nx)
         DG[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
@@ -95,7 +95,7 @@ Charge(void)
        DG[i+1][j+1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(1.-(y-(real)(j-1))));
     }
 // L-valley
-    if(P[n][0]==2){
+    if(P[n].valley==2){
       DL[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
       if(i<=nx)
         DL[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));

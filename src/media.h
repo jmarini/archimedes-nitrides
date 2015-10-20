@@ -47,9 +47,9 @@ void media(void)
    }
  for(n=1;n<=INUM;n++){
    int iaux;
-   iv=(int)(P[n][0]);
-   x=P[n][5];
-   y=P[n][6];
+   iv=P[n].valley;
+   x=P[n].x;
+   y=P[n].y;
    i=(int)(x/dx+1.5);
    j=(int)(y/dy+1.5);
    if(i<=1)  i=1;
@@ -60,18 +60,18 @@ void media(void)
    if(NOVALLEY[i_dom[i][j]]==2) iaux=iv;
    if(CONDUCTION_BAND==FULL) iaux=0;
 
-   ksquared=P[n][1]*P[n][1]+P[n][2]*P[n][2]+P[n][3]*P[n][3];
+   ksquared=P[n].kx*P[n].kx+P[n].ky*P[n].ky+P[n].kz*P[n].kz;
 
    if(CONDUCTION_BAND==PARABOLIC){
     superparticle_energy=HHM[i_dom[i][j]][0]*ksquared;
-    xvelocity=P[n][1]*HM[i_dom[i][j]][iaux];
-    yvelocity=P[n][2]*HM[i_dom[i][j]][iaux];
+    xvelocity=P[n].kx*HM[i_dom[i][j]][iaux];
+    yvelocity=P[n].ky*HM[i_dom[i][j]][iaux];
    }
    if(CONDUCTION_BAND==KANE){
     thesquareroot=sqrt(1.+4.*alphaK[i_dom[i][j]][iv]*HHM[i_dom[i][j]][iaux]*ksquared);
     superparticle_energy=(thesquareroot-1.)/(2.*alphaK[i_dom[i][j]][iv]);
-    xvelocity=P[n][1]*HM[i_dom[i][j]][iaux]/thesquareroot;
-    yvelocity=P[n][2]*HM[i_dom[i][j]][iaux]/thesquareroot;
+    xvelocity=P[n].kx*HM[i_dom[i][j]][iaux]/thesquareroot;
+    yvelocity=P[n].ky*HM[i_dom[i][j]][iaux]/thesquareroot;
    }
    if(CONDUCTION_BAND==FULL){
     real k,k2,k4;
@@ -104,8 +104,8 @@ void media(void)
      +CB_FULL[i_dom[i][j]][9];
     k*=1.e+12*2.*PI;
     d*=1.e-12*0.5/PI;
-    xvelocity=QH*d*P[n][1]/k;
-    yvelocity=QH*d*P[n][2]/k;
+    xvelocity=QH*d*P[n].kx/k;
+    yvelocity=QH*d*P[n].ky/k;
    }
 // for the following two rows see
 // pag.10 formula (1.19) of Tomizawa,

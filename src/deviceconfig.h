@@ -100,17 +100,17 @@ MCdevice_config(void)
       c5=2.*PI*rnd();
       c6=sin(c5);
       c7=cos(c5);
-      P[n][0]=IV;
-      P[n][1]=c2*c3*c6;
-      P[n][2]=c2*c4*c6;
-      P[n][3]=c2*c7;
-      P[n][4]=-log(rnd())/GM[i_dom[i][j]];
-      P[n][5]=dx*(rnd()+(real)(i)-1.5);
-      P[n][6]=dy*(rnd()+(real)(j)-1.5);
-      if(i==1) P[n][5]=dx*0.5*rnd();
-      if(j==1) P[n][6]=dy*0.5*rnd();
-      if(i==nx+1) P[n][5]=LX-dx*0.5*rnd();
-      if(j==ny+1) P[n][6]=LY-dy*0.5*rnd();
+      P[n].valley = IV;
+      P[n].kx = c2 * c3 * c6;
+      P[n].ky = c2 * c4 * c6;
+      P[n].kz = c2 * c7;
+      P[n].t  = -log(rnd())/GM[i_dom[i][j]];
+      P[n].x  = dx*(rnd()+(real)(i)-1.5);
+      P[n].y  = dy*(rnd()+(real)(j)-1.5);
+      if(i==1) P[n].x=dx*0.5*rnd();
+      if(j==1) P[n].y=dy*0.5*rnd();
+      if(i==nx+1) P[n].x=LX-dx*0.5*rnd();
+      if(j==ny+1) P[n].y=LY-dy*0.5*rnd();
      }
     }
   }

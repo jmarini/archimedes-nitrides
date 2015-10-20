@@ -106,6 +106,7 @@
 #include "sign.h"
 #include "mm.h"
 #include "mm2.h"
+#include "particle.h"
 // ===============================
 
 // All integers here...
@@ -160,10 +161,10 @@ real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / m*, array 
 real HM[NOAMTIA+1][3];              // precomputed constant, hbar / m*, array indexed by material and valley number
 real GM[NOAMTIA+1];
 real SWK[NOAMTIA+1][3][14][DIME+1];
-real P[NPMAX+1][7];                 // particle information, array indexed by material and variable (see below), index 0 is IV (valley #)
-real KX, KY, KZ;                    // particle Kx, Ky, Kz  -- indices 1, 2, 3 for array P
-real TS;                            // time for particle    -- index 4 for array P
-real X, Y;                          // particle x & y       -- indices 5 & 6 for array P
+particle_t P[NPMAX+1];              // particle information, array indexed by particle
+real KX, KY, KZ;                    // particle Kx, Ky, Kz
+real TS;                            // time for particle
+real X, Y;                          // particle x & y
 real EPP;
 real DDmax;
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
