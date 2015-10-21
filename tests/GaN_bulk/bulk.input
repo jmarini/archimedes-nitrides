@@ -1,0 +1,47 @@
+# This file is for the simulation of
+# a GaN BULK device. To run it type:
+# archimedes bulk.input
+
+TRANSPORT MC ELECTRONS
+
+FINALTIME 0.2e-12
+TIMESTEP 0.001e-12
+
+XLENGTH 0.2e-6
+YLENGTH 1.0e-6
+
+XSPATIALSTEP 64
+YSPATIALSTEP 32
+
+# Phonons scattering
+ACOUSTICSCATTERING ON
+OPTICALSCATTERING ON
+IMPURITYSCATTERING ON
+
+# Parabolic conduction band
+CONDUCTIONBAND KANE
+
+# definition of the material (all the device is made of GaN)
+MATERIAL X 0.0 0.2e-6    Y 0.0 1.0e-6  GAN
+
+# Definition of the doping concentration
+# ======================================
+# Nd=1E17
+DONORDENSITY    0.       0.         0.2e-6    1.0e-6    1.e23
+
+# Definition of the various contacts
+# ==================================
+CONTACT LEFT  0.0    0.2e-6  INSULATOR 0.0
+CONTACT RIGHT 0.0    0.2e-6  INSULATOR 0.0
+CONTACT DOWN  0.0    1.0e-6 OHMIC     0.0 1.e26
+CONTACT UP    0.0    1.0e-6 OHMIC     0.2 1.e26
+
+LATTICETEMPERATURE 300.
+
+STATISTICALWEIGHT 1000
+MAXIMINI
+# SAVEEACHSTEP
+
+OUTPUTFORMAT GNUPLOT
+
+# end of BULK test-1
