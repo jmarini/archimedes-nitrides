@@ -100,6 +100,13 @@
 
 #define NUMSIO2 2 // maximum number of SiO2 interfaces
 
+struct {
+    int BOTTOM;
+    int RIGHT;
+    int TOP;
+    int LEFT;
+} direction_t = {.BOTTOM = 0, .RIGHT = 1, .TOP = 2, .LEFT = 3};
+
 // ===============================
 #include "constants.h"
 #include "extrema.h"
@@ -107,6 +114,9 @@
 #include "mm.h"
 #include "mm2.h"
 #include "particle.h"
+extern inline int does_particle_exist(particle_t *particle);
+extern inline void remove_particle(particle_t *particle);
+extern inline real particle_ksquared(particle_t *particle);
 // ===============================
 
 // All integers here...
@@ -115,8 +125,7 @@ int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
 int MEDIA;               // number of time steps macroscopic variables will be computed over, defaults to 500
 int MAXIMINI;            // boolean, whether to save max & min values of macroscopic variables during simulation, defaults to 0
 int SAVEALWAYS;          // boolean, whether to save information at each step, defaults to 0
-int nx;                  // number of cells in x-direction
-int ny;                  // number of cells in y-direction
+int nx, ny;              // number of cells in x- and y-directions
 int ISEED;               // seed for random number generator, starts at 38467
 int NP1;                 // number of particles in n+ cell, defaults to 2500
 int INUM;                // number of electrons sumulated
@@ -131,7 +140,7 @@ int leid_flag;           // boolean, controls whether starting point used previo
 int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
 int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
 int FARADAYFLAG;         // boolean, controls whether evolution of magnetic field will be calculated, defaults to 0
-int i_dom[NXM+1][NYM+1];
+int i_dom[NXM+1][NYM+1]; // material at each mesh node, array indexed by node (i, j)
 int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
 int ACOUSTICPHONONS;     // boolean, controls whether acoustic phonon scattering is used, defaults to 1
 int OPTICALPHONONS;      // boolean, controls whether optical phonon scattering is used, defaults to 1
@@ -165,7 +174,7 @@ particle_t P[NPMAX+1];              // particle information, array indexed by pa
 real KX, KY, KZ;                    // particle Kx, Ky, Kz
 real TS;                            // time for particle
 real X, Y;                          // particle x & y
-real EPP;
+real EPP;                           // number of carriers per particle (?)
 real DDmax;
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
                                     //                                               cell index (i or j),
@@ -365,7 +374,7 @@ For more information about these matters, see the file named COPYING.\n",
   else if (z){
 // In case of filename specified
 // =============================
-     fp=fopen(argv[1],"r"); // here we open th input file...
+     fp=fopen(argv[1],"r"); // here we open the input file...
 // File Control, just in case the file does not exist...
      if(fp==NULL){
       printf("%s: fatal error in opening the input file %s\n",

@@ -34,25 +34,28 @@
 #define ARCHIMEDES_PARTICLE_H
 
 typedef struct {
-   int valley;
-   real kx;
-   real ky;
-   real kz;
-   real t; // time
-   real x;
-   real y;
+    int valley;
+    real kx;
+    real ky;
+    real kz;
+    real t; // time
+    real x;
+    real y;
 } particle_t;
 
 
-inline int does_particle_exist(particle_t particle) {
-   return particle.valley != 9;
+inline int does_particle_exist(particle_t *particle) {
+    return particle->valley != 9;
 }
 
+inline void remove_particle(particle_t *particle) {
+    particle->valley = 9;
+}
 
-inline real _ksquared(particle_t particle) {
-   return (particle.kx * particle.kx +
-           particle.ky * particle.ky +
-           particle.kz * particle.kz);
+inline real particle_ksquared(particle_t *particle) {
+    return (particle->kx * particle->kx +
+            particle->ky * particle->ky +
+            particle->kz * particle->kz);
 }
 
 #endif

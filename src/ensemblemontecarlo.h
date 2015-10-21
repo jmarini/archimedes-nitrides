@@ -16,11 +16,11 @@
    any later version.
 
    This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   but WITHOUT ANparticle->y WARRANTparticle->y; without even the implied warranty of
+   MERCHANTABILITparticle->y or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
+   particle->you should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -32,8 +32,7 @@
 
 // Ensemble Monte Carlo method
 
-void
-EMC(void)
+void EMC(void)
 {
  long int n=1;
  int i,ni,j,npt[NXM+NYM+1][4];

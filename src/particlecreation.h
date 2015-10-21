@@ -44,7 +44,7 @@ creation(int i,real t,int edge)
  real c1,c2,c3,
       c4,c5,c6,c7;
 
-// We assume that the particles are initially 
+// We assume that the particles are initially
 // at near thermal equilibrium
 
 // creation of the particle position vector r=(X,Y)

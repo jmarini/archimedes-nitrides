@@ -2,13 +2,13 @@
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes some quantum effects by means 
+   electrons and holes. It also includes some quantum effects by means
    of the effective potential method. It is also able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
    Copyright (C) 2004-2011 Jean Michel Sellier
    <jeanmichel.sellier@gmail.com>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -512,7 +512,7 @@ scat(int Material)
      KX=a11*x1+a12*x2+a13*x3;
      KY=a21*x1+a22*x2+a23*x3;
      KZ=a32*x2+a33*x3;
-     return;     
+     return;
     }
     if((finalenergy<=0.) || j==0) return;
    }
