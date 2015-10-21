@@ -2,7 +2,7 @@
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It includes some quantum effects by means 
+   electrons and holes. It includes some quantum effects by means
    of effective potential method. It is also able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
@@ -34,25 +34,27 @@
 #define ARCHIMEDES_PARTICLE_H
 
 typedef struct {
-    int valley;
-    real kx;
+    int valley;  // number id of the valley the particle is in
+    real kx;     // momentum coordinates
     real ky;
     real kz;
-    real t; // time
-    real x;
+    real t;      // time
+    real x;      // real coordinates
     real y;
 } particle_t;
 
 
-inline int does_particle_exist(particle_t *particle) {
+inline int mc_does_particle_exist(particle_t *particle) {
     return particle->valley != 9;
 }
 
-inline void remove_particle(particle_t *particle) {
+
+inline void mc_remove_particle(particle_t *particle) {
     particle->valley = 9;
 }
 
-inline real particle_ksquared(particle_t *particle) {
+
+inline real mc_particle_ksquared(particle_t *particle) {
     return (particle->kx * particle->kx +
             particle->ky * particle->ky +
             particle->kz * particle->kz);

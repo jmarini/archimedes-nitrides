@@ -37,247 +37,308 @@
 // From version 1.1.0 on, the scattering effects can be excluded
 // to simulate ballistic transport.
 
-void
-scat(int Material)
+void scatter(particle_t *particle, int material)
 {
- int j=0;
- register int i,ie=0;
- real ksquared,thesquareroot,superparticle_energy;
- real r1,finalenergy=0.,finalk,cosinus,sinus,fai;
- real f,cb,cf,sf,skk,a11,a12,a13,a21,a22,a23,a32,a33,x1,x2,x3,sb,r2;
- real ki,kf,cs,sn;
+    int has_scattered = 0;
+    register int i, ie = 0;
+    real ksquared, thesquareroot, superparticle_energy;
+    real r1, finalenergy = 0., finalk, cosinus, sinus, fai;
+    real f, cb, cf, sf, skk, a11, a12, a13, a21, a22, a23, a32, a33, x1, x2,
+         x3, sb, r2;
+    real ki, kf, cs, sn;
 
-  if(IV==9) return;
+    if(!mc_does_particle_exist(particle)) { return; }
 
-// One-valley material Scattering Selection
-// ########################################
- if(NOVALLEY[Material]==1){
-  ksquared=KX*KX+KY*KY+KZ*KZ;
-  if(CONDUCTION_BAND==FULL){
-   real k,k2,k4;
-   k=sqrt(ksquared)*0.5/PI*1.e-12;
-   k2=k*k;
-   k4=k2*k2;
-   k=sqrt(k2);
-   // periodicity on reciprocal lattice
-   superparticle_energy=CB_FULL[Material][0]*k4*k4*k2
-                       +CB_FULL[Material][1]*k4*k4*k
-                       +CB_FULL[Material][2]*k4*k4
-                       +CB_FULL[Material][3]*k4*k2*k
-                       +CB_FULL[Material][4]*k4*k2
-                       +CB_FULL[Material][5]*k4*k
-                       +CB_FULL[Material][6]*k4
-                       +CB_FULL[Material][7]*k2*k
-                       +CB_FULL[Material][8]*k2
-                       +CB_FULL[Material][9]*k
-                       +CB_FULL[Material][10]; // in eV
-  }
-  if(CONDUCTION_BAND==KANE){
-   thesquareroot=sqrt(1.+4.*alphaK[Material][1]*HHM[Material][0]*ksquared);
-   superparticle_energy=(thesquareroot-1.)/(2.*alphaK[Material][1]);
-  }
-  if(CONDUCTION_BAND==PARABOLIC){
-   superparticle_energy=HHM[Material][0]*ksquared; // in eV
-  }
-  if(superparticle_energy<=0.) return;
-  ie=((int)(superparticle_energy/DE))+1;
-  if(ie>DIME) ie=DIME;
 
-// Selection of scattering process
-  r1 = rnd();
-// Non-Polar optical phonons
-  for(i=1;i<=6;i++){
-// Emission of an optical phonon
-    if(r1<=SWK[Material][0][i*2-1][ie] && j==0){
-       finalenergy=superparticle_energy-HWO[Material][i-1];
-       if(finalenergy<=0.) return;
-       j=1;
+    // ########################################
+    // One-valley material Scattering Selection
+    // ########################################
+    if(NOVALLEY[material] == 1) {
+        ksquared = mc_particle_ksquared(particle);
+
+        if(CONDUCTION_BAND==FULL){
+            real k, k2, k4;
+            k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
+            k2 =  k * k;
+            k4 = k2 * k2;
+            k = sqrt(k2);
+            // periodicity on reciprocal lattice
+            superparticle_energy = CB_FULL[material][0] * k4 * k4 * k2
+                                 + CB_FULL[material][1] * k4 * k4 * k
+                                 + CB_FULL[material][2] * k4 * k4
+                                 + CB_FULL[material][3] * k4 * k2 * k
+                                 + CB_FULL[material][4] * k4 * k2
+                                 + CB_FULL[material][5] * k4 * k
+                                 + CB_FULL[material][6] * k4
+                                 + CB_FULL[material][7] * k2 * k
+                                 + CB_FULL[material][8] * k2
+                                 + CB_FULL[material][9] * k
+                                 + CB_FULL[material][10]; // in eV
+        }
+        if(CONDUCTION_BAND == KANE) {
+            thesquareroot = sqrt(1. + 4. * alphaK[material][1] * HHM[material][0] * ksquared);
+            superparticle_energy = (thesquareroot - 1.) / (2. * alphaK[material][1]);
+        }
+        if(CONDUCTION_BAND == PARABOLIC) {
+            superparticle_energy = HHM[material][0] * ksquared; // in eV
+        }
+
+        if(superparticle_energy <= 0.) { return; }
+        ie = ((int)(superparticle_energy / DE)) + 1;
+        if(ie > DIME) { ie = DIME; }
+
+
+        // ===============================
+        // Selection of scattering process
+        // ===============================
+        r1 = rnd();
+
+        // =========================
+        // Non-Polar optical phonons
+        for(i = 1; i <= 6; i++) {
+
+            // Emission of an optical phonon
+            if(r1 <= SWK[material][0][i*2-1][ie] && !has_scattered) {
+                finalenergy = superparticle_energy - HWO[material][i-1];
+                if(finalenergy <= 0.) { return; }
+                has_scattered = 1;
+            }
+
+            // Absorbation of an optical phonon
+            if((r1 <= SWK[material][0][i*2][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + HWO[material][i-1];
+                if(finalenergy <= 0.) { return; }
+                has_scattered = 1;
+            }
+        }
+
+        // =========================
+        // Acoustic phonon
+        if((r1 <= SWK[material][0][13][ie]) && !has_scattered) {
+            finalenergy = superparticle_energy;
+            if(finalenergy <= 0.) { return; }
+            has_scattered = 1;
+        }
+
+        if((finalenergy <= 0.) || !has_scattered) { return; }
+
+
+        // =================================
+        // Determination of the final states
+        // =================================
+        if(CONDUCTION_BAND == FULL) {
+            // look for a final k
+            // bisection algorithm, probably not best but at least something to start from..
+            real x = 0.0,
+                 a = 0.0,
+                 b = 1.0 / LATTCONST[material] * 1.e-12;
+            real a2, a4, x4;
+            real fx, fa;
+            int k = 0;
+
+            for(k = 0; k <= 512; k++) {
+                x = 0.5 * (a + b);
+                x2 = x * x;
+                x4 = x2 * x2;
+                a2 = a * a;
+                a4 = a2 * a2;
+
+                fa = (CB_FULL[material][0] * a4 * a4 * a2
+                   +  CB_FULL[material][1] * a4 * a4 * a
+                   +  CB_FULL[material][2] * a4 * a4
+                   +  CB_FULL[material][3] * a4 * a2 * a
+                   +  CB_FULL[material][4] * a4 * a2
+                   +  CB_FULL[material][5] * a4 * a
+                   +  CB_FULL[material][6] * a4
+                   +  CB_FULL[material][7] * a2 * a
+                   +  CB_FULL[material][8] * a2
+                   +  CB_FULL[material][9] * a
+                   +  CB_FULL[material][10])
+                   -  finalenergy;
+                fx = (CB_FULL[material][0] * x4 * x4 * x2
+                   +  CB_FULL[material][1] * x4 * x4 * x
+                   +  CB_FULL[material][2] * x4 * x4
+                   +  CB_FULL[material][3] * x4 * x2 * x
+                   +  CB_FULL[material][4] * x4 * x2
+                   +  CB_FULL[material][5] * x4 * x
+                   +  CB_FULL[material][6] * x4
+                   +  CB_FULL[material][7] * x2 * x
+                   +  CB_FULL[material][8] * x2
+                   +  CB_FULL[material][9] * x
+                   +  CB_FULL[material][10])
+                   -  finalenergy;
+                if((fa * fx) < 0.) { b = x; }
+                else { a = x; }
+            }
+            finalk = x * 1.e12 * 2. * PI;
+        }
+        if(CONDUCTION_BAND == KANE) {
+            finalk = SMH[material][0]
+                   * sqrt(finalenergy * (1. + alphaK[material][1] * finalenergy));
+        }
+        if(CONDUCTION_BAND == PARABOLIC) {
+            finalk = SMH[material][0] * sqrt(finalenergy);
+        }
+
+        cosinus = 1. - 2. * rnd();
+        sinus = sqrt(1. - cosinus * cosinus);
+        fai = 2. * PI * rnd();
+        particle->kx = finalk * cosinus;
+        particle->ky = finalk * sinus * cos(fai);
+        particle->kz = finalk * sinus * sin(fai);
+        return;
     }
-// Absorbation of an optical phonon
-    if((r1<=SWK[Material][0][i*2][ie]) && j==0){
-       finalenergy=superparticle_energy+HWO[Material][i-1];
-       if(finalenergy<=0.) return;
-       j=1;
-    }
-  }
-// Acoustic phonon
-  if((r1<=SWK[Material][0][13][ie]) && j==0){
-     finalenergy=superparticle_energy;
-     if(finalenergy<=0.) return;
-     j=1;
-  }
-  if((finalenergy<=0.) || j==0) return;
 
-// determination of the final states
-  if(CONDUCTION_BAND==FULL){
-   // look for a final k
-   // bisection algorithm, probably not best but at least something to start from..
-    real x=0.0,a=0.,b=1./LATTCONST[Material]*1.e-12,a2;
-    // real del=0.001
-    real a4,x4;
-    real fx,fa;
-    int k=0;
-    for(k=0;k<=512;k++){
-     x=0.5*(a+b);
-     x2=x*x;
-     x4=x2*x2;
-     a2=a*a;
-     a4=a2*a2;
-     fa=(CB_FULL[Material][0]*a4*a4*a2
-        +CB_FULL[Material][1]*a4*a4*a
-        +CB_FULL[Material][2]*a4*a4
-        +CB_FULL[Material][3]*a4*a2*a
-        +CB_FULL[Material][4]*a4*a2
-        +CB_FULL[Material][5]*a4*a
-        +CB_FULL[Material][6]*a4
-        +CB_FULL[Material][7]*a2*a
-        +CB_FULL[Material][8]*a2
-        +CB_FULL[Material][9]*a
-        +CB_FULL[Material][10])-finalenergy;
-     fx=(CB_FULL[Material][0]*x4*x4*x2
-        +CB_FULL[Material][1]*x4*x4*x
-        +CB_FULL[Material][2]*x4*x4
-        +CB_FULL[Material][3]*x4*x2*x
-        +CB_FULL[Material][4]*x4*x2
-        +CB_FULL[Material][5]*x4*x
-        +CB_FULL[Material][6]*x4
-        +CB_FULL[Material][7]*x2*x
-        +CB_FULL[Material][8]*x2
-        +CB_FULL[Material][9]*x
-        +CB_FULL[Material][10])-finalenergy;
-     if((fa*fx)<0.) b=x;
-     else a=x;
-    }
-   finalk=x*1.e12*2.*PI;
-  }
-  if(CONDUCTION_BAND==KANE) finalk = SMH[Material][0]*sqrt(finalenergy*(1.+alphaK[Material][1]*finalenergy));
-  if(CONDUCTION_BAND==PARABOLIC) finalk=SMH[Material][0]*sqrt(finalenergy);
-  cosinus = 1.-2.*rnd();
-  sinus = sqrt(1.-cosinus*cosinus);
-  fai = 2.*PI*rnd();
-  KX = finalk*cosinus;
-  KY = finalk*sinus*cos(fai);
-  KZ = finalk*sinus*sin(fai);
-  return;
- }
 
-// Two-valleys material Scattering Selection
-// #########################################
- if(NOVALLEY[Material]==2){
-   ksquared=KX*KX+KY*KY+KZ*KZ;
-   ki=sqrt(ksquared);
-   if(CONDUCTION_BAND==KANE){
-    thesquareroot=sqrt(1.+4.*alphaK[Material][IV]*HHM[Material][IV]*ksquared);
-    superparticle_energy=(thesquareroot-1.)/(2.*alphaK[Material][IV]);
-   }
-   if(CONDUCTION_BAND==PARABOLIC){
-    superparticle_energy=HHM[Material][IV]*ksquared;
-   }
-   if(superparticle_energy<=0.) return;
-   ie=((int)(superparticle_energy/DE))+1;
-   if(ie>DIME) ie=DIME;
+    // ########################################
+    // Two-valley material Scattering Selection
+    // ########################################
+    if(NOVALLEY[material] == 2) {
+        ksquared = mc_particle_ksquared(particle);
+        ki = sqrt(ksquared);
 
-// Selection of scattering process in the GAMMA-Valley
-// ===================================================
-  if(IV==1){
-    r1 = rnd();
-// Non-Polar optical phonons
-// Emission of an optical phonon
-      if(r1<=SWK[Material][1][1][ie] && j==0){
-         finalenergy=superparticle_energy-HWO[Material][0];
-         if(finalenergy<=0.) return;
-//         if(finalenergy>DIME*DE) finalenergy=BKTQ;
-         j=1;
-// linea 20
-       if(CONDUCTION_BAND==KANE) kf=SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
-       f=2.*ki*kf/(ki-kf)/(ki-kf);
-       if(f<=0.) return;
-       cb=(1.+f-pow(1.+2.*f,rnd()))/f;
-// linea 30 -- determination of the final states
-       sb=sqrt(1.-cb*cb);
-       fai=2.*PI*rnd();
-       cf=cos(fai);
-       sf=sin(fai);
-       skk=sqrt(KX*KX+KY*KY);
-       a11=KY/skk;
-       a12=KX*KZ/skk/ki;
-       a13=KX/ki;
-       a21=-KX/skk;
-       a22=KY*KZ/skk/ki;
-       a23=KY/ki;
-       a32=-skk/ki;
-       a33=KZ/ki;
-       x1=kf*sb*cf;
-       x2=kf*sb*sf;
-       x3=kf*cb;
-       KX=a11*x1+a12*x2+a13*x3;
-       KY=a21*x1+a22*x2+a23*x3;
-       KZ=a32*x2+a33*x3;
-       return;
-      }
-// Absorption of an optical phonon
-      if((r1<=SWK[Material][1][2][ie]) && j==0){
-         finalenergy=superparticle_energy+HWO[Material][0];
-//         if(finalenergy<0.) return;
-//         if(finalenergy>DIME*DE) finalenergy=BKTQ;
-         j=1;
-// linea 20
-       if(CONDUCTION_BAND==KANE) kf=SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
-       f=2.*ki*kf/(ki-kf)/(ki-kf);
-       if(f<=0.) return;
-       cb=(1.+f-pow((1.+2.*f),rnd()))/f;
-// linea 30 -- determination of the final states
-       sb=sqrt(1.-cb*cb);
-       fai=2.*PI*rnd();
-       cf=cos(fai);
-       sf=sin(fai);
-       skk=sqrt(KX*KX+KY*KY);
-       a11=KY/skk;
-       a12=KX*KZ/skk/ki;
-       a13=KX/ki;
-       a21=-KX/skk;
-       a22=KY*KZ/skk/ki;
-       a23=KY/ki;
-       a32=-skk/ki;
-       a33=KZ/ki;
-       x1=kf*sb*cf;
-       x2=kf*sb*sf;
-       x3=kf*cb;
-       KX=a11*x1+a12*x2+a13*x3;
-       KY=a21*x1+a22*x2+a23*x3;
-       KZ=a32*x2+a33*x3;
-       return;
-      }
-// Emission
-      if((r1<=SWK[Material][1][3][ie]) && j==0){
-         finalenergy=superparticle_energy-HWO[Material][0]+EMIN[Material][1]-EMIN[Material][2];
-         if(finalenergy<=0.) return;
-//         if(finalenergy>DIME*DE) finalenergy=BKTQ;
-         IV=2;
-         j=1;
-// determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
-       sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
-       KX = kf*cs;
-       KY = kf*sn*cos(fai);
-       KZ = kf*sn*sin(fai);
-       return;
-      }
+        if(CONDUCTION_BAND == KANE) {
+            thesquareroot = sqrt(1. + 4. * alphaK[material][IV]
+                                         * HHM[material][particle->valley]
+                                         * ksquared);
+            superparticle_energy = (thesquareroot - 1.)
+                                 / (2. * alphaK[material][particle->valley]);
+        }
+        if(CONDUCTION_BAND == PARABOLIC) {
+            superparticle_energy = HHM[material][particle->valley] * ksquared;
+        }
+
+        if(superparticle_energy <= 0.) { return; }
+        ie=((int)(superparticle_energy / DE)) + 1;
+        if(ie > DIME) { ie=DIME; }
+
+
+        // ===================================================
+        // Selection of scattering process in the GAMMA-Valley
+        // ===================================================
+        if(particle->valley == 1) {
+            r1 = rnd();
+
+            // Non-Polar optical phonons
+            // Emission of an optical phonon
+            if(r1 <= SWK[material][1][1][ie] && !has_scattered) {
+                finalenergy = superparticle_energy - HWO[material][0];
+                if(finalenergy <= 0.) { return; }
+                has_scattered = 1;
+
+                if(CONDUCTION_BAND == KANE) {
+                    kf = SMH[material][particle->valley]
+                       * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
+                }
+                if(CONDUCTION_BAND == PARABOLIC) {
+                    kf = SMH[material][particle->valley] * sqrt(finalenergy);
+                }
+
+                f = 2. * ki * kf / (ki - kf) / (ki - kf);
+                if(f <= 0.) { return; }
+                cb = (1. + f - pow(1. + 2. * f, rnd())) / f;
+                // linea 30 -- determination of the final states
+                sb  = sqrt(1.-cb*cb);
+                fai = 2.*PI*rnd();
+                cf  = cos(fai);
+                sf  = sin(fai);
+                skk = sqrt(particle->kx*particle->kx
+                         + particle->ky*particle->ky);
+                a11 = particle->ky / skk;
+                a12 = particle->kx * particle->kz / skk / ki;
+                a13 = particle->kx / ki;
+                a21 = -particle->kx / skk;
+                a22 = particle->ky * particle->kz / skk / ki;
+                a23 = particle->ky / ki;
+                a32 = -skk / ki;
+                a33 = particle->kz / ki;
+                 x1 = kf * sb * cf;
+                 x2 = kf * sb * sf;
+                 x3 = kf * cb;
+                particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
+                particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
+                particle->kz =            a32 * x2 + a33 * x3;
+                return;
+            }
+
+            // Absorption of an optical phonon
+            if((r1 <= SWK[material][1][2][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + HWO[material][0];
+                has_scattered = 1;
+
+                if(CONDUCTION_BAND == KANE) {
+                    kf = SMH[material][particle->valley]
+                       * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
+                }
+                if(CONDUCTION_BAND == PARABOLIC) {
+                    kf=SMH[material][particle->valley] * sqrt(finalenergy);
+                }
+
+                f = 2. * ki * kf / (ki - kf) / (ki - kf);
+                if(f <= 0.) { return; }
+                cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
+                // linea 30 -- determination of the final states
+                sb=sqrt(1.-cb*cb);
+                fai=2.*PI*rnd();
+                cf=cos(fai);
+                sf=sin(fai);
+                skk=sqrt(particle->kx * particle->kx
+                    +    particle->ky * particle->ky);
+                a11 = particle->ky / skk;
+                a12 = particle->kx * particle->kz / skk / ki;
+                a13 = particle->kx / ki;
+                a21 = -particle->kx / skk;
+                a22 = particle->ky * particle->kz / skk / ki;
+                a23 = particle->ky / ki;
+                a32 = -skk / ki;
+                a33 = particle->kz / ki;
+                 x1 = kf * sb * cf;
+                 x2 = kf * sb * sf;
+                 x3 = kf * cb;
+                particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
+                particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
+                particle->kz =            a32 * x2 + a33 * x3;
+                return;
+            }
+
+            // Emission
+            if((r1 <= SWK[material][1][3][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy - HWO[material][0]
+                            + EMIN[material][1] - EMIN[material][2];
+                if(finalenergy <= 0.) { return; }
+                particle->valley = 2;
+                has_scattered = 1;
+
+                // determination of the final states
+                if(CONDUCTION_BAND == KANE) {
+                    kf = SMH[material][particle->valley]
+                       * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
+                }
+                if(CONDUCTION_BAND == PARABOLIC) {
+                    kf = SMH[material][particle->valley] * sqrt(finalenergy);
+                }
+
+                cs = 1. - 2. * rnd();
+                sn = sqrt(1. - cs * cs);
+                fai = 2. * PI * rnd();
+                particle->kx = kf * cs;
+                particle->ky = kf * sn * cos(fai);
+                particle->kz = kf * sn * sin(fai);
+                return;
+            }
+
+//=======================================================
+
 // Absorption
-      if((r1<=SWK[Material][1][4][ie]) && j==0){
-         finalenergy=superparticle_energy+HWO[Material][0]+EMIN[Material][1]-EMIN[Material][2];
+      if((r1<=SWK[material][1][4][ie]) && has_scattered==0){
+         finalenergy=superparticle_energy+HWO[material][0]+EMIN[material][1]-EMIN[material][2];
          if(finalenergy<=0.) return;
 //         if(finalenergy>DIME*DE) finalenergy=BKTQ;
          IV=2;
-         j=1;
+         has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -287,14 +348,14 @@ scat(int Material)
        return;
       }
 // Acoustic phonon
-    if((r1<=SWK[Material][1][5][ie]) && j==0){
+    if((r1<=SWK[material][1][5][ie]) && has_scattered==0){
        finalenergy=superparticle_energy;
 //       if(finalenergy<0.) return;
        finalk=sqrt(ksquared);
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -304,7 +365,7 @@ scat(int Material)
        return;
     }
 // Impurity scattering
-    if((r1<=SWK[Material][1][6][ie]) && j==0){
+    if((r1<=SWK[material][1][6][ie]) && has_scattered==0){
      finalenergy=superparticle_energy;
 //     if(finalenergy<0.) return;
      r2=rnd();
@@ -332,7 +393,7 @@ scat(int Material)
      KZ=a32*x2+a33*x3;
      return;
     }
-    if((finalenergy<=0.) || j==0) return;
+    if((finalenergy<=0.) || has_scattered==0) return;
    }
 // Selection of scattering process in the L-Valley
 // ===================================================
@@ -340,13 +401,13 @@ scat(int Material)
     r1 = rnd();
 // Non-Polar optical phonons
 // Emission of an optical phonon
-      if(r1<=SWK[Material][2][1][ie] && j==0){
-         finalenergy=superparticle_energy-HWO[Material][0];
+      if(r1<=SWK[material][2][1][ie] && has_scattered==0){
+         finalenergy=superparticle_energy-HWO[material][0];
          if(finalenergy<=0.) return;
-         j=1;
+         has_scattered=1;
 // linea 20
-       if(CONDUCTION_BAND==KANE) kf=SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf=SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        f=2.*ki*kf/(ki-kf)/(ki-kf);
        if(f<=0.) return;
        cb=(1.+f-pow((1.+2.*f),rnd()))/f;
@@ -373,12 +434,12 @@ scat(int Material)
        return;
       }
 // Absorbation of an optical phonon
-      if((r1<=SWK[Material][2][2][ie]) && j==0){
-         finalenergy=superparticle_energy+HWO[Material][0];
-         j=1;
+      if((r1<=SWK[material][2][2][ie]) && has_scattered==0){
+         finalenergy=superparticle_energy+HWO[material][0];
+         has_scattered=1;
 // linea 20
-       if(CONDUCTION_BAND==KANE) kf=SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf=SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        f=2.*ki*kf/(ki-kf)/(ki-kf);
        if(f<=0.) return;
        cb=(1.+f-pow((1.+2.*f),rnd()))/f;
@@ -405,13 +466,13 @@ scat(int Material)
        return;
       }
 // Emission
-    if((r1<=SWK[Material][2][3][ie]) && j==0){
-       finalenergy=superparticle_energy-HWO[Material][0];
+    if((r1<=SWK[material][2][3][ie]) && has_scattered==0){
+       finalenergy=superparticle_energy-HWO[material][0];
        if(finalenergy<=0.) return;
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -421,13 +482,13 @@ scat(int Material)
        return;
     }
 // Absorbation
-    if((r1<=SWK[Material][2][4][ie]) && j==0){
-       finalenergy=superparticle_energy+HWO[Material][0];
+    if((r1<=SWK[material][2][4][ie]) && has_scattered==0){
+       finalenergy=superparticle_energy+HWO[material][0];
        if(finalenergy<=0.) return;
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -437,14 +498,14 @@ scat(int Material)
        return;
     }
 // Emission
-    if((r1<=SWK[Material][2][5][ie]) && j==0){
-       finalenergy=superparticle_energy-HWO[Material][0]+EMIN[Material][2]-EMIN[Material][1];
+    if((r1<=SWK[material][2][5][ie]) && has_scattered==0){
+       finalenergy=superparticle_energy-HWO[material][0]+EMIN[material][2]-EMIN[material][1];
        if(finalenergy<=0.) return;
        IV=1;
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -454,14 +515,14 @@ scat(int Material)
        return;
     }
 // Absorbation
-    if((r1<=SWK[Material][2][6][ie]) && j==0){
-       finalenergy=superparticle_energy+HWO[Material][0]+EMIN[Material][2]-EMIN[Material][1];
+    if((r1<=SWK[material][2][6][ie]) && has_scattered==0){
+       finalenergy=superparticle_energy+HWO[material][0]+EMIN[material][2]-EMIN[material][1];
        if(finalenergy<=0.) return;
        IV=1;
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -471,13 +532,13 @@ scat(int Material)
        return;
     }
 // Acoustic phonon emission
-    if((r1<=SWK[Material][2][7][ie]) && j==0){
+    if((r1<=SWK[material][2][7][ie]) && has_scattered==0){
        finalenergy=superparticle_energy;
        finalk=sqrt(ksquared);
-       j=1;
+       has_scattered=1;
 // determination of the final states
-       if(CONDUCTION_BAND==KANE) kf = SMH[Material][IV]*sqrt(finalenergy*(1.+alphaK[Material][IV]*finalenergy));
-       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[Material][IV]*sqrt(finalenergy);
+       if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
+       if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        cs = 1.-2.*rnd();
        sn = sqrt(1.-cs*cs);
        fai = 2.*PI*rnd();
@@ -487,7 +548,7 @@ scat(int Material)
        return;
     }
 // Impurity scattering
-    if((r1<=SWK[Material][2][8][ie]) && j==0){
+    if((r1<=SWK[material][2][8][ie]) && has_scattered==0){
      finalenergy=superparticle_energy;
      r2=rnd();
      cb=1.-r2/(0.5+(1.-r2)*ksquared/QD2);
@@ -514,7 +575,7 @@ scat(int Material)
      KZ=a32*x2+a33*x3;
      return;
     }
-    if((finalenergy<=0.) || j==0) return;
+    if((finalenergy<=0.) || has_scattered==0) return;
    }
   }
 }

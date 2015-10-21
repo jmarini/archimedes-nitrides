@@ -2,14 +2,14 @@
    Archimedes is a simulator for Submicron 2D III-V Semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method. It is now able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
    Copyright (C) 2004-2011 Jean Michel Sellier
    <jeanmichel.sellier@gmail.com>
    <jsellier@purdue.edu>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -32,147 +32,144 @@
 
 // calculation of drift process
 
-void
-drift(real tau)
+void drift(particle_t *particle, real tau)
 {
- int iaux;
- int i,j;
- real dkx,dky,hmt,ksquared;
- real vx,vy;
+    int iaux;
+    int i,j;
+    real dkx,dky,hmt,ksquared;
+    real vx,vy;
 
- if(IV==9) return;
+    if(!mc_does_particle_exist(particle)) { return; }
 
- i=(int)(X/dx)+1;
- j=(int)(Y/dy)+1;
- if(i<=1) i=1;
- if(j<=1) j=1;
- if(i>=nx) i=nx;
- if(j>=ny) j=ny;
+    mc_particle_coords(particle, &i, &j);
 
- if(NOVALLEY[i_dom[i][j]]==1) iaux=0;
- if(NOVALLEY[i_dom[i][j]]==2) iaux=IV;
+    if(NOVALLEY[i_dom[i][j]] == 1) { iaux = 0; }
+    if(NOVALLEY[i_dom[i][j]] == 2) { iaux = particle->valley; }
 
-// Electron drift process
-// second order Runge-Kutta method
- hmt=HM[i_dom[i][j]][iaux]*tau;
- ksquared=KX*KX+KY*KY+KZ*KZ;
- if(CONDUCTION_BAND==KANE){
-  real thesquareroot,gk;
-  gk=HHM[i_dom[i][j]][iaux]*ksquared;
-  thesquareroot=sqrt(1.+4.*alphaK[i_dom[i][j]][IV]*gk);
-  vx=KX*HM[i_dom[i][j]][iaux]/thesquareroot;
-  vy=KY*HM[i_dom[i][j]][iaux]/thesquareroot;
-  dkx=-QH*(E[i][j][0]+vy*B[i][j])*tau;
-  dky=-QH*(E[i][j][1]-vx*B[i][j])*tau;
-  X+=hmt*(KX+0.5*dkx)/thesquareroot;
-  Y+=hmt*(KY+0.5*dky)/thesquareroot;
-  KX+=dkx;
-  KY+=dky;
- }
- if(CONDUCTION_BAND==PARABOLIC){
-  vx=KX*HM[i_dom[i][j]][iaux];
-  vy=KY*HM[i_dom[i][j]][iaux];
-  dkx=-QH*(E[i][j][0]+vy*B[i][j])*tau;
-  dky=-QH*(E[i][j][1]-vx*B[i][j])*tau;
-  X+=hmt*(KX+0.5*dkx);
-  Y+=hmt*(KY+0.5*dky);
-  KX+=dkx;
-  KY+=dky;
- }
- if(CONDUCTION_BAND==FULL){
-  real k4,k2,ks;
-  real dx,dy,d;
-  vx=KX*HM[i_dom[i][j]][iaux];
-  vy=KY*HM[i_dom[i][j]][iaux];
-  dkx=-QH*(E[i][j][0]+vy*B[i][j])*tau;
-  dky=-QH*(E[i][j][1]-vx*B[i][j])*tau;
-  k2=(KX+0.5*dkx)*(KX+0.5*dkx)+(KY+0.5*dky)*(KY+0.5*dky)+KZ*KZ;
-  ks=sqrt(k2)*1.e-12*0.5/PI;
-  k2=ks*ks;
-  k4=k2*k2;
-  d=10.*CB_FULL[i_dom[i][j]][0]*k4*k4*ks
-    +9.*CB_FULL[i_dom[i][j]][1]*k4*k4
-    +8.*CB_FULL[i_dom[i][j]][2]*k4*k2*ks
-    +7.*CB_FULL[i_dom[i][j]][3]*k4*k2
-    +6.*CB_FULL[i_dom[i][j]][4]*k4*ks
-    +5.*CB_FULL[i_dom[i][j]][5]*k4
-    +4.*CB_FULL[i_dom[i][j]][6]*k2*ks
-    +3.*CB_FULL[i_dom[i][j]][7]*k2
-    +2.*CB_FULL[i_dom[i][j]][8]*ks
-    +CB_FULL[i_dom[i][j]][9];
-  ks*=1.e+12*2.*PI;
-  d*=1.e-12*0.5/PI;
-  dx=QH*d*tau*(KX+0.5*dkx)/ks;
-  dy=QH*d*tau*(KY+0.5*dky)/ks;
-  KX+=dkx;
-  KY+=dky;
-  X+=dx;
-  Y+=dy;
- }
+    // Electron drift process
+    // second order Runge-Kutta method
+    hmt = HM[i_dom[i][j]][iaux] * tau;
+    ksquared = mc_particle_ksquared(particle);
 
-// check if some particles are out of the device
- i=(int)(X/dx)+1;
- j=(int)(Y/dy)+1;
- if(i<=1) i=1;
- if(j<=1) j=1;
- if(i>=nx) i=nx;
- if(j>=ny) j=ny;
+    if(CONDUCTION_BAND == KANE) {
+        real thesquareroot, gk;
+        gk = HHM[i_dom[i][j]][iaux] * ksquared;
+        thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][particle->valley] * gk);
+        vx = particle->kx * HM[i_dom[i][j]][iaux] / thesquareroot;
+        vy = particle->ky * HM[i_dom[i][j]][iaux] / thesquareroot;
+        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
+        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
+        particle->x += hmt * (particle->kx + 0.5 * dkx) / thesquareroot;
+        particle->y += hmt * (particle->ky + 0.5 * dky) / thesquareroot;
+        particle->kx += dkx;
+        particle->ky += dky;
+    }
+    else if(CONDUCTION_BAND == PARABOLIC) {
+        vx = particle->kx * HM[i_dom[i][j]][iaux];
+        vy = particle->ky * HM[i_dom[i][j]][iaux];
+        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
+        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
+        particle->x += hmt * (particle->kx + 0.5 * dkx);
+        particle->y += hmt * (particle->ky + 0.5 * dky);
+        particle->kx += dkx;
+        particle->ky += dky;
+    }
+    else if(CONDUCTION_BAND == FULL) {
+        real k4, k2, ks;
+        real dx, dy, d;
+        vx = particle->kx * HM[i_dom[i][j]][iaux];
+        vy = particle->ky * HM[i_dom[i][j]][iaux];
+        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
+        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
+        k2 = (particle->kx + 0.5 * dkx) * (particle->kx + 0.5 * dkx)
+           + (particle->ky + 0.5 * dky) * (particle->ky + 0.5 * dky)
+           +  particle->kz              *  particle->kz;
+        ks = sqrt(k2) * 1.e-12 * 0.5 / PI;
+        k2 = ks * ks;
+        k4 = k2 * k2;
+        d = 10. * CB_FULL[i_dom[i][j]][0] * k4 * k4 * ks
+          +  9. * CB_FULL[i_dom[i][j]][1] * k4 * k4
+          +  8. * CB_FULL[i_dom[i][j]][2] * k4 * k2 * ks
+          +  7. * CB_FULL[i_dom[i][j]][3] * k4 * k2
+          +  6. * CB_FULL[i_dom[i][j]][4] * k4 * ks
+          +  5. * CB_FULL[i_dom[i][j]][5] * k4
+          +  4. * CB_FULL[i_dom[i][j]][6] * k2 * ks
+          +  3. * CB_FULL[i_dom[i][j]][7] * k2
+          +  2. * CB_FULL[i_dom[i][j]][8] * ks
+          +       CB_FULL[i_dom[i][j]][9];
+        ks *= 1.e+12 * 2.  * PI;
+        d  *= 1.e-12 * 0.5 / PI;
+        dx = QH * d * tau * (particle->kx + 0.5 * dkx) / ks;
+        dy = QH * d * tau * (particle->ky + 0.5 * dky) / ks;
+        particle->kx += dkx;
+        particle->ky += dky;
+        particle->x += dx;
+        particle->y += dy;
+    }
 
-// Generic boundary conditions for the super-particles
-// ===================================================
+    // check if some particles are out of the device
+    mc_particle_coords(particle, &i, &j);
 
-// left edge
-// =========
-// ---Insulator---
- if(X<=0. && EDGE[3][j][0]==0){
-  X=-X;
-  KX=-KX;
-  return;
- }
-// ---Schottky or ohmic contact---
- else if(X<=0. && (EDGE[3][j][0]==1 || EDGE[3][j][0]==2)){
-   IV=9;
-   return;
- }
-// right edge
-// ==========
-// ---Insulator---
- if(X>=LX && EDGE[1][j][0]==0){
-  X=LX-(X-LX);
-  KX=-KX;
-  return;
- }
-// ---Schottky or ohmic contact---
- else if(X>=LX && (EDGE[1][j][0]==1 || EDGE[1][j][0]==2)){
-   IV=9;
-   return;
- }
-// bottom edge
-// ===========
-// ---Insulator---
- if(Y<=0. && EDGE[0][i][0]==0){
-  Y=-Y;
-  KY=-KY;
-  return;
- }
-// ---Schottky or ohmic contact---
- else if(Y<=0. && (EDGE[0][i][0]==1 || EDGE[0][i][0]==2)){
-   IV=9;
-   return;
- }
-// upper edge
-// ==========
-// ---Insulator---
- if(Y>=LY && EDGE[2][i][0]==0){
-  Y=LY-(Y-LY);
-  KY=-KY;
-  return;
- }
-// ---Schottky or ohmic contact---
- else if(Y>=LY && (EDGE[2][i][0]==1 || EDGE[2][i][0]==2)){
-   IV=9;
-   return;
- }
+
+    // Generic boundary conditions for the super-particles
+    // ===================================================
+
+    // left edge
+    // =========
+    // ---Insulator---
+    if(particle->x <= 0. && mc_is_boundary_insulator(direction_t.LEFT, j)) {
+        particle->x  *= -1.;
+        particle->kx *= -1.;
+        return;
+    }
+    // ---Schottky or ohmic contact---
+    else if(particle->x <= 0. && mc_is_boundary_contact(direction_t.LEFT, j)) {
+        mc_remove_particle(particle);
+        return;
+    }
+
+    // right edge
+    // ==========
+    // ---Insulator---
+    if(particle->x >= LX && mc_is_boundary_insulator(direction_t.RIGHT, j)) {
+        particle->x = LX - (particle->x - LX);
+        particle->kx *= -1.;
+        return;
+    }
+    // ---Schottky or ohmic contact---
+    else if(particle->x >= LX && mc_is_boundary_contact(direction_t.RIGHT, j)) {
+        mc_remove_particle(particle);
+        return;
+    }
+
+    // bottom edge
+    // ===========
+    // ---Insulator---
+    if(particle->y <= 0. && mc_is_boundary_insulator(direction_t.BOTTOM, i)) {
+        particle->y  *= -1.;
+        particle->ky *= -1.;
+        return;
+    }
+    // ---Schottky or ohmic contact---
+    else if(particle->y <= 0. && mc_is_boundary_contact(direction_t.BOTTOM, i)) {
+        mc_remove_particle(particle);
+        return;
+    }
+
+    // upper edge
+    // ==========
+    // ---Insulator---
+    if(particle->y >= LY && mc_is_boundary_insulator(direction_t.TOP, i)) {
+        particle->y = LY - (particle->y - LY);
+        particle->ky *= -1.;
+        return;
+    }
+    // ---Schottky or ohmic contact---
+    else if(particle->y >= LY && mc_is_boundary_contact(direction_t.TOP, i)) {
+        mc_remove_particle(particle);
+        return;
+    }
+
 }
 
 // ============================================================

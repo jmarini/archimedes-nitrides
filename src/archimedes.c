@@ -99,14 +99,6 @@
 // ********************
 
 #define NUMSIO2 2 // maximum number of SiO2 interfaces
-
-struct {
-    int BOTTOM;
-    int RIGHT;
-    int TOP;
-    int LEFT;
-} direction_t = {.BOTTOM = 0, .RIGHT = 1, .TOP = 2, .LEFT = 3};
-
 // ===============================
 #include "constants.h"
 #include "extrema.h"
@@ -114,9 +106,9 @@ struct {
 #include "mm.h"
 #include "mm2.h"
 #include "particle.h"
-extern inline int does_particle_exist(particle_t *particle);
-extern inline void remove_particle(particle_t *particle);
-extern inline real particle_ksquared(particle_t *particle);
+extern inline int mc_does_particle_exist(particle_t *particle);
+extern inline void mc_remove_particle(particle_t *particle);
+extern inline real mc_particle_ksquared(particle_t *particle);
 // ===============================
 
 // All integers here...
@@ -235,6 +227,7 @@ FILE *fp;
 // All strings here...
 static char *progname;
 
+#include "utility.h"
 #include "mesher.h"
 #include "poissonbcs.h"
 #include "faradaybcs.h"
@@ -269,16 +262,20 @@ static char *progname;
 
 // provide extern declarations of functions to fix compiler error
 extern inline real rnd(void);
-extern inline void creation(int i,real t,int edge);
-extern inline real MM(real a,real b);
-extern inline real MM2(real x,real a,real b);
-extern inline real sign(real a,real b);
-extern inline real minimus(real x,real y);
-extern inline real maximus(real x,real y);
+extern inline particle_t creation(int i, real t, int edge);
+extern inline real MM(real a, real b);
+extern inline real MM2(real x, real a, real b);
+extern inline real sign(real a, real b);
+extern inline real minimus(real x, real y);
+extern inline real maximus(real x, real y);
+extern inline int mc_is_boundary_insulator(int direction, int index);
+extern inline int mc_is_boundary_schottky(int direction, int index);
+extern inline int mc_is_boundary_ohmic(int direction, int index);
+extern inline int mc_is_boundary_contact(int direction, int index);
+extern inline void mc_particle_coords(particle_t *particle, int *i, int *j);
 
 
-int
-main(int argc,char* argv[])
+int main(int argc, char *argv[])
 {
 
 //  RpLibrary* lib=NULL;
