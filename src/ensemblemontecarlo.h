@@ -155,7 +155,7 @@ EMC(void)
      }
 // if IV=9 then the super-particle has been eliminated
      if(IV==9){
-       P[n] = P[INUM]
+       P[n] = P[INUM];
        INUM--;
      }
   }while(n<INUM);

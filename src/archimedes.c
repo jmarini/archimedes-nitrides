@@ -395,7 +395,7 @@ For more information about these matters, see the file named COPYING.\n",
      NOVALLEY[INXGA1XAS]=1;  // only G-valley
      NOVALLEY[INXAL1XAS]=1;  // G-valley
      NOVALLEY[INXGAXXAS]=1;  // only G-valley
-     NOVALLEY[GAN]=3;        // G-1, L-M, G-2
+     NOVALLEY[GAN]=1;        // G-1, L-M, G-2
 // Dielectric constant for Silicon Oxide SiO2
      EPSRSIO2=3.9*EPS0;         // see http://en.wikipedia.org/wiki/Relative_permittivity
 // Dielectric constant for Semiconducting materials
