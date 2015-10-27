@@ -34,7 +34,7 @@
 // super-particles in the device.
 // The solution is writted in the array named u2d.
 
-void 
+void
 updating(int model)
 {
  register int i,j;

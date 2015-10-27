@@ -157,10 +157,10 @@ real DT;                            // time step, defaults to 0.001e-12
 real mstar2;                        // UNUSED
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
-real SMH[NOAMTIA+1][3];
+real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
 real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / m*, array indexed by material and valley number
 real HM[NOAMTIA+1][3];              // precomputed constant, hbar / m*, array indexed by material and valley number
-real GM[NOAMTIA+1];
+real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1];
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
 real KX, KY, KZ;                    // particle Kx, Ky, Kz
