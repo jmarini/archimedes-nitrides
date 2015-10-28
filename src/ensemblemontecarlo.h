@@ -60,7 +60,7 @@ void EMC(void)
         drift(particle, tau);        // drift for unused time in step
 
         // check if a particle is going out from the right edge of the device
-        if(!mc_does_particle_exist(particle)) {
+        if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
             if(i >= nx + 1 && mc_is_boundary_contact(direction_t.RIGHT, j)) {
@@ -77,7 +77,7 @@ void EMC(void)
         }
 
         // check if a particle is going out from the left edge of the device
-        if(!mc_does_particle_exist(particle)) {
+        if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
             if(i<=1 && mc_is_boundary_contact(direction_t.LEFT, j)) {
@@ -94,7 +94,7 @@ void EMC(void)
         }
 
         // check if a particle is going out from the bottom edge of the device
-        if(!mc_does_particle_exist(particle)) {
+        if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
             if(j<=1 && mc_is_boundary_contact(direction_t.BOTTOM, i)) {
@@ -111,7 +111,7 @@ void EMC(void)
         }
 
         // check if a particle is going out from the upper edge of the device
-        if(!mc_does_particle_exist(particle)) {
+        if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
             if(j>=ny+1 && mc_is_boundary_contact(direction_t.TOP, i)) {
