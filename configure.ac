@@ -5,7 +5,7 @@ AC_PREREQ(2.64)
 AC_INIT([Archimedes],[2.0.1],[jeanmichel.sellier@gmail.com])
 AC_CONFIG_SRCDIR([src/archimedes.c])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([gnu dist-bzip2])
+AM_INIT_AUTOMAKE([gnu -Wall -Werror dist-bzip2])
 
 # Checks for programs.
 AC_PROG_CXX

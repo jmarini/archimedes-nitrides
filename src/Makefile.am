@@ -1,7 +1,17 @@
 bin_PROGRAMS = archimedes
-archimedes_SOURCES = AlAs.h \
-	AlP.h \
-	AlSb.h \
+archimedes_SOURCES = \
+	materials/AlAs.h \
+	materials/AlP.h \
+	materials/AlSb.h \
+	materials/GaAs.h \
+	materials/GaN.h \
+	materials/GaP.h \
+	materials/GaSb.h \
+	materials/Germanium.h \
+	materials/InAs.h \
+	materials/InP.h \
+	materials/InSb.h \
+	materials/Silicon.h \
 	archimedes.c \
 	charge.h \
 	computecurrents.h \
@@ -15,17 +25,10 @@ archimedes_SOURCES = AlAs.h \
 	extrema.h \
 	faradaybcs.h \
 	faraday.h \
-	GaAs.h \
-	GaP.h \
-	GaSb.h \
-	Germanium.h \
 	HMEPbcs.h \
 	Hole_bcs.h \
 	holemep2d.h \
 	hole_relaxation.h \
-	InAs.h \
-	InP.h \
-	InSb.h \
 	mcparameters.h \
 	media.h \
 	mesher.h \
@@ -33,6 +36,7 @@ archimedes_SOURCES = AlAs.h \
 	mm2.h \
 	mm.h \
 	ParabMEP2D.h \
+	particle.h \
 	particlecreation.h \
 	poissonbcs.h \
 	quantumeffectivepotential.h \
@@ -45,8 +49,7 @@ archimedes_SOURCES = AlAs.h \
 	saveoutputfiles.h \
 	scattering.h \
 	sign.h \
-	Silicon.h \
-	updating.h
+	updating.h \
+	utility.h
 
 archimedes_LDADD = -lm
-

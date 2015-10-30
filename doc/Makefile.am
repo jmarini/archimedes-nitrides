@@ -4,7 +4,7 @@
 EXTRA_DIST = archimedes.tex dblfont.sty fdl.tex diode_pictures mesfet_pictures
 
 CLEANFILES = archimedes.aux archimedes.dvi archimedes.log archimedes.maf archimedes.pdf archimedes.ps \
-archimedes.toc archimedes.bmt archimedes.mtc* 
+archimedes.toc archimedes.bmt archimedes.mtc*
 
 DVIPS = @DVIPS@
 DVIPDF = @DVIPDF@
