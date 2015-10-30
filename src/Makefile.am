@@ -49,7 +49,10 @@ archimedes_SOURCES = \
 	saveoutputfiles.h \
 	scattering.h \
 	sign.h \
+	thpool.h \
+	thpool.c \
 	updating.h \
 	utility.h
 
 archimedes_LDADD = -lm
+archimedes_LDFLAGS = -pthread
