@@ -43,6 +43,17 @@
 #else
     #include <strings.h>
 #endif
+#include <locale.h>
+
+
+// Threading
+#include "thpool.h"
+#define NUMBER_THREADS  128
+#define SEGMENT_SIZE    20000
+
+
+threadpool thread_pool;
+int thread_data[NUMBER_THREADS];
 
 // #include "rappture.h"
 
@@ -246,6 +257,7 @@ static char *progname;
 #include "particlecreation.h"
 #include "drift.h"
 #include "scattering.h"
+#include "emc_threaded.h"
 #include "ensemblemontecarlo.h"
 #include "charge.h"
 #include "computecurrents.h"
@@ -260,6 +272,7 @@ static char *progname;
 #include "readinputfile.h"
 //#include "SaveRappture.h"
 
+
 // provide extern declarations of functions to fix compiler error
 extern inline real rnd(void);
 extern inline particle_t creation(int i, real t, int edge);
@@ -268,17 +281,23 @@ extern inline real MM2(real x, real a, real b);
 extern inline real sign(real a, real b);
 extern inline real minimus(real x, real y);
 extern inline real maximus(real x, real y);
+extern inline int mc_boundary_type(int direction, int index);
 extern inline int mc_is_boundary_insulator(int direction, int index);
-extern inline int mc_is_boundary_schottky(int direction, int index);
-extern inline int mc_is_boundary_ohmic(int direction, int index);
 extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline void mc_particle_coords(particle_t *particle, int *i, int *j);
+extern inline int mc_parallel_axis(int direction);
+extern inline int mc_perpendicular_axis(int direction);
+extern inline int mc_is_direction_horizontal(int direction);
+extern inline int mc_is_direction_vertical(int direction);
+extern inline int mc_is_index_in_bounds_direction(int i, int j, int direction);
+extern inline int mc_is_index_in_bounds_axis(int i, int j, int axis);
 
 
 int main(int argc, char *argv[])
 {
 
 //  RpLibrary* lib=NULL;
+  setlocale(LC_NUMERIC, "");
 
   int optc;
   int h = 0, v = 0, lose = 0, z = 0;
@@ -378,6 +397,10 @@ For more information about these matters, see the file named COPYING.\n",
              progname,argv[1]);
       exit(EXIT_FAILURE);
      }
+
+
+     thread_pool = thpool_init(NUMBER_THREADS);
+
 // ========================
 // Material constants here!
 // ========================

@@ -34,7 +34,7 @@
 // edge = 2 Upper edge
 // edge = 3 Left edge
 
-inline particle_t creation(int i,real t,int edge)
+inline particle_t creation(int i, real t, int edge)
 {
     int iaux;
     int iv;
