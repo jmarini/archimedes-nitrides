@@ -39,9 +39,10 @@ void EMC_worker(int *start)
          tdt = TEMPO + DT,
          tau = 0.0;
     int i = 0,
-        j = 0;
+        j = 0,
+        n = 0;
 
-    for(int n = *start; n < stop && n < INUM; n++) {
+    for(n = *start; n < stop && n < INUM; n++) {
         particle_t *particle = &P[n];
 
         // while the particle's time is less than the time for the step...
@@ -71,7 +72,7 @@ void EMC_cleanup(void)
     int npt[NXM+NYM+1][NUMBER_DIRECTIONS];
     memset(&npt, 0, sizeof(npt));
 
-    for(int n = 1; n < INUM; n++) {
+    for(n = 1; n < INUM; n++) {
         particle_t *particle = &P[n];
 
 
@@ -85,7 +86,7 @@ void EMC_cleanup(void)
     }
 
 
-    for(int n = INUM; n > 0; n--) {
+    for(n = INUM; n > 0; n--) {
         if(!mc_does_particle_exist(&P[n])) {
             P[n] = P[INUM];
             INUM--;
