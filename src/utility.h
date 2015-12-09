@@ -126,11 +126,11 @@ void mc_check_particle_leaving(particle_t *particle, int i, int j, int direction
     if(!mc_is_index_in_bounds_direction(i, j, direction)
             && mc_is_boundary_contact(direction, off_axis)) {
         mc_remove_particle(particle);
-        if(npt[off_axis][direction] < (NP1/2) && mc_is_index_in_bounds_axis(i, j, axis)) {
+        if(npt[off_axis][direction] < (NP1/2) && mc_is_index_in_bounds_axis(i, j, off_axis)) {
             npt[off_axis][direction]++;
             particle->valley = 1;
         }
-        else if(npt[off_axis][direction] < (NP1/4) && !mc_is_index_in_bounds_axis(i, j, axis)) {
+        else if(npt[off_axis][direction] < (NP1/4) && !mc_is_index_in_bounds_axis(i, j, off_axis)) {
             npt[off_axis][direction]++;
             particle->valley = 1;
         }
