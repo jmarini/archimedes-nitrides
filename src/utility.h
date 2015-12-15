@@ -121,17 +121,17 @@ void mc_check_particle_leaving(particle_t *particle, int i, int j, int direction
     if(!mc_does_particle_exist(particle)) { return; }
 
     int axis = mc_parallel_axis(direction);
-    int off_axis = (axis == axis_t.VERTICAL ? i : j);
+    int index = (axis == axis_t.VERTICAL ? i : j);
 
     if(!mc_is_index_in_bounds_direction(i, j, direction)
-            && mc_is_boundary_contact(direction, off_axis)) {
+            && mc_is_boundary_contact(direction, index)) {
         mc_remove_particle(particle);
-        if(npt[off_axis][direction] < (NP1/2) && mc_is_index_in_bounds_axis(i, j, off_axis)) {
-            npt[off_axis][direction]++;
+        if(npt[index][direction] < (NP1/2) && mc_is_index_in_bounds_axis(i, j, !axis)) {
+            npt[index][direction]++;
             particle->valley = 1;
         }
-        else if(npt[off_axis][direction] < (NP1/4) && !mc_is_index_in_bounds_axis(i, j, off_axis)) {
-            npt[off_axis][direction]++;
+        else if(npt[index][direction] < (NP1/4) && !mc_is_index_in_bounds_axis(i, j, !axis)) {
+            npt[index][direction]++;
             particle->valley = 1;
         }
     }
