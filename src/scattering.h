@@ -37,7 +37,7 @@
 // From version 1.1.0 on, the scattering effects can be excluded
 // to simulate ballistic transport.
 
-void scatter(particle_t *particle, int material)
+void scatter(particle_t *particle, int material, int tid)
 {
     int has_scattered = 0;
     register int i, ie = 0;
@@ -91,7 +91,7 @@ void scatter(particle_t *particle, int material)
         // ===============================
         // Selection of scattering process
         // ===============================
-        r1 = rnd();
+        r1 = trnd(tid);
 
         // =========================
         // Non-Polar optical phonons
@@ -180,9 +180,9 @@ void scatter(particle_t *particle, int material)
             finalk = SMH[material][0] * sqrt(finalenergy);
         }
 
-        cosinus = 1. - 2. * rnd();
+        cosinus = 1. - 2. * trnd(tid);
         sinus = sqrt(1. - cosinus * cosinus);
-        fai = 2. * PI * rnd();
+        fai = 2. * PI * trnd(tid);
         particle->kx = finalk * cosinus;
         particle->ky = finalk * sinus * cos(fai);
         particle->kz = finalk * sinus * sin(fai);
@@ -217,7 +217,7 @@ void scatter(particle_t *particle, int material)
         // Selection of scattering process in the GAMMA-Valley
         // ===================================================
         if(particle->valley == 1) {
-            r1 = rnd();
+            r1 = trnd(tid);
 
             // Non-Polar optical phonons
             // Emission of an optical phonon
@@ -236,10 +236,10 @@ void scatter(particle_t *particle, int material)
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
                 if(f <= 0.) { return; }
-                cb = (1. + f - pow(1. + 2. * f, rnd())) / f;
+                cb = (1. + f - pow(1. + 2. * f, trnd(tid))) / f;
                 // linea 30 -- determination of the final states
                 sb  = sqrt(1.-cb*cb);
-                fai = 2.*PI*rnd();
+                fai = 2.*PI*trnd(tid);
                 cf  = cos(fai);
                 sf  = sin(fai);
                 skk = sqrt(particle->kx*particle->kx
@@ -276,10 +276,10 @@ void scatter(particle_t *particle, int material)
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
                 if(f <= 0.) { return; }
-                cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
+                cb = (1. + f - pow((1. + 2. * f), trnd(tid))) / f;
                 // linea 30 -- determination of the final states
                 sb=sqrt(1.-cb*cb);
-                fai=2.*PI*rnd();
+                fai=2.*PI*trnd(tid);
                 cf=cos(fai);
                 sf=sin(fai);
                 skk=sqrt(particle->kx * particle->kx
@@ -318,9 +318,9 @@ void scatter(particle_t *particle, int material)
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
-                cs = 1. - 2. * rnd();
+                cs = 1. - 2. * trnd(tid);
                 sn = sqrt(1. - cs * cs);
-                fai = 2. * PI * rnd();
+                fai = 2. * PI * trnd(tid);
                 particle->kx = kf * cs;
                 particle->ky = kf * sn * cos(fai);
                 particle->kz = kf * sn * sin(fai);
@@ -339,9 +339,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -356,9 +356,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -368,12 +368,12 @@ void scatter(particle_t *particle, int material)
     if((r1<=SWK[material][1][6][ie]) && has_scattered==0){
      finalenergy=superparticle_energy;
 //     if(finalenergy<0.) return;
-     r2=rnd();
+     r2=trnd(tid);
      cb=1.-r2/(0.5+(1.-r2)*ksquared/QD2);
      kf=ki;
 // linea 30 -- determination of the final states
      sb=sqrt(1.-cb*cb);
-     fai=2.*PI*rnd();
+     fai=2.*PI*trnd(tid);
      cf=cos(fai);
      sf=sin(fai);
      skk=sqrt(KX*KX+KY*KY);
@@ -398,7 +398,7 @@ void scatter(particle_t *particle, int material)
 // Selection of scattering process in the L-Valley
 // ===================================================
   if(IV==2){
-    r1 = rnd();
+    r1 = trnd(tid);
 // Non-Polar optical phonons
 // Emission of an optical phonon
       if(r1<=SWK[material][2][1][ie] && has_scattered==0){
@@ -410,10 +410,10 @@ void scatter(particle_t *particle, int material)
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        f=2.*ki*kf/(ki-kf)/(ki-kf);
        if(f<=0.) return;
-       cb=(1.+f-pow((1.+2.*f),rnd()))/f;
+       cb=(1.+f-pow((1.+2.*f),trnd(tid)))/f;
 // linea 30 -- determination of the final states
        sb=sqrt(1.-cb*cb);
-       fai=2.*PI*rnd();
+       fai=2.*PI*trnd(tid);
        cf=cos(fai);
        sf=sin(fai);
        skk=sqrt(KX*KX+KY*KY);
@@ -442,10 +442,10 @@ void scatter(particle_t *particle, int material)
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
        f=2.*ki*kf/(ki-kf)/(ki-kf);
        if(f<=0.) return;
-       cb=(1.+f-pow((1.+2.*f),rnd()))/f;
+       cb=(1.+f-pow((1.+2.*f),trnd(tid)))/f;
 // linea 30 -- determination of the final states
        sb=sqrt(1.-cb*cb);
-       fai=2.*PI*rnd();
+       fai=2.*PI*trnd(tid);
        cf=cos(fai);
        sf=sin(fai);
        skk=sqrt(KX*KX+KY*KY);
@@ -473,9 +473,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -489,9 +489,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -506,9 +506,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -523,9 +523,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -539,9 +539,9 @@ void scatter(particle_t *particle, int material)
 // determination of the final states
        if(CONDUCTION_BAND==KANE) kf = SMH[material][IV]*sqrt(finalenergy*(1.+alphaK[material][IV]*finalenergy));
        if(CONDUCTION_BAND==PARABOLIC) kf=SMH[material][IV]*sqrt(finalenergy);
-       cs = 1.-2.*rnd();
+       cs = 1.-2.*trnd(tid);
        sn = sqrt(1.-cs*cs);
-       fai = 2.*PI*rnd();
+       fai = 2.*PI*trnd(tid);
        KX = kf*cs;
        KY = kf*sn*cos(fai);
        KZ = kf*sn*sin(fai);
@@ -550,12 +550,12 @@ void scatter(particle_t *particle, int material)
 // Impurity scattering
     if((r1<=SWK[material][2][8][ie]) && has_scattered==0){
      finalenergy=superparticle_energy;
-     r2=rnd();
+     r2=trnd(tid);
      cb=1.-r2/(0.5+(1.-r2)*ksquared/QD2);
      kf=ki;
 // linea 30 -- determination of the final states
      sb=sqrt(1.-cb*cb);
-     fai=2.*PI*rnd();
+     fai=2.*PI*trnd(tid);
      cf=cos(fai);
      sf=sin(fai);
      skk=sqrt(KX*KX+KY*KY);

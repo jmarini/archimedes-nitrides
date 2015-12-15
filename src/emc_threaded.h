@@ -31,10 +31,20 @@
 // ######################################################
 
 
+typedef struct {
+    int start;
+    int tid;
+} thread_data_t;
 
-void EMC_worker(int *start)
+
+thread_data_t thread_data[NUMBER_THREADS];
+
+
+void EMC_worker(thread_data_t *data)
 {
-    int stop = *start + SEGMENT_SIZE;
+    int start = data->start;
+    int tid = data->tid;
+    int stop = start + SEGMENT_SIZE;
     real ti  = TEMPO,
          tdt = TEMPO + DT,
          tau = 0.0;
@@ -42,7 +52,7 @@ void EMC_worker(int *start)
         j = 0,
         n = 0;
 
-    for(n = *start; n < stop && n < INUM; n++) {
+    for(n = start; n < stop && n < INUM; n++) {
         particle_t *particle = &P[n];
 
         // while the particle's time is less than the time for the step...
@@ -50,9 +60,9 @@ void EMC_worker(int *start)
             tau = particle->t - ti;                // the dt for the current step
             drift(particle, tau);                  // drift for dt
             mc_particle_coords(particle, &i, &j);  // get updated particle coords
-            scatter(particle, i_dom[i][j]);        // scatter particle
+            scatter(particle, i_dom[i][j], tid);   // scatter particle
             ti = particle->t;                      // update the time
-            particle->t += -log(rnd()) / GM[i_dom[i][j]]; // update particle time
+            particle->t += -log(trnd(tid)) / GM[i_dom[i][j]]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step
@@ -171,14 +181,14 @@ void EMC_threaded(void)
         t = 0;  // thread index
 
     printf("\n"
-           "  INUM           = %'d\n"
-           "  NUMBER_THREADS = %'d\n"
-           "  SEGMENT_SIZE   = %'d\n"
-           "  TOTAL QUEUED   = %.2f\n",
+           "  NUMBER PARTICLES = %'d\n"
+           "  NUMBER THREADS   = %'d\n"
+           "  SEGMENT SIZE     = %'d\n"
+           "  TOTAL QUEUED     = %.2f\n",
            INUM, NUMBER_THREADS, SEGMENT_SIZE, (float)INUM / (float)SEGMENT_SIZE);
 
     while(n < INUM) {
-        thread_data[t] = n;
+        thread_data[t] = (thread_data_t){.start=n, .tid=t};
 
         thpool_add_work(thread_pool, (void *)EMC_worker, &thread_data[t]);
 

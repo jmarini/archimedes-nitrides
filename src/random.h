@@ -30,11 +30,15 @@
 
 // a simple (but well working...) generator of random numbers
 
-inline
-real
-rnd(void){
-  ISEED = fmod(1027.*ISEED, 1048576.);
-  return (ISEED/1048576.);
+inline real rnd(void) {
+    ISEED = fmod(1027. * ISEED, 1048576.);
+    return (ISEED / 1048576.);
+}
+
+
+inline real trnd(int tid) {
+    tseed[tid] = fmod(1027. * tseed[tid], 1048576.);
+    return (tseed[tid] / 1048576.);
 }
 
 // =========================================

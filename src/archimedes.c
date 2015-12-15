@@ -53,7 +53,7 @@
 
 
 threadpool thread_pool;
-int thread_data[NUMBER_THREADS];
+int tseed[NUMBER_THREADS];
 
 // #include "rappture.h"
 
@@ -275,6 +275,7 @@ static char *progname;
 
 // provide extern declarations of functions to fix compiler error
 extern inline real rnd(void);
+extern inline real trnd(int tid);
 extern inline particle_t creation(int i, real t, int edge);
 extern inline real MM(real a, real b);
 extern inline real MM2(real x, real a, real b);

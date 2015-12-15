@@ -44,8 +44,12 @@ MCparameters(int Material)
  real ak,qq,wk;
  int ie,i;
  real z2=4.;
+ int n = 0;
 
  ISEED = 38467.;  //  initial value for random number generator
+ for(n = 0; n < NUMBER_THREADS; n++) {
+   tseed[n] = rnd();
+ }
 
 // These definitions are valid for every material
  BKTQ=KB*TL/Q; // in eV
