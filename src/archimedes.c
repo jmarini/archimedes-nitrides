@@ -57,7 +57,7 @@
 #define QEP_CALIBRATED_BOHM 1  // quantum effective potential, calibrated bohm potential
 #define QEP_FULL 2             // quantum effective potential, full effective potential
 #define QEP_DENSITY_GRADIENT 3 // quantum effective potential, density gradient
-#define MN3 4
+#define MN3 4                  // number of summary values to save per cell
 #define NXM 308                // maximum number of cells in x-direction
 #define NYM 308                // maximum number of cells in y-direction
 #define DIME 1003              // maximum number of points in energy mesh
@@ -114,7 +114,7 @@ extern inline real mc_particle_ksquared(particle_t *particle);
 // All integers here...
 int NUM_VERT;            // number of vertices in the meshing
 int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
-int MEDIA;               // number of time steps macroscopic variables will be computed over, defaults to 500
+int MEDIA;               // number of time steps macroscopic variables will be averaged/computed over, defaults to 500
 int MAXIMINI;            // boolean, whether to save max & min values of macroscopic variables during simulation, defaults to 0
 int SAVEALWAYS;          // boolean, whether to save information at each step, defaults to 0
 int nx, ny;              // number of cells in x- and y-directions
@@ -142,12 +142,22 @@ int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to
 int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 3 array
 
 // All "real"'s here...
-real u2d[NXM+1][NYM+1][MN3+1];
-real h2d[NXM+1][NYM+1][MN3+1];
-real PSI[NXM+1][NYM+1];
+real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
+                                    //  type = 0: quantum effective potential
+                                    //  type = 1: electron density
+                                    //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
+                                    //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
+                                    //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
+real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
+                                    //  type = 0: quantum effective potential
+                                    //  type = 1: hole density
+                                    //  type = 2: running sum of hole x-velocity (divide by MEDIA to get average)
+                                    //  type = 3: running sum of hole y-velocity (divide by MEDIA to get average)
+                                    //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
+real PSI[NXM+1][NYM+1];             // Potential, indexed by mesh node
 real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
-real N_D[NXM+1][NYM+1];
-real N_H[NXM+1][NYM+1];
+real N_D[NXM+1][NYM+1];             // Donor concentration, indexed by mesh node, defaults to NI
+real N_H[NXM+1][NYM+1];             // Acceptor concentration, indexed by mesh node, defaults to NI
 real dx, dy;                        // length of cells in x & y directions
 real TEMPO=0.;                      // current time in simulation, starts at 0
 real TF;                            // final time, defaults to 5e-12
@@ -158,10 +168,10 @@ real mstar2;                        // UNUSED
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
-real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / m*, array indexed by material and valley number
-real HM[NOAMTIA+1][3];              // precomputed constant, hbar / m*, array indexed by material and valley number
+real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / (2 * m* * m_e * q), array indexed by material and valley number
+real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), array indexed by material and valley number
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
-real SWK[NOAMTIA+1][3][14][DIME+1];
+real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
 real KX, KY, KZ;                    // particle Kx, Ky, Kz
 real TS;                            // time for particle
