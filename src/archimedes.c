@@ -134,6 +134,7 @@ int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, 
 int FARADAYFLAG;         // boolean, controls whether evolution of magnetic field will be calculated, defaults to 0
 int i_dom[NXM+1][NYM+1]; // material at each mesh node, array indexed by node (i, j)
 int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
+int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, array indexed by material, starting valley and ending valley
 int ACOUSTICPHONONS;     // boolean, controls whether acoustic phonon scattering is used, defaults to 1
 int OPTICALPHONONS;      // boolean, controls whether optical phonon scattering is used, defaults to 1
 int IMPURITYPHONONS;     // boolean, controls whether impurity scattering is used, defaults to 1
@@ -411,7 +412,35 @@ For more information about these matters, see the file named COPYING.\n",
      NOVALLEY[INXGA1XAS]=1;  // only G-valley
      NOVALLEY[INXAL1XAS]=1;  // G-valley
      NOVALLEY[INXGAXXAS]=1;  // only G-valley
-     NOVALLEY[GAN]=1;        // G-1, L-M, G-2
+     NOVALLEY[GAN]=1;        // G-1, M-L(U), G-3
+
+        for(int m = 0; m < NOAMTIA; m++) {
+            for(int v1 = 1; v1 <= 6; v1++) {
+                for(int v2 = 1; v2 <= 6; v2++) {
+                    ZSCATTER[m][v1][v2] = 1;
+                }
+            }
+        }
+        ZSCATTER[GAAS][1][1] = 0; // G -> G
+        ZSCATTER[GAAS][1][2] = 4; // G -> L
+        ZSCATTER[GAAS][1][3] = 3; // G -> X
+        ZSCATTER[GAAS][2][1] = 1; // L -> G
+        ZSCATTER[GAAS][2][2] = 3; // L -> L
+        ZSCATTER[GAAS][2][3] = 3; // L -> X
+        ZSCATTER[GAAS][3][1] = 1; // X -> G
+        ZSCATTER[GAAS][3][2] = 4; // X -> L
+        ZSCATTER[GAAS][3][3] = 2; // X -> X
+
+        ZSCATTER[GAN][1][1] = 0; // G1 -> G1
+        ZSCATTER[GAN][1][2] = 6; // G1 -> ML
+        ZSCATTER[GAN][1][3] = 1; // G1 -> G3
+        ZSCATTER[GAN][2][1] = 1; // ML -> G1
+        ZSCATTER[GAN][2][2] = 5; // ML -> ML
+        ZSCATTER[GAN][2][3] = 1; // ML -> G3
+        ZSCATTER[GAN][3][1] = 1; // G3 -> G1
+        ZSCATTER[GAN][3][2] = 6; // G3 -> ML
+        ZSCATTER[GAN][3][3] = 0; // G3 -> G3
+
 // Dielectric constant for Silicon Oxide SiO2
      EPSRSIO2=3.9*EPS0;         // see http://en.wikipedia.org/wiki/Relative_permittivity
 // Dielectric constant for Semiconducting materials

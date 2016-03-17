@@ -32,91 +32,205 @@
 // account scatterings from acoustic and optical,non-polar
 // phonons (which are the most relevant scatterings in common semiconductors like Silicon)
 
-void
-MCparameters(int Material)
+void MCparameters(int Material)
 {
- real wo,no,dos,aco,oge[7],oga[7];
- real dos1,dos2,am1,am2,cl,deq,dij;
- real hwe,hwij,wij,we,ne,nij;
- real poe,poa,ope,opa,eqe,eqa,qmin,qmax;
- real initialenergy,sei,finalenergy,sef;
- real eps,epf,ep,bimp,cimp,qd;
- real ak,qq,wk;
- int ie,i;
- real z2=4.;
+    real wo,no,dos,aco,oge[7],oga[7];
+    real dos1,dos2,am1,am2,cl,deq,dij;
+    real hwe,hwij,wij,we,ne,nij;
+    real poe,poa,ope,opa,eqe,eqa,qmin,qmax;
+    real initialenergy,sei,finalenergy,sef;
+    real eps,epf,ep,bimp,cimp,qd;
+    real ak,qq,wk;
+    int ie,i;
+    real z2=4.;
+    real gamma1_initial, gamma1_final,
+         gamma2_initial, gamma2_final,
+         gamma_initial,  gamma_final,
+         sqgamma_initial, sqgamma_final;
+    real overlapA, overlapB, overlapC, overlap;
+    real rate_nonpara, rate_para, prefactor;
 
- ISEED = 38467.;  //  initial value for random number generator
+    ISEED = 38467.;  //  initial value for random number generator
 
-// These definitions are valid for every material
- BKTQ=KB*TL/Q; // in eV
- QH=Q/HBAR;
+    // These definitions are valid for every material
+    BKTQ=KB*TL/Q; // in eV
+    QH=Q/HBAR;
 
-// Material with 2 valleys
-// #######################
- if(NOVALLEY[Material]==2){
-// Effective mass for the GAMMA and L-Valley, respectively
-  am1=MSTAR[Material][1]*M;
-  am2=MSTAR[Material][2]*M;
-  eps=EPSR[Material]*EPS0;
-  epf=EPF[Material]*EPS0;
-  ep=1./(1./epf-1./eps);
+    // Material with 2 valleys
+    // #######################
+    if(NOVALLEY[Material] == 2) {
+        // Effective mass for the GAMMA and L-Valley, respectively
+        am1 = MSTAR[Material][1] * M;
+        am2 = MSTAR[Material][2] * M;
+        // Dielectric constant - static, hi-freq and combination
+        eps = EPSR[Material] * EPS0;
+        epf = EPF[Material]  * EPS0;
+        ep  = 1. / ((1. / epf) - (1. / eps));
 
-// Parameters for Phonon Scattering
-  cl=RHO[Material]*pow(UL[Material],2.);
-  deq=dij=DTK[Material][0]*Q;
-  hwe=hwij=HWO[Material][0];
 
-  SMH[Material][1]=sqrt(2.*am1*Q)/HBAR;
-  SMH[Material][2]=sqrt(2.*am2*Q)/HBAR;
-  HHM[Material][1]=HBAR*HBAR/(2.*am1*Q);
-  HHM[Material][2]=HBAR*HBAR/(2.*am2*Q);
-  HM[Material][1]=HBAR/am1;
-  HM[Material][2]=HBAR/am2;
+        // =======================
+        // == Phonon Scattering ==
+        // =======================
+        cl = RHO[Material] * pow(UL[Material], 2.);  // rho * vs^2
+        deq = dij = DTK[Material][0] * Q; // deformation potential
+        hwe = hwij = HWO[Material][0]; // phonon energy
 
-  wo=HWO[Material][0]*Q/HBAR;
-  wij=hwij*Q/HBAR;
-  we=hwe*Q/HBAR;
+        SMH[Material][1] = sqrt(2. * am1 * Q) / HBAR;
+        SMH[Material][2] = sqrt(2. * am2 * Q) / HBAR;
+        HHM[Material][1] = HBAR * HBAR / (2. * am1 * Q);
+        HHM[Material][2] = HBAR * HBAR / (2. * am2 * Q);
+        HM[Material][1]  = HBAR / am1;
+        HM[Material][2]  = HBAR / am2;
 
-  no=1./(exp(HWO[Material][0]/BKTQ)-1.);
-  nij=1./(exp(hwij/BKTQ)-1.);
-  ne=1./(exp(hwe/BKTQ)-1.);
+        // Phonon frequency
+        wo  = HWO[Material][0] * Q / HBAR;
+        wij = hwij * Q / HBAR;
+        we  = hwe  * Q / HBAR;
 
-  dos1=pow(sqrt(2.*am1*Q)/HBAR,3.)/pow(2.*PI,2.);
-  dos2=pow(sqrt(2.*am2*Q)/HBAR,3.)/pow(2.*PI,2.);
+        // Phonon number
+        no  = 1. / (exp(HWO[Material][0] / BKTQ) - 1.);
+        nij = 1. / (exp(hwij / BKTQ) - 1.);
+        ne  = 1. / (exp(hwe  / BKTQ) - 1.);
 
-  poe=Q/8./PI/ep*Q*wo*(no+1.);
-  poa=poe*no/(1.+no);
-  aco=2.*PI*DA[Material]/Q*DA[Material]*BKTQ/HBAR*Q/cl;
-  ope=PI*dij/wij*dij/RHO[Material]/Q*(nij+1.);
-  opa=ope*nij/(1.+nij);
-  eqe=PI*deq/we*deq/RHO[Material]/Q*(ne+1.);
-  eqa=eqe*ne/(1.+ne);
+        // Effective mass and density of states prefactor for each valley
+        real mstar[4];
+        real dos[4];
+        real alpha[4];
+        // band structure parameters
+        for(int v = 1; v <= NOVALLEY[Material]; v++) {
+            mstar[v] = MSTAR[Material][v] * M;
+            dos[v] = pow(sqrt(2. * mstar[v]) / HBAR, 3.) / (2. * PI * PI);
+            if(CONDUCTION_BAND == PARABOLIC) { alpha[v] = 0.; }
+            else if(CONDUCTION_BAND == KANE) { alpha[v] = alphaK[Material][v]; }
+        }
 
-// Parameters for impurity scatterings
-  cimp=CIMP; // <--- impurity concentration
-  qd=sqrt(Q*cimp/BKTQ/eps);
-  QD2=qd*qd;
-  bimp=2.*PI*cimp*Q*Q/HBAR*Q/eps/eps;
 
-// Calculation of scattering rates
-  for(ie=1;ie<=DIME;ie++){
-   initialenergy=DE*((real)(ie));
-   sei=sqrt(initialenergy);
-// GAMMA-valley
-// ============
-   if(OPTICALPHONONS==ON){
-// Polar optical phonon
-// Emission - Parabolic
-    finalenergy=initialenergy-HWO[Material][0];
-    if(finalenergy>0.){
-     sef=sqrt(finalenergy);
-     qmax=sef+sei;
-     qmin=sei-sef;
-     SWK[Material][1][1][ie]=poe*SMH[Material][1]*sei/initialenergy/Q*log(qmax/qmin);
-    }
-    else SWK[Material][1][1][ie]=0.;
-// Absorption - Parabolic
-    finalenergy=initialenergy+HWO[Material][0];
+        poe = Q * Q * wo / (4. * PI * ep) * (no + 1.);
+        poa = poe * no / (no + 1.);
+
+        // Polar Optical Prefactor
+        //   Emission
+        poe= Q / 8. / PI / ep * Q * wo * ( no + 1.);
+        //   Absorption
+        poa= poe * no / (1. + no);
+
+        // Acoustic Prefactor (Elastic)
+        aco = 2. * PI * DA[Material] / Q * DA[Material] * BKTQ / HBAR * Q / cl;
+
+        // Non-polar Optical Prefactor
+        //   Emission
+        ope = PI * dij / wij * dij / RHO[Material] / Q * (nij + 1.);
+        //   Absorption
+        opa = ope * nij / (1. + nij);
+        //   Emission
+        eqe = PI * deq / we * deq / RHO[Material] / Q * (ne + 1.);
+        //   Absorption
+        eqa= eqe * ne / (1. + ne);
+
+        // =========================
+        // == Impurity Scattering ==
+        // =========================
+        cimp = CIMP; // impurity concentration
+        QD2 = Q * cimp / BKTQ / eps;
+        qd = sqrt(QD2);
+        bimp = 2. * PI * cimp * Q * Q / HBAR * Q / eps / eps;
+
+
+        // =====================================
+        // == Calculation of scattering rates ==
+        // =====================================
+        printf("alpha=%g\n", alpha[1]);
+        printf("energy,parabolic,nonparabolic\n");
+        for(ie = 1; ie <= DIME; ie++) {
+            initialenergy = DE * (real)(ie);
+            sei = sqrt(initialenergy);
+
+            // ==================
+            // == GAMMA-valley ==
+            // ==================
+            if(OPTICALPHONONS == ON) {
+
+                SWK[Material][1][1][ie] = 0.
+                for(int i = 1; i <= 2; ++i) {
+                    if(i == 1) { // Emission
+                        finalenergy = initialenergy - HWO[Material][0];
+                        prefactor = poe;
+                    }
+                    if(i == 2) { // Absorption
+                        finalenergy = initialenergy + HWO[Material][0];
+                        prefactor = poa;
+                    }
+
+                    if(finalenergy < 0.) { SWK[Material][1][i][ie] += 0.; }
+                    else {
+                        // non-parabolicity precalculations
+                        //   γ  = E(1 + αE) = E*γ1
+                        //   γ1 = 1 + αE
+                        //   γ2 = 1 + 2αE
+                        gamma1_initial = 1. +      alpha[1] * initialenergy;
+                        gamma1_final   = 1. +      alpha[1] * finalenergy;
+                        gamma2_initial = 1. + 2. * alpha[1] * initialenergy;
+                        gamma2_final   = 1. + 2. * alpha[1] * finalenergy;
+                        gamma_initial = initialenergy * gamma1_initial;
+                        gamma_final   = finalenergy   * gamma1_final;
+                        sqgamma_initial = sqrt(gamma_initial);
+                        sqgamma_final   = sqrt(gamma_final);
+                        sef = sqrt(finalenergy);
+                        qmax = sqgamma_initial + sqgamma_final;
+                        qmin = sqgamma_initial - sqgamma_final;
+                        overlapA = pow(2. * gamma1_initial * gamma1_final
+                                       + alpha[1] * (gamma_initial + gamma_final), 2.);
+                        overlapB = 2. * alpha[1] * sqgamma_initial * sqgamma_final
+                                   * (4. * gamma1_initial * gamma1_final
+                                      + alpha[1] * (gamma_initial + gamma_final));
+                        overlapC = 4. * gamma1_initial * gamma1_final
+                                      * gamma2_initial * gamma2_final;
+                        overlap = (overlapA * log(qmax / qmin) - overlapB) / overlapC;
+
+                        SWK[Material][1][i][ie] += prefactor * SMH[Material][1] * gamma2_final / sqgamma_initial * overlap / Q;
+                    }
+                }
+
+                // Polar optical phonon
+                finalenergy = initialenergy - HWO[Material][0]; // TA phonon
+                if(finalenergy > 0.) {
+                    // non-parabolicity precalculations
+                    //   γ  = E(1 + αE) = E*γ1
+                    //   γ1 = 1 + αE
+                    //   γ2 = 1 + 2αE
+                    gamma1_initial = 1. +      alpha[1] * initialenergy;
+                    gamma1_final   = 1. +      alpha[1] * finalenergy;
+                    gamma2_initial = 1. + 2. * alpha[1] * initialenergy;
+                    gamma2_final   = 1. + 2. * alpha[1] * finalenergy;
+                    gamma_initial = initialenergy * gamma1_initial;
+                    gamma_final   = finalenergy   * gamma1_final;
+                    sqgamma_initial = sqrt(gamma_initial);
+                    sqgamma_final   = sqrt(gamma_final);
+                    sef = sqrt(finalenergy);
+                    qmax = sqgamma_initial + sqgamma_final;
+                    qmin = sqgamma_initial - sqgamma_final;
+                    overlapA = pow(2. * gamma1_initial * gamma1_final
+                                   + alpha[1] * (gamma_initial + gamma_final), 2.);
+                    overlapB = 2. * alpha[1] * sqgamma_initial * sqgamma_final
+                               * (4. * gamma1_initial * gamma1_final
+                                  + alpha[1] * (gamma_initial + gamma_final));
+                    overlapC = 4. * gamma1_initial * gamma1_final
+                                  * gamma2_initial * gamma2_final;
+                    overlap = (overlapA * log(qmax / qmin) - overlapB) / overlapC;
+
+                    // for parabolic comparison
+                    real pqmax = sei + sef;
+                    real pqmin = sei - sef;
+
+                    rate_nonpara = poe * SMH[Material][1] * gamma2_final / sqgamma_initial * overlap / Q;
+                    rate_para = poe * SMH[Material][1] * sei / initialenergy / Q * log(pqmax / pqmin);
+                    printf("%g, %g, %g\n", initialenergy, rate_para, rate_nonpara);
+                    SWK[Material][1][1][ie] = rate_para;
+                }
+                else { SWK[Material][1][1][ie]=0.; }
+
+                // Absorption - Parabolic
+                finalenergy = initialenergy + HWO[Material][0];
     sef=sqrt(finalenergy);
     qmax=sef+sei;
     qmin=sef-sei;
