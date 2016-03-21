@@ -417,7 +417,7 @@ For more information about these matters, see the file named COPYING.\n",
         for(int m = 0; m < NOAMTIA; m++) {
             for(int v1 = 1; v1 <= 6; v1++) {
                 for(int v2 = 1; v2 <= 6; v2++) {
-                    ZSCATTER[m][v1][v2] = 1;
+                    ZSCATTER[m][v1][v2] = 0.;
                 }
             }
         }

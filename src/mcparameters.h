@@ -42,7 +42,7 @@ void MCparameters(int material)
     real eps,epf,ep,bimp,cimp,qd;
     real ak,qq,wk;
     int ie,i;
-    real z2=4.;
+    real z2=4., zf;
     real gamma1_initial, gamma1_final,
          gamma2_initial, gamma2_final,
          gamma_initial,  gamma_final,
@@ -139,159 +139,221 @@ void MCparameters(int material)
         // == Calculation of scattering rates ==
         // =====================================
         char filename[150];
-        FILE  *pop_emission,  *pop_absorption,
-             *npop_emission, *npop_absorption;
+        FILE *pop_emission,  *pop_absorption,
+             *npop_emission, *npop_absorption,
+             *ac_elastic,    *imp_elastic;
+        char f_band_model[20];
+        char f_material[20];
 
-        sprintf(filename, "pop_emission_%d-%d.csv", material, CONDUCTION_BAND);
+        if(CONDUCTION_BAND == PARABOLIC) { sprintf(f_band_model, "para"); }
+        else if(CONDUCTION_BAND == KANE) { sprintf(f_band_model, "kane"); }
+        if(material == GAAS) { sprintf(f_material, "GaAs"); }
+        else if(material == SILICON) { sprintf(f_material, "Si"); }
+        else if(material == GAN) { sprintf(f_material, "GaN"); }
+
+        sprintf(filename, "pop_emission_%s-%s.csv", f_material, f_band_model);
         pop_emission = fopen(filename, "w");
         fprintf(pop_emission, "energy,rate\n");
 
-        sprintf(filename, "pop_absorption_%d-%d.csv", material, CONDUCTION_BAND);
+        sprintf(filename, "pop_absorption_%s-%s.csv", f_material, f_band_model);
         pop_absorption = fopen(filename, "w");
         fprintf(pop_absorption, "energy,rate\n");
 
-        sprintf(filename, "npop_emission_%d-%d.csv", material, CONDUCTION_BAND);
+        sprintf(filename, "npop_emission_%s-%s.csv", f_material, f_band_model);
         npop_emission = fopen(filename, "w");
         fprintf(npop_emission, "energy,rate\n");
 
-        sprintf(filename, "npop_absorption_%d-%d.csv", material, CONDUCTION_BAND);
+        sprintf(filename, "npop_absorption_%s-%s.csv", f_material, f_band_model);
         npop_absorption = fopen(filename, "w");
         fprintf(npop_absorption, "energy,rate\n");
+
+        sprintf(filename, "ac_elastic_%s-%s.csv", f_material, f_band_model);
+        ac_elastic = fopen(filename, "w");
+        fprintf(ac_elastic, "energy,rate\n");
+
+        sprintf(filename, "imp_elastic_%s-%s.csv", f_material, f_band_model);
+        imp_elastic = fopen(filename, "w");
+        fprintf(imp_elastic, "energy,rate\n");
 
         for(ie = 1; ie <= DIME; ie++) {
             initialenergy = DE * (real)(ie);
             sei = sqrt(initialenergy);
 
-            // ==================
-            // == GAMMA-valley ==
-            // ==================
-            if(OPTICALPHONONS == ON) {
+            for(int v = 1; v < NOVALLEY[material]; ++v) {
 
-                SWK[material][1][0][ie] = 0.;
+                // ===============================
+                // == Optical Phonon Scattering ==
+                // ===============================
+                if(OPTICALPHONONS == ON) {
 
-                // Polar Optical Phonons
-                // ---------------------
-                for(int i = 1; i <= 2; ++i) {
-                    SWK[material][1][i][ie] = SWK[material][1][i-1][ie];
+                    SWK[material][v][0][ie] = 0.;
 
-                    real prefactor = 0.;
-                    FILE *f;
-                    // Emission
-                    if(i == 1) {
-                        finalenergy = initialenergy - HWO[material][0];
-                        prefactor = poe;
-                        f = pop_emission;
-                    }
-                    // Absorption
-                    if(i == 2) {
-                        finalenergy = initialenergy + HWO[material][0];
-                        prefactor = poa;
-                        f = pop_absorption;
-                    }
+                    // Polar Optical Phonons
+                    // ---------------------
+                    for(int i = 1; i <= 2; ++i) {
+                        SWK[material][v][i][ie] = SWK[material][v][i-1][ie];
 
-                    if(finalenergy < 0.) { // Negative energy, ignore
-                        fprintf(f, "%g,%g\n", initialenergy, 0.);
-                        SWK[material][1][i][ie] += 0.;
-                    }
-                    else {
-                        // non-parabolicity precalculations
-                        //   γ  = E(1 + αE) = E*γ1
-                        //   γ1 = 1 + αE
-                        //   γ2 = 1 + 2αE
-                        gamma1_initial = 1. +      alpha[1] * initialenergy;
-                        gamma1_final   = 1. +      alpha[1] * finalenergy;
-                        gamma2_initial = 1. + 2. * alpha[1] * initialenergy;
-                        gamma2_final   = 1. + 2. * alpha[1] * finalenergy;
-                        gamma_initial = initialenergy * gamma1_initial;
-                        gamma_final   = finalenergy   * gamma1_final;
-                        sqgamma_initial = sqrt(gamma_initial);
-                        sqgamma_final   = sqrt(gamma_final);
-                        sef = sqrt(finalenergy);
-                        qmax = sqgamma_initial + sqgamma_final;
-                        qmin = fabs(sqgamma_initial - sqgamma_final);
-                        overlapA = pow(2. * gamma1_initial * gamma1_final
-                                       + alpha[1] * (gamma_initial + gamma_final), 2.);
-                        overlapB = 2. * alpha[1] * sqgamma_initial * sqgamma_final
-                                   * (4. * gamma1_initial * gamma1_final
-                                      + alpha[1] * (gamma_initial + gamma_final));
-                        overlapC = 4. * gamma1_initial * gamma1_final
-                                      * gamma2_initial * gamma2_final;
-                        overlap = (overlapA * log(qmax / qmin) - overlapB) / overlapC;
+                        real prefactor = 0.;
+                        FILE *f;
+                        // Emission
+                        if(i == 1) {
+                            finalenergy = initialenergy - HWO[material][0];
+                            prefactor = poe;
+                            f = pop_emission;
+                        }
+                        // Absorption
+                        if(i == 2) {
+                            finalenergy = initialenergy + HWO[material][0];
+                            prefactor = poa;
+                            f = pop_absorption;
+                        }
 
-                        rate = prefactor * SMH[material][1] * gamma2_final / sqgamma_initial * overlap / Q;
-                        fprintf(f, "%g,%g\n", initialenergy, rate);
-                        SWK[material][1][i][ie] += rate;
-                    }
+                        if(finalenergy <= 0.) { // Negative energy, ignore
+                            fprintf(f, "%g,%g\n", initialenergy, 0.);
+                            SWK[material][1][i][ie] += 0.;
+                        }
+                        else {
+                            // non-parabolicity precalculations
+                            //   γ  = E(1 + αE) = E*γ1
+                            //   γ1 = 1 + αE
+                            //   γ2 = 1 + 2αE
+                            gamma1_initial = 1. +      alpha[v] * initialenergy;
+                            gamma1_final   = 1. +      alpha[v] * finalenergy;
+                            gamma2_initial = 1. + 2. * alpha[v] * initialenergy;
+                            gamma2_final   = 1. + 2. * alpha[v] * finalenergy;
+                            gamma_initial = initialenergy * gamma1_initial;
+                            gamma_final   = finalenergy   * gamma1_final;
+                            sqgamma_initial = sqrt(gamma_initial);
+                            sqgamma_final   = sqrt(gamma_final);
+                            sef = sqrt(finalenergy);
+                            qmax = sqgamma_initial + sqgamma_final;
+                            qmin = fabs(sqgamma_initial - sqgamma_final);
+                            overlapA = pow(2. * gamma1_initial * gamma1_final
+                                           + alpha[v] * (gamma_initial + gamma_final), 2.);
+                            overlapB = 2. * alpha[v] * sqgamma_initial * sqgamma_final
+                                       * (4. * gamma1_initial * gamma1_final
+                                          + alpha[v] * (gamma_initial + gamma_final));
+                            overlapC = 4. * gamma1_initial * gamma1_final
+                                          * gamma2_initial * gamma2_final;
+                            overlap = (overlapA * log(qmax / qmin) - overlapB) / overlapC;
+
+                            rate = prefactor * SMH[material][v] * gamma2_final / sqgamma_initial * overlap / Q;
+                            fprintf(f, "%g,%g\n", initialenergy, rate);
+                            SWK[material][v][i][ie] += rate;
+                        }
+                    } // POP scattering
+
+                    // Non-polar Optical Phonons - Intervalley
+                    // ---------------------------------------
+                    for(int v2 = 1; v2 <= NOVALLEY[material]; ++v2) {
+                        // scatter from valley v -> v2
+                        // when v == v2, scattering to equivalent valley
+                        for(int i = 3; i <= 4; ++i) {
+                            SWK[material][v][i][ie] = SWK[material][v][i-1][ie];
+
+                            real prefactor = 0.;
+                            FILE *f;
+
+                            // Emission
+                            if(i == 3) {
+                                finalenergy = initialenergy - hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
+                                prefactor = ope * Q;
+                                f = npop_emission;
+                            }
+                            // Absorption
+                            if(i == 4) {
+                                finalenergy = initialenergy + hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
+                                prefactor = opa * Q;
+                                f = npop_absorption;
+                            }
+
+                            if(finalenergy <= 0.) { // Negative energy, ignore
+                                if(v != v2) {
+                                    fprintf(f, "%g,%g\n", initialenergy, 0.);
+                                }
+                                SWK[material][v][i][ie] += 0.;
+                            }
+                            else {
+                                gamma1_initial = 1. +      alpha[v]  * initialenergy;
+                                gamma1_final   = 1. +      alpha[v2] * finalenergy;
+                                gamma2_initial = 1. + 2. * alpha[v]  * initialenergy;
+                                gamma2_final   = 1. + 2. * alpha[v2] * finalenergy;
+                                gamma_initial = Q * initialenergy * gamma1_initial;
+                                gamma_final   = Q * finalenergy   * gamma1_final;
+                                sqgamma_initial = sqrt(gamma_initial);
+                                sqgamma_final   = sqrt(gamma_final);
+                                overlap = (gamma1_initial * gamma1_final) / (gamma2_initial * gamma2_final);
+                                zf = ZSCATTER[material][v][v2];
+
+                                rate = prefactor * zf * dos[v2] * sqgamma_final * gamma2_final * overlap;
+                                if(v != v2) {
+                                    fprintf(f, "%g,%g\n", initialenergy, rate);
+                                }
+                                SWK[material][v][i][ie] += rate;
+                            }
+                        } // NPOP scattering
+                    } // secondary loop over valleys
                 }
-
-                // Non-polar Optical Phonons
-                // -------------------------
-                for(int i = 3; i <= 4; ++i) {
-                    SWK[material][1][i][ie] = SWK[material][1][i-1][ie];
-
-                    real prefactor = 0.;
-                    FILE *f;
-
-                    // Emission
-                    if(i == 3) {
-                        finalenergy = initialenergy - hwij + EMIN[material][1] - EMIN[material][2];
-                        prefactor = ope;
-                        f = npop_emission;
+                else { // no optical phonon scattering
+                    for(int i = 1; i <= 4; ++i) {
+                        SWK[material][v][i][ie] = 0.;
                     }
-                    // Absorption
-                    if(i == 4) {
-                        finalenergy = initialenergy + hwij + EMIN[material][1] - EMIN[material][2];
-                        prefactor = opa;
-                        f = npop_absorption;
-                    }
+                } // optical phonon scattering
 
-                    if(finalenergy < 0.) { // Negative energy, ignore
-                        fprintf(f, "%g,%g\n", initialenergy, 0.);
-                        SWK[material][1][i][ie] += 0.;
-                    }
-                    else {
+                // ================================
+                // == Acoustic Phonon Scattering ==
+                // ================================
+                if(ACOUSTICPHONONS == ON) {
+                    finalenergy = initialenergy; // elastic scattering assumption
 
-                        rate = 0.;
-                        fprintf(f, "%g,%g\n", initialenergy, rate);
-                        SWK[material][1][i][ie] += rate;
-                    }
+                    real gamma1 = 1. +      alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    overlapA = gamma1 * gamma1;
+                    overlapB = (alpha[v] * alpha[v] * finalenergy * finalenergy) / 3;
+                    overlapC = gamma2 * gamma2;
+                    overlap = (overlapA + overlapB) / overlapC;
+
+                    rate = aco * Q * dos[v] * sqgamma * gamma2 * overlap;
+
+                    fprintf(ac_elastic, "%g,%g\n", initialenergy, rate);
+                    SWK[material][v][5][ie] = SWK[material][v][4][ie] + rate;
                 }
+                else { // no acoustic phonon scattering
+                    SWK[material][v][5][ie] = 0.;
+                    fprintf(ac_elastic, "%g,%g\n", initialenergy, 0.);
+                } // acoustic phonon scattering
 
-// Emission
-    finalenergy=initialenergy-hwij+EMIN[material][1]-EMIN[material][2];
-    if(finalenergy>0.){
-     sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-     SWK[material][1][3][ie]=SWK[material][1][2][ie]
-                            +z2*ope*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-    }
-    else SWK[material][1][3][ie]=SWK[material][1][2][ie];
-// Absorption
-    finalenergy=initialenergy+hwij+EMIN[material][1]-EMIN[material][2];
-    if(finalenergy>0.){
-     sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-     SWK[material][1][4][ie]=SWK[material][1][3][ie]
-                            +z2*opa*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-    }
-    else SWK[material][1][4][ie]=SWK[material][1][3][ie];
-   }
-   else{
-    // NO OPTICAL SCATTERING
-    SWK[material][1][1][ie]=0.0;
-    SWK[material][1][2][ie]=0.0;
-    SWK[material][1][3][ie]=0.0;
-    SWK[material][1][4][ie]=0.0;
-   }
-   if(ACOUSTICPHONONS==ON){
-// Acoustic Phonon
-    finalenergy=initialenergy;
-    sef=sqrt(finalenergy*(1.+alphaK[material][1]*finalenergy));
-    SWK[material][1][5][ie]=SWK[material][1][4][ie]
-                           +aco*sef*dos1*(1.+2.*alphaK[material][1]*finalenergy);
-   }
-   else {
-    // NO ACOUSTIC PHONON
-    SWK[material][1][5][ie]=SWK[material][1][4][ie]+0.0;
-   }
+                // =========================
+                // == Impurity Scattering ==
+                // =========================
+                if(IMPURITYPHONONS == ON) {
+                    finalenergy = initialenergy; // elastic scattering
+
+                    real gamma1 = 1. +      alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    real prefactor = 2 * PI * CIMP * Q * Q * Q * Q / ( HBAR * eps * eps);
+                    real qd2 = Q * Q * CIMP / (BKTQ * Q * eps);
+                    real k2 = 2 * mstar[v] * gamma / (HBAR * HBAR);
+                    real screening = qd2 * (4. * k2 + qd2);
+
+                    rate = prefactor * sqgamma * gamma2 * dos[v] / screening;
+                    fprintf(imp_elastic, "%g,%g\n", initialenergy, rate);
+                    SWK[material][v][6][ie] = SWK[material][v][5][ie] + rate;
+                }
+                else { // no impurity scattering
+                    SWK[material][v][6][ie] = 0.;
+                    fprintf(imp_elastic, "%g,%g\n", initialenergy, 0.);
+                } // impurity scattering
+
+            } // loop over valleys
+
+
 // Impurity scattering
    if(IMPURITYPHONONS==ON){
     finalenergy=initialenergy;
