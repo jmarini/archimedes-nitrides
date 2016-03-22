@@ -74,6 +74,7 @@
 #define MEPEH 5                // MEPEH stands for MEP model for electrons and holes
 #define GNUPLOTFORMAT 0        // output file in GNUPLOT format
 #define MESHFORMAT 1           // output file in Mesh format
+#define MAX_VALLEYS 4          // maximum number of valleys
 
 // definition of the material reference table
 #define NOAMTIA 17   // Number Of All Material Taken Into Account (excluding SiO2)
@@ -284,6 +285,8 @@ extern inline int mc_is_boundary_schottky(int direction, int index);
 extern inline int mc_is_boundary_ohmic(int direction, int index);
 extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline void mc_particle_coords(particle_t *particle, int *i, int *j);
+extern inline char* mc_material_name(int material);
+extern inline char* mc_band_model_name(int model);
 
 
 int main(int argc, char *argv[])
@@ -398,7 +401,7 @@ For more information about these matters, see the file named COPYING.\n",
 // For the others, see comments below
      NOVALLEY[SILICON]=1;    // X-valley
      NOVALLEY[GERMANIUM]=1;  // G-valley
-     NOVALLEY[GAAS]=2;       // G and L-valleys
+     NOVALLEY[GAAS]=3;       // G and L-valleys
      NOVALLEY[INSB]=1;       // G valley
      NOVALLEY[ALSB]=1;       // G-valley
      NOVALLEY[ALXINXSB]=1;   // G-valley
@@ -595,16 +598,18 @@ For more information about these matters, see the file named COPYING.\n",
      EMIN[INAS][1]=0.0;
      EMIN[INP][1]=0.0;
      EMIN[GAN][1]=0.0;         // G-1
-// eventual second valley
-     EMIN[GAAS][2]=0.323;
+// second valley
+     EMIN[GAAS][2]=0.323;      // L
      EMIN[GAN][2]=1.9;         // L-M
 // third valley
+     EMIN[GAAS][3]=0.48;       // X
      EMIN[GAN][3]=2.1;         // G-2
 
 // Definition of effective mass for all materials in all valleys
      MSTAR[SILICON][1]=0.32;     // see Sellier, Tomizawa, etc.
      MSTAR[GAAS][1]=0.067;       // Gamma-valley -- see Tomizawa
      MSTAR[GAAS][2]=0.350;       // L-valley     -- see Tomizawa
+     MSTAR[GAAS][3]=0.27;        // X-valley
      MSTAR[GERMANIUM][1]=0.12;   // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
      MSTAR[INSB][1]=0.0135;      // Gamma-valley -- see Ram-Mohan
      MSTAR[ALSB][1]=0.14;        // Gamma-valley -- See Ram-Mohan

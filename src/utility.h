@@ -82,4 +82,56 @@ inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
 }
 
 
+real mc_particle_energy(particle_t *particle) {
+    int i, j;
+    mc_particle_coords(particle, &i, &j);
+    if(CONDUCTION_BAND == PARABOLIC) {
+        return HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
+    }
+    else if(CONDUCTION_BAND == KANE) {
+        real alpha = alphaK[i_dom[i][j]][0];
+        real gamma = HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
+        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * gamma);
+    }
+    else {
+        return -1.0;
+    }
+}
+
+
+inline char* mc_material_name(int material) {
+    switch(material) {
+        case iSIO2: return "iSIO2";
+        case SILICON: return "Si";
+        case GAAS: return "GaAs";
+        case GERMANIUM: return "Ge";
+        case INSB: return "InSb";
+        case ALSB: return "AlSb";
+        case ALXINXSB: return "AlxInxSb";
+        case ALXIN1XSB: return "AlxIn1xSb";
+        case ALAS: return "AlAs";
+        case ALP: return "AlP";
+        case GAP: return "GaP";
+        case GASB: return "GaSb";
+        case INAS: return "InAs";
+        case INP: return "InP";
+        case INXGA1XAS: return "InxGa1xAs";
+        case INXAL1XAS: return "InxAl1xAs";
+        case INXGAXXAS: return "InxGaXxAs";
+        case GAN: return "GaN";
+        default: return "Unknown Material";
+    }
+}
+
+
+inline char* mc_band_model_name(int model) {
+    switch(model) {
+        case PARABOLIC: return "Parabolic";
+        case KANE: return "Kane";
+        case FULL: return "Full";
+        default: return "Unknown Band Model";
+    }
+}
+
+
 #endif
