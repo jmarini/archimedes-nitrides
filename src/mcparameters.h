@@ -326,7 +326,10 @@ void MCparameters(int material)
                     real sqgamma = sqrt(gamma);
 
                     real prefactor = 2 * PI * CIMP * Q * Q * Q * Q / ( HBAR * eps * eps);
-                    real qd2 = Q * Q * CIMP / (BKTQ * Q * eps);
+                    // using thomas femri screening
+                    // TODO: use concentration of light holes
+                    // TODO: use light hole mass rather than electron mass
+                    real qd2 = Q * Q * mstar[v] * pow(3.0 * CIMP, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
                     real k2 = 2 * mstar[v] * gamma / (HBAR * HBAR);
                     real screening = qd2 * (4. * k2 + qd2);
 
@@ -340,6 +343,7 @@ void MCparameters(int material)
                 } // impurity scattering
 
             } // loop over valleys
+
 
 
 // Impurity scattering
