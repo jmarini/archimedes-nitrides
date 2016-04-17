@@ -374,7 +374,7 @@ void MCparameters(int material)
                 }
             }
         }
-        printf("GAMMA[%s] = %g \n", f_material, GM[material]);
+        printf("GAMMA[%s] = %g\n", f_material, GM[material]);
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
                 for(i = 1; i <= 6; i++) {
@@ -390,6 +390,7 @@ void MCparameters(int material)
 // Material = one valley
 // #####################
  if(NOVALLEY[material]==1){
+        char *f_material = mc_material_name(material);
   SMH[material][0]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
   HHM[material][0]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
   HM[material][0]=HBAR/(MSTAR[material][1]*M);
@@ -466,7 +467,7 @@ void MCparameters(int material)
   GM[material]=SWK[material][0][13][1];
   for(ie=1;ie<=DIME;++ie)
     if(SWK[material][0][13][ie]>GM[material]) GM[material]=SWK[material][0][13][ie];
-  printf("GAMMA[%d] = %g \n",material, GM[material]);
+  printf("GAMMA[%s] = %g\n", f_material, GM[material]);
   for(ie=1;ie<=DIME;ie++)
     for(i=1;i<=13;i++)
       SWK[material][0][i][ie]/=GM[material];
