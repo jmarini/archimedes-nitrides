@@ -33,6 +33,7 @@
 
 # Archimedes specific
 *.xyz
+*.csv
 archimedes
 
 # Autotools
