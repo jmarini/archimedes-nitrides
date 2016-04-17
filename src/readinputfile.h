@@ -50,6 +50,7 @@ Read_Input_File(void)
  OPTICALPHONONS=ON;  // Optical phonons scattering ON by default
  ACOUSTICPHONONS=ON; // Acoustic phonons scattering ON by default
  IMPURITYPHONONS=ON; // Impurity phonons scattering ON by default
+ PIEZOELECTRIC=OFF; // Piezoelectric scattering OFF by default
  CONDUCTION_BAND=KANE;   // Kane approximation by default
  QEP_ALPHA=0.5; // alpha parameter for quantum effective potential
  QEP_GAMMA=1.0; // gamma parameter for quantum effective potential
@@ -845,6 +846,22 @@ Processing the input file\n\
    }
    else {
     printf("%s : command IMPURITYSCATTERING accept ON or OFF.\n",progname);
+    exit(0);
+   }
+  }
+  else if(strcmp(s,"PIEZOELECTRIC")==0){
+// specify if the Acoustic phonons scattering has to be taken into account
+   fscanf(fp,"%s",s);
+   if(strcmp(s,"ON")==0){
+    PIEZOELECTRIC=ON;
+    printf("PIEZOELECTRIC SCATTERING = ON ---> Ok\n");
+   }
+   else if(strcmp(s,"OFF")==0){
+    PIEZOELECTRIC=OFF;
+    printf("PIEZOELECTRIC SCATTERING = OFF ---> Ok\n");
+   }
+   else {
+    printf("%s : command PIEZOELECTRIC accept ON or OFF.\n",progname);
     exit(0);
    }
   }

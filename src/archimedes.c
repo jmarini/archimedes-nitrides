@@ -139,6 +139,7 @@ int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, a
 int ACOUSTICPHONONS;     // boolean, controls whether acoustic phonon scattering is used, defaults to 1
 int OPTICALPHONONS;      // boolean, controls whether optical phonon scattering is used, defaults to 1
 int IMPURITYPHONONS;     // boolean, controls whether impurity scattering is used, defaults to 1
+int PIEZOELECTRIC;       // boolean, controls whether piezoelectric scattering is used, defaults to 0
 int CONDUCTION_BAND;     // enum, controls which band structure model is used, values include PARABOLIC, KANE, FULL, defaults to KANE
 int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to 0
 int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 3 array
@@ -221,6 +222,7 @@ real EMIN[NOAMTIA+1][4];      // energy difference between valley minimum and CB
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real LATTCONST[NOAMTIA+1];    // lattice constant, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
+real KAV[NOAMTIA+1];          // electro-mechanical coupling constants, array indexed by material
 real QEP_ALPHA;
 real QEP_GAMMA;
 real QEP_MODEL;
@@ -641,6 +643,9 @@ For more information about these matters, see the file named COPYING.\n",
      LATTCONST[INAS]=605.83e-12;       // CODATA
      LATTCONST[INSB]=647.9e-12;        // CODATA
      LATTCONST[GAN]=318.9e-12;         // a lattice constant
+// electro-mechanical coupling constant
+     KAV[GAAS] = 0.0252;
+     KAV[GAN] = 0.137;
 // sp3s* Conduction Band calculated parameters for full band simulations
 #include "materials/Silicon.h"
 #include "materials/GaAs.h"

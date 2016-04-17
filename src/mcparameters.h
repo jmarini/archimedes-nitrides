@@ -342,6 +342,25 @@ void MCparameters(int material)
                     fprintf(scattering_rates[6][v][0], "%g,%g\n", initialenergy, 0.);
                 } // impurity scattering
 
+                if(PIEZOELECTRIC == ON) {
+                    finalenergy = initialenergy; // elastic scattering
+
+                    real gamma1 = 1. +      alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    real prefactor = Q*Q * KAV[material]*KAV[material] * BKTQ * Q / (HBAR * HBAR * eps * 8 * PI);
+                    real qd2 = Q * Q * mstar[v] * pow(3.0 * CIMP, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
+                    real a = mstar[v] * finalenergy * Q / (HBAR * HBAR * qd2);
+                    real screening = log(1. + a) - 1. / (1. + 1. / a);
+                    real rate = prefactor * sqrt(mstar[v] / 2.) * gamma2 * screening / sqgamma;
+                    printf("%g,%g\n", initialenergy, rate);
+                }
+                else {
+                    //
+                }
+
             } // loop over valleys
 
 
