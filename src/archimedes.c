@@ -371,9 +371,8 @@ Report bugs to jeanmichel.sellier@gmail.com or jsellier@purdue.edu\n");
   if (v)
     {
       /* Print version number.  */
-      printf("archimedes - GNU archimedes 2.0.0\n");
+      printf("archimedes - GNU archimedes 2.0.0\n\n");
       /* xgettext: no-wrap */
-      printf("");
       printf("\
 Copyright (C) %s Jean Michel D. Sellier.\n\n\
 There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A\n\
@@ -842,6 +841,7 @@ For more information about these matters, see the file named COPYING.\n",
 // Closure of the input file
 // =========================
      fclose(fp);
+     printf("\nInput file read...\n");
 
 // Read all the coefficients for MEP simulation
 // ============================================
@@ -858,14 +858,18 @@ For more information about these matters, see the file named COPYING.\n",
 // ===========================================
      PoissonBCs();
      if(FARADAYFLAG) FaradayBCs();
+     printf("Boundary conditions calculated...\n");
 
 // Initialisation for Monte Carlo
 // ==============================
      if(Model_Number==MCE || Model_Number==MCEH){
       int i;
-      for(i=0;i<NOAMTIA;i++) MCparameters(i);
-      printf("\n");
+      for(i=0;i<NOAMTIA;i++) {
+        MCparameters(i);
+      }
+      printf("Scattering rates calculated...\n");
       MCdevice_config();
+      printf("Device configuration complete...\n");
      }
      printf("\n");
 // HERE IS THE SIMULATION

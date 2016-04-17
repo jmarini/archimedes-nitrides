@@ -205,7 +205,7 @@ void EMC(void)
         }
     }
 
-    printf("Actual number of electron super-particles = %d\n", INUM);
+    printf("\nActual number of electron super-particles = %d\n", INUM);
     if(INUM > NPMAX) {
         printf("%s: too big actual number of particles\n", progname);
         exit(EXIT_FAILURE);

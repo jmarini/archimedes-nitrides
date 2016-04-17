@@ -88,8 +88,8 @@ updating(int model)
         if(u2d[i+2][j+2][0]<=mini) mini=u2d[i+2][j+2][0];
        }
       }
-    printf("Max. Potential = %g\n",maxi);
-    printf("Min. Potential = %g\n",mini);
+    printf("Max. Potential = %g V\n",maxi);
+    printf("Min. Potential = %g V\n",mini);
 // Max and Min of x-component of electric field
     maxi=E[8][8][0];
     mini=E[8][8][0];
@@ -98,8 +98,8 @@ updating(int model)
         if(E[i][j][0]>=maxi) maxi=E[i][j][0];
         if(E[i][j][0]<=mini) mini=E[i][j][0];
       }
-    printf("Max. x-elec.field = %g\n",maxi);
-    printf("Min. x-elec.field = %g\n",mini);
+    printf("Max. x-elec.field = %g V/m\n",maxi);
+    printf("Min. x-elec.field = %g V/m\n",mini);
 // Max and Min of y-component of electric field
     maxi=E[8][8][1];
     mini=E[8][8][1];
@@ -108,8 +108,8 @@ updating(int model)
         if(E[i][j][1]>=maxi) maxi=E[i][j][1];
         if(E[i][j][1]<=mini) mini=E[i][j][1];
       }
-    printf("Max. y-elec.field = %g\n",maxi);
-    printf("Min. y-elec.field = %g\n",mini);
+    printf("Max. y-elec.field = %g V/m\n",maxi);
+    printf("Min. y-elec.field = %g V/m\n",mini);
 // Max and Min of Density
     maxi=0.;
     mini=DDmax;
@@ -124,8 +124,8 @@ updating(int model)
         if(u2d[i+2][j+2][1]<=mini) mini=u2d[i+2][j+2][1];
        }
       }
-    printf("Max. Density = %g\n",maxi);
-    printf("Min. Density = %g\n",mini);
+    printf("Max. Density = %g 1/m^3\n",maxi);
+    printf("Min. Density = %g 1/m^3\n",mini);
   }
 
 // Here we save at each step if this option has been choosed
