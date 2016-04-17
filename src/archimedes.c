@@ -416,7 +416,7 @@ For more information about these matters, see the file named COPYING.\n",
      NOVALLEY[INXGA1XAS]=1;  // only G-valley
      NOVALLEY[INXAL1XAS]=1;  // G-valley
      NOVALLEY[INXGAXXAS]=1;  // only G-valley
-     NOVALLEY[GAN]=3;        // G-1, M-L(U), G-3
+     NOVALLEY[GAN]=2;        // G-1, M-L(U), G-3
 
         for(int m = 0; m < NOAMTIA; m++) {
             for(int v1 = 1; v1 <= 6; v1++) {

@@ -362,130 +362,30 @@ void MCparameters(int material)
                 }
 
             } // loop over valleys
+        } // loop over energy
 
 
+        // Evalutation of gamma
+        GM[material] = 0.0;
+        for(ie = 1; ie <= DIME; ie++) {
+            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+                if(SWK[material][v][6][ie] > GM[material]) {
+                    GM[material] = SWK[material][v][6][ie];
+                }
+            }
+        }
+        printf("GAMMA[%s] = %g \n", f_material, GM[material]);
+        for(ie = 1; ie <= DIME; ie++) {
+            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+                for(i = 1; i <= 6; i++) {
+                    SWK[material][v][i][ie] /= GM[material];
+                }
+            }
+        }
+    }
 
-// Impurity scattering
-   if(IMPURITYPHONONS==ON){
-    finalenergy=initialenergy;
-    sef=sqrt(finalenergy*(1.+alphaK[material][1]*finalenergy));
-    ak=SMH[material][1]*sef;
-    qq=QD2*(4.*ak*ak+QD2);
-    wk=bimp/qq*sef*dos1*(1.+2.*alphaK[material][1]*finalenergy);
-    if(wk>1.e14) wk=1.e14;
-    SWK[material][1][6][ie]=SWK[material][1][5][ie]+wk;
-   }
-   else {
-    // NO IMPURITY SCATTERING
-    SWK[material][1][6][ie]=SWK[material][1][5][ie]+0.0;
-   }
-// L-valley
-// ========
-   if(OPTICALPHONONS==ON){
-// Polar optical phonon
-// Emission
-    finalenergy=initialenergy-HWO[material][0];
-    if(finalenergy>0.){
-      sef=sqrt(finalenergy);
-      qmax=sef+sei;
-      qmin=sei-sef;
-      SWK[material][2][1][ie]=poe*SMH[material][2]*sei/initialenergy/Q*log(qmax/qmin);
-    }
-    else SWK[material][2][1][ie]=0.;
-// Absorption
-    finalenergy=initialenergy+HWO[material][0];
-    sef=sqrt(finalenergy);
-    qmax=sef+sei;
-    qmin=sef-sei;
-    SWK[material][2][2][ie]=SWK[material][2][1][ie]
-                 +poa*SMH[material][2]*sei/initialenergy/Q*log(qmax/qmin);
-// Non-polar optical phonon
-// Emission
-    finalenergy=initialenergy-hwe;
-    if(finalenergy>0.){
-      sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-      SWK[material][2][3][ie]=SWK[material][2][2][ie]
-                   +(z2-1.)*eqe*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-    }
-    else SWK[material][2][3][ie]=SWK[material][2][2][ie];
-// Absorption
-    finalenergy=initialenergy+hwe;
-    sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-    SWK[material][2][4][ie]=SWK[material][2][3][ie]
-                 +(z2-1.)*eqa*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-
-// Emission
-    finalenergy=initialenergy-hwij+EMIN[material][2]-EMIN[material][1];
-    if(finalenergy>0.){
-     sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-     SWK[material][2][5][ie]=SWK[material][2][4][ie]
-                            +ope*sef*dos1*(1.+2.*alphaK[material][2]*finalenergy);
-    }
-    else SWK[material][2][5][ie]=SWK[material][2][4][ie];
-// Absorption
-    finalenergy=initialenergy+hwij+EMIN[material][2]-EMIN[material][1];
-    if(finalenergy>0.){
-     sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-     SWK[material][2][6][ie]=SWK[material][2][5][ie]
-                            +opa*sef*dos1*(1.+2.*alphaK[material][2]*finalenergy);
-    }
-    else SWK[material][2][6][ie]=SWK[material][2][5][ie];
-   }
-   else {
-      // NO OPTICAL SCATTERING
-      SWK[material][2][1][ie]=0.0;
-      SWK[material][2][2][ie]=0.0;
-      SWK[material][2][3][ie]=0.0;
-      SWK[material][2][4][ie]=0.0;
-      SWK[material][2][5][ie]=0.0;
-      SWK[material][2][6][ie]=0.0;
-   }
-   if(ACOUSTICPHONONS==ON){
-// Acoustic phonon
-    finalenergy=initialenergy;
-    sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-    SWK[material][2][7][ie]=SWK[material][2][6][ie]
-                           +aco*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-   }
-   else {
-      // NO ACOUSTIC SCATTERING
-      SWK[material][2][7][ie]=SWK[material][2][6][ie]+0.0;
-   }
-// ==================
-// --->  } <--- This is a bug! Removed by J.M.Sellier on 24 dec.2006 (SR)
-// (Thanks to Kun-Yuan Xu who helped me to find it!)
-// ==================
-   if(IMPURITYPHONONS==ON){
-// Impurity scattering
-    finalenergy=initialenergy;
-    sef=sqrt(finalenergy*(1.+alphaK[material][2]*finalenergy));
-    ak=SMH[material][2]*sef;
-    qq=QD2*(4.*ak*ak+QD2);
-    wk=bimp/qq*sef*dos2*(1.+2.*alphaK[material][2]*finalenergy);
-    if(wk>1.e14) wk=1.e14;
-    SWK[material][2][8][ie]=SWK[material][2][7][ie]+wk;
-   }
-   else {
-    // NO IMPURITY SCATTERING
-    SWK[material][2][8][ie]=SWK[material][2][7][ie]+0.0;
-   }
-  } // <--- this is the correct place for the symbol } (J.M.Sellier,24/12/2006)
-// Evalutation of gamma
-  GM[material]=SWK[material][1][6][1];
-  for(ie=1;ie<=DIME;ie++){
-    if(SWK[material][1][6][ie]>GM[material]) GM[material]=SWK[material][1][6][ie];
-    if(SWK[material][2][8][ie]>GM[material]) GM[material]=SWK[material][2][8][ie];
-  }
-  printf("GAMMA[%d] = %g \n",material, GM[material]);
-  for(i=1;i<=6;i++)
-    for(ie=1;ie<=DIME;ie++)
-      SWK[material][1][i][ie]/=GM[material];
-  for(i=1;i<=8;i++)
-    for(ie=1;ie<=DIME;ie++)
-      SWK[material][2][i][ie]/=GM[material];
- }
-// End of two-valleys materials
-// ############################
+    // End of two-valleys materials
+    // ############################
 
 // Material = one valley
 // #####################
