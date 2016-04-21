@@ -76,7 +76,7 @@ inline particle_t creation(int i,real t,int edge)
         iv = 1;
         iaux = 0;
     }
-    else if(NOVALLEY[i_dom[ii][j]] == 2) {
+    else if(NOVALLEY[i_dom[ii][j]] >= 2) {
         iv = iaux = 1;
         // 20% of the created particles belongs to the L-valley
         if(rnd() >= 0.8) { iv = iaux = 2; }

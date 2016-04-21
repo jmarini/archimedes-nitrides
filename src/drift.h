@@ -44,7 +44,7 @@ void drift(particle_t *particle, real tau)
     mc_particle_coords(particle, &i, &j);
 
     if(NOVALLEY[i_dom[i][j]] == 1) { iaux = 0; }
-    if(NOVALLEY[i_dom[i][j]] == 2) { iaux = particle->valley; }
+    if(NOVALLEY[i_dom[i][j]] >= 2) { iaux = particle->valley; }
 
     // Electron drift process
     // second order Runge-Kutta method

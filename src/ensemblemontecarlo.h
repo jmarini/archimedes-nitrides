@@ -32,8 +32,7 @@
 
 // Ensemble Monte Carlo method
 
-void EMC(void)
-{
+void EMC(void) {
     long int n=1;  // index of current particle
     int i, ni, j, npt[NXM+NYM+1][4];
     real tdt, ti, tau;
