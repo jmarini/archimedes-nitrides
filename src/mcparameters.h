@@ -350,15 +350,15 @@ void MCparameters(int material)
                     real gamma = finalenergy * Q * gamma1;
                     real sqgamma = sqrt(gamma);
 
-                    real prefactor = Q*Q * KAV[material]*KAV[material] * BKTQ * Q / (HBAR * HBAR * eps * 8 * PI);
+                    real prefactor = Q*Q * KAV[material] * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
                     real qd2 = Q * Q * mstar[v] * pow(3.0 * CIMP, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
                     real a = mstar[v] * finalenergy * Q / (HBAR * HBAR * qd2);
-                    real screening = log(1. + a) - 1. / (1. + 1. / a);
+                    real screening = log(1. + a) - a / (1. + a);
                     real rate = prefactor * sqrt(mstar[v] / 2.) * gamma2 * screening / sqgamma;
-                    printf("%g,%g\n", initialenergy, rate);
+                    SWK[material][v][7][ie] = SWK[material][v][6][ie] + rate;
                 }
                 else {
-                    //
+                    SWK[material][v][7][ie] = 0.;
                 }
 
             } // loop over valleys
@@ -369,15 +369,15 @@ void MCparameters(int material)
         GM[material] = 0.0;
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
-                if(SWK[material][v][6][ie] > GM[material]) {
-                    GM[material] = SWK[material][v][6][ie];
+                if(SWK[material][v][7][ie] > GM[material]) {
+                    GM[material] = SWK[material][v][7][ie];
                 }
             }
         }
         printf("GAMMA[%s] = %g\n", f_material, GM[material]);
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
-                for(i = 1; i <= 6; i++) {
+                for(i = 1; i <= 7; i++) {
                     SWK[material][v][i][ie] /= GM[material];
                 }
             }
