@@ -30,6 +30,11 @@
 // Last modif. : 17 apr.2016, J. Marini
 // ######################################################
 
+
+// =========================
+// Band Structure Parameters
+// =========================
+
 // Number of valleys
 NOVALLEY[SILICON]   = 1;  // X-valley
 NOVALLEY[GERMANIUM] = 1;  // G-valley
@@ -49,16 +54,12 @@ NOVALLEY[INXAL1XAS] = 1;  // G-valley
 NOVALLEY[INXGAXXAS] = 1;  // only G-valley
 NOVALLEY[GAN]       = 2;  // G-1, M-L(U), G-3
 
+
 // Number of equivalent valleys
 // Scattering from first index to second index
 // Repeated indexes mean scattering between equivalent valleys
-for(int m = 0; m < NOAMTIA; m++) {
-   for(int v1 = 1; v1 <= 6; v1++) {
-       for(int v2 = 1; v2 <= 6; v2++) {
-           ZSCATTER[m][v1][v2] = 0.;
-       }
-   }
-}
+memset(ZSCATTER, 0, sizeof(ZSCATTER[0][0][0]) * NOAMTIA * 6 * 6);
+
 ZSCATTER[GAAS][1][1] = 0; // G -> G
 ZSCATTER[GAAS][1][2] = 4; // G -> L
 ZSCATTER[GAAS][1][3] = 3; // G -> X
@@ -78,6 +79,56 @@ ZSCATTER[GAN][2][3] = 1; // ML -> G3
 ZSCATTER[GAN][3][1] = 1; // G3 -> G1
 ZSCATTER[GAN][3][2] = 6; // G3 -> ML
 ZSCATTER[GAN][3][3] = 0; // G3 -> G3
+
+
+// Band minimum energy  - relative to CBM (eV)
+// first valley
+EMIN[SILICON][1]   = 0.0;    // Sellier, Fischetti, etc.
+EMIN[GERMANIUM][1] = 0.173;
+EMIN[GAAS][1]      = 0.0;    // Tomizawa
+EMIN[INSB][1]      = 0.0;
+EMIN[ALSB][1]      = 0.507;
+EMIN[ALAS][1]      = 0.767;
+EMIN[ALP][1]       = 1.237;
+EMIN[GAP][1]       = 0.496;
+EMIN[GASB][1]      = 0.0;
+EMIN[INAS][1]      = 0.0;
+EMIN[INP][1]       = 0.0;
+EMIN[GAN][1]       = 0.0;    // G-1
+// second valley
+EMIN[GAAS][2]      = 0.323;  // L
+EMIN[GAN][2]       = 1.9;    // L-M
+// third valley
+EMIN[GAAS][3]      = 0.48;   // X
+EMIN[GAN][3]       = 2.1;    // G-2
+
+
+// Definition of effective mass for all materials in all valleys
+MSTAR[SILICON][1]   = 0.32;    // see Sellier, Tomizawa, etc.
+MSTAR[GAAS][1]      = 0.067;   // Gamma-valley -- see Tomizawa
+MSTAR[GAAS][2]      = 0.350;   // L-valley     -- see Tomizawa
+MSTAR[GAAS][3]      = 0.27;    // X-valley
+MSTAR[GERMANIUM][1] = 0.12;    // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
+MSTAR[INSB][1]      = 0.0135;  // Gamma-valley -- see Ram-Mohan
+MSTAR[ALSB][1]      = 0.14;    // Gamma-valley -- See Ram-Mohan
+MSTAR[ALAS][1]      = 0.149;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+MSTAR[ALP][1]       = 0.22;    // Gamma-valley -- see Ram-Mohan
+MSTAR[GAP][1]       = 0.13;    // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+MSTAR[GASB][1]      = 0.039;   // Gamma-valley -- see Ram-Mohan
+MSTAR[INAS][1]      = 0.026;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+MSTAR[INP][1]       = 0.0795;  // Gamma-valley -- see Ram-Mohan
+MSTAR[GAN][1]       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
+MSTAR[GAN][2]       = 0.4;     // L-M -- Bhapkar & Shur
+MSTAR[GAN][3]       = 0.6;     // G-2 -- Bhapkar & Shur
+
+
+// non-parabolicity coefficients (1/eV)
+alphaK[SILICON][1]   = 0.5;    // see Sellier, Tomizawa
+alphaK[GERMANIUM][1] = 0.3;  // Gamma valley - Jacoboni Reggiani
+alphaK[GAN][1]       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
+alphaK[GAN][2]       = 0.065;      // L-M -- Bhapkar & Shur
+alphaK[GAN][3]       = 0.029;      // G-2 -- Bhapkar & Shur
+
 
 // Dielectric constant for Silicon Oxide SiO2
 // see http://en.wikipedia.org/wiki/Relative_permittivity
@@ -139,7 +190,7 @@ HWO[GASB][0]      = 0.02529;  // Fischetti
 HWO[INAS][0]      = 0.03008;  // Fischetti
 HWO[INP][0]       = 0.04240;  // Fischetti
 HWO[GAN][0]       = 0.09212;  // LO -- E. Bellotti & F. Bertazzi
-// HWO[GAN][1]       = 0.06955;  // TO -- E. Bellotti & F. Bertazzi
+HWO[GAN][1]       = 0.06955;  // TO -- E. Bellotti & F. Bertazzi
 
 // Optical coupling constants (eV/m)
 DTK[SILICON][0]   = 0.05e11;  // Jacoboni Reggiani
@@ -164,7 +215,7 @@ DTK[GASB][0]      = 0.94e11;  // see ???
 DTK[INAS][0]      = 3.59e11;  // see ???
 DTK[INP][0]       = 2.46e11;  // see ???
 DTK[GAN][0]       = 1.0e11;   // E. Bellotti & F. Bertazzi
-// DTK[GAN][1]       = 1.0e11;   // E. Bellotti & F. Bertazzi
+DTK[GAN][1]       = 1.0e11;   // E. Bellotti & F. Bertazzi
 
 // Optical phonon Z-factor
 ZF[SILICON][0]   = 1.;  // Sellier
@@ -228,51 +279,6 @@ UL[INAS]      = 4.28e3;  // Fischetti
 UL[INP]       = 5.13e3;  // Fischetti
 UL[GAN]       = 6.56e3;  // Foutz, O'Leary, Shur, Eastman
 
-// Band minimum energy  - relative to CBM (eV)
-// first valley
-EMIN[SILICON][1]   = 0.0;    // Sellier, Fischetti, etc.
-EMIN[GERMANIUM][1] = 0.173;
-EMIN[GAAS][1]      = 0.0;    // Tomizawa
-EMIN[INSB][1]      = 0.0;
-EMIN[ALSB][1]      = 0.507;
-EMIN[ALAS][1]      = 0.767;
-EMIN[ALP][1]       = 1.237;
-EMIN[GAP][1]       = 0.496;
-EMIN[GASB][1]      = 0.0;
-EMIN[INAS][1]      = 0.0;
-EMIN[INP][1]       = 0.0;
-EMIN[GAN][1]       = 0.0;    // G-1
-// second valley
-EMIN[GAAS][2]      = 0.323;  // L
-EMIN[GAN][2]       = 1.9;    // L-M
-// third valley
-EMIN[GAAS][3]      = 0.48;   // X
-EMIN[GAN][3]       = 2.1;    // G-2
-
-// Definition of effective mass for all materials in all valleys
-MSTAR[SILICON][1]   = 0.32;    // see Sellier, Tomizawa, etc.
-MSTAR[GAAS][1]      = 0.067;   // Gamma-valley -- see Tomizawa
-MSTAR[GAAS][2]      = 0.350;   // L-valley     -- see Tomizawa
-MSTAR[GAAS][3]      = 0.27;    // X-valley
-MSTAR[GERMANIUM][1] = 0.12;    // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
-MSTAR[INSB][1]      = 0.0135;  // Gamma-valley -- see Ram-Mohan
-MSTAR[ALSB][1]      = 0.14;    // Gamma-valley -- See Ram-Mohan
-MSTAR[ALAS][1]      = 0.149;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-MSTAR[ALP][1]       = 0.22;    // Gamma-valley -- see Ram-Mohan
-MSTAR[GAP][1]       = 0.13;    // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-MSTAR[GASB][1]      = 0.039;   // Gamma-valley -- see Ram-Mohan
-MSTAR[INAS][1]      = 0.026;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-MSTAR[INP][1]       = 0.0795;  // Gamma-valley -- see Ram-Mohan
-MSTAR[GAN][1]       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
-MSTAR[GAN][2]       = 0.4;     // L-M -- Bhapkar & Shur
-MSTAR[GAN][3]       = 0.6;     // G-2 -- Bhapkar & Shur
-
-// non-parabolicity coefficients (1/eV)
-alphaK[SILICON][1]   = 0.5;    // see Sellier, Tomizawa
-alphaK[GERMANIUM][1] = 0.3;  // Gamma valley - Jacoboni Reggiani
-alphaK[GAN][1]       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
-alphaK[GAN][2]       = 0.065;      // L-M -- Bhapkar & Shur
-alphaK[GAN][3]       = 0.029;      // G-2 -- Bhapkar & Shur
 
 // Lattice constants (m)
 LATTCONST[GAAS]      = 565.35e-12;   // CODATA
