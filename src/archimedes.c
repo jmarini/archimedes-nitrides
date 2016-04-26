@@ -110,6 +110,7 @@
 extern inline int mc_does_particle_exist(particle_t *particle);
 extern inline void mc_remove_particle(particle_t *particle);
 extern inline real mc_particle_ksquared(particle_t *particle);
+extern inline real mc_particle_k(particle_t *particle);
 // ===============================
 
 // All integers here...

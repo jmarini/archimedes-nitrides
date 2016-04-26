@@ -60,4 +60,8 @@ inline real mc_particle_ksquared(particle_t *particle) {
             particle->kz * particle->kz);
 }
 
+inline real mc_particle_k(particle_t *particle) {
+    return sqrt(mc_particle_ksquared(particle));
+}
+
 #endif
