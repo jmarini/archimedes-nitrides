@@ -97,10 +97,10 @@ EMIN[INP][1]       = 0.0;
 EMIN[GAN][1]       = 0.0;    // G-1
 // second valley
 EMIN[GAAS][2]      = 0.323;  // L
-EMIN[GAN][2]       = 1.9;    // L-M
+EMIN[GAN][2]       = 2.1;    // L-M
 // third valley
 EMIN[GAAS][3]      = 0.48;   // X
-EMIN[GAN][3]       = 2.1;    // G-2
+EMIN[GAN][3]       = 1.9;    // G-2
 
 
 // Definition of effective mass for all materials in all valleys
