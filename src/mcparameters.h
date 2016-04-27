@@ -141,11 +141,14 @@ void MCparameters(int material)
         // scattering rate files, indexed by scattering type and valley number
         //   1: Polar Optical Emission
         //   2: Polar Optical Absorption
-        //   3: Non-polar Optical Emission
-        //   4: Non-polar Optical Absorption
-        //   5: Acoustic Phonon
-        //   6: Impurity Scattering
-        FILE * scattering_rates[7][MAX_VALLEYS][MAX_VALLEYS];
+        //   3: Non-polar Optical Emission    V->1
+        //   4: Non-polar Optical Absorption  V->1
+        //   5: Non-polar Optical Emission    V->2
+        //   6: Non-polar Optical Absorption  V->2
+        //   7: Acoustic Phonon
+        //   8: Impurity Scattering
+        //   9: Piezoelectric Scattering
+        FILE * scattering_rates[10][MAX_VALLEYS];
 
         char *f_band_model = mc_band_model_name(CONDUCTION_BAND);
         char *f_material = mc_material_name(material);
@@ -153,21 +156,24 @@ void MCparameters(int material)
             "unknown",
             "pop_emission",  "pop_absorption",
             "npop_emission", "npop_absorption",
-            "ac_elastic",    "imp_elastic"
+            "npop_emission", "npop_absorption",
+            "ac_elastic",    "imp_elastic",
+            "piezo_elastic"
         };
         char filename[150];
 
-        for(int s = 1; s <= 6; ++s ) {
+        for(int s = 1; s <= 9; ++s ) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
-                if(s == 3 || s == 4) { // NPOP Inter-valley
+                if(s >= 3 && s <= 6) {
                     for(int v2 = 1; v2 <= NOVALLEY[material]; ++v2) {
                         sprintf(filename, "%s_%d-%d-%s-%s.csv", f_scattering[s], v, v2, f_material, f_band_model);
-                        scattering_rates[s][v][v2] = fopen(filename, "w");
+                        scattering_rates[s][v] = fopen(filename, "w");
                     }
+                    int v2 = 1;
                 }
                 else {
                     sprintf(filename, "%s_%d-%s-%s.csv", f_scattering[s], v, f_material, f_band_model);
-                    scattering_rates[s][v][0] = fopen(filename, "w");
+                    scattering_rates[s][v] = fopen(filename, "w");
                 }
             }
         }
@@ -190,7 +196,7 @@ void MCparameters(int material)
                         SWK[material][v][i][ie] = SWK[material][v][i-1][ie];
 
                         real prefactor = 0.;
-                        FILE *f = scattering_rates[i][v][0];
+                        FILE *f = scattering_rates[i][v];
                         // Emission
                         if(i == 1) {
                             finalenergy = initialenergy - HWO[material][0];
@@ -242,11 +248,13 @@ void MCparameters(int material)
                     for(int v2 = 1; v2 <= NOVALLEY[material]; ++v2) {
                         // scatter from valley v -> v2
                         // when v == v2, scattering to equivalent valley
-                        for(int i = 3; i <= 4; ++i) {
+                        for(int n = 1; n <=2; ++n) {
+                            int i = 2 * v2 + n;
+                            if(ie == 1) { printf("i=%d v=%d v2=%d\n", i, v, v2); }
                             SWK[material][v][i][ie] = SWK[material][v][i-1][ie];
 
                             real prefactor = 0.;
-                            FILE *f = scattering_rates[i][v][v2];
+                            FILE *f = scattering_rates[i][v];
 
                             // Emission
                             if(i == 3) {
@@ -283,7 +291,7 @@ void MCparameters(int material)
                     } // secondary loop over valleys
                 }
                 else { // no optical phonon scattering
-                    for(int i = 1; i <= 4; ++i) {
+                    for(int i = 1; i <= 2 * NOVALLEY[material] + 2; ++i) {
                         SWK[material][v][i][ie] = 0.;
                     }
                 } // optical phonon scattering
@@ -292,6 +300,7 @@ void MCparameters(int material)
                 // == Acoustic Phonon Scattering ==
                 // ================================
                 if(ACOUSTICPHONONS == ON) {
+                    int i = 7;
                     finalenergy = initialenergy; // elastic scattering assumption
 
                     real gamma1 = 1. +      alpha[v] * finalenergy;
@@ -306,18 +315,20 @@ void MCparameters(int material)
 
                     rate = aco * Q * dos[v] * sqgamma * gamma2 * overlap;
 
-                    fprintf(scattering_rates[5][v][0], "%g,%g\n", initialenergy, rate);
-                    SWK[material][v][5][ie] = SWK[material][v][4][ie] + rate;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    SWK[material][v][i][ie] = SWK[material][v][i-1][ie] + rate;
                 }
                 else { // no acoustic phonon scattering
-                    SWK[material][v][5][ie] = 0.;
-                    fprintf(scattering_rates[5][v][0], "%g,%g\n", initialenergy, 0.);
+                    int i = 7;
+                    SWK[material][v][i][ie] = 0.;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
                 } // acoustic phonon scattering
 
                 // =========================
                 // == Impurity Scattering ==
                 // =========================
                 if(IMPURITYPHONONS == ON) {
+                    int i = 8;
                     finalenergy = initialenergy; // elastic scattering
 
                     real gamma1 = 1. +      alpha[v] * finalenergy;
@@ -334,15 +345,17 @@ void MCparameters(int material)
                     real screening = qd2 * (4. * k2 + qd2);
 
                     rate = prefactor * sqgamma * gamma2 * dos[v] / screening;
-                    fprintf(scattering_rates[6][v][0], "%g,%g\n", initialenergy, rate);
-                    SWK[material][v][6][ie] = SWK[material][v][5][ie] + rate;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    SWK[material][v][i][ie] = SWK[material][v][i-1][ie] + rate;
                 }
                 else { // no impurity scattering
-                    SWK[material][v][6][ie] = 0.;
-                    fprintf(scattering_rates[6][v][0], "%g,%g\n", initialenergy, 0.);
+                    int i = 8;
+                    SWK[material][v][i][ie] = 0.;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
                 } // impurity scattering
 
                 if(PIEZOELECTRIC == ON) {
+                    int i = 9;
                     finalenergy = initialenergy; // elastic scattering
 
                     real gamma1 = 1. +      alpha[v] * finalenergy;
@@ -355,10 +368,13 @@ void MCparameters(int material)
                     real a = mstar[v] * finalenergy * Q / (HBAR * HBAR * qd2);
                     real screening = log(1. + a) - a / (1. + a);
                     real rate = prefactor * sqrt(mstar[v] / 2.) * gamma2 * screening / sqgamma;
-                    SWK[material][v][7][ie] = SWK[material][v][6][ie] + rate;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    SWK[material][v][i][ie] = SWK[material][v][i-1][ie] + rate;
                 }
                 else {
-                    SWK[material][v][7][ie] = 0.;
+                    int i = 9;
+                    fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
+                    SWK[material][v][i][ie] = 0.;
                 }
 
             } // loop over valleys
@@ -369,15 +385,15 @@ void MCparameters(int material)
         GM[material] = 0.0;
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
-                if(SWK[material][v][7][ie] > GM[material]) {
-                    GM[material] = SWK[material][v][7][ie];
+                if(SWK[material][v][9][ie] > GM[material]) {
+                    GM[material] = SWK[material][v][9][ie];
                 }
             }
         }
         printf("GAMMA[%s] = %g\n", f_material, GM[material]);
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
-                for(i = 1; i <= 7; i++) {
+                for(i = 1; i <= 9; i++) {
                     SWK[material][v][i][ie] /= GM[material];
                 }
             }
