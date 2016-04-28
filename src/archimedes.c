@@ -60,7 +60,7 @@
 #define MN3 4                  // number of summary values to save per cell
 #define NXM 308                // maximum number of cells in x-direction
 #define NYM 308                // maximum number of cells in y-direction
-#define DIME 1003              // maximum number of points in energy mesh
+#define DIME 3003              // maximum number of points in energy mesh
 #define ITMAX 10000000         // maximum number of monte carlo iterations
 #define POISSONITMAX 1500      // maximum number of poisson iterations
 #define SMALL 1.e-5            // defines what is a "small" number/delta

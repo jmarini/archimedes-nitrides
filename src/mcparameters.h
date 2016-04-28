@@ -165,11 +165,9 @@ void MCparameters(int material)
         for(int s = 1; s <= 9; ++s ) {
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
                 if(s >= 3 && s <= 6) {
-                    for(int v2 = 1; v2 <= NOVALLEY[material]; ++v2) {
-                        sprintf(filename, "%s_%d-%d-%s-%s.csv", f_scattering[s], v, v2, f_material, f_band_model);
-                        scattering_rates[s][v] = fopen(filename, "w");
-                    }
-                    int v2 = 1;
+                    int v2 = (int)((s - 1) / 2);
+                    sprintf(filename, "%s_%d-%d-%s-%s.csv", f_scattering[s], v, v2, f_material, f_band_model);
+                    scattering_rates[s][v] = fopen(filename, "w");
                 }
                 else {
                     sprintf(filename, "%s_%d-%s-%s.csv", f_scattering[s], v, f_material, f_band_model);
@@ -250,25 +248,23 @@ void MCparameters(int material)
                         // when v == v2, scattering to equivalent valley
                         for(int n = 1; n <=2; ++n) {
                             int i = 2 * v2 + n;
-                            if(ie == 1) { printf("i=%d v=%d v2=%d\n", i, v, v2); }
                             SWK[material][v][i][ie] = SWK[material][v][i-1][ie];
 
                             real prefactor = 0.;
-                            FILE *f = scattering_rates[i][v];
 
                             // Emission
-                            if(i == 3) {
+                            if(n == 1) {
                                 finalenergy = initialenergy - hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
                                 prefactor = ope * Q;
                             }
                             // Absorption
-                            if(i == 4) {
+                            if(n == 2) {
                                 finalenergy = initialenergy + hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
                                 prefactor = opa * Q;
                             }
 
                             if(finalenergy <= 0.) { // Negative energy, ignore
-                                fprintf(f, "%g,%g\n", initialenergy, 0.);
+                                fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
                                 SWK[material][v][i][ie] += 0.;
                             }
                             else {
@@ -284,7 +280,7 @@ void MCparameters(int material)
                                 zf = ZSCATTER[material][v][v2];
 
                                 rate = prefactor * zf * dos[v2] * sqgamma_final * gamma2_final * overlap;
-                                fprintf(f, "%g,%g\n", initialenergy, rate);
+                                fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
                                 SWK[material][v][i][ie] += rate;
                             }
                         } // NPOP scattering
@@ -396,6 +392,12 @@ void MCparameters(int material)
                 for(i = 1; i <= 9; i++) {
                     SWK[material][v][i][ie] /= GM[material];
                 }
+            }
+        }
+
+        for(int i = 1; i <= 9; ++i) {
+            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+                fclose(scattering_rates[i][v]);
             }
         }
     }
