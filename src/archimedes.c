@@ -177,7 +177,6 @@ real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array 
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
 real KX, KY, KZ;                    // particle Kx, Ky, Kz
-real TS;                            // time for particle
 real X, Y;                          // particle x & y
 real EPP;                           // number of carriers per particle (?)
 real DDmax;

@@ -39,6 +39,7 @@ inline particle_t creation(int i,real t,int edge)
     int iaux;
     int iv;
     int ii, j;
+    real ts = 0.0;
     real c1, c2, c3, c4, c5, c6, c7;
 
     // We assume that the particles are initially
@@ -92,11 +93,11 @@ inline particle_t creation(int i,real t,int edge)
     KX = c2 * c3;
     KY = c2 * c4 * c6;
     KZ = c2 * c4 * c7;
-    TS = t - log(rnd()) / GM[i_dom[ii][j]];
+    ts = t - log(rnd()) / GM[i_dom[ii][j]];
     if(edge == direction_t.TOP)   { KY *= -1.; }
     if(edge == direction_t.RIGHT) { KX *= -1.; }
 
-    return (particle_t){.valley=iv, .t=TS, .kx=KX, .ky=KY, .kz=KZ, .x=X, .y=Y};
+    return (particle_t){.valley=iv, .t=ts, .kx=KX, .ky=KY, .kz=KZ, .x=X, .y=Y};
 }
 
 // =================================================
