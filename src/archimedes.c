@@ -123,7 +123,6 @@ int nx, ny;              // number of cells in x- and y-directions
 int ISEED;               // seed for random number generator, starts at 38467
 int NP1;                 // number of particles in n+ cell, defaults to 2500
 int INUM;                // number of electrons sumulated
-int IV;                  // index of which valley a particle is in, 9 means eliminated
 int c;                   // iteration number
 int Model_Number;        // enum, controls which simulation model is used, values include MCE, MCH, MCEH, MEPE, MEPH, MEPEH, defaults to MCE
 int File_Format;         // enum, controls which file format to output to, values include GNUPLOTFORMAT and MESHFORMAT, defaults to GNUPLOTFORMAT

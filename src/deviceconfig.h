@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void MCdevice_config(void) {
     long int n = 0;
     int i, j, np, m;
+    int valley = 0;
     real c1,
          c2,
          c3,
@@ -71,25 +72,25 @@ void MCdevice_config(void) {
                     // valley in the starting simulation time, while the other 20% are
                     // in the L-valley.
                     if(leid_flag == 0) {
-                        IV=1;
+                        valley=1;
                         c1=log(rnd());
                         if(NOVALLEY[i_dom[i][j]]==1) {
                             c2=SMH[i_dom[i][j]][0]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*BKTQ*c1));
                         }
                         if(NOVALLEY[i_dom[i][j]]>=2){
                             // 80% of the created particles goes in the first valley
-                            IV=1;
-                            c2=SMH[i_dom[i][j]][IV]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*BKTQ*c1));
+                            valley=1;
+                            c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*BKTQ*c1));
                             // 20% of the created particles goes in the second valley
                             if(rnd()>0.8){
-                                IV=2;
-                                c2=SMH[i_dom[i][j]][IV]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*BKTQ*c1));
+                                valley=2;
+                                c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*BKTQ*c1));
                             }
                         }
                     }
                     // The following is in case of precendtly loaded initial data.
                     else if(leid_flag == 1) {
-                        IV=1;
+                        valley=1;
                         // In this case c1 represents the mean electron energy
                         // loaded from precedent simulations and have nothing to
                         // do with the lattice energy.
@@ -98,11 +99,11 @@ void MCdevice_config(void) {
                             c2=SMH[i_dom[i][j]][0]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*c1));
                         }
                         if(NOVALLEY[i_dom[i][j]]>=2){
-                            IV=1;
-                            c2=SMH[i_dom[i][j]][IV]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*c1));
+                            valley=1;
+                            c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*c1));
                             if(rnd()>0.8){
-                                IV=2;
-                                c2=SMH[i_dom[i][j]][IV]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*c1));
+                                valley=2;
+                                c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*c1));
                             }
                         }
                     }
@@ -111,7 +112,7 @@ void MCdevice_config(void) {
                     c5=2.*PI*rnd();
                     c6=sin(c5);
                     c7=cos(c5);
-                    P[n].valley = IV;
+                    P[n].valley = valley;
                     P[n].kx = c2 * c3 * c6;
                     P[n].ky = c2 * c4 * c6;
                     P[n].kz = c2 * c7;
@@ -129,7 +130,7 @@ void MCdevice_config(void) {
 
     INUM = n;
     for(i=1;i<=nx+1;i++) {
-        for(j=1;j<=ny+1;j++){
+        for(j=1;j<=ny+1;j++) {
             u2d[i][j][2]=0.;
             u2d[i][j][3]=0.;
             u2d[i][j][4]=0.;
