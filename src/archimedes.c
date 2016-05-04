@@ -252,7 +252,7 @@ static char *progname;
 #include "electric_field.h"
 #include "faraday.h"
 #include "random.h"
-#include "mcparameters.h"
+#include "scattering_rates.h"
 #include "deviceconfig.h"
 #include "particlecreation.h"
 #include "drift.h"
@@ -582,7 +582,7 @@ int main(int argc, char *argv[]) {
     if(Model_Number == MCE || Model_Number == MCEH) {
         int i;
         for(i = 0; i < NOAMTIA; i++) {
-            MCparameters(i);
+            calc_scattering_rates(i);
         }
         printf("Scattering rates calculated...\n");
         MCdevice_config( );

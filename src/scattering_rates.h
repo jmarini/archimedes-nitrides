@@ -1,13 +1,13 @@
-/* mcparameters.h -- This file is part of Archimedes release 1.1.0.
+/* scattering_rates.h -- This file is part of Archimedes release 1.1.0.
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method. It is now able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
    Copyright (C) 2004-2011 Jean Michel Sellier <jeanmichel.sellier@gmail.com>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -25,24 +25,23 @@
 
 // ######################################################
 // Created on 05 sep.2004, Siracusa, J.M.Sellier
-// Last modif. : 18 Aug.2011, Carry le Rouet, France, J.M.Sellier
+// Last modif. : 04 may.2016, J. Marini
 // ######################################################
 
 // Definition of the variables needed for taking into
 // account scatterings from acoustic and optical,non-polar
 // phonons (which are the most relevant scatterings in common semiconductors like Silicon)
 
-void MCparameters(int material)
-{
-    real wo,no,dos,aco,oge[7],oga[7];
-    real dos1,dos2,am1,am2,cl,deq,dij;
+void calc_scattering_rates(int material) {
+    real wo,no,aco,oge[7],oga[7];
+    real cl,deq,dij;
     real hwe,hwij,wij,we,ne,nij;
     real poe,poa,ope,opa,eqe,eqa,qmin,qmax;
     real initialenergy,sei,finalenergy,sef;
     real eps,epf,ep,bimp,cimp,qd;
     real ak,qq,wk;
     int ie,i;
-    real z2=4., zf;
+    real zf = 0.;
     real gamma1_initial, gamma1_final,
          gamma2_initial, gamma2_final,
          gamma_initial,  gamma_final,
@@ -58,9 +57,6 @@ void MCparameters(int material)
     // Material with 2 valleys
     // #######################
     if(NOVALLEY[material] >= 2) {
-        // Effective mass for the GAMMA and L-Valley, respectively
-        am1 = MSTAR[material][1] * M;
-        am2 = MSTAR[material][2] * M;
         // Dielectric constant - static, hi-freq and combination
         eps = EPSR[material] * EPS0;
         epf = EPF[material]  * EPS0;
@@ -73,13 +69,6 @@ void MCparameters(int material)
         cl = RHO[material] * pow(UL[material], 2.);  // rho * vs^2
         deq = dij = DTK[material][0] * Q; // deformation potential
         hwe = hwij = HWO[material][0]; // phonon energy
-
-        SMH[material][1] = sqrt(2. * am1 * Q) / HBAR;
-        SMH[material][2] = sqrt(2. * am2 * Q) / HBAR;
-        HHM[material][1] = HBAR * HBAR / (2. * am1 * Q);
-        HHM[material][2] = HBAR * HBAR / (2. * am2 * Q);
-        HM[material][1]  = HBAR / am1;
-        HM[material][2]  = HBAR / am2;
 
         // Phonon frequency
         wo  = HWO[material][0] * Q / HBAR;
@@ -101,6 +90,9 @@ void MCparameters(int material)
             dos[v] = pow(sqrt(2. * mstar[v]) / HBAR, 3.) / (2. * PI * PI);
             if(CONDUCTION_BAND == PARABOLIC) { alpha[v] = 0.; }
             else if(CONDUCTION_BAND == KANE) { alpha[v] = alphaK[material][v]; }
+            SMH[material][v] = sqrt(2. * mstar[v] * Q) / HBAR;
+            HHM[material][v] = HBAR * HBAR / (2. * mstar[v] * Q);
+            HM[material][v] = HBAR / mstar[v];
         }
 
 
@@ -124,7 +116,7 @@ void MCparameters(int material)
         //   Emission
         eqe = PI * deq / we * deq / RHO[material] / Q * (ne + 1.);
         //   Absorption
-        eqa= eqe * ne / (1. + ne);
+        eqa = eqe * ne / (1. + ne);
 
         // =========================
         // == Impurity Scattering ==
@@ -413,7 +405,7 @@ void MCparameters(int material)
   HHM[material][0]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
   HM[material][0]=HBAR/(MSTAR[material][1]*M);
 // Density of states
-  dos=pow((sqrt(2.*MSTAR[material][1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
+  real dos=pow((sqrt(2.*MSTAR[material][1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
 // constant for the acoustic phonon
   aco=2.*PI*(DA[material]/Q)*DA[material]*(BKTQ/HBAR)
      *(Q/(RHO[material]*UL[material]*UL[material]));
