@@ -176,8 +176,6 @@ real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), 
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
-real KX, KY, KZ;                    // particle Kx, Ky, Kz
-real X, Y;                          // particle x & y
 real EPP;                           // number of carriers per particle (?)
 real DDmax;
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),

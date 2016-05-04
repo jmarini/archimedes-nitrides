@@ -34,41 +34,46 @@
 // edge = 2 Upper edge
 // edge = 3 Left edge
 
-inline particle_t creation(int i,real t,int edge)
-{
+inline particle_t creation(int i, real t, int edge) {
     int iaux;
     int iv;
     int ii, j;
     real ts = 0.0;
+    real kx = 0.0,
+         ky = 0.0,
+         kz = 0.0,
+         x  = 0.0,
+         y  = 0.0,
+         z  = 0.0;
     real c1, c2, c3, c4, c5, c6, c7;
 
     // We assume that the particles are initially
     // at near thermal equilibrium
 
     // creation of the particle position vector r=(X,Y)
-    X = dx * (rnd() + (real)i - 1.5);
-    Y = dy * (rnd() + (real)i - 1.5);
+    x = dx * (rnd() + (real)i - 1.5);
+    y = dy * (rnd() + (real)i - 1.5);
     if((edge == direction_t.BOTTOM || edge == direction_t.TOP) && i == 1) {
-        X = dx * 0.5 * rnd();
+        x = dx * 0.5 * rnd();
     }
     if((edge == direction_t.BOTTOM || edge == direction_t.TOP) && i == nx) {
-        X = LX - dx * 0.5 * rnd();
+        x = LX - dx * 0.5 * rnd();
     }
-    if(edge == direction_t.BOTTOM) { Y =      dy * 0.5 * rnd(); }
-    if(edge == direction_t.TOP)    { Y = LY - dy * 0.5 * rnd(); }
+    if(edge == direction_t.BOTTOM) { y =      dy * 0.5 * rnd(); }
+    if(edge == direction_t.TOP)    { y = LY - dy * 0.5 * rnd(); }
     if((edge == direction_t.RIGHT || edge == direction_t.LEFT) && i == 1) {
-        Y = dy * 0.5 * rnd();
+        y = dy * 0.5 * rnd();
     }
     if((edge == direction_t.RIGHT || edge == direction_t.LEFT) && i == ny) {
-        Y = LY - dy * 0.5 * rnd();
+        y = LY - dy * 0.5 * rnd();
     }
-    if(edge == direction_t.RIGHT) { X = LX - dx * 0.5 * rnd(); }
-    if(edge == direction_t.LEFT)  { X =      dx * 0.5 * rnd(); }
+    if(edge == direction_t.RIGHT) { x = LX - dx * 0.5 * rnd(); }
+    if(edge == direction_t.LEFT)  { x =      dx * 0.5 * rnd(); }
 
     // creation of the particle pseudo-wave vector k=(KX,KY,KZ)
     // in the (i,j)-th cell
-    ii = (int)(X / dx + 1.5);
-    j  = (int)(Y / dy + 1.5);
+    ii = (int)(x / dx + 1.5);
+    j  = (int)(y / dy + 1.5);
     if(ii <= 1) { ii = 1; }
     if( j <= 1) {  j = 1; }
     if(ii >= nx + 1) { ii = nx + 1; }
@@ -90,14 +95,14 @@ inline particle_t creation(int i,real t,int edge)
     c5 = 2. * PI * rnd();
     c6 = sin(c5);
     c7 = cos(c5);
-    KX = c2 * c3;
-    KY = c2 * c4 * c6;
-    KZ = c2 * c4 * c7;
+    kx = c2 * c3;
+    ky = c2 * c4 * c6;
+    kz = c2 * c4 * c7;
     ts = t - log(rnd()) / GM[i_dom[ii][j]];
-    if(edge == direction_t.TOP)   { KY *= -1.; }
-    if(edge == direction_t.RIGHT) { KX *= -1.; }
+    if(edge == direction_t.TOP)   { ky *= -1.; }
+    if(edge == direction_t.RIGHT) { kx *= -1.; }
 
-    return (particle_t){.valley=iv, .t=ts, .kx=KX, .ky=KY, .kz=KZ, .x=X, .y=Y};
+    return (particle_t){.valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y};
 }
 
 // =================================================
