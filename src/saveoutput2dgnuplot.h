@@ -141,7 +141,7 @@ SaveOutput2DGNUPLOT(int je)
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(up,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
-              u2d[i][j][2]/MEDIA);
+              moving_average[i][j][2]);
       fprintf(up,"\n");
   }
 // Y-component of electronic velocity output
@@ -149,7 +149,7 @@ SaveOutput2DGNUPLOT(int je)
   for (j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(vp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
-              u2d[i][j][3]/MEDIA);
+              moving_average[i][j][3]);
       fprintf(vp,"\n");
   }
 // Electrostatic Potential
@@ -185,7 +185,7 @@ SaveOutput2DGNUPLOT(int je)
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(ep,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
-              u2d[i][j][4]/MEDIA);
+              moving_average[i][j][4]);
       fprintf(ep,"\n");
   }
 // Quantum Effective Potential

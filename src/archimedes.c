@@ -151,6 +151,8 @@ real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cel
                                     //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
                                     //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
                                     //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
+real moving_average[NXM+1][NYM+1][MN3+1];
+real moving_alpha;
 real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: hole density

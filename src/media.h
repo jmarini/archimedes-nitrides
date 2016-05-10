@@ -154,6 +154,16 @@ void media(void) {
             u2d[i][j][2] += xvel[i][j];
             u2d[i][j][3] += yvel[i][j];
             u2d[i][j][4] += ener[i][j];
+            if(TEMPO < DT) {
+                moving_average[i][j][2] = xvel[i][j];
+                moving_average[i][j][3] = yvel[i][j];
+                moving_average[i][j][4] = ener[i][j];
+            }
+            else {
+                moving_average[i][j][2] = moving_alpha * xvel[i][j] + (1. - moving_alpha) * moving_average[i][j][2];
+                moving_average[i][j][3] = moving_alpha * yvel[i][j] + (1. - moving_alpha) * moving_average[i][j][3];
+                moving_average[i][j][4] = moving_alpha * ener[i][j] + (1. - moving_alpha) * moving_average[i][j][4];
+            }
         }
     }
 }

@@ -43,17 +43,16 @@ updating(int model)
 // =================================
   Electric_Field();
   if(FARADAYFLAG) Faraday();
-// Monte Carlo Simulation
-// ======================
-  if(model==MCE || model==MCEH){
-   EMC();
-   Charge();
-   if((int)(TF/DT)-(int)(TEMPO/DT)<MEDIA){
-     media();
-   }
-   if((TEMPO+DT)>=TF) DT=TF-TEMPO;
-   TEMPO+=DT;
-  }
+
+    // Monte Carlo Simulation
+    // ======================
+    if(model == MCE || model == MCEH) {
+        EMC( );
+        Charge( );
+        media( );
+        if(TEMPO + DT >= TF) { DT = TF - TEMPO; }
+        TEMPO += DT;
+    }
 // Electron MEP Simulation
 // =======================
   if(model==MEPE || model==MEPEH){

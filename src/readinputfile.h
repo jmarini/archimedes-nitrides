@@ -78,6 +78,7 @@ Read_Input_File(void)
  TL=300.; // Lattice temperature in Kelvin
  NP1=2500; // Number of particle in n+ cell
  MEDIA=500; // Number of step on which we compute the various mean average
+ moving_alpha = 1. / (real)MEDIA;
  Quantum_Flag=0; // No quantum effects taken into account
  MAXIMINI=0; // No computation of max and min of variables during simulation
  SAVEALWAYS=0; // we don't save at each step by default
@@ -755,6 +756,7 @@ Processing the input file\n\
       exit(EXIT_FAILURE);
     }
     MEDIA=(int) num;
+    moving_alpha = 1. / (real)MEDIA;
     printf("MEDIA = %d ---> Ok\n",MEDIA);
   }
   else if(strcmp(s,"MAXIMINI")==0){
