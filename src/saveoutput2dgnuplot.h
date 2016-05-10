@@ -64,6 +64,7 @@ SaveOutput2DGNUPLOT(int je)
  FILE *ep;
  FILE *qp;
  FILE *fM;
+ FILE *vo;
  register int i,j;
 
 //if(Material==SILICON || Material==GERMANIUM){
@@ -86,6 +87,8 @@ SaveOutput2DGNUPLOT(int je)
    lyp=fopen(s,"w");
    sprintf(s,"quantum_potential00%d.xyz",je);
    qp=fopen(s,"w");
+   sprintf(s, "valley_occupation00%d.xyz", je);
+   vo = fopen(s, "w");
  }
  else if(je>9 && je<=99){
    sprintf(s,"density0%d.xyz",je);
@@ -106,6 +109,8 @@ SaveOutput2DGNUPLOT(int je)
    lyp=fopen(s,"w");
    sprintf(s,"quantum_potential0%d.xyz",je);
    qp=fopen(s,"w");
+   sprintf(s, "valley_occupation0%d.xyz", je);
+   vo = fopen(s, "w");
  }
  else{
    sprintf(s,"density%d.xyz",je);
@@ -126,6 +131,8 @@ SaveOutput2DGNUPLOT(int je)
    lyp=fopen(s,"w");
    sprintf(s,"quantum_potential%d.xyz",je);
    qp=fopen(s,"w");
+   sprintf(s, "valley_occupation%d.xyz", je);
+   vo = fopen(s, "w");
  }
 // Save the Monte Carlo results
  if(Model_Number==MCE || Model_Number==MCEH){
@@ -197,6 +204,10 @@ SaveOutput2DGNUPLOT(int je)
       fprintf(qp,"\n");
   }
 
+  for(i = 1; i <= INUM; ++i) {
+      fprintf(vo, "%d %d\n", i, valley_occupation[i]);
+  }
+
 // Closure of output files
 // =======================
    fclose(fp);
@@ -208,6 +219,7 @@ SaveOutput2DGNUPLOT(int je)
    fclose(lyp);
    fclose(ep);
    fclose(qp);
+   fclose(vo);
   }
 // Save the Hybrid MEP results
  if(Model_Number==MEPE || Model_Number==MEPEH){

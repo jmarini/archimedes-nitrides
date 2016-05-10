@@ -127,6 +127,7 @@ void media(void) {
         ener[i][j] += EMIN[i_dom[i][j]][iv];
         xvel[i][j] += xvelocity;
         yvel[i][j] += yvelocity;
+        valley_occupation[n] = P[n].valley;
     } // end loop over particles
 
     // Mean Value of the macroscopic variables
