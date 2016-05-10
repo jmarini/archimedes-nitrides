@@ -74,11 +74,11 @@ inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
     // uses globabl variables dx & dy
     *i = (int)(particle->x / dx) + 1;
     if(*i < 1) { *i = 1; }
-    if(*i > nx ) { *i = 1; }
+    if(*i > nx ) { *i = nx; }
 
     *j = (int)(particle->y / dy) + 1;
     if(*j < 1) { *j = 1; }
-    if(*j > ny ) { *j = 1; }
+    if(*j > ny ) { *j = ny; }
 }
 
 

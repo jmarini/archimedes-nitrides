@@ -44,14 +44,10 @@ void media(void) {
 
     // resetting of the electronic density
     // a simple way to avoid NaN propagation...
-    for(i = 0 ; i <= NXM; i++) {
-        for(j = 0; j <= NYM; j++) {
-            cont[i][j] = 0;
-            xvel[i][j] = 0.;
-            yvel[i][j] = 0.;
-            ener[i][j] = 0.;
-        }
-    }
+    memset(cont, 0, sizeof(cont[0][0]) * (NXM + 1) * (NYM + 1));
+    memset(xvel, 0, sizeof(xvel[0][0]) * (NXM + 1) * (NYM + 1));
+    memset(yvel, 0, sizeof(yvel[0][0]) * (NXM + 1) * (NYM + 1));
+    memset(ener, 0, sizeof(ener[0][0]) * (NXM + 1) * (NYM + 1));
 
     for(n = 1; n <= INUM; n++) {
         int iaux;
