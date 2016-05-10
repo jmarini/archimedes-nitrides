@@ -82,6 +82,7 @@ Read_Input_File(void)
  Quantum_Flag=0; // No quantum effects taken into account
  MAXIMINI=0; // No computation of max and min of variables during simulation
  SAVEALWAYS=0; // we don't save at each step by default
+ SCATTERING_OUTPUT=0; // don't output scattering rates by default
  File_Format=GNUPLOTFORMAT; // output file in mesh format
  leid_flag=0;
  SIO2_UP_FLAG=0; // No upper SiO2
@@ -770,6 +771,10 @@ Processing the input file\n\
   else if(strcmp(s,"SAVEEACHSTEP")==0){
     SAVEALWAYS=1;
     printf("SAVE AT EACH TIME STEP ---> Ok\n");
+  }
+  else if(strcmp(s,"SCATTERING_OUTPUT") == 0) {
+    SCATTERING_OUTPUT = 1;
+    printf("OUTPUT SCATTERING RATES ---> Ok\n");
   }
   else if(strcmp(s,"FARADAY")==0){
 // Faraday equation ON or OFF

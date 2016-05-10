@@ -119,6 +119,7 @@ int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
 int MEDIA;               // number of time steps macroscopic variables will be averaged/computed over, defaults to 500
 int MAXIMINI;            // boolean, whether to save max & min values of macroscopic variables during simulation, defaults to 0
 int SAVEALWAYS;          // boolean, whether to save information at each step, defaults to 0
+int SCATTERING_OUTPUT;   // boolean, whether to output scattering rates, defaults to 0
 int nx, ny;              // number of cells in x- and y-directions
 int ISEED;               // seed for random number generator, starts at 38467
 int NP1;                 // number of particles in n+ cell, defaults to 2500
