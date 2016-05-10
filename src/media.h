@@ -50,7 +50,6 @@ void media(void) {
     memset(ener, 0, sizeof(ener[0][0]) * (NXM + 1) * (NYM + 1));
 
     for(n = 1; n <= INUM; n++) {
-        int iaux;
         iv = P[n].valley;
         x  = P[n].x;
         y  = P[n].y;
@@ -61,22 +60,21 @@ void media(void) {
         if(i >= nx + 1) { i = nx + 1; }
         if(j >= ny + 1) { j = ny + 1; }
 
-        if(NOVALLEY[i_dom[i][j]] == 1) { iaux = 0; }
-        else { iaux = iv; }
-        if(CONDUCTION_BAND == FULL) { iaux = 0; }
+        if(NOVALLEY[i_dom[i][j]] == 1) { iv = 0; }
+        if(CONDUCTION_BAND == FULL) { iv = 0; }
 
         ksquared=P[n].kx*P[n].kx + P[n].ky*P[n].ky + P[n].kz*P[n].kz;
 
         if(CONDUCTION_BAND == PARABOLIC) {
-            superparticle_energy = HHM[i_dom[i][j]][0] * ksquared;
-            xvelocity = P[n].kx * HM[i_dom[i][j]][iaux];
-            yvelocity = P[n].ky * HM[i_dom[i][j]][iaux];
+            superparticle_energy = HHM[i_dom[i][j]][iv] * ksquared;
+            xvelocity = P[n].kx * HM[i_dom[i][j]][iv];
+            yvelocity = P[n].ky * HM[i_dom[i][j]][iv];
         }
         if(CONDUCTION_BAND == KANE) {
-            thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][iv] * HHM[i_dom[i][j]][iaux] * ksquared);
+            thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][iv] * HHM[i_dom[i][j]][iv] * ksquared);
             superparticle_energy = (thesquareroot - 1.) / (2. * alphaK[i_dom[i][j]][iv]);
-            xvelocity = P[n].kx * HM[i_dom[i][j]][iaux] / thesquareroot;
-            yvelocity = P[n].ky * HM[i_dom[i][j]][iaux] / thesquareroot;
+            xvelocity = P[n].kx * HM[i_dom[i][j]][iv] / thesquareroot;
+            yvelocity = P[n].ky * HM[i_dom[i][j]][iv] / thesquareroot;
         }
         if(CONDUCTION_BAND == FULL) {
             real k, k2, k4;
