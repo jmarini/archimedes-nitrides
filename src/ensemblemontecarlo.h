@@ -126,10 +126,7 @@ void EMC(void) {
             }
         }
 
-        // ==============================================
-        if(mc_does_particle_exist(particle)) {
-            n++;
-        }
+        if(mc_does_particle_exist(particle)) { n++; }
         else {
             P[n] = P[INUM];
             INUM--;

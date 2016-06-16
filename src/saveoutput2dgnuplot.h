@@ -141,7 +141,7 @@ SaveOutput2DGNUPLOT(int je)
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(fp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,u2d[i][j][1]);
-      fprintf(fp,"\n");
+    fprintf(fp,"\n");
   }
 // X-component of electronic velocity output
 // =========================================
@@ -149,7 +149,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(up,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               moving_average[i][j][2]);
-      fprintf(up,"\n");
+    fprintf(up,"\n");
   }
 // Y-component of electronic velocity output
 // =========================================
@@ -157,35 +157,35 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(vp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               moving_average[i][j][3]);
-      fprintf(vp,"\n");
+    fprintf(vp,"\n");
   }
 // Electrostatic Potential
 // =======================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,PSI[i][j]);
-      fprintf(lp,"\n");
+    fprintf(lp,"\n");
   }
 // Magnetic Field
 // ==============
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(fM,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,B[i][j]);
-      fprintf(fM,"\n");
+    fprintf(fM,"\n");
   }
 // X-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lxp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][0]);
-      fprintf(lxp,"\n");
+    fprintf(lxp,"\n");
   }
 // Y-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lyp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][1]);
-      fprintf(lyp,"\n");
+    fprintf(lyp,"\n");
   }
 // Electron Energy (in eV)
 // ===============
@@ -193,7 +193,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(ep,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               moving_average[i][j][4]);
-      fprintf(ep,"\n");
+    fprintf(ep,"\n");
   }
 // Quantum Effective Potential
 // ===========================
@@ -201,7 +201,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(qp,"%g %g %g\n",
           1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,u2d[i][j][0]);
-      fprintf(qp,"\n");
+    fprintf(qp,"\n");
   }
 
   for(i = 1; i <= INUM; ++i) {
@@ -229,7 +229,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(fp,"%g %g %g\n",1.e6*(i-1.)*dx,
               1.e6*(j-1.)*dy,u2d[i+2][j+2][1]);
-      fprintf(fp,"\n");
+    fprintf(fp,"\n");
   }
 // X-component of electronic velocity output
 // =========================================
@@ -237,7 +237,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(up,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               u2d[i+2][j+2][2]/u2d[i+2][j+2][1]);
-      fprintf(up,"\n");
+    fprintf(up,"\n");
   }
 // Y-component of electronic velocity output
 // =========================================
@@ -245,28 +245,28 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(vp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               u2d[i+2][j+2][3]/u2d[i+2][j+2][1]);
-      fprintf(vp,"\n");
+    fprintf(vp,"\n");
   }
 // Electrostatic Potential
 // =======================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,PSI[i][j]);
-      fprintf(lp,"\n");
+    fprintf(lp,"\n");
   }
 // X-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lxp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][0]);
-      fprintf(lxp,"\n");
+    fprintf(lxp,"\n");
   }
 // Y-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
       fprintf(lyp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][1]);
-      fprintf(lyp,"\n");
+    fprintf(lyp,"\n");
   }
 // Electron Energy (in eV)
 // ===============
@@ -274,7 +274,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(ep,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,
               u2d[i+2][j+2][4]/u2d[i+2][j+2][1]/Q);
-      fprintf(ep,"\n");
+    fprintf(ep,"\n");
   }
 // Quantum Effective Potential
 // ===========================
@@ -282,7 +282,7 @@ SaveOutput2DGNUPLOT(int je)
     for(i=1;i<=nx+1;i++)
       fprintf(qp,"%g %g %g\n",
           1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,u2d[i][j][0]);
-      fprintf(qp,"\n");
+    fprintf(qp,"\n");
   }
 
 // Closure of output files
