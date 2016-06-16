@@ -211,6 +211,14 @@ real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
 real EPSR[NOAMTIA+1];         // static dielectric constant, array indexed by material
 real EPF[NOAMTIA+1];          // high frequency dielectric constant, array indexed by material
 real MSTAR[NOAMTIA+1][6];     // effective mass, array indexed by material and by valley number
+real MSTAR_VB[NOAMTIA+1][3];  // effective valence band mass, array indexed by material and by valley number
+                              //   valley = 0: heavy hole
+                              //   valley = 1: light hole
+                              //   valley = 2: split-off
+real DELTAE_VB[NOAMTIA+1][3]; // energy difference between VBM and valence band, array indexed by material and by valley number
+                              //   valley = 0: heavy hole
+                              //   valley = 1: light hole
+                              //   valley = 2: split-off
 real alphaK[NOAMTIA+1][4];    // valley non-parabolicity, array indexed by material annd by valley number
 real EG[NOAMTIA+1];           // band gap, array indexed by material
 real HWO[NOAMTIA+1][6];       // optical phonon scattering energy, array indexed by material and up to 6 different values

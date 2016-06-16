@@ -130,6 +130,15 @@ alphaK[GAN][2]       = 0.065;      // L-M -- Bhapkar & Shur
 alphaK[GAN][3]       = 0.029;      // G-2 -- Bhapkar & Shur
 
 
+MSTAR_VB[GAN][0] = 1.4; // heavy hole
+MSTAR_VB[GAN][1] = 0.3; // light hole
+MSTAR_VB[GAN][2] = 0.6; // split-off
+
+DELTAE_VB[GAN][0] = 0.0;
+DELTAE_VB[GAN][1] = 0.008; // difference between heavy hole and light hole bands
+DELTAE_VB[GAN][2] = 0.04;  // difference between heavy hole and split-off bands
+
+
 // Dielectric constant for Silicon Oxide SiO2
 // see http://en.wikipedia.org/wiki/Relative_permittivity
 EPSRSIO2 = 3.9 * EPS0;
@@ -161,6 +170,7 @@ EPF[GASB] = 14.44;       // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.
 EPF[INAS] = 12.3;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
 EPF[INP]  = 9.61;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
 EPF[GAN]  = 5.28;        // E. Bellotti & F. Bertazzi
+
 
 int ii;
 for(ii = 0; ii < NOAMTIA; ii++) {
