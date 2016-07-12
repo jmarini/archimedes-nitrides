@@ -265,6 +265,7 @@ static char *progname;
 #include "faraday.h"
 #include "random.h"
 #include "scattering_rates.h"
+#include "optical_absorption.h"
 #include "deviceconfig.h"
 #include "particlecreation.h"
 #include "drift.h"
