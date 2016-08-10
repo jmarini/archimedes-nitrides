@@ -51,89 +51,41 @@
 // density000.xyz, density001.xyz, density002.xyz, ..., density010.xyz
 // and so on, in order to create movies or animated gif.
 
-void
-SaveOutput2DGNUPLOT(int je)
-{
- char s[150];
- FILE *fp;
- FILE *up;
- FILE *vp;
- FILE *lp;
- FILE *lxp;
- FILE *lyp;
- FILE *ep;
- FILE *qp;
- FILE *fM;
- FILE *vo;
- register int i,j;
+void SaveOutput2DGNUPLOT(int je) {
+    char s[150];
+    FILE *fp;
+    FILE *up;
+    FILE *vp;
+    FILE *lp;
+    FILE *lxp;
+    FILE *lyp;
+    FILE *ep;
+    FILE *qp;
+    FILE *fM;
+    FILE *vo;
+    register int i, j;
 
-//if(Material==SILICON || Material==GERMANIUM){
- if(je<=9){
-   sprintf(s,"density00%d.xyz",je);
-   fp=fopen(s,"w");
-   sprintf(s,"x_velocity00%d.xyz",je);
-   up=fopen(s,"w");
-   sprintf(s,"y_velocity00%d.xyz",je);
-   vp=fopen(s,"w");
-   sprintf(s,"energy00%d.xyz",je);
-   ep=fopen(s,"w");
-   sprintf(s,"potential00%d.xyz",je);
-   lp=fopen(s,"w");
-   sprintf(s,"magnetic_field00%d.xyz",je);
-   fM=fopen(s,"w");
-   sprintf(s,"x_Efield00%d.xyz",je);
-   lxp=fopen(s,"w");
-   sprintf(s,"y_Efield00%d.xyz",je);
-   lyp=fopen(s,"w");
-   sprintf(s,"quantum_potential00%d.xyz",je);
-   qp=fopen(s,"w");
-   sprintf(s, "valley_occupation00%d.xyz", je);
-   vo = fopen(s, "w");
- }
- else if(je>9 && je<=99){
-   sprintf(s,"density0%d.xyz",je);
-   fp=fopen(s,"w");
-   sprintf(s,"x_velocity0%d.xyz",je);
-   up=fopen(s,"w");
-   sprintf(s,"y_velocity0%d.xyz",je);
-   vp=fopen(s,"w");
-   sprintf(s,"energy0%d.xyz",je);
-   ep=fopen(s,"w");
-   sprintf(s,"potential0%d.xyz",je);
-   lp=fopen(s,"w");
-   sprintf(s,"magnetic_field0%d.xyz",je);
-   fM=fopen(s,"w");
-   sprintf(s,"x_Efield0%d.xyz",je);
-   lxp=fopen(s,"w");
-   sprintf(s,"y_Efield0%d.xyz",je);
-   lyp=fopen(s,"w");
-   sprintf(s,"quantum_potential0%d.xyz",je);
-   qp=fopen(s,"w");
-   sprintf(s, "valley_occupation0%d.xyz", je);
-   vo = fopen(s, "w");
- }
- else{
-   sprintf(s,"density%d.xyz",je);
-   fp=fopen(s,"w");
-   sprintf(s,"x_velocity%d.xyz",je);
-   up=fopen(s,"w");
-   sprintf(s,"y_velocity%d.xyz",je);
-   vp=fopen(s,"w");
-   sprintf(s,"energy%d.xyz",je);
-   ep=fopen(s,"w");
-   sprintf(s,"potential%d.xyz",je);
-   lp=fopen(s,"w");
-   sprintf(s,"magnetic_field%d.xyz",je);
-   fM=fopen(s,"w");
-   sprintf(s,"x_Efield%d.xyz",je);
-   lxp=fopen(s,"w");
-   sprintf(s,"y_Efield%d.xyz",je);
-   lyp=fopen(s,"w");
-   sprintf(s,"quantum_potential%d.xyz",je);
-   qp=fopen(s,"w");
-   sprintf(s, "valley_occupation%d.xyz", je);
-   vo = fopen(s, "w");
- }
+    sprintf(s, "density%03d.xyz", je);
+    fp = fopen(s, "w");
+    sprintf(s, "x_velocity%03d.xyz", je);
+    up = fopen(s, "w");
+    sprintf(s, "y_velocity%03d.xyz", je);
+    vp = fopen(s, "w");
+    sprintf(s, "energy%03d.xyz", je);
+    ep = fopen(s, "w");
+    sprintf(s, "potential%03d.xyz", je);
+    lp = fopen(s, "w");
+    sprintf(s, "magnetic_field%03d.xyz", je);
+    fM = fopen(s,"w");
+    sprintf(s, "x_Efield%03d.xyz", je);
+    lxp = fopen(s, "w");
+    sprintf(s, "y_Efield%03d.xyz", je);
+    lyp = fopen(s, "w");
+    sprintf(s, "quantum_potential%03d.xyz", je);
+    qp = fopen(s, "w");
+    sprintf(s, "particle_info%03d.xyz", je);
+    vo = fopen(s, "w");
+
 // Save the Monte Carlo results
  if(Model_Number==MCE || Model_Number==MCEH){
 // Electron Density Output
@@ -205,7 +157,23 @@ SaveOutput2DGNUPLOT(int je)
   }
 
   for(i = 1; i <= INUM; ++i) {
-      fprintf(vo, "%d %d\n", i, valley_occupation[i]);
+      // print all particle info
+      particle_info_t *info = &particle_info[i];
+      fprintf(vo, "%d %lld %d %g %g %g %g %g %g %g %d %d %g %g\n",
+              i,
+              info->id,
+              info->valley,
+              info->kx,
+              info->ky,
+              info->kz,
+              info->energy,
+              info->t,
+              info->x,
+              info->y,
+              info->i,
+              info->j,
+              info->vx,
+              info->vy);
   }
 
 // Closure of output files

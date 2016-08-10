@@ -144,6 +144,7 @@ int PIEZOELECTRIC;       // boolean, controls whether piezoelectric scattering i
 int CONDUCTION_BAND;     // enum, controls which band structure model is used, values include PARABOLIC, KANE, FULL, defaults to KANE
 int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to 0
 int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 3 array
+long long int PARTICLE_ID;         // tracker for next particle id
 
 // All "real"'s here...
 real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
@@ -155,6 +156,7 @@ real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cel
 real moving_average[NXM+1][NYM+1][MN3+1];
 real moving_alpha;
 int valley_occupation[NPMAX+1];
+particle_info_t particle_info[NPMAX+1];
 real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: hole density
@@ -299,6 +301,7 @@ extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline void mc_particle_coords(particle_t *particle, int *i, int *j);
 extern inline char* mc_material_name(int material);
 extern inline char* mc_band_model_name(int model);
+particle_info_t mc_calculate_particle_info(particle_t *p);
 
 
 int main(int argc, char *argv[]) {

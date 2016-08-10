@@ -34,14 +34,32 @@
 #define ARCHIMEDES_PARTICLE_H
 
 typedef struct {
+    long long int id;      // unique identifier used to track particle
     int valley;  // number id of the valley the particle is in
-    real kx;     // momentum coordinates
+    real kx;     // momentum coordinates - relative to valley minimum
     real ky;
     real kz;
     real t;      // time
     real x;      // real coordinates
     real y;
 } particle_t;
+
+
+typedef struct {
+    long long int id;         // unique identifier used to track particle
+    int valley;     // valley the particle is in
+    real kx;        // momentum coordinates - relative to valley minimum
+    real ky;
+    real kz;
+    real energy;    // particle energy - relative to valley minimum
+    real t;         // time
+    real x;         // real coordinates
+    real y;
+    int i;          // mesh cell
+    int j;
+    real vx;        // real-space velocity
+    real vy;
+} particle_info_t;
 
 
 inline int mc_does_particle_exist(particle_t *particle) {
@@ -60,8 +78,10 @@ inline real mc_particle_ksquared(particle_t *particle) {
             particle->kz * particle->kz);
 }
 
+
 inline real mc_particle_k(particle_t *particle) {
     return sqrt(mc_particle_ksquared(particle));
 }
+
 
 #endif

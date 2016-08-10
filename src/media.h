@@ -26,109 +26,35 @@
 // ######################################################
 
 void media(void) {
-    register int i,j,n;
-    int iv;
-    int cont[NXM+1][NYM+1];
+    printf("Computation of macroscopic observables\n");
+
+    int i = 0,
+        j = 0,
+        n = 0;
+    int density[NXM+1][NYM+1];
     real xvel[NXM+1][NYM+1],
          yvel[NXM+1][NYM+1],
          ener[NXM+1][NYM+1];
-    real x,
-         y,
-         xvelocity,
-         yvelocity,
-         ksquared,
-         thesquareroot;
-    real superparticle_energy;
-
-    printf("Computation of macroscopic observables\n");
 
     // resetting of the electronic density
     // a simple way to avoid NaN propagation...
-    memset(cont, 0, sizeof(cont[0][0]) * (NXM + 1) * (NYM + 1));
-    memset(xvel, 0, sizeof(xvel[0][0]) * (NXM + 1) * (NYM + 1));
-    memset(yvel, 0, sizeof(yvel[0][0]) * (NXM + 1) * (NYM + 1));
-    memset(ener, 0, sizeof(ener[0][0]) * (NXM + 1) * (NYM + 1));
+    memset(density, 0, sizeof(density[0][0]) * (NXM + 1) * (NYM + 1));
+    memset(xvel,    0, sizeof(xvel[0][0])    * (NXM + 1) * (NYM + 1));
+    memset(yvel,    0, sizeof(yvel[0][0])    * (NXM + 1) * (NYM + 1));
+    memset(ener,    0, sizeof(ener[0][0])    * (NXM + 1) * (NYM + 1));
 
+    // calculate info for each particle
     for(n = 1; n <= INUM; n++) {
-        iv = P[n].valley;
-        x  = P[n].x;
-        y  = P[n].y;
-        i  = (int)(x / dx + 1.5);
-        j  = (int)(y / dy + 1.5);
-        if(i <= 1) { i = 1; }
-        if(j <= 1) { j = 1; }
-        if(i >= nx + 1) { i = nx + 1; }
-        if(j >= ny + 1) { j = ny + 1; }
+        particle_info[n] = mc_calculate_particle_info(&P[n]);
+        i = particle_info[n].i;
+        j = particle_info[n].j;
 
-        if(NOVALLEY[i_dom[i][j]] == 1) { iv = 0; }
-        if(CONDUCTION_BAND == FULL) { iv = 0; }
-
-        ksquared=P[n].kx*P[n].kx + P[n].ky*P[n].ky + P[n].kz*P[n].kz;
-
-        if(CONDUCTION_BAND == PARABOLIC) {
-            superparticle_energy = HHM[i_dom[i][j]][iv] * ksquared;
-            xvelocity = P[n].kx * HM[i_dom[i][j]][iv];
-            yvelocity = P[n].ky * HM[i_dom[i][j]][iv];
-        }
-        if(CONDUCTION_BAND == KANE) {
-            thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][iv] * HHM[i_dom[i][j]][iv] * ksquared);
-            superparticle_energy = (thesquareroot - 1.) / (2. * alphaK[i_dom[i][j]][iv]);
-            xvelocity = P[n].kx * HM[i_dom[i][j]][iv] / thesquareroot;
-            yvelocity = P[n].ky * HM[i_dom[i][j]][iv] / thesquareroot;
-        }
-        if(CONDUCTION_BAND == FULL) {
-            real k, k2, k4;
-            real dx, dy, d;
-            k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
-            // periodicity on reciprocal lattice
-            k2 = k * k;
-            k4 = k2 * k2;
-            superparticle_energy = CB_FULL[i_dom[i][j]][0] * k4 * k4 * k2
-                                 + CB_FULL[i_dom[i][j]][1] * k4 * k4 * k
-                                 + CB_FULL[i_dom[i][j]][2] * k4 * k4
-                                 + CB_FULL[i_dom[i][j]][3] * k4 * k2 * k
-                                 + CB_FULL[i_dom[i][j]][4] * k4 * k2
-                                 + CB_FULL[i_dom[i][j]][5] * k4 * k
-                                 + CB_FULL[i_dom[i][j]][6] * k4
-                                 + CB_FULL[i_dom[i][j]][7] * k2 * k
-                                 + CB_FULL[i_dom[i][j]][8] * k2
-                                 + CB_FULL[i_dom[i][j]][9] * k
-                                 + CB_FULL[i_dom[i][j]][10]; // in eV
-
-            d = 10. * CB_FULL[i_dom[i][j]][0] * k4 * k4 * k
-              +  9. * CB_FULL[i_dom[i][j]][1] * k4 * k4
-              +  8. * CB_FULL[i_dom[i][j]][2] * k4 * k2 * k
-              +  7. * CB_FULL[i_dom[i][j]][3] * k4 * k2
-              +  6. * CB_FULL[i_dom[i][j]][4] * k4 * k
-              +  5. * CB_FULL[i_dom[i][j]][5] * k4
-              +  4. * CB_FULL[i_dom[i][j]][6] * k2 * k
-              +  3. * CB_FULL[i_dom[i][j]][7] * k2
-              +  2. * CB_FULL[i_dom[i][j]][8] * k
-              +       CB_FULL[i_dom[i][j]][9];
-            k *= 1.e+12 * 2. * PI;
-            d *= 1.e-12 * 0.5 / PI;
-            xvelocity = QH * d * P[n].kx / k;
-            yvelocity = QH * d * P[n].ky / k;
-        }
-
-        // for the following two rows see
-        // pag.10 formula (1.19) of Tomizawa,
-        // "Numerical Simulation of Submicron Semiconductor
-        //  Devices", 1993, ARTECH HOUSE
-        // (this are due to the Kane non-parabolic energy band)
-        i = (int)(x / dx + 1.5);
-        j = (int)(y / dy + 1.5);
-        if(i < 1) { i = 1; }
-        if(j < 1) { j = 1; }
-        if(i >= nx + 1) { i = nx + 1; }
-        if(j >= ny + 1) { j = ny + 1; }
-        cont[i][j]++;
-        ener[i][j] += superparticle_energy;
-        ener[i][j] += EMIN[i_dom[i][j]][iv];
-        xvel[i][j] += xvelocity;
-        yvel[i][j] += yvelocity;
-        valley_occupation[n] = P[n].valley;
-    } // end loop over particles
+        density[i][j]++;
+        ener[i][j] += particle_info[n].energy;
+        ener[i][j] += EMIN[i_dom[i][j]][particle_info[n].valley];
+        xvel[i][j] += particle_info[n].vx;
+        yvel[i][j] += particle_info[n].vy;
+    }
 
     // Mean Value of the macroscopic variables
     // =======================================
@@ -136,10 +62,10 @@ void media(void) {
     // Average velocity and energy over grid cell
     for(i = 1; i <= nx + 1; i++) {
         for(j = 1; j <= ny + 1; j++) {
-            if(cont[i][j] != 0) {
-                xvel[i][j] /= (real)cont[i][j];
-                yvel[i][j] /= (real)cont[i][j];
-                ener[i][j] /= (real)cont[i][j];
+            if(density[i][j] != 0) {
+                xvel[i][j] /= (real)density[i][j];
+                yvel[i][j] /= (real)density[i][j];
+                ener[i][j] /= (real)density[i][j];
             }
         }
     }

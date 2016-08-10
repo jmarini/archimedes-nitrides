@@ -134,4 +134,90 @@ inline char* mc_band_model_name(int model) {
 }
 
 
+particle_info_t mc_calculate_particle_info(particle_t *p) {
+    // calculate particle coordinates
+    int i = 0,
+        j = 0;
+
+    i = (int)(p->x / dx + 1.5);
+    if(i <= 1) { i = 1; }
+    if(i >= nx + 1) { i = nx + 1; }
+
+    j = (int)(p->y / dy + 1.5);
+    if(j <= 1) { j = 1; }
+    if(j >= ny + 1) { j = ny + 1; }
+
+    int material = i_dom[i][j];
+
+    // calculate particle energy and velocity
+    real ksquared = mc_particle_ksquared(p);
+    real energy = 0.;
+    real xvelocity = 0.,
+         yvelocity = 0.;
+
+    if(CONDUCTION_BAND == PARABOLIC) {
+        energy = HHM[material][p->valley] * ksquared;
+        xvelocity = p->kx * HM[material][p->valley];
+        yvelocity = p->ky * HM[material][p->valley];
+    }
+    else if(CONDUCTION_BAND == KANE) {
+        real sq = sqrt(1. + 4. * alphaK[material][p->valley] * HHM[material][p->valley] * ksquared);
+        energy = (sq - 1.) / (2. * alphaK[material][p->valley]);
+        xvelocity = p->kx * HM[material][p->valley] / sq;
+        yvelocity = p->ky * HM[material][p->valley] / sq;
+    }
+    else if(CONDUCTION_BAND == FULL) {
+        real k, k2, k4;
+        real dx, dy, d;
+        k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
+        // periodicity on reciprocal lattice
+        k2 = k * k;
+        k4 = k2 * k2;
+        energy = CB_FULL[material][0] * k4 * k4 * k2
+               + CB_FULL[material][1] * k4 * k4 * k
+               + CB_FULL[material][2] * k4 * k4
+               + CB_FULL[material][3] * k4 * k2 * k
+               + CB_FULL[material][4] * k4 * k2
+               + CB_FULL[material][5] * k4 * k
+               + CB_FULL[material][6] * k4
+               + CB_FULL[material][7] * k2 * k
+               + CB_FULL[material][8] * k2
+               + CB_FULL[material][9] * k
+               + CB_FULL[material][10]; // in eV
+
+        d = 10. * CB_FULL[material][0] * k4 * k4 * k
+          +  9. * CB_FULL[material][1] * k4 * k4
+          +  8. * CB_FULL[material][2] * k4 * k2 * k
+          +  7. * CB_FULL[material][3] * k4 * k2
+          +  6. * CB_FULL[material][4] * k4 * k
+          +  5. * CB_FULL[material][5] * k4
+          +  4. * CB_FULL[material][6] * k2 * k
+          +  3. * CB_FULL[material][7] * k2
+          +  2. * CB_FULL[material][8] * k
+          +       CB_FULL[material][9];
+        k *= 1.e+12 * 2. * PI;
+        d *= 1.e-12 * 0.5 / PI;
+        xvelocity = QH * d * p->kx / k;
+        yvelocity = QH * d * p->ky / k;
+    }
+
+
+    return (particle_info_t){
+        .id=p->id,
+        .valley=p->valley,
+        .kx=p->kx,
+        .ky=p->ky,
+        .kz=p->kz,
+        .energy=energy,
+        .t=p->t,
+        .x=p->x,
+        .y=p->y,
+        .i=i,
+        .j=j,
+        .vx=xvelocity,
+        .vy=yvelocity
+    };
+}
+
+
 #endif

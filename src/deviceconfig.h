@@ -112,6 +112,7 @@ void MCdevice_config(void) {
                     c5=2.*PI*rnd();
                     c6=sin(c5);
                     c7=cos(c5);
+                    P[n].id = PARTICLE_ID++;
                     P[n].valley = valley;
                     P[n].kx = c2 * c3 * c6;
                     P[n].ky = c2 * c4 * c6;
