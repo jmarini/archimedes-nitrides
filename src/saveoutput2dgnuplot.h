@@ -2,12 +2,12 @@
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method and Hybrid MEP model
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method. It is now able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
    Copyright (C) 2004, 2005, 2006, 2007 Jean Michel Sellier <sellier@dmi.unict.it>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -28,7 +28,7 @@
 // Last modif. : 10 Sep.2007, Siracusa (Italy), J.M.Sellier
 // ######################################################
 
-// Here we save all the macroscopic variables 
+// Here we save all the macroscopic variables
 // related to the electrons.
 // The format of saving is compatible with GNUPLOT
 // and is as follows (constituted of 3 columns):
@@ -156,6 +156,9 @@ void SaveOutput2DGNUPLOT(int je) {
     fprintf(qp,"\n");
   }
 
+  // Particle Information
+  // ====================
+  fprintf(vo, "index id valley kx ky kz energy t x y i j vx vy\n");
   for(i = 1; i <= INUM; ++i) {
       // print all particle info
       particle_info_t *info = &particle_info[i];
