@@ -153,10 +153,14 @@ real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cel
                                     //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
                                     //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
                                     //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
-real moving_average[NXM+1][NYM+1][MN3+1];
-real moving_alpha;
-int valley_occupation[NPMAX+1];
-particle_info_t particle_info[NPMAX+1];
+real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
+                                          //  type = 0: unused
+                                          //  type = 1: unused
+                                          //  type = 2: particle x-velocity
+                                          //  type = 3: particle y-velocity
+                                          //  type = 4: particle energy
+real moving_alpha;                  // for calculating exponential moving average - represents the degree of weighting decrease for older observations
+particle_info_t particle_info[NPMAX+1];   // Holds summary information for particles to be output, array indexed by particle index
 real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: hole density
@@ -173,7 +177,6 @@ real TF;                            // final time, defaults to 5e-12
 real LX, LY;                        // length of device in x & y directions
 real TL;                            // lattice temperature
 real DT;                            // time step, defaults to 0.001e-12
-real mstar2;                        // UNUSED
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
@@ -183,7 +186,7 @@ real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array 
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
 real EPP;                           // number of carriers per particle (?)
-real DDmax;
+real DDmax;                         // maximum donor density (?)
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
                                     //                                               cell index (i or j),
                                     //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
