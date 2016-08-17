@@ -33,6 +33,7 @@
 #ifndef ARCHIMEDES_MESH_H
 #define ARCHIMEDES_MESH_H
 
+// maximum number of mesh cells in x and y
 #define NXM 308
 #define NXY 308
 

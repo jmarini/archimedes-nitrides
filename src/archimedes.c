@@ -78,8 +78,6 @@ int c;                   // iteration number
 int Model_Number;        // enum, controls which simulation model is used, values include MCE, MCH, MCEH, MEPE, MEPH, MEPEH, defaults to MCE
 int File_Format;         // enum, controls which file format to output to, values include GNUPLOTFORMAT and MESHFORMAT, defaults to GNUPLOTFORMAT
 int Quantum_Flag;        // boolean, controls whether quantum effects are simulated using effective potential method, defaults to 0
-int NG;                  // number of mesh nodes
-int NE;                  // number of mesh triangles
 int leid_flag;           // boolean, controls whether starting point used previously saved results, defaults to 0
 int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
 int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
@@ -93,7 +91,6 @@ int IMPURITYPHONONS;     // boolean, controls whether impurity scattering is use
 int PIEZOELECTRIC;       // boolean, controls whether piezoelectric scattering is used, defaults to 0
 int CONDUCTION_BAND;     // enum, controls which band structure model is used, values include PARABOLIC, KANE, FULL, defaults to KANE
 int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to 0
-int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 3 array
 long long int PARTICLE_ID;         // tracker for next particle id
 
 // All "real"'s here...
@@ -190,7 +187,6 @@ real KAV[NOAMTIA+1];          // electro-mechanical coupling constants, array in
 real QEP_ALPHA;
 real QEP_GAMMA;
 real QEP_MODEL;
-real COORD[2][(NXM+1)*(NYM+1)];
 
 // All structures here...
 time_t binarytime;
@@ -206,7 +202,6 @@ FILE *fp;
 static char *progname;
 
 #include "utility.h"
-#include "mesher.h"
 #include "poissonbcs.h"
 #include "faradaybcs.h"
 #include "media.h"

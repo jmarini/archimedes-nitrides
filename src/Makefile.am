@@ -31,7 +31,6 @@ archimedes_SOURCES = \
 	hole_relaxation.h \
 	mcparameters.h \
 	media.h \
-	mesher.h \
 	MEP_interpolation.h \
 	mm2.h \
 	mm.h \
