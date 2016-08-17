@@ -29,7 +29,7 @@
 // ##################################################################
 
 // Parse the script describing the device.
-// 
+//
 // For the syntax see the manual
 
 void
@@ -41,7 +41,7 @@ Read_Input_File(void)
  int i,j;
  int LXflag=0, LYflag=0;
  int transportflag=0;
- 
+
 // Thess are the default values
 // i.e. if nothing is specified
 // in the input file we have
@@ -87,13 +87,13 @@ Read_Input_File(void)
  leid_flag=0;
  SIO2_UP_FLAG=0; // No upper SiO2
  SIO2_DOWN_FLAG=0; // No lower SiO2
+
 // =====================
 
 // Reading the input file
 // ======================
- printf("\
-Processing the input file\n\
-=========================\n");
+ printf("Processing the input file\n\
+        =========================\n");
  do{
 // read the current row
   fscanf(fp,"%s",s);
@@ -138,66 +138,6 @@ Processing the input file\n\
     else if(strcmp(s,"INAS")==0) type=INAS;
     else if(strcmp(s,"INP")==0) type=INP;
     else if(strcmp(s,"GAN")==0) type=GAN;
-    else if(strcmp(s,"ALxINxSB")==0){
-      real dum;
-      type=ALXINXSB;
-      fscanf(fp,"%lf",&dum);
-      XVAL[type]=dum;
-      if(XVAL[type]<0.){
-        printf("%s : x negative for AlxInxSb!\n",progname);
-        exit(0);
-      }
-      XVAL[type]=dum;
-      printf("AlxInxSb X = %g\n",XVAL[type]);
-    }
-    else if(strcmp(s,"ALxIN1-xSB")==0){
-      real dum;
-      type=ALXIN1XSB;
-      fscanf(fp,"%lf",&dum);
-      XVAL[type]=dum;
-      if(XVAL[type]<0.){
-        printf("%s : x negative for AlxIn(1-x)Sb!\n",progname);
-        exit(0);
-      }
-      XVAL[type]=dum;
-      printf("AlxIn(1-x)Sb X = %g\n",XVAL[type]);
-    }
-    else if(strcmp(s,"INxGA1-xAS")==0){
-      real dum;
-      type=INXGA1XAS;
-      fscanf(fp,"%lf",&dum);
-      XVAL[type]=dum;
-      if(XVAL[type]<0.){
-        printf("%s : x negative for InxGa(1-x)As!\n",progname);
-        exit(0);
-      }
-      XVAL[type]=dum;
-      printf("InxGa(1-x)As X = %g\n",XVAL[type]);
-    }
-    else if(strcmp(s,"INxAL1-xAS")==0){
-      real dum;
-      type=INXAL1XAS;
-      fscanf(fp,"%lf",&dum);
-      XVAL[type]=dum;
-      if(XVAL[type]<0.){
-        printf("%s : x negative for InxAl(1-x)As!\n",progname);
-        exit(0);
-      }
-      XVAL[type]=dum;
-      printf("InxAl(1-x)As X = %g\n",XVAL[type]);
-    }
-    else if(strcmp(s,"INxGAxAS2")==0){
-      real dum;
-      type=INXGAXXAS;
-      fscanf(fp,"%lf",&dum);
-      XVAL[type]=dum;
-      if(XVAL[type]<0.){
-        printf("%s : x negative for InxGaxAs2!\n",progname);
-        exit(0);
-      }
-      XVAL[type]=dum;
-      printf("InxGaxAs2 X = %g\n",XVAL[type]);
-    }
     else{
       printf("%s : unknown specified material!\n",progname);
       exit(0);
@@ -232,8 +172,7 @@ Processing the input file\n\
         printf("TRANSPORT MC %s ---> Ok\n",s);
       }
       else{
-        printf("\
-%s: unknown particles in MC transport specification\n",progname);
+        printf("%s: unknown particles in MC transport specification\n",progname);
         exit(EXIT_FAILURE);
       }
     }
@@ -252,13 +191,12 @@ Processing the input file\n\
         printf("TRANSPORT %s ---> Ok\n",s);
       }
       else{
-        printf("\
-%s: unknown particles in MEP transport specification\n",progname);
+        printf("%s: unknown particles in MEP transport specification\n",progname);
         exit(EXIT_FAILURE);
       }
     }
     else{
-        printf("\%s: unknown transport model specified\n",progname);
+        printf("%s: unknown transport model specified\n",progname);
         exit(EXIT_FAILURE);
     }
   }
@@ -390,24 +328,21 @@ Processing the input file\n\
     dp=fopen("density_start.xyz","r");
 // File Control, just in case the file does not exist...
      if(dp==NULL){
-      printf("\
-%s: fatal error in opening the density000.xyz input file\n",progname);
+      printf("%s: fatal error in opening the density000.xyz input file\n",progname);
       exit(EXIT_FAILURE);
      }
 // Open the initial electron energy file
     ep=fopen("energy_start.xyz","r");
 // File Control, just in case the file does not exist...
      if(ep==NULL){
-      printf("\
-%s: fatal error in opening the energy000.xyz input file\n",progname);
+      printf("%s: fatal error in opening the energy000.xyz input file\n",progname);
       exit(EXIT_FAILURE);
      }
 // Open the initial potential file
     pp=fopen("potential_start.xyz","r");
 // File Control, just in case the file does not exist...
      if(pp==NULL){
-      printf("\
-%s: fatal error in opening the potential000.xyz input file\n",progname);
+      printf("%s: fatal error in opening the potential000.xyz input file\n",progname);
       exit(EXIT_FAILURE);
      }
 // Load the initial data for electrons in case of Monte Carlo method

@@ -36,7 +36,7 @@ void calc_scattering_rates(int material) {
     real wo,no,aco,oge[7],oga[7];
     real cl,deq,dij;
     real hwe,hwij,wij,we,ne,nij;
-    real poe,poa,ope,opa,eqe,eqa,qmin,qmax;
+    real poe,poa,ope,opa,qmin,qmax;
     real initialenergy,sei,finalenergy,sef;
     real eps,epf,ep,bimp,cimp,qd;
     real ak,qq,wk;
@@ -113,10 +113,6 @@ void calc_scattering_rates(int material) {
         ope = PI * dij / wij * dij / RHO[material] / Q * (nij + 1.);
         //   Absorption
         opa = ope * nij / (1. + nij);
-        //   Emission
-        eqe = PI * deq / we * deq / RHO[material] / Q * (ne + 1.);
-        //   Absorption
-        eqa = eqe * ne / (1. + ne);
 
         // =========================
         // == Impurity Scattering ==

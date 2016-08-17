@@ -40,17 +40,28 @@ real optical_joint_DOS(int material, int conduction_band, int valence_band, real
     real deltaE = DELTAE_VB[material][valence_band] + EG[material];
     real e2 = (mr / mc) * (energy - deltaE);
 
-    real gamma1 = e2 * (1. + alpha * e2);
-    real gamma2 = e2 * (1. + 2. * alpha * e2);
+    real gamma = Q * e2 * (1. + alpha * e2);
+    real gamma2 = (1. + 2. * alpha * e2);
 
-    return mr * sqrt(2. * mr) * sqrt(gamma1) * gamma2 / (PI * PI * HBAR * HBAR * HBAR);
+    real dos = mr * M * sqrt(2. * mr * M) * sqrt(gamma) * gamma2 / (PI * PI * HBAR * HBAR * HBAR);
+    return dos;
+}
+
+
+real absorption_coefficient(int material) {
+    return 0.0;
 }
 
 
 real optical_transition_rate(int material, int conduction_band,
                              int valence_band, real photon_energy) {
     real prefactor = PI * HBAR * Q * Q * EG[material]
-                   / (3. * EPSR[material] * M * photon_energy);
+                   / (3. * EPSR[material] * EPS0 * M * photon_energy);
     real rate = prefactor * optical_joint_DOS(material, conduction_band, valence_band, photon_energy);
     return rate;
+}
+
+
+int electrons_in_cell(int material, int conduction_band, int valence_band, real photon_energy, int i, int j) {
+    return 0;
 }

@@ -44,12 +44,11 @@
     #include <strings.h>
 #endif
 
-// #include "rappture.h"
-
 // Preprocessor Definitions
 #define real double
 #define ON 1
 #define OFF 0
+#define INVALID -1             // invalid value for most enum-like variables
 #define KANE 0                 // conduction band model, kane model
 #define PARABOLIC 1            // conduction band model, parabolic approximation
 #define FULL 2                 // conduction band model, full band model
@@ -147,12 +146,6 @@ int NODE_GEO[3][(NXM+1)*(NYM+1)];  // stores the node geometry, nxm+1 x nym+1 x 
 long long int PARTICLE_ID;         // tracker for next particle id
 
 // All "real"'s here...
-real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
-                                    //  type = 0: quantum effective potential
-                                    //  type = 1: electron density
-                                    //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
-                                    //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
-                                    //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
                                           //  type = 0: unused
                                           //  type = 1: unused
@@ -161,6 +154,12 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 4: particle energy
 real moving_alpha;                  // for calculating exponential moving average - represents the degree of weighting decrease for older observations
 particle_info_t particle_info[NPMAX+1];   // Holds summary information for particles to be output, array indexed by particle index
+real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
+                                    //  type = 0: quantum effective potential
+                                    //  type = 1: electron density
+                                    //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
+                                    //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
+                                    //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
 real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: hole density
@@ -197,16 +196,16 @@ real CIMP;                          // impurity concentration
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real TAUW;                          // energy relaxation time, defaults to 0.4e-12
 real EPSRSIO2;
-real bufx2d[NXM+1][NYM+1];
-real bufy2d[NXM+1][NYM+1];
-real ux2d[NXM+1][NYM+1][MN3+1];
-real uy2d[NXM+1][NYM+1][MN3+1];
-real f2d[NXM+1][NYM+1][MN3+1];
-real g2d[NXM+1][NYM+1][MN3+1];
-real fx2d[NXM+1][NYM+1][MN3+1];
-real gy2d[NXM+1][NYM+1][MN3+1];
-real c11[7],c12[7],c21[7],c22[7];
-real u[7],f[7],g[7],cw[7];
+real bufx2d[NXM+1][NYM+1];          // MEP
+real bufy2d[NXM+1][NYM+1];          // MEP
+real ux2d[NXM+1][NYM+1][MN3+1];     // MEP
+real uy2d[NXM+1][NYM+1][MN3+1];     // MEP
+real f2d[NXM+1][NYM+1][MN3+1];      // MEP
+real g2d[NXM+1][NYM+1][MN3+1];      // MEP
+real fx2d[NXM+1][NYM+1][MN3+1];     // MEP
+real gy2d[NXM+1][NYM+1][MN3+1];     // MEP
+real c11[7],c12[7],c21[7],c22[7];   // MEP
+real u[7],f[7],g[7],cw[7];          // MEP
 real SIO2_INI[NUMSIO2];
 real SIO2_FIN[NUMSIO2];
 real SIO2_POT[NUMSIO2];
@@ -608,6 +607,7 @@ int main(int argc, char *argv[]) {
         printf("Device configuration complete...\n");
     }
     printf("\n");
+
 
     // HERE IS THE SIMULATION
     // ======================
