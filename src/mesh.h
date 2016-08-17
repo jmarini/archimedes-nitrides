@@ -26,58 +26,72 @@
 
 
 // ######################################################
-// Created on 12 aug.2016, J. Marini
-// Last modif. : 12 aug.2016, J. Marini
+// Created on 20 oct.2015, J. Marini
+// Last modif. : 20 oct.2015, J. Marini
 // ######################################################
 
-#ifndef ARCHIMEDES_CONFIGURATION_H
-#define ARCHIMEDES_CONFIGURATION_H
+#ifndef ARCHIMEDES_MESH_H
+#define ARCHIMEDES_MESH_H
+
+#define NXM 308
+#define NXY 308
 
 
 typedef struct {
-    int simulation_model;
-
-    // scattering mechanism flags
-    int optical_phonon_scattering;
-    int acoustic_phonon_scattering;
-    int impurity_scattering;
-    int piezoelectric_scattering;
-
-    // band structure & quantum correction models
-    int conduction_band;
-    int quantum_flag;
-    int qep_model;
-    real qep_alpha;
-    real qep_gamma;
-
-    int faraday_flag;
-
-    real lattice_temp;
-    real impurity_conc;
-
-    // averaging
-    int particles_per_cell;
-    int avg_steps; // media
-    real avg_alpha;
-
-    // intput / output
-    int save_mesh;
-    int max_min_output;
-    int save_step_output;
-    int scattering_output;
-    int output_format;
-    int load_initial_data;
-
-    // simulation timing parameters
-    real tf;
-    real dt;
-    real tauw;
-
-    real max_doping;
-} mc_configuration_t;
+    real qep;             // quantum effective potential
+    real potential;
+    real efield_x;        // electric field - x
+    real efield_y;        //                - y
+    real magnetic_field;
+} mc_poisson_t;
 
 
-extern mc_configuration_t *g_config;
+typedef struct {
+    real density;
+    real xvel;    // running sum velocity - x
+    real yvel;    //                      - y
+    real energy;  // running sum energy
+} mc_carrier_t;
+
+
+typedef struct {
+    int material;
+    real donor_conc;
+    real acceptor_conc;
+
+    mc_carrier_t e;     // electrons
+    mc_carrier_t h;     // holes
+
+    mc_poisson_t poisson;
+} mc_node_information_t;
+
+
+typedef struct {
+    int nx; // number of cells in x-direction
+    int ny; //                    y-direction
+
+    real dx; // cell size in x-direction
+    real dy; //              y-direction
+
+    real width;  // device width
+    real height; //        height
+
+    int num_nodes;
+    int num_triangles;
+
+    mc_node_information_t info[NXM + 1][NYM + 1];
+
+    real nodes[NXM * NYM][2];
+    int triangles[NXM * NYM][3];
+} mc_mesh_t;
+
+
+extern mc_mesh_t *g_mesh;
+
+
+int mc_build_mesh(mc_mesh_t *mesh);
+
+int mc_save_mesh(mc_mesh_t *mesh, char *filename);
 
 
 #endif

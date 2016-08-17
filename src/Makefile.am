@@ -51,6 +51,9 @@ archimedes_SOURCES = \
 	sign.h \
 	updating.h \
 	utility.h \
-	configuration.h
+	configuration.h \
+	mesh.h \
+	mesh.c \
+	global_defines.h
 
 archimedes_LDADD = -lm
