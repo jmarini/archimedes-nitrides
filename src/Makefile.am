@@ -50,6 +50,7 @@ archimedes_SOURCES = \
 	scattering.h \
 	sign.h \
 	updating.h \
-	utility.h
+	utility.h \
+	configuration.h
 
 archimedes_LDADD = -lm
