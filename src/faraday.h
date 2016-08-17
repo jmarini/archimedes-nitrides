@@ -41,6 +41,6 @@ Faraday(void)
  for(i=2;i<=nx;i++)
   for(j=2;j<=ny;j++)
    B[i][j]=0.25*(B[i+1][j]+B[i][j+1]+B[i-1][j]+B[i][j-1])
-          -DT*(0.5*(E[i+1][j][1]-E[i-1][j][1])/dx
+          -g_config->dt*(0.5*(E[i+1][j][1]-E[i-1][j][1])/dx
 	      -0.5*(E[i][j+1][0]-E[i][j-1][0])/dy);
 }

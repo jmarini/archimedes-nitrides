@@ -49,22 +49,20 @@ void electron_relaxation_step(void)
 // in BBW (Baccarani et al.) model.
 
 // This is a simple explicit Euler step.
-// DT/=2.;
  for(c=1;c<=50;c++)
   for(i=ND;i<=nx+ND;i++)
    for(j=ND;j<=ny+ND;j++){
      t=(2./3.)*(u2d[i][j][4]/u2d[i][j][1])/KB;
-     ktaup=M*MSTAR[i_dom[i][j]][1]*MIU0*TL/Q;
-     ktauw=MIU0*TL*KB/(Q*VS*VS);
+     ktaup=M*MSTAR[i_dom[i][j]][1]*MIU0*g_config->lattice_temp/Q;
+     ktauw=MIU0*g_config->lattice_temp*KB/(Q*VS*VS);
      taup=ktaup/t;
-     u2d[i][j][4]+=-DT/50.*(Q*(u2d[i][j][2]*E[i-1][j-1][0]
+     u2d[i][j][4]+=-g_config->dt/50.*(Q*(u2d[i][j][2]*E[i-1][j-1][0]
                   +u2d[i][j][3]*E[i-1][j-1][1])
-                  +u2d[i][j][1]*1.5*KB*(t-TL)/tauwi(1.5*KB*t));
-     u2d[i][j][2]+=-DT/50.*(u2d[i][j][1]*Q*E[i-1][j-1][0]/(M*MSTAR[i_dom[i][j]][1])
+                  +u2d[i][j][1]*1.5*KB*(t-g_config->lattice_temp)/tauwi(1.5*KB*t));
+     u2d[i][j][2]+=-g_config->dt/50.*(u2d[i][j][1]*Q*E[i-1][j-1][0]/(M*MSTAR[i_dom[i][j]][1])
                   +u2d[i][j][2]/taup);
-     u2d[i][j][3]+=-DT/50.*(u2d[i][j][1]*Q*E[i-1][j-1][1]/(M*MSTAR[i_dom[i][j]][1])
+     u2d[i][j][3]+=-g_config->dt/50.*(u2d[i][j][1]*Q*E[i-1][j-1][1]/(M*MSTAR[i_dom[i][j]][1])
                   +u2d[i][j][3]/taup);
    }
-// DT*=2.;
 }
 // ================================================

@@ -66,31 +66,15 @@ extern inline real mc_particle_k(particle_t *particle);
 // All integers here...
 int NUM_VERT;            // number of vertices in the meshing
 int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
-int MEDIA;               // number of time steps macroscopic variables will be averaged/computed over, defaults to 500
-int MAXIMINI;            // boolean, whether to save max & min values of macroscopic variables during simulation, defaults to 0
-int SAVEALWAYS;          // boolean, whether to save information at each step, defaults to 0
-int SCATTERING_OUTPUT;   // boolean, whether to output scattering rates, defaults to 0
 int nx, ny;              // number of cells in x- and y-directions
 int ISEED;               // seed for random number generator, starts at 38467
-int NP1;                 // number of particles in n+ cell, defaults to 2500
 int INUM;                // number of electrons sumulated
 int c;                   // iteration number
-int Model_Number;        // enum, controls which simulation model is used, values include MCE, MCH, MCEH, MEPE, MEPH, MEPEH, defaults to MCE
-int File_Format;         // enum, controls which file format to output to, values include GNUPLOTFORMAT and MESHFORMAT, defaults to GNUPLOTFORMAT
-int Quantum_Flag;        // boolean, controls whether quantum effects are simulated using effective potential method, defaults to 0
-int leid_flag;           // boolean, controls whether starting point used previously saved results, defaults to 0
 int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
 int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
-int FARADAYFLAG;         // boolean, controls whether evolution of magnetic field will be calculated, defaults to 0
 int i_dom[NXM+1][NYM+1]; // material at each mesh node, array indexed by node (i, j)
 int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
 int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, array indexed by material, starting valley and ending valley
-int ACOUSTICPHONONS;     // boolean, controls whether acoustic phonon scattering is used, defaults to 1
-int OPTICALPHONONS;      // boolean, controls whether optical phonon scattering is used, defaults to 1
-int IMPURITYPHONONS;     // boolean, controls whether impurity scattering is used, defaults to 1
-int PIEZOELECTRIC;       // boolean, controls whether piezoelectric scattering is used, defaults to 0
-int CONDUCTION_BAND;     // enum, controls which band structure model is used, values include PARABOLIC, KANE, FULL, defaults to KANE
-int SAVE_MESH;           // boolean, controls whether mesh is saved, defaults to 0
 long long int PARTICLE_ID;         // tracker for next particle id
 
 // All "real"'s here...
@@ -100,7 +84,6 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 2: particle x-velocity
                                           //  type = 3: particle y-velocity
                                           //  type = 4: particle energy
-real moving_alpha;                  // for calculating exponential moving average - represents the degree of weighting decrease for older observations
 particle_info_t particle_info[NPMAX+1];   // Holds summary information for particles to be output, array indexed by particle index
 real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
@@ -119,11 +102,6 @@ real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
 real N_D[NXM+1][NYM+1];             // Donor concentration, indexed by mesh node, defaults to NI
 real N_H[NXM+1][NYM+1];             // Acceptor concentration, indexed by mesh node, defaults to NI
 real dx, dy;                        // length of cells in x & y directions
-real TEMPO=0.;                      // current time in simulation, starts at 0
-real TF;                            // final time, defaults to 5e-12
-real LX, LY;                        // length of device in x & y directions
-real TL;                            // lattice temperature
-real DT;                            // time step, defaults to 0.001e-12
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
@@ -132,17 +110,15 @@ real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), 
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
-real EPP;                           // number of carriers per particle (?)
-real DDmax;                         // maximum donor density (?)
+real EPP;                           // number of carriers per particle
+real DDmax;                         // maximum donor density
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
                                     //                                               cell index (i or j),
                                     //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
                                     //                                                                 1=potential,
                                     //                                                                 2=contact electron density,
                                     //                                                                 3=contact hole density)
-real CIMP;                          // impurity concentration
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
-real TAUW;                          // energy relaxation time, defaults to 0.4e-12
 real EPSRSIO2;
 real bufx2d[NXM+1][NYM+1];          // MEP
 real bufy2d[NXM+1][NYM+1];          // MEP
@@ -184,9 +160,6 @@ real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real LATTCONST[NOAMTIA+1];    // lattice constant, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
 real KAV[NOAMTIA+1];          // electro-mechanical coupling constants, array indexed by material
-real QEP_ALPHA;
-real QEP_GAMMA;
-real QEP_MODEL;
 
 // All structures here...
 time_t binarytime;
@@ -369,35 +342,35 @@ int main(int argc, char *argv[]) {
 
     // III-V Semiconductor materials energy gap (depending on the lattice temperature)
     printf("\n");
-    EG[SILICON]=1.21-3.333e-4*TL;
+    EG[SILICON]=1.21-3.333e-4*g_config->lattice_temp;
     printf("EG[SILICON]      = %g\n",EG[SILICON]);
-    EG[GERMANIUM]=0.747-3.587e-4*TL;
+    EG[GERMANIUM]=0.747-3.587e-4*g_config->lattice_temp;
     printf("EG[GERMANIUM]    = %g\n",EG[GERMANIUM]);
-    EG[GAAS]=1.54-4.036e-4*TL;
+    EG[GAAS]=1.54-4.036e-4*g_config->lattice_temp;
     printf("EG[GAAS]         = %g\n",EG[GAAS]);
-    EG[INSB]=0.2446-2.153e-4*TL;
+    EG[INSB]=0.2446-2.153e-4*g_config->lattice_temp;
     printf("EG[INSB]         = %g\n",EG[INSB]);
-    EG[ALSB]=1.696-2.20e-4*TL;
+    EG[ALSB]=1.696-2.20e-4*g_config->lattice_temp;
     printf("EG[ALSB]         = %g\n",EG[ALSB]);
-    EG[ALAS]=2.314-3.0e-4*TL;
+    EG[ALAS]=2.314-3.0e-4*g_config->lattice_temp;
     printf("EG[ALAS]         = %g\n",EG[ALAS]);
-    EG[ALP]=2.51-3.333e-4*TL;
+    EG[ALP]=2.51-3.333e-4*g_config->lattice_temp;
     printf("EG[ALP]         = %g\n",EG[ALP]);
-    EG[GAP]=2.35-2.667e-4*TL;
+    EG[GAP]=2.35-2.667e-4*g_config->lattice_temp;
     printf("EG[GAP]         = %g\n",EG[GAP]);
-    EG[GASB]=0.81-3.667e-4*TL;
+    EG[GASB]=0.81-3.667e-4*g_config->lattice_temp;
     printf("EG[GASB]         = %g\n",EG[GASB]);
-    EG[INAS]=0.434-2.601e-4*TL;
+    EG[INAS]=0.434-2.601e-4*g_config->lattice_temp;
     printf("EG[INAS]         = %g\n",EG[INAS]);
-    EG[INP]=1.445-3.296e-4*TL;
+    EG[INP]=1.445-3.296e-4*g_config->lattice_temp;
     printf("EG[INP]         = %g\n",EG[INP]);
-    EG[GAN]=3.47 - 7.7e-4 * TL * TL / (TL + 600);
+    EG[GAN]=3.47 - 7.7e-4 * g_config->lattice_temp * g_config->lattice_temp / (g_config->lattice_temp + 600.);
     printf("EG[GAN]         = %g\n", EG[GAN]);
     printf("\n");
 
-    if(CONDUCTION_BAND == KANE ||
-       CONDUCTION_BAND == PARABOLIC ||
-       CONDUCTION_BAND == FULL) {
+    if(g_config->conduction_band == KANE ||
+       g_config->conduction_band == PARABOLIC ||
+       g_config->conduction_band == FULL) {
         // USED WHATEVER IS THE CONDUCTION BAND FOR THE INITIAL PSUEDO WAVE VECTOR
         // OF THE PSEUDO PARTICLES
         // all the following non-parabolicity coefficients depend on lattice temperature
@@ -549,14 +522,14 @@ int main(int argc, char *argv[]) {
     // Boundary conditions for the model simulated
     // ===========================================
     PoissonBCs();
-    if(FARADAYFLAG) {
+    if(g_config->faraday_flag) {
         FaradayBCs();
     }
     printf("Boundary conditions calculated...\n");
 
     // Initialization for Monte Carlo
     // ==============================
-    if(Model_Number == MCE || Model_Number == MCEH) {
+    if(g_config->simulation_model == MCE || g_config->simulation_model == MCEH) {
         int i;
         for(i = 0; i < NOAMTIA; i++) {
             calc_scattering_rates(i);
@@ -571,12 +544,12 @@ int main(int argc, char *argv[]) {
     // HERE IS THE SIMULATION
     // ======================
     for(c = 1; c <= ITMAX; c++) {
-        updating(Model_Number);
+        updating(g_config->simulation_model);
     }
 
     // Here we save the outputs
     // ========================
-    SaveOutputFiles(File_Format, 0);
+    SaveOutputFiles(g_config->output_format, 0);
     printf("\nFinal Output has been saved\n");
 
     binarytime=time(NULL);

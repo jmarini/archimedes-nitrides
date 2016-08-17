@@ -160,7 +160,7 @@ else{
  fprintf(Qp,"%d %d %d %d\n",dim,nbmet,nbval,type);
 
 // Save the Monte Carlo results 
- if(Model_Number==MCE || Model_Number==MCEH){
+ if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
 // Save the macroscopic variables related to electrons
 // ===================================================
    for(j=1;j<=ny+1;j++)
@@ -177,13 +177,13 @@ else{
        fprintf(fp,"%g\n",u2d[i][j][1]);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(up,"%g\n",u2d[i][j][2]/MEDIA);
+       fprintf(up,"%g\n",u2d[i][j][2]/g_config->avg_steps);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(vp,"%g\n",u2d[i][j][3]/MEDIA);
+       fprintf(vp,"%g\n",u2d[i][j][3]/g_config->avg_steps);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(ep,"%g\n",u2d[i][j][4]/MEDIA); //energy (eV)
+       fprintf(ep,"%g\n",u2d[i][j][4]/g_config->avg_steps); //energy (eV)
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
        fprintf(Xp,"%g\n",E[i][j][0]);
@@ -207,7 +207,7 @@ else{
          i+1+j*(nx+1),i+j*(nx+1)); // 1 2 4 3
  }
 // Save the Hybrid MEP results 
- if(Model_Number==MEPE || Model_Number==MEPEH){
+ if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
 // Save the macroscopic variables related to electrons
 // ===================================================
    for(j=1;j<=ny+1;j++)

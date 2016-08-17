@@ -79,11 +79,11 @@ HMEPBCs(void)
        u2d[i+2][2][3]=EDGE[0][i][2]*yvel;
 // energy
        u2d[i+2][0][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
-                   +1.5*KB*TL*EDGE[0][i][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
        u2d[i+2][1][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
-                   +1.5*KB*TL*EDGE[0][i][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
        u2d[i+2][2][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
-                   +1.5*KB*TL*EDGE[0][i][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
      }
    }
 // Left Edge
@@ -125,11 +125,11 @@ HMEPBCs(void)
        u2d[2][j+2][3]=0.;
 // energy
        u2d[0][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
-                   +1.5*KB*TL*EDGE[3][j][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
        u2d[1][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
-                   +1.5*KB*TL*EDGE[3][j][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
        u2d[2][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
-                   +1.5*KB*TL*EDGE[3][j][2];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
      }
    }
 // Right Edge
@@ -171,15 +171,15 @@ HMEPBCs(void)
        u2d[nx+4][j+2][3]=0.;
 // energy
        u2d[nx+2][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
-                      +1.5*KB*TL*EDGE[1][j][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
        u2d[nx+3][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
-                      +1.5*KB*TL*EDGE[1][j][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
        u2d[nx+4][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
-                      +1.5*KB*TL*EDGE[1][j][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
      }
    }
 // Upper Edge
-// ==========   
+// ==========
    for(i=1;i<=nx+2;i++){
 // INSULATOR
      if(EDGE[2][i][0]==0){
@@ -217,11 +217,11 @@ HMEPBCs(void)
        u2d[i+2][ny+4][3]=EDGE[2][i][2]*yvel;
 // energy
        u2d[i+2][ny+2][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
-                      +1.5*KB*TL*EDGE[2][i][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
        u2d[i+2][ny+3][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
-                      +1.5*KB*TL*EDGE[2][i][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
        u2d[i+2][ny+4][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
-                      +1.5*KB*TL*EDGE[2][i][2];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
      }
   }
 }

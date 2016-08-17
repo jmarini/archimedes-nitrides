@@ -69,9 +69,10 @@ typedef struct {
     int load_initial_data;
 
     // simulation timing parameters
+    real time;
     real tf;
     real dt;
-    real tauw;
+    real tauw; // MEP
 
     real max_doping;
 } mc_configuration_t;

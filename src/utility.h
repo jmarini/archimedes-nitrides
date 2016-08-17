@@ -85,10 +85,10 @@ inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
 real mc_particle_energy(particle_t *particle) {
     int i, j;
     mc_particle_coords(particle, &i, &j);
-    if(CONDUCTION_BAND == PARABOLIC) {
+    if(g_config->conduction_band == PARABOLIC) {
         return HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
     }
-    else if(CONDUCTION_BAND == KANE) {
+    else if(g_config->conduction_band == KANE) {
         real alpha = alphaK[i_dom[i][j]][0];
         real gamma = HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
         return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * gamma);
@@ -155,18 +155,18 @@ particle_info_t mc_calculate_particle_info(particle_t *p) {
     real xvelocity = 0.,
          yvelocity = 0.;
 
-    if(CONDUCTION_BAND == PARABOLIC) {
+    if(g_config->conduction_band == PARABOLIC) {
         energy = HHM[material][p->valley] * ksquared;
         xvelocity = p->kx * HM[material][p->valley];
         yvelocity = p->ky * HM[material][p->valley];
     }
-    else if(CONDUCTION_BAND == KANE) {
+    else if(g_config->conduction_band == KANE) {
         real sq = sqrt(1. + 4. * alphaK[material][p->valley] * HHM[material][p->valley] * ksquared);
         energy = (sq - 1.) / (2. * alphaK[material][p->valley]);
         xvelocity = p->kx * HM[material][p->valley] / sq;
         yvelocity = p->ky * HM[material][p->valley] / sq;
     }
-    else if(CONDUCTION_BAND == FULL) {
+    else if(g_config->conduction_band == FULL) {
         real k, k2, k4;
         real dx, dy, d;
         k = sqrt(ksquared) * 0.5 / PI * 1.e-12;

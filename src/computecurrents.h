@@ -45,16 +45,16 @@ Compute_Currents(void)
 // compute currents on the contacts of the bottom edge
  for(i=1;i<=nx;i++){
    if(EDGE[0][i][0]==1 || EDGE[0][i][0]==2){
-    if(Model_Number==MCE || Model_Number==MCEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
      sum+=u2d[i][2][1]*u2d[i][2][3];
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum+=u2d[i][3][3];
    }
    if((EDGE[0][i+1][0]==0 && sum!=0.)
     || (i==nx && sum!=0.)){
-    if(Model_Number==MCE || Model_Number==MCEH)
-     sum*=-Q*dx/MEDIA;
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
+     sum*=-Q*dx/g_config->avg_steps;
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum*=-Q*dx;
     printf("\
 Bottom Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
@@ -67,16 +67,16 @@ Bottom Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
 // compute currents on the contacts of the right edge
  for(i=1;i<=ny;i++){
    if(EDGE[1][i][0]==1 || EDGE[1][i][0]==2){
-    if(Model_Number==MCE || Model_Number==MCEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
      sum+=u2d[nx-1][i][1]*u2d[nx-1][i][2];
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum+=u2d[nx+3][i][2];
    }
    if((EDGE[1][i+1][0]==0 && sum!=0.)
     || (i==ny && sum!=0.)){
-    if(Model_Number==MCE || Model_Number==MCEH)
-     sum*=-Q*dy/MEDIA;
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
+     sum*=-Q*dy/g_config->avg_steps;
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum*=-Q*dy;
     printf("\
 Right Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
@@ -89,16 +89,16 @@ Right Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
 // compute currents on the contacts of the upper edge
  for(i=1;i<=nx;i++){
    if(EDGE[2][i][0]==1 || EDGE[2][i][0]==2){
-    if(Model_Number==MCE || Model_Number==MCEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
      sum+=u2d[i][ny-1][1]*u2d[i][ny-1][3];
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum+=u2d[i][ny+3][3];
    }
    if((EDGE[2][i+1][0]==0 && sum!=0.)
     || (i==nx && sum!=0.)){
-    if(Model_Number==MCE || Model_Number==MCEH)
-     sum*=-Q*dx/MEDIA;
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
+     sum*=-Q*dx/g_config->avg_steps;
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum*=-Q*dx;
     printf("\
 Upper Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
@@ -111,16 +111,16 @@ Upper Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
 // compute currents on the contacts of the left edge
  for(i=1;i<=ny;i++){
    if(EDGE[3][i][0]==1 || EDGE[3][i][0]==2){
-    if(Model_Number==MCE || Model_Number==MCEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
      sum+=u2d[2][i][1]*u2d[2][i][2];
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum+=u2d[3][i][2];
    }
    if((EDGE[3][i+1][0]==0 && sum!=0.)
     || (i==ny && sum!=0.)){
-    if(Model_Number==MCE || Model_Number==MCEH)
-     sum*=-Q*dy/MEDIA;
-    else if(Model_Number==MEPE || Model_Number==MEPEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
+     sum*=-Q*dy/g_config->avg_steps;
+    else if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
      sum*=-Q*dy;
     printf("\
 Left Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
@@ -130,8 +130,8 @@ Left Edge : Electron Current on contact #%d = %g (A/m)\n",cn,sum);
  }
 // Hole current computations
 // =========================
- if(Model_Number==MCEH || Model_Number==MCH
-  || Model_Number==MEPEH || Model_Number==MEPH){
+ if(g_config->simulation_model==MCEH || g_config->simulation_model==MCH
+  || g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH){
   sum=0.;
   cn=1;
 // compute currents on the contacts of the bottom edge

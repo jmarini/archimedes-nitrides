@@ -158,12 +158,12 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
      }
 // Compute time step size
    if(io==0){
-     dt=DT;
-     if((TEMPO+2.*dt)>=TF) dt=0.5*(TF-TEMPO);
+     dt=g_config->dt;
+     if((g_config->time+2.*dt)>=g_config->tf) dt=0.5*(g_config->tf-g_config->time);
    }
    dtodx2=0.5*dt/dx;
    dtody2=0.5*dt/dy;
-   TEMPO+=dt;
+   g_config->time+=dt;
 // Compute the values of "u2d" at the next time level
    for(m=1;m<=MN3;m++){
      for(j=ND+1-io;j<=NYE-io;j++)

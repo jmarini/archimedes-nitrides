@@ -76,16 +76,16 @@ void quantum_effective_potential(void)
 
 // WEIGHTED_BOHM and BOHM models
 // =============================
- if(QEP_MODEL==QEP_CALIBRATED_BOHM || QEP_MODEL==QEP_BOHM){
+ if(g_config->qep_model==QEP_CALIBRATED_BOHM || g_config->qep_model==QEP_BOHM){
 
-  if(QEP_MODEL==QEP_BOHM){
-   QEP_GAMMA=1.0;
-   QEP_ALPHA=0.5;
+  if(g_config->qep_model==QEP_BOHM){
+   g_config->qep_gamma=1.0;
+   g_config->qep_alpha=0.5;
   }
 
-  C=-0.5*HBAR*HBAR*QEP_GAMMA/Q;
-  D=QEP_ALPHA-1.;
-  E=QEP_ALPHA;
+  C=-0.5*HBAR*HBAR*g_config->qep_gamma/Q;
+  D=g_config->qep_alpha-1.;
+  E=g_config->qep_alpha;
 
   // "normalization" of density
   for(i=1;i<=nx+2;i++)
@@ -168,10 +168,10 @@ void quantum_effective_potential(void)
                 *E*pow(n_x[i][j],D)*(n_x[i+1][j]-n_x[i][j])*odx2
                +((MSTAR[i_dom[i][j+1]][1]-MSTAR[i_dom[i][j]][1])/(MSTAR[i_dom[i][j+1]][1]*MSTAR[i_dom[i][j]][1]*M))
                 *E*pow(n_y[i][j],D)*(n_y[i][j+1]-n_y[i][j])*ody2
-                +((pow(n_x[i+1][j],QEP_ALPHA)-2.*pow(n_x[i][j],QEP_ALPHA)+pow(n_x[i-1][j],QEP_ALPHA))*odx2
-                +(pow(n_y[i][j+1],QEP_ALPHA)-2.*pow(n_y[i][j],QEP_ALPHA)+pow(n_y[i][j-1],QEP_ALPHA))*ody2)
+                +((pow(n_x[i+1][j],g_config->qep_alpha)-2.*pow(n_x[i][j],g_config->qep_alpha)+pow(n_x[i-1][j],g_config->qep_alpha))*odx2
+                +(pow(n_y[i][j+1],g_config->qep_alpha)-2.*pow(n_y[i][j],g_config->qep_alpha)+pow(n_y[i][j-1],g_config->qep_alpha))*ody2)
                /(MSTAR[i_dom[i][j]][1]*M);
-      Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),QEP_ALPHA);
+      Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),g_config->qep_alpha);
      } else {
       // no quantum effective potential when no particles are present
       Qeff[i][j]=0.0;
@@ -186,14 +186,14 @@ void quantum_effective_potential(void)
 
 // DENSITY GRADIENT
 // ================
- if(QEP_MODEL==QEP_DENSITY_GRADIENT){
+ if(g_config->qep_model==QEP_DENSITY_GRADIENT){
   for(i=1;i<=nx+1;i++) for(j=1;j<=ny+1;j++) Qeff[i][j]=0.;
 
-  QEP_ALPHA=0.5;
+  g_config->qep_alpha=0.5;
 
-  C=-HBAR*HBAR*QEP_GAMMA/Q/6.;
-  D=QEP_ALPHA-1.;
-  E=QEP_ALPHA;
+  C=-HBAR*HBAR*g_config->qep_gamma/Q/6.;
+  D=g_config->qep_alpha-1.;
+  E=g_config->qep_alpha;
 
   // "normalization" of density
   for(i=1;i<=nx+2;i++)
@@ -271,10 +271,10 @@ void quantum_effective_potential(void)
   for(i=3;i<=nx-1;i++)
     for(j=3;j<=ny-1;j++){
      if(n_x[i][j]>0.0){
-      tmp=((pow(n_x[i+1][j],QEP_ALPHA)-2.*pow(n_x[i][j],QEP_ALPHA)+pow(n_x[i-1][j],QEP_ALPHA))*odx2
-         +(pow(n_y[i][j+1],QEP_ALPHA)-2.*pow(n_y[i][j],QEP_ALPHA)+pow(n_y[i][j-1],QEP_ALPHA))*ody2)
+      tmp=((pow(n_x[i+1][j],g_config->qep_alpha)-2.*pow(n_x[i][j],g_config->qep_alpha)+pow(n_x[i-1][j],g_config->qep_alpha))*odx2
+         +(pow(n_y[i][j+1],g_config->qep_alpha)-2.*pow(n_y[i][j],g_config->qep_alpha)+pow(n_y[i][j-1],g_config->qep_alpha))*ody2)
          /(MSTAR[i_dom[i][j]][1]*M);
-      Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),QEP_ALPHA);
+      Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),g_config->qep_alpha);
      } else {
       // no quantum effective potential when no particles are present
       Qeff[i][j]=0.0;
@@ -290,7 +290,7 @@ void quantum_effective_potential(void)
 
 // FULL effective potential
 // ========================
- if(QEP_MODEL==QEP_FULL){
+ if(g_config->qep_model==QEP_FULL){
 //  int l,m;
 //  real tmp;
   real odx2=1./(dx*dx);
@@ -302,7 +302,7 @@ void quantum_effective_potential(void)
   for(i=2;i<=nx;i++)
    for(j=2;j<=ny;j++){
     // electron wavelenght
-    alpha2=HBAR*HBAR/(8.*M*MSTAR[i_dom[i][j]][1]*KB*TL);
+    alpha2=HBAR*HBAR/(8.*M*MSTAR[i_dom[i][j]][1]*KB*g_config->lattice_temp);
     // Mac-Laurin series up to second derivative (leading correction term)
     Qeff[i][j]=alpha2*((PSI[i+1][j]-2.*PSI[i][j]+PSI[i-1][j])*odx2
                       +(PSI[i][j+1]-2.*PSI[i][j]+PSI[i][j-1])*ody2);
@@ -312,7 +312,7 @@ void quantum_effective_potential(void)
  // adds the quantum correction to the electrostatic potential
  for(i=1;i<=nx+1;i++) for(j=1;j<=ny+1;j++) u2d[i][j][0]=PSI[i][j]+Qeff[i][j];
 
- if(MAXIMINI==1){
+ if(g_config->max_min_output){
     real maxi,mini;
 // Compute the maximum and minimum of Quantum Effective Potential
     maxi=Qeff[8][8];

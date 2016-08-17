@@ -51,7 +51,7 @@ void drift(particle_t *particle, real tau)
     hmt = HM[i_dom[i][j]][iaux] * tau;
     ksquared = mc_particle_ksquared(particle);
 
-    if(CONDUCTION_BAND == KANE) {
+    if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
         gk = HHM[i_dom[i][j]][iaux] * ksquared;
         thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][particle->valley] * gk);
@@ -64,7 +64,7 @@ void drift(particle_t *particle, real tau)
         particle->kx += dkx;
         particle->ky += dky;
     }
-    else if(CONDUCTION_BAND == PARABOLIC) {
+    else if(g_config->conduction_band == PARABOLIC) {
         vx = particle->kx * HM[i_dom[i][j]][iaux];
         vy = particle->ky * HM[i_dom[i][j]][iaux];
         dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
@@ -74,7 +74,7 @@ void drift(particle_t *particle, real tau)
         particle->kx += dkx;
         particle->ky += dky;
     }
-    else if(CONDUCTION_BAND == FULL) {
+    else if(g_config->conduction_band == FULL) {
         real k4, k2, ks;
         real dx, dy, d;
         vx = particle->kx * HM[i_dom[i][j]][iaux];
@@ -131,13 +131,13 @@ void drift(particle_t *particle, real tau)
     // right edge
     // ==========
     // ---Insulator---
-    if(particle->x >= LX && mc_is_boundary_insulator(direction_t.RIGHT, j)) {
-        particle->x = LX - (particle->x - LX);
+    if(particle->x >= g_mesh->width && mc_is_boundary_insulator(direction_t.RIGHT, j)) {
+        particle->x = g_mesh->width - (particle->x - g_mesh->width);
         particle->kx *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->x >= LX && mc_is_boundary_contact(direction_t.RIGHT, j)) {
+    else if(particle->x >= g_mesh->width && mc_is_boundary_contact(direction_t.RIGHT, j)) {
         mc_remove_particle(particle);
         return;
     }
@@ -159,13 +159,13 @@ void drift(particle_t *particle, real tau)
     // upper edge
     // ==========
     // ---Insulator---
-    if(particle->y >= LY && mc_is_boundary_insulator(direction_t.TOP, i)) {
-        particle->y = LY - (particle->y - LY);
+    if(particle->y >= g_mesh->height && mc_is_boundary_insulator(direction_t.TOP, i)) {
+        particle->y = g_mesh->height - (particle->y - g_mesh->height);
         particle->ky *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->y >= LY && mc_is_boundary_contact(direction_t.TOP, i)) {
+    else if(particle->y >= g_mesh->height && mc_is_boundary_contact(direction_t.TOP, i)) {
         mc_remove_particle(particle);
         return;
     }

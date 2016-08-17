@@ -87,7 +87,7 @@ void SaveOutput2DGNUPLOT(int je) {
     vo = fopen(s, "w");
 
 // Save the Monte Carlo results
- if(Model_Number==MCE || Model_Number==MCEH){
+ if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
 // Electron Density Output
 // =======================
   for(j=1;j<=ny+1;j++){
@@ -193,7 +193,7 @@ void SaveOutput2DGNUPLOT(int je) {
    fclose(vo);
   }
 // Save the Hybrid MEP results
- if(Model_Number==MEPE || Model_Number==MEPEH){
+ if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
 // Electron Density Output
 // =======================
   for(j=1;j<=ny+1;j++){

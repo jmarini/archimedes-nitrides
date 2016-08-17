@@ -151,7 +151,7 @@ Electric_Field(void)
      for(i=0;i<=nx+1;i++)
        u2d[i][j][0]-=EMIN[i_dom[i][j]][1];
 
- if(Quantum_Flag==1){
+ if(g_config->quantum_flag){
    printf("Calculation of Quantum Effective Potential\n");
 // We take in account the Quantum Effects
    quantum_effective_potential();

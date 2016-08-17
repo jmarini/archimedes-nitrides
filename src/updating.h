@@ -42,7 +42,7 @@ updating(int model)
 // Computation of the electric field
 // =================================
   Electric_Field();
-  if(FARADAYFLAG) Faraday();
+  if(g_config->faraday_flag) { Faraday(); }
 
     // Monte Carlo Simulation
     // ======================
@@ -50,39 +50,42 @@ updating(int model)
         EMC( );
         Charge( );
         media( );
-        if(TEMPO + DT >= TF) { DT = TF - TEMPO; }
-        TEMPO += DT;
+        // If timestep would put simulation time after ending time, adjust step
+        if(g_config->time + g_config->dt >= g_config->tf) {
+            g_config->dt = g_config->tf - g_config->time;
+        }
+        g_config->time += g_config->dt;
     }
 // Electron MEP Simulation
 // =======================
   if(model==MEPE || model==MEPEH){
-   DT/=2.;
+   g_config->dt/=2.;
    ParabMEP2D(nx,ny,dx,dy,0.475,1.0);
    electron_relaxation_step();
-   DT*=2.;
+   g_config->dt*=2.;
   }
 // Hole MEP Simulation
 // ===================
   if(model==MEPH || model==MEPEH){
-   DT/=2.;
+   g_config->dt/=2.;
    Hole_MEP2D(nx,ny,dx,dy,0.475,1.0);
    Relaxation_Step_Hole();
-   DT*=2.;
+   g_config->dt*=2.;
   }
 // Output on some usefull informations about the simulation
-  printf("%5d   TIME = %10.4g  (picosec)\n",c,TEMPO*1.e12);
-  if(MAXIMINI==1){
+  printf("%5d   TIME = %10.4g  (picosec)\n",c,g_config->time*1.e12);
+  if(g_config->max_min_output){
 // Compute the maximum and minimum of various macroscopic variables
 // Max and Min of Potential
     maxi=u2d[8][8][0];
     mini=u2d[8][8][0];
     for(i=1;i<=nx+1;i++)
       for(j=1;j<=ny+1;j++){
-       if(Model_Number==MCE || Model_Number==MCEH){
+       if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
         if(u2d[i][j][0]>=maxi) maxi=u2d[i][j][0];
         if(u2d[i][j][0]<=mini) mini=u2d[i][j][0];
        }
-       if(Model_Number==MEPE || Model_Number==MEPEH){
+       if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
         if(u2d[i+2][j+2][0]>=maxi) maxi=u2d[i+2][j+2][0];
         if(u2d[i+2][j+2][0]<=mini) mini=u2d[i+2][j+2][0];
        }
@@ -114,11 +117,11 @@ updating(int model)
     mini=DDmax;
     for(i=1;i<=nx+1;i++)
       for(j=1;j<=ny+1;j++){
-       if(Model_Number==MCE || Model_Number==MCEH){
+       if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
         if(u2d[i][j][1]>=maxi) maxi=u2d[i][j][1];
         if(u2d[i][j][1]<=mini) mini=u2d[i][j][1];
        }
-       if(Model_Number==MEPE || Model_Number==MEPEH){
+       if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
         if(u2d[i+2][j+2][1]>=maxi) maxi=u2d[i+2][j+2][1];
         if(u2d[i+2][j+2][1]<=mini) mini=u2d[i+2][j+2][1];
        }
@@ -128,11 +131,11 @@ updating(int model)
   }
 
 // Here we save at each step if this option has been choosed
-  if(SAVEALWAYS==1){
-    SaveOutputFiles(File_Format,c);
+  if(g_config->save_step_output==1){
+    SaveOutputFiles(g_config->output_format,c);
     printf("Output number %d has been saved\n",c);
   }
-  if(fabs(TEMPO-TF)/fabs(TF)<SMALL){
+  if(fabs(g_config->time-g_config->tf)/fabs(g_config->tf)<SMALL){
 // Compute the various currents on the various defined contacts
     Compute_Currents();
     c=ITMAX+10;

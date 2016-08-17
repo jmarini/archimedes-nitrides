@@ -56,7 +56,7 @@ void scatter(particle_t *particle, int material)
     if(NOVALLEY[material] == 1) {
         ksquared = mc_particle_ksquared(particle);
 
-        if(CONDUCTION_BAND==FULL){
+        if(g_config->conduction_band==FULL){
             real k, k2, k4;
             k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
             k2 =  k * k;
@@ -75,11 +75,11 @@ void scatter(particle_t *particle, int material)
                                  + CB_FULL[material][9] * k
                                  + CB_FULL[material][10]; // in eV
         }
-        if(CONDUCTION_BAND == KANE) {
+        if(g_config->conduction_band == KANE) {
             thesquareroot = sqrt(1. + 4. * alphaK[material][1] * HHM[material][0] * ksquared);
             superparticle_energy = (thesquareroot - 1.) / (2. * alphaK[material][1]);
         }
-        if(CONDUCTION_BAND == PARABOLIC) {
+        if(g_config->conduction_band == PARABOLIC) {
             superparticle_energy = HHM[material][0] * ksquared; // in eV
         }
 
@@ -126,7 +126,7 @@ void scatter(particle_t *particle, int material)
         // =================================
         // Determination of the final states
         // =================================
-        if(CONDUCTION_BAND == FULL) {
+        if(g_config->conduction_band == FULL) {
             // look for a final k
             // bisection algorithm, probably not best but at least something to start from..
             real x = 0.0,
@@ -172,11 +172,11 @@ void scatter(particle_t *particle, int material)
             }
             finalk = x * 1.e12 * 2. * PI;
         }
-        if(CONDUCTION_BAND == KANE) {
+        if(g_config->conduction_band == KANE) {
             finalk = SMH[material][0]
                    * sqrt(finalenergy * (1. + alphaK[material][1] * finalenergy));
         }
-        if(CONDUCTION_BAND == PARABOLIC) {
+        if(g_config->conduction_band == PARABOLIC) {
             finalk = SMH[material][0] * sqrt(finalenergy);
         }
 
@@ -197,14 +197,14 @@ void scatter(particle_t *particle, int material)
         ksquared = mc_particle_ksquared(particle);
         ki = sqrt(ksquared);
 
-        if(CONDUCTION_BAND == KANE) {
+        if(g_config->conduction_band == KANE) {
             thesquareroot = sqrt(1. + 4. * alphaK[material][particle->valley]
                                          * HHM[material][particle->valley]
                                          * ksquared);
             superparticle_energy = (thesquareroot - 1.)
                                  / (2. * alphaK[material][particle->valley]);
         }
-        if(CONDUCTION_BAND == PARABOLIC) {
+        if(g_config->conduction_band == PARABOLIC) {
             superparticle_energy = HHM[material][particle->valley] * ksquared;
         }
 
@@ -226,11 +226,11 @@ void scatter(particle_t *particle, int material)
                 if(finalenergy <= 0.) { return; }
                 has_scattered = 1;
 
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -268,11 +268,11 @@ void scatter(particle_t *particle, int material)
                 if(finalenergy <= 0.) { return; }
                 has_scattered = 1;
 
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf=SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -321,11 +321,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -347,11 +347,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -372,11 +372,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -431,11 +431,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -465,11 +465,11 @@ void scatter(particle_t *particle, int material)
                 if(finalenergy <= 0.) { return; }
                 has_scattered = 1;
 
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -507,11 +507,11 @@ void scatter(particle_t *particle, int material)
                 if(finalenergy <= 0.) { return; }
                 has_scattered = 1;
 
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -553,11 +553,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -579,11 +579,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -602,11 +602,11 @@ void scatter(particle_t *particle, int material)
                 if(finalenergy <= 0.) { return; }
                 has_scattered = 1;
 
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -626,11 +626,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND==KANE) {
+                if(g_config->conduction_band==KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND==PARABOLIC) {
+                if(g_config->conduction_band==PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 
@@ -651,11 +651,11 @@ void scatter(particle_t *particle, int material)
 
                 finalk = sqrt(ksquared);
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
                 cs = 1. - 2. * rnd();
@@ -709,11 +709,11 @@ void scatter(particle_t *particle, int material)
                 has_scattered = 1;
 
                 // determination of the final states
-                if(CONDUCTION_BAND == KANE) {
+                if(g_config->conduction_band == KANE) {
                     kf = SMH[material][particle->valley]
                        * sqrt(finalenergy * (1. + alphaK[material][particle->valley] * finalenergy));
                 }
-                if(CONDUCTION_BAND == PARABOLIC) {
+                if(g_config->conduction_band == PARABOLIC) {
                     kf = SMH[material][particle->valley] * sqrt(finalenergy);
                 }
 

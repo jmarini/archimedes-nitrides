@@ -44,12 +44,12 @@ void MCdevice_config(void) {
          c7;
 
     // Number of carriers per particle
-    EPP = DDmax * dx * dy / NP1;
+    EPP = DDmax * dx * dy / g_config->particles_per_cell;
 
     for(i=1;i<=nx+1;i++) {
         for(j=1;j<=ny+1;j++){
             // np=number of particles in the (i,j)-th cell
-            if(leid_flag == 1) {
+            if(g_config->load_initial_data == 1) {
                 np = (int)(u2d[i][j][1] * dx * dy / EPP + 0.5);
             }
             else {
@@ -71,7 +71,7 @@ void MCdevice_config(void) {
                     // In the case of two-valleys materials, 80% of the electrons are considered in the Gamma
                     // valley in the starting simulation time, while the other 20% are
                     // in the L-valley.
-                    if(leid_flag == 0) {
+                    if(g_config->load_initial_data == 0) {
                         valley=1;
                         c1=log(rnd());
                         if(NOVALLEY[i_dom[i][j]]==1) {
@@ -89,7 +89,7 @@ void MCdevice_config(void) {
                         }
                     }
                     // The following is in case of precendtly loaded initial data.
-                    else if(leid_flag == 1) {
+                    else if(g_config->load_initial_data == 1) {
                         valley=1;
                         // In this case c1 represents the mean electron energy
                         // loaded from precedent simulations and have nothing to
@@ -122,8 +122,8 @@ void MCdevice_config(void) {
                     P[n].y  = dy*(rnd()+(real)(j)-1.5);
                     if(i==1) P[n].x=dx*0.5*rnd();
                     if(j==1) P[n].y=dy*0.5*rnd();
-                    if(i==nx+1) P[n].x=LX-dx*0.5*rnd();
-                    if(j==ny+1) P[n].y=LY-dy*0.5*rnd();
+                    if(i==nx+1) P[n].x=g_mesh->width-dx*0.5*rnd();
+                    if(j==ny+1) P[n].y=g_mesh->height-dy*0.5*rnd();
                 }
             }
         }

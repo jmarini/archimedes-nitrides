@@ -173,9 +173,9 @@ tauwi(real t)
 // input : energy in Joule
 // output : tauw in sec
  real W=t; // energy in Joule
- real W0=1.5*KB*TL; // lattice energy in Joule
+ real W0=1.5*KB*g_config->lattice_temp; // lattice energy in Joule
  if(-(W-W0)/cwi(W)!=0.) return -(W-W0)/cwi(W);
- else return TAUW;
+ else return g_config->tauw;
 }
 
 // ******************************

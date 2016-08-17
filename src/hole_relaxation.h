@@ -48,16 +48,16 @@ for(c=1;c<=50;c++)
  for(i=ND;i<=nx+ND;i++)
    for(j=ND;j<=ny+ND;j++){
      t=(2./3.)*(h2d[i][j][4]/h2d[i][j][1])/KB;
-     ktaup=M*mstarhole*MIU0hole*TL/Q;
-     ktauw=MIU0hole*TL*KB/(Q*VShole*VShole);
+     ktaup=M*mstarhole*MIU0hole*g_config->lattice_temp/Q;
+     ktauw=MIU0hole*g_config->lattice_temp*KB/(Q*VShole*VShole);
      taup=ktaup/t;
-     tauw=0.5*ktaup/t+1.5*ktauw*t/(t+TL);
-     h2d[i][j][4]+=-DT/50.*(-Q*(h2d[i][j][2]*E[i-1][j-1][0]
+     tauw=0.5*ktaup/t+1.5*ktauw*t/(t+g_config->lattice_temp);
+     h2d[i][j][4]+=-g_config->dt/50.*(-Q*(h2d[i][j][2]*E[i-1][j-1][0]
                   +h2d[i][j][3]*E[i-1][j-1][1])
-                  +h2d[i][j][1]*1.5*KB*(t-TL)/tauw);
-     h2d[i][j][2]+=-DT/50.*(-h2d[i][j][1]*Q*E[i-1][j-1][0]/(M*mstarhole)
+                  +h2d[i][j][1]*1.5*KB*(t-g_config->lattice_temp)/tauw);
+     h2d[i][j][2]+=-g_config->dt/50.*(-h2d[i][j][1]*Q*E[i-1][j-1][0]/(M*mstarhole)
                   +h2d[i][j][2]/taup);
-     h2d[i][j][3]+=-DT/50.*(-h2d[i][j][1]*Q*E[i-1][j-1][1]/(M*mstarhole)
+     h2d[i][j][3]+=-g_config->dt/50.*(-h2d[i][j][1]*Q*E[i-1][j-1][1]/(M*mstarhole)
                   +h2d[i][j][3]/taup);
    }
 }

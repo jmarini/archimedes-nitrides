@@ -39,20 +39,20 @@ void
 SaveOutputFiles(int File_Format,int c)
 {
  if(File_Format==MESHFORMAT){
-  if(Model_Number==MCE || Model_Number==MCEH || 
-     Model_Number==MEPE || Model_Number==MEPEH)
+  if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH || 
+     g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
        SaveOutput2D_MeshFormat(c);
-  if(Model_Number==MCH || Model_Number==MCEH ||
-     Model_Number==MEPH || Model_Number==MEPEH)
+  if(g_config->simulation_model==MCH || g_config->simulation_model==MCEH ||
+     g_config->simulation_model==MEPH || g_config->simulation_model==MEPEH)
        SaveOutput2DHole_MeshFormat(c);
   return;
  }
  if(File_Format==GNUPLOTFORMAT){
-  if(Model_Number==MCE || Model_Number==MCEH ||
-     Model_Number==MEPE || Model_Number==MEPEH)
+  if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH ||
+     g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH)
        SaveOutput2DGNUPLOT(c);
-  if(Model_Number==MCH || Model_Number==MCEH ||
-     Model_Number==MEPH || Model_Number==MEPEH) 
+  if(g_config->simulation_model==MCH || g_config->simulation_model==MCEH ||
+     g_config->simulation_model==MEPH || g_config->simulation_model==MEPEH) 
        SaveOutput2DHoleGNUPLOT(c);
   return;
  }

@@ -47,23 +47,9 @@ Read_Input_File(void)
 // in the input file we have
 // the following values.
 // ============================
- OPTICALPHONONS=ON;  // Optical phonons scattering ON by default
- ACOUSTICPHONONS=ON; // Acoustic phonons scattering ON by default
- IMPURITYPHONONS=ON; // Impurity phonons scattering ON by default
- PIEZOELECTRIC=OFF; // Piezoelectric scattering OFF by default
- CONDUCTION_BAND=KANE;   // Kane approximation by default
- QEP_ALPHA=0.5; // alpha parameter for quantum effective potential
- QEP_GAMMA=1.0; // gamma parameter for quantum effective potential
- QEP_MODEL=QEP_BOHM; // Bohm potential by default (if QEP is ON)
- SAVE_MESH=OFF; // dont save the mesh by default
  XVAL[ALXINXSB]=XVAL[ALXIN1XSB]=XVAL[INXGA1XAS]=XVAL[INXAL1XAS]=XVAL[INXGAXXAS]=0.5;
- Model_Number=MCE; // here we choose the model
  nx=50; // default # of cells in x-direction
  ny=50; // default # of cells in y-direction
- TF=5.0e-12; // Default Final Time in seconds
- DT=0.001e-12; // Default constant time step
- TAUW=0.4e-12; // Default Energy relaxation time
- FARADAYFLAG=0; // no evolution of magnetic field taken into account as default (B = 0 or const.)
 // standard doping concentration
  for(i=1;i<=nx+1;i++)
    for(j=1;j<=ny+1;j++){
@@ -74,31 +60,21 @@ Read_Input_File(void)
       i_dom[i][j]=SILICON; // Silicon everywhere as default
       B[i][j]=0.; // no magnetic field as default
    }
- CIMP=1.e20; // Impurity concentration
- TL=300.; // Lattice temperature in Kelvin
- NP1=2500; // Number of particle in n+ cell
- MEDIA=500; // Number of step on which we compute the various mean average
- moving_alpha = 1. / (real)MEDIA;
- Quantum_Flag=0; // No quantum effects taken into account
- MAXIMINI=0; // No computation of max and min of variables during simulation
- SAVEALWAYS=0; // we don't save at each step by default
- SCATTERING_OUTPUT=0; // don't output scattering rates by default
- File_Format=GNUPLOTFORMAT; // output file in mesh format
- leid_flag=0;
  SIO2_UP_FLAG=0; // No upper SiO2
  SIO2_DOWN_FLAG=0; // No lower SiO2
 
     // setting defaults using configuration object
-    g_config->optical_phonon_scattering = ON;
-    g_config->acoustic_phonon_scattering = ON;
-    g_config->impurity_scattering = ON;
-    g_config->piezoelectric_scattering = ON;
+    g_config->optical_phonon_scattering = ON;  // Optical phonons scattering ON by default
+    g_config->acoustic_phonon_scattering = ON; // Acoustic phonons scattering ON by default
+    g_config->impurity_scattering = ON;        // Impurity phonons scattering ON by default
+    g_config->piezoelectric_scattering = ON;   // Piezoelectric scattering OFF by default
     g_config->conduction_band = KANE;
     g_config->qep_alpha = 0.5;
     g_config->qep_gamma = 1.0;
     g_config->qep_model = QEP_BOHM;
     g_config->save_mesh = OFF;
     g_config->simulation_model = MCE; // model_number
+    g_config->time = 0.;
     g_config->tf = 5.0e-12;
     g_config->dt = 0.001e-12;
     g_config->tauw = 0.4e-12;
@@ -220,19 +196,16 @@ Read_Input_File(void)
     if(strcmp(s,"MC")==0){
       fscanf(fp,"%s",s);
       if(strcmp(s,"ELECTRONS")==0){
-        Model_Number=MCE;
         g_config->simulation_model = MCE;
         printf("TRANSPORT MC %s ---> Ok\n",s);
       }
       else if(strcmp(s,"HOLES")==0){
-        Model_Number=MCH;
         g_config->simulation_model = MCH;
         printf("TRANSPORT %s ---> Ok\n",s);
         printf("%s: hole transport not yet implemented\n",progname);
         exit(EXIT_FAILURE);
       }
       else if(strcmp(s,"BIPOLAR")==0){
-        Model_Number=MCEH;
         g_config->simulation_model = MCEH;
         printf("TRANSPORT MC %s ---> Ok\n",s);
       }
@@ -244,17 +217,14 @@ Read_Input_File(void)
     else if(strcmp(s,"MEP")==0){
       fscanf(fp,"%s",s);
       if(strcmp(s,"ELECTRONS")==0){
-        Model_Number=MEPE;
         g_config->simulation_model = MEPE;
         printf("TRANSPORT MEP %s ---> Ok\n",s);
       }
       else if(strcmp(s,"HOLES")==0){
-        Model_Number=MEPH;
         g_config->simulation_model = MEPH;
         printf("TRANSPORT %s ---> Ok\n",s);
       }
       else if(strcmp(s,"BIPOLAR")==0){
-        Model_Number=MEPEH;
         g_config->simulation_model = MEPEH;
         printf("TRANSPORT %s ---> Ok\n",s);
       }
@@ -281,7 +251,7 @@ Read_Input_File(void)
       printf("%s: you have to define the x-length first\n",progname);
       exit(EXIT_FAILURE);
     }
-    dx=LX/nx; // length of cell in x-direction
+    dx=g_mesh->width/nx; // length of cell in x-direction
     g_mesh->dx = g_mesh->width / g_mesh->nx;
     printf("XSPATIALSTEP = %d ---> Ok\n",nx);
   }
@@ -298,19 +268,18 @@ Read_Input_File(void)
       printf("%s: you have to define the y-length first\n",progname);
       exit(EXIT_FAILURE);
     }
-    dy=LY/ny; // length of cell in y-direction
+    dy=g_mesh->height/ny; // length of cell in y-direction
     g_mesh->dy = g_mesh->height / g_mesh->ny;
     printf("YSPATIALSTEP = %d ---> Ok\n",ny);
   }
 // specify the final time of simulation
   else if(strcmp(s,"FINALTIME")==0){
     fscanf(fp,"%lg",&num);
-    TF=num;
     g_config->tf = num;
-    if(TF<=0.){
+    if(g_config->tf<=0.){
       printf("%s: not valid final time\n",progname);
     }
-    printf("FINAL TIME = %lg ---> Ok\n",TF);
+    printf("FINAL TIME = %lg ---> Ok\n",g_config->tf);
   }
 // Setting the Silicon Oxyde interface
   else if(strcmp(s,"OXYDE")==0){
@@ -325,7 +294,7 @@ Read_Input_File(void)
       }
       fscanf(fp,"%lf",&num);
       SIO2_FIN[0]=num;
-      if(num<=SIO2_INI[0] || num>LX){
+      if(num<=SIO2_INI[0] || num>g_mesh->width){
         printf("%s: not valid upper SiO2 final position\n",progname);
         exit(EXIT_FAILURE);
       }
@@ -350,7 +319,7 @@ Read_Input_File(void)
       }
       fscanf(fp,"%lf",&num);
       SIO2_FIN[1]=num;
-      if(num<=SIO2_INI[1] || num>LX){
+      if(num<=SIO2_INI[1] || num>g_mesh->width){
         printf("%s: not valid lower SiO2 final position\n",progname);
         exit(EXIT_FAILURE);
       }
@@ -369,29 +338,27 @@ Read_Input_File(void)
       printf("%s: not valid final time\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("FINAL TIME = %g ---> Ok\n",TF);
+    printf("OXYDE = %g ---> Ok\n");
   }
 // setting the energy relaxation time
   else if(strcmp(s,"TAUW")==0){
     fscanf(fp,"%lf",&num);
-    TAUW=num;
     g_config->tauw = num;
-    if(TAUW==0.){
+    if(g_config->tauw==0.){
       printf("%s: not valid energy relaxation time\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("TAUW = %g ---> Ok\n",TAUW);
+    printf("TAUW = %g ---> Ok\n",g_config->tauw);
   }
 // configuration of the time step
   else if(strcmp(s,"TIMESTEP")==0){
     fscanf(fp,"%lf",&num);
-    DT=num;
     g_config->dt = num;
-    if(DT<=0.){
+    if(g_config->dt<=0.){
       printf("%s: not valid time step\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("TIME STEP = %g ---> Ok\n",DT);
+    printf("TIME STEP = %g ---> Ok\n",g_config->dt);
   }
 // load electron initial data ___ LEID = Load Electron Initial Data
   else if(strcmp(s,"LEID")==0){
@@ -421,7 +388,7 @@ Read_Input_File(void)
       exit(EXIT_FAILURE);
      }
 // Load the initial data for electrons in case of Monte Carlo method
-    if(Model_Number==MCE || Model_Number==MCEH){
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
       for(j=1;j<=ny+1;j++)
        for(i=1;i<=nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
@@ -436,7 +403,7 @@ Read_Input_File(void)
        }
     }
 // Load the initial data for electrons in case of Simplified MEP model
-    if(Model_Number==MEPE || Model_Number==MEPEH){
+    if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
       for(j=1;j<=ny+1;j++)
        for(i=1;i<=nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
@@ -453,44 +420,41 @@ Read_Input_File(void)
     fclose(dp);
     fclose(ep);
     fclose(pp);
-    leid_flag=1;
+    g_config->load_initial_data = ON;
     printf("Electron initial data loaded ---> Ok\n");
   }
 // choice of the GaAs impurity concentration
   else if(strcmp(s,"CIMP")==0){
     fscanf(fp,"%lf",&num);
-    CIMP=num;
     g_config->impurity_conc = num;
-    if(CIMP<0.){
+    if(g_config->impurity_conc<0.){
       printf("%s: not valid impurity concentration\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("CIMP = %g ---> Ok\n",CIMP);
+    printf("CIMP = %g ---> Ok\n",g_config->impurity_conc);
   }
 
 // read the x length of the device
   else if(strcmp(s,"XLENGTH")==0){
     fscanf(fp,"%lf",&num);
-    LX=num;
     g_mesh->width = num;
-    if(LX<=0.){
+    if(g_mesh->width<=0.){
       printf("%s: not valid x-length\n",progname);
       exit(EXIT_FAILURE);
     }
     LXflag=1;
-    printf("LENGTH X = %g ---> Ok\n",LX);
+    printf("LENGTH X = %g ---> Ok\n",g_mesh->width);
   }
 // read the y length of the device
   else if(strcmp(s,"YLENGTH")==0){
     fscanf(fp,"%lf",&num);
-    LY=num;
     g_mesh->height = num;
-    if(LY<=0.){
+    if(g_mesh->height<=0.){
       printf("%s: not valid y-length\n",progname);
       exit(EXIT_FAILURE);
     }
     LYflag=1;
-    printf("LENGTH Y = %g ---> Ok\n",LY);
+    printf("LENGTH Y = %g ---> Ok\n",g_mesh->height);
   }
 // read the donor doping density
   else if(strcmp(s,"DONORDENSITY")==0){
@@ -516,14 +480,14 @@ Read_Input_File(void)
 // read and check the xmax value
     fscanf(fp,"%lf",&num);
     xmax=num;
-    if(xmax>LX){
+    if(xmax>g_mesh->width){
       printf("%s: not valid xmax value\n",progname);
       exit(EXIT_FAILURE);
     }
 // read and check the ymax value
     fscanf(fp,"%lf",&num);
     ymax=num;
-    if(ymax>LY){
+    if(ymax>g_mesh->height){
       printf("%s: not valid xmin value\n",progname);
       exit(EXIT_FAILURE);
     }
@@ -534,7 +498,7 @@ Read_Input_File(void)
       printf("%s: not valid donor density\n",progname);
       exit(EXIT_FAILURE);
     }
-    if(Model_Number==MCE || Model_Number==MCEH)
+    if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
     for(i=1;i<=nx+1;i++)
       for(j=1;j<=ny+1;j++)
         if((i-0.5)*dx>=xmin && (i-1.5)*dx<=xmax
@@ -543,7 +507,7 @@ Read_Input_File(void)
            g_mesh->info[i][j].donor_conc = conc;
            g_mesh->info[i][j].e.density = conc;
         }
-    if(Model_Number==MEPE || Model_Number==MEPEH || Model_Number==MEPH)
+    if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH)
     for(i=1;i<=nx+1;i++)
       for(j=1;j<=ny+1;j++){
         if((i-0.5)*dx>=xmin && (i-1.5)*dx<=xmax
@@ -551,7 +515,7 @@ Read_Input_File(void)
            u2d[i+2][j+2][1]=N_D[i][j]=conc;
            g_mesh->info[i][j].donor_conc = conc;
            g_mesh->info[i+2][j+2].e.density = conc;
-           u2d[i+2][j+2][4]=conc*1.5*KB*TL;
+           u2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
            g_mesh->info[i+2][j+2].e.energy = conc * 1.5 * KB * g_config->lattice_temp;
         }
       }
@@ -579,14 +543,14 @@ Read_Input_File(void)
 // read and check the xmax value
     fscanf(fp,"%lf",&num);
     xmax=num;
-    if(xmax>LX){
+    if(xmax>g_mesh->width){
       printf("%s: not valid xmax value\n",progname);
       exit(EXIT_FAILURE);
     }
 // read and check the ymax value
     fscanf(fp,"%lf",&num);
     ymax=num;
-    if(ymax>LY){
+    if(ymax>g_mesh->height){
       printf("%s: not valid xmin value\n",progname);
       exit(EXIT_FAILURE);
     }
@@ -597,7 +561,7 @@ Read_Input_File(void)
       printf("%s: not valid acceptor density\n",progname);
       exit(EXIT_FAILURE);
     }
-    if(Model_Number==MEPEH || Model_Number==MEPH || Model_Number==MCEH)
+    if(g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH || g_config->simulation_model==MCEH)
     for(i=1;i<=nx+1;i++)
       for(j=1;j<=ny+1;j++){
         if((i-0.5)*dx>=xmin && (i-1.5)*dx<=xmax
@@ -605,7 +569,7 @@ Read_Input_File(void)
            h2d[i+2][j+2][1]=N_H[i][j]=conc;
            g_mesh->info[i][j].acceptor_conc = conc;
            g_mesh->info[i+2][j+2].h.density = conc;
-           h2d[i+2][j+2][4]=conc*1.5*KB*TL;
+           h2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
            g_mesh->info[i+2][j+2].h.energy = conc * 1.5 * KB * g_config->lattice_temp;
         }
       }
@@ -613,31 +577,27 @@ Read_Input_File(void)
 // read the lattice temperature
   else if(strcmp(s,"LATTICETEMPERATURE")==0){
     fscanf(fp,"%lf",&num);
-    TL=num;
     g_config->lattice_temp = num;
-    if(TL<=0.){
+    if(g_config->lattice_temp<=0.){
       printf("%s: not valid lattice temperature\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("LATTICE TEMPERATURE = %g ---> Ok\n",TL);
+    printf("LATTICE TEMPERATURE = %g ---> Ok\n",g_config->lattice_temp);
   }
 // read the statistical weight for electrons and holes
   else if(strcmp(s,"STATISTICALWEIGHT")==0){
     fscanf(fp,"%lf",&num);
-    NP1=(int) num;
     g_config->particles_per_cell = (int)num;
-    printf("STATISTICAL WEIGHT = %d ---> Ok\n",NP1);
+    printf("STATISTICAL WEIGHT = %d ---> Ok\n",g_config->particles_per_cell);
   }
 // configuration of the output format
   else if(strcmp(s,"OUTPUTFORMAT")==0){
     fscanf(fp,"%s",s);
     if(strcmp(s,"GNUPLOT")==0){
-     File_Format=GNUPLOTFORMAT;
      g_config->output_format = GNUPLOTFORMAT;
      printf("OUTPUT FORMAT = GNUPLOT/XD3D\n");
     }
     else if(strcmp(s,"MESH")==0){
-     File_Format=MESHFORMAT;
      g_config->output_format = MESHFORMAT;
      printf("OUTPUT FORMAT = MESH/BB\n");
     }
@@ -661,19 +621,19 @@ Read_Input_File(void)
     }
     if(strcmp(pos,"DOWN")==0){
      i=0;
-     delt=LX/nx;
+     delt=g_mesh->width/nx;
     }
     if(strcmp(pos,"RIGHT")==0){
      i=1;
-     delt=LY/ny;
+     delt=g_mesh->height/ny;
     }
     if(strcmp(pos,"UP")==0){
      i=2;
-     delt=LX/nx;
+     delt=g_mesh->width/nx;
     }
     if(strcmp(pos,"LEFT")==0){
      i=3;
-     delt=LY/ny;
+     delt=g_mesh->height/ny;
     }
 // read the "quantitative" position of the contact
     fscanf(fp,"%lf %lf",&num0,&num);
@@ -705,8 +665,8 @@ Read_Input_File(void)
     }
 // read the hole density for the reservoir at contact
 // if and only if the contact is ohmic
-    if(k==2 && (Model_Number==MCH || Model_Number==MEPH
-                   || Model_Number==MCEH || Model_Number==MEPEH)){
+    if(k==2 && (g_config->simulation_model==MCH || g_config->simulation_model==MEPH
+                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)){
       fscanf(fp,"%lf",&num);
       denshole=num;
     }
@@ -735,15 +695,15 @@ Read_Input_File(void)
         EDGE[i][j][1]=potential;
         EDGE[i][j][2]=0;
         if(k==1) EDGE[i][j][2]=NGATE;
-        if(k==1 && (Model_Number==MCH || Model_Number==MEPH
-                   || Model_Number==MCEH || Model_Number==MEPEH))
+        if(k==1 && (g_config->simulation_model==MCH || g_config->simulation_model==MEPH
+                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH))
           EDGE[i][j][3]=NI*NI/NGATE;
       }
       else if(k==2){
         EDGE[i][j][1]=potential;
         EDGE[i][j][2]=dens;
-        if(Model_Number==MCH || Model_Number==MEPH
-          || Model_Number==MCEH || Model_Number==MEPEH)
+        if(g_config->simulation_model==MCH || g_config->simulation_model==MEPH
+          || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)
          EDGE[i][j][3]=denshole;
       }
     }
@@ -754,19 +714,17 @@ Read_Input_File(void)
     else if(k==2){
      printf("CONTACT %s %g %g %s %g %g ",
             pos,ipos,fpos,kind,potential,dens);
-     if(Model_Number==MCH || Model_Number==MEPH
-        || Model_Number==MCEH || Model_Number==MEPEH) printf("%g ",denshole);
+     if(g_config->simulation_model==MCH || g_config->simulation_model==MEPH
+        || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH) printf("%g ",denshole);
      printf("---> Ok\n");
     }
   }
   else if(strcmp(s,"QEP")==0){
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0) {
-    Quantum_Flag=1;
     g_config->quantum_flag = ON;
    }
    else if(strcmp(s,"OFF")==0) {
-    Quantum_Flag=0;
     g_config->quantum_flag = OFF;
    }
    else{
@@ -777,14 +735,12 @@ Read_Input_File(void)
   }
   else if(strcmp(s,"NOQUANTUMEFFECTS")==0){
 // WE KEEP IT ONLY FOR BACK COMPATIBILITY
-    Quantum_Flag=0;
     g_config->quantum_flag = OFF;
     printf("WARNING! This command is DEPRECATED! Use QEP instead!\n");
     printf("QUANTUM EFFECTIVE POTENTIAL = OFF --->Ok\n");
   }
   else if(strcmp(s,"QUANTUMEFFECTS")==0){
 // WE KEEP IT ONLY FOR BACK COMPATIBILITY
-    Quantum_Flag=1;
     g_config->quantum_flag = ON;
     printf("WARNING! This command is DEPRECATED! Use QEP instead!\n");
     printf("QUANTUM EFFECTIVE POTENTIAL = ON --->Ok\n");
@@ -795,29 +751,23 @@ Read_Input_File(void)
       printf("%s: number of media is negative\n",progname);
       exit(EXIT_FAILURE);
     }
-    MEDIA=(int) num;
-    moving_alpha = 1. / (real)MEDIA;
     g_config->avg_steps = (int)num;
     g_config->avg_alpha = 1. / (real)g_config->avg_steps;
-    printf("MEDIA = %d ---> Ok\n",MEDIA);
+    printf("MEDIA = %d ---> Ok\n",g_config->avg_steps);
   }
   else if(strcmp(s,"MAXIMINI")==0){
-    MAXIMINI=1;
     g_config->max_min_output = ON;
     printf("MAXIMINI ---> Ok\n");
   }
   else if(strcmp(s,"NOMAXIMINI")==0){
-    MAXIMINI=0;
     g_config->max_min_output = OFF;
     printf("NO MAXIMINI ---> Ok\n");
   }
   else if(strcmp(s,"SAVEEACHSTEP")==0){
-    SAVEALWAYS=1;
     g_config->save_step_output = ON;
     printf("SAVE AT EACH TIME STEP ---> Ok\n");
   }
   else if(strcmp(s,"SCATTERING_OUTPUT") == 0) {
-    SCATTERING_OUTPUT = 1;
     g_config->scattering_output = ON;
     printf("OUTPUT SCATTERING RATES ---> Ok\n");
   }
@@ -825,18 +775,16 @@ Read_Input_File(void)
 // Faraday equation ON or OFF
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0) {
-    FARADAYFLAG=1;
     g_config->faraday_flag = ON;
    }
    else if(strcmp(s,"OFF")==0) {
-    FARADAYFLAG=0;
     g_config->faraday_flag = OFF;
    }
    else{
      printf("%s : command FARADAY accept ON or OFF.\n",progname);
      exit(0);
    }
-   if(FARADAYFLAG) printf("FARADAY = ON ---> Ok\n");
+   if(g_config->faraday_flag) printf("FARADAY = ON ---> Ok\n");
    else printf("FARADAY = OFF ---> Ok\n");
   }
   else if(strcmp(s,"CONSTANTMAGNETICFIELD")==0){
@@ -864,12 +812,10 @@ Read_Input_File(void)
 // specify if the Optical phonons scateering has to be taken into account
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0){
-    OPTICALPHONONS=ON;
     g_config->optical_phonon_scattering = ON;
     printf("OPTICAL PHONONS SCATTERING = ON ---> Ok\n");
    }
    else if(strcmp(s,"OFF")==0){
-    OPTICALPHONONS=OFF;
     g_config->optical_phonon_scattering = OFF;
     printf("OPTICAL PHONONS SCATTERING = OFF ---> Ok\n");
    }
@@ -882,12 +828,10 @@ Read_Input_File(void)
 // specify if the Acoustic phonons scattering has to be taken into account
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0){
-    ACOUSTICPHONONS=ON;
     g_config->acoustic_phonon_scattering = ON;
     printf("ACOUSTIC PHONONS SCATTERING = ON ---> Ok\n");
    }
    else if(strcmp(s,"OFF")==0){
-    ACOUSTICPHONONS=OFF;
     g_config->acoustic_phonon_scattering = OFF;
     printf("ACOUSTIC PHONONS SCATTERING = OFF ---> Ok\n");
    }
@@ -900,12 +844,10 @@ Read_Input_File(void)
 // specify if the Acoustic phonons scattering has to be taken into account
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0){
-    IMPURITYPHONONS=ON;
     g_config->impurity_scattering = ON;
     printf("IMPURITY PHONONS SCATTERING = ON ---> Ok\n");
    }
    else if(strcmp(s,"OFF")==0){
-    IMPURITYPHONONS=OFF;
     g_config->impurity_scattering = OFF;
     printf("IMPURITY PHONONS SCATTERING = OFF ---> Ok\n");
    }
@@ -918,12 +860,10 @@ Read_Input_File(void)
 // specify if the Acoustic phonons scattering has to be taken into account
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0){
-    PIEZOELECTRIC=ON;
     g_config->piezoelectric_scattering = ON;
     printf("PIEZOELECTRIC SCATTERING = ON ---> Ok\n");
    }
    else if(strcmp(s,"OFF")==0){
-    PIEZOELECTRIC=OFF;
     g_config->piezoelectric_scattering = OFF;
     printf("PIEZOELECTRIC SCATTERING = OFF ---> Ok\n");
    }
@@ -937,17 +877,14 @@ Read_Input_File(void)
 // Possible choices are PARABOLIC, KANE, FULL
    fscanf(fp,"%s",s);
    if(strcmp(s,"PARABOLIC")==0){
-    CONDUCTION_BAND=PARABOLIC;
     g_config->conduction_band = PARABOLIC;
     printf("CONDUCTION BAND = PARABOLIC ---> Ok\n");
    }
    else if(strcmp(s,"KANE")==0){
-    CONDUCTION_BAND=KANE;
     g_config->conduction_band = KANE;
     printf("CONDUCTION BAND = KANE ---> Ok\n");
    }
    else if(strcmp(s,"FULL")==0){
-    CONDUCTION_BAND=FULL;
     g_config->conduction_band = FULL;
     printf("CONDUCTION BAND = FULL BAND ---> Ok\n");
    }
@@ -961,33 +898,27 @@ Read_Input_File(void)
 // quantum effective potential approximation
    real tmp;
    fscanf(fp,"%lf",&tmp);
-   QEP_ALPHA=tmp;
    g_config->qep_alpha = tmp;
    fscanf(fp,"%lf",&tmp);
-   QEP_GAMMA=tmp;
    g_config->qep_gamma = tmp;
-   printf("QUAT. EFF. POT. PARAMETERS\nALPHA = %f --> Ok\nGAMMA = %f --> Ok\n",QEP_ALPHA,QEP_GAMMA);
+   printf("QUAT. EFF. POT. PARAMETERS\nALPHA = %f --> Ok\nGAMMA = %f --> Ok\n",g_config->qep_alpha,g_config->qep_gamma);
   }
   else if(strcmp(s,"QEP_MODEL")==0){
 // Specify the QEP model to be simulated
    fscanf(fp,"%s",s);
    if(strcmp(s,"CALIBRATED_BOHM")==0){
-    QEP_MODEL=QEP_CALIBRATED_BOHM;
     g_config->qep_model = QEP_CALIBRATED_BOHM;
     printf("QEP_MODEL = CALIBRATED BOHM POTENTIAL ---> Ok\n");
    }
    else if(strcmp(s,"BOHM")==0){
-    QEP_MODEL=QEP_BOHM;
     g_config->qep_model = QEP_BOHM;
     printf("QEP_MODEL = BOHM POTENTIAL ---> Ok\n");
    }
    else if(strcmp(s,"FULL")==0){
-    QEP_MODEL=QEP_FULL;
     g_config->qep_model = QEP_FULL;
     printf("QEP_MODEL = FULL EFFECTIVE POTENTIAL ---> Ok\n");
    }
    else if(strcmp(s,"DENSITY_GRADIENT")==0){
-    QEP_MODEL=QEP_DENSITY_GRADIENT;
     g_config->qep_model = QEP_DENSITY_GRADIENT;
     printf("QEP_MODEL = DENSITY GRADIENT ---> Ok\n");
    } else {
@@ -996,7 +927,6 @@ Read_Input_File(void)
    }
   }
   else if(strcmp(s,"SAVEMESH")==0){
-   SAVE_MESH=ON;
    g_config->save_mesh = ON;
    printf("SAVE THE MESH --> Ok\n");
   }

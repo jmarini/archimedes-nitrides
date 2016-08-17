@@ -57,18 +57,18 @@ inline particle_t creation(int i, real t, int edge) {
         x = dx * 0.5 * rnd();
     }
     if((edge == direction_t.BOTTOM || edge == direction_t.TOP) && i == nx) {
-        x = LX - dx * 0.5 * rnd();
+        x = g_mesh->width - dx * 0.5 * rnd();
     }
-    if(edge == direction_t.BOTTOM) { y =      dy * 0.5 * rnd(); }
-    if(edge == direction_t.TOP)    { y = LY - dy * 0.5 * rnd(); }
+    if(edge == direction_t.BOTTOM) { y =                  dy * 0.5 * rnd(); }
+    if(edge == direction_t.TOP)    { y = g_mesh->height - dy * 0.5 * rnd(); }
     if((edge == direction_t.RIGHT || edge == direction_t.LEFT) && i == 1) {
         y = dy * 0.5 * rnd();
     }
     if((edge == direction_t.RIGHT || edge == direction_t.LEFT) && i == ny) {
-        y = LY - dy * 0.5 * rnd();
+        y = g_mesh->height - dy * 0.5 * rnd();
     }
-    if(edge == direction_t.RIGHT) { x = LX - dx * 0.5 * rnd(); }
-    if(edge == direction_t.LEFT)  { x =      dx * 0.5 * rnd(); }
+    if(edge == direction_t.RIGHT) { x = g_mesh->width - dx * 0.5 * rnd(); }
+    if(edge == direction_t.LEFT)  { x =                 dx * 0.5 * rnd(); }
 
     // creation of the particle pseudo-wave vector k=(KX,KY,KZ)
     // in the (i,j)-th cell

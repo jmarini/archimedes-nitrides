@@ -79,11 +79,11 @@ HoleHMEPBCs(void)
        h2d[i+2][2][3]=EDGE[0][i][3]*yvel;
 // energy
        h2d[i+2][0][4]=0.5*mstarhole*M*yvel*yvel*EDGE[0][i][3]
-                   +1.5*KB*TL*EDGE[0][i][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][3];
        h2d[i+2][1][4]=0.5*mstarhole*M*yvel*yvel*EDGE[0][i][3]
-                   +1.5*KB*TL*EDGE[0][i][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][3];
        h2d[i+2][2][4]=0.5*mstarhole*M*yvel*yvel*EDGE[0][i][3]
-                   +1.5*KB*TL*EDGE[0][i][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[0][i][3];
      }
    }
 // Left Edge
@@ -125,11 +125,11 @@ HoleHMEPBCs(void)
        h2d[2][j+2][3]=0.;
 // energy
        h2d[0][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[3][j][3]
-                   +1.5*KB*TL*EDGE[3][j][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][3];
        h2d[1][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[3][j][3]
-                   +1.5*KB*TL*EDGE[3][j][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][3];
        h2d[2][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[3][j][3]
-                   +1.5*KB*TL*EDGE[3][j][3];
+                   +1.5*KB*g_config->lattice_temp*EDGE[3][j][3];
      }
    }
 // Right Edge
@@ -171,15 +171,15 @@ HoleHMEPBCs(void)
        h2d[nx+4][j+2][3]=0.;
 // energy
        h2d[nx+2][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[1][j][3]
-                      +1.5*KB*TL*EDGE[1][j][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][3];
        h2d[nx+3][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[1][j][3]
-                      +1.5*KB*TL*EDGE[1][j][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][3];
        h2d[nx+4][j+2][4]=0.5*mstarhole*M*xvel*xvel*EDGE[1][j][3]
-                      +1.5*KB*TL*EDGE[1][j][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[1][j][3];
      }
    }
 // Upper Edge
-// ==========   
+// ==========
    for(i=1;i<=nx+2;i++){
 // INSULATOR
      if(EDGE[2][i][0]==0){
@@ -217,11 +217,11 @@ HoleHMEPBCs(void)
        h2d[i+2][ny+4][3]=EDGE[2][i][3]*yvel;
 // energy
        h2d[i+2][ny+2][4]=0.5*mstarhole*M*yvel*yvel*EDGE[2][i][3]
-                      +1.5*KB*TL*EDGE[2][i][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][3];
        h2d[i+2][ny+3][4]=0.5*mstarhole*M*yvel*yvel*EDGE[2][i][3]
-                      +1.5*KB*TL*EDGE[2][i][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][3];
        h2d[i+2][ny+4][4]=0.5*mstarhole*M*yvel*yvel*EDGE[2][i][3]
-                      +1.5*KB*TL*EDGE[2][i][3];
+                      +1.5*KB*g_config->lattice_temp*EDGE[2][i][3];
      }
   }
 }
