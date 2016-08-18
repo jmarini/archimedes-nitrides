@@ -306,16 +306,15 @@ int main(int argc, char *argv[]) {
     g_config = malloc(sizeof *g_config);
     g_mesh = malloc(sizeof *g_mesh);
 
-    // material constants definition
-    #include "material_parameters.h"
-
-
     // We reset the some arrays
     // ========================
     memset(&u2d, 0, sizeof(u2d));
     memset(&E, 0, sizeof(E));
     memset(&EDGE, 0, sizeof(EDGE));
     memset(&SIO2, 0, sizeof(SIO2));
+
+    // material constants definition
+    #include "material_parameters.h"
 
     // Read the geometrical and physical description of the MESFET
     // ===========================================================
@@ -334,170 +333,6 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
     }
-    // mesher();
-
-    // III-V Semiconductor materials energy gap (depending on the lattice temperature)
-    printf("\n");
-    EG[SILICON]=1.21-3.333e-4*g_config->lattice_temp;
-    printf("EG[SILICON]      = %g\n",EG[SILICON]);
-    EG[GERMANIUM]=0.747-3.587e-4*g_config->lattice_temp;
-    printf("EG[GERMANIUM]    = %g\n",EG[GERMANIUM]);
-    EG[GAAS]=1.54-4.036e-4*g_config->lattice_temp;
-    printf("EG[GAAS]         = %g\n",EG[GAAS]);
-    EG[INSB]=0.2446-2.153e-4*g_config->lattice_temp;
-    printf("EG[INSB]         = %g\n",EG[INSB]);
-    EG[ALSB]=1.696-2.20e-4*g_config->lattice_temp;
-    printf("EG[ALSB]         = %g\n",EG[ALSB]);
-    EG[ALAS]=2.314-3.0e-4*g_config->lattice_temp;
-    printf("EG[ALAS]         = %g\n",EG[ALAS]);
-    EG[ALP]=2.51-3.333e-4*g_config->lattice_temp;
-    printf("EG[ALP]         = %g\n",EG[ALP]);
-    EG[GAP]=2.35-2.667e-4*g_config->lattice_temp;
-    printf("EG[GAP]         = %g\n",EG[GAP]);
-    EG[GASB]=0.81-3.667e-4*g_config->lattice_temp;
-    printf("EG[GASB]         = %g\n",EG[GASB]);
-    EG[INAS]=0.434-2.601e-4*g_config->lattice_temp;
-    printf("EG[INAS]         = %g\n",EG[INAS]);
-    EG[INP]=1.445-3.296e-4*g_config->lattice_temp;
-    printf("EG[INP]         = %g\n",EG[INP]);
-    EG[GAN]=3.47 - 7.7e-4 * g_config->lattice_temp * g_config->lattice_temp / (g_config->lattice_temp + 600.);
-    printf("EG[GAN]         = %g\n", EG[GAN]);
-    printf("\n");
-
-    if(g_config->conduction_band == KANE ||
-       g_config->conduction_band == PARABOLIC ||
-       g_config->conduction_band == FULL) {
-        // USED WHATEVER IS THE CONDUCTION BAND FOR THE INITIAL PSUEDO WAVE VECTOR
-        // OF THE PSEUDO PARTICLES
-        // all the following non-parabolicity coefficients depend on lattice temperature
-        // non-parabolicity coefficient for GaAs in the GAMMA-valley
-        alphaK[GAAS][1]=pow(1.-MSTAR[GAAS][1],2.)/(EG[GAAS]+EMIN[GAAS][1]);//expected value = 0.611
-        printf("alphaK_gamma[GaAs] = %g\n",alphaK[GAAS][1]);
-        // non-parabolicity coefficient for GaAs in the L-valley
-        alphaK[GAAS][2]=pow(1.-MSTAR[GAAS][2],2.)/(EG[GAAS]+EMIN[GAAS][2]);//expected value = 0.242;
-        printf("alphaK_L[GaAs]     = %g\n",alphaK[GAAS][2]);
-        // non-parabolicity coefficient for InSb in the GAMMA-valley
-        alphaK[INSB][1]=pow(1.-MSTAR[INSB][1],2.)/(EG[INSB]+EMIN[INSB][1]);//5.59;
-        printf("alphaK_gamma[InSb] = %g\n",alphaK[INSB][1]);
-        // non-parabolicity coefficient for AlSb in the GAMMA-valley
-        alphaK[ALSB][1]=pow(1.-MSTAR[ALSB][1],2.)/(EG[ALSB]+EMIN[ALSB][1]);//0.321;
-        printf("alphaK_gamma[AlSb] = %g\n",alphaK[ALSB][1]);
-        // non-parabolicity coefficient for AlAs in the GAMMA-valley
-        alphaK[ALAS][1]=pow(1.-MSTAR[ALAS][1],2.)/(EG[ALAS]+EMIN[ALAS][1]);
-        printf("alphaK_gamma[AlAs] = %g\n",alphaK[ALAS][1]);
-        // non-parabolicity coefficient for AlP in the GAMMA-valley
-        alphaK[ALP][1]=pow(1.-MSTAR[ALP][1],2.)/(EG[ALP]+EMIN[ALP][1]);
-        printf("alphaK_gamma[AlP] = %g\n",alphaK[ALP][1]);
-        // non-parabolicity coefficient for GaP in the GAMMA-valley
-        alphaK[GAP][1]=pow(1.-MSTAR[GAP][1],2.)/(EG[GAP]+EMIN[GAP][1]);
-        printf("alphaK_gamma[GaP] = %g\n",alphaK[GAP][1]);
-        // non-parabolicity coefficient for GaSb in the GAMMA-valley
-        alphaK[GASB][1]=pow(1.-MSTAR[GASB][1],2.)/(EG[GASB]+EMIN[GASB][1]);
-        printf("alphaK_gamma[GaSb] = %g\n",alphaK[GASB][1]);
-        // non-parabolicity coefficient for InAs in the GAMMA-valley
-        alphaK[INAS][1]=pow(1.-MSTAR[INAS][1],2.)/(EG[INAS]+EMIN[INAS][1]);
-        printf("alphaK_gamma[InAs] = %g\n",alphaK[INAS][1]);
-        // non-parabolicity coefficient for InP in the GAMMA-valley
-        alphaK[INP][1]=pow(1.-MSTAR[INP][1],2.)/(EG[INP]+EMIN[INP][1]);
-        printf("alphaK_gamma[InP] = %g\n",alphaK[INP][1]);
-
-        alphaK[GAN][1] = pow(1. - MSTAR[GAN][1], 2.) / (EG[GAN] + EMIN[GAN][1]); // expected value = 0.189
-        printf("alphaK_gamma1[GAN] = %g\n", alphaK[GAN][1]);
-    }
-
-    // Semiconductor compounds
-    // ***
-    // Relative dielectric constant for semiconductor compounds
-    EPSR[ALXINXSB]=XVAL[ALXINXSB]*EPSR[ALSB]+XVAL[ALXINXSB]*EPSR[INSB];
-    EPSR[ALXIN1XSB]=XVAL[ALXIN1XSB]*EPSR[ALSB]+(1.-XVAL[ALXIN1XSB])*EPSR[INSB];
-    EPSR[INXGA1XAS]=XVAL[INXGA1XAS]*EPSR[INAS]+(1.-XVAL[INXGA1XAS])*EPSR[GAAS];
-    EPSR[INXAL1XAS]=XVAL[INXAL1XAS]*EPSR[INAS]+(1.-XVAL[INXAL1XAS])*EPSR[ALAS];
-    EPSR[INXGAXXAS]=XVAL[INXGAXXAS]*EPSR[INAS]+XVAL[INXGAXXAS]*EPSR[GAAS];
-    // semiconductor compounds high frequency dieletric constant
-    EPF[ALXINXSB]=XVAL[ALXINXSB]*(EPF[ALSB]+EPF[INSB]);
-    EPF[ALXIN1XSB]=XVAL[ALXIN1XSB]*EPF[ALSB]+(1.-XVAL[ALXIN1XSB])*EPF[INSB];
-    EPF[INXGA1XAS]=XVAL[INXGA1XAS]*EPF[INAS]+(1.-XVAL[INXGA1XAS])*EPF[GAAS];
-    EPF[INXAL1XAS]=XVAL[INXAL1XAS]*EPF[INAS]+(1.-XVAL[INXAL1XAS])*EPF[ALAS];
-    EPF[INXGAXXAS]=XVAL[INXGAXXAS]*EPF[INAS]+XVAL[INXGAXXAS]*EPF[GAAS];
-    // semiconductor compounds optical phonon scattering energy (eV)
-    HWO[ALXINXSB][0]=XVAL[ALXINXSB]*(HWO[ALSB][0]+HWO[INSB][0]);
-    HWO[ALXIN1XSB][0]=XVAL[ALXIN1XSB]*HWO[ALSB][0]+(1.-XVAL[ALXIN1XSB])*HWO[INSB][0];
-    HWO[INXGA1XAS][0]=XVAL[INXGA1XAS]*HWO[INAS][0]+(1.-XVAL[INXGA1XAS])*HWO[GAAS][0];
-    HWO[INXAL1XAS][0]=XVAL[INXAL1XAS]*HWO[INAS][0]+(1.-XVAL[INXAL1XAS])*HWO[ALAS][0];
-    HWO[INXGAXXAS][0]=XVAL[INXGAXXAS]*HWO[INAS][0]+XVAL[INXGAXXAS]*HWO[GAAS][0];
-    // semiconductor compounds optical coupling constants (eV/m)
-    DTK[ALXINXSB][0]=XVAL[ALXINXSB]*(DTK[ALSB][0]+DTK[INSB][0]);
-    DTK[ALXIN1XSB][0]=XVAL[ALXIN1XSB]*DTK[ALSB][0]+(1.-XVAL[ALXIN1XSB])*DTK[INSB][0];
-    DTK[INXGA1XAS][0]=XVAL[INXGA1XAS]*DTK[INAS][0]+(1.-XVAL[INXGA1XAS])*DTK[GAAS][0];
-    DTK[INXAL1XAS][0]=XVAL[INXAL1XAS]*DTK[INAS][0]+(1.-XVAL[INXAL1XAS])*DTK[ALAS][0];
-    DTK[INXGAXXAS][0]=XVAL[INXGAXXAS]*DTK[INAS][0]+XVAL[INXGAXXAS]*DTK[GAAS][0];
-    // semiconductor compounds optical phonon Z-factor
-    ZF[ALXINXSB][0]=XVAL[ALXINXSB]*(ZF[ALSB][0]+ZF[INSB][0]);
-    ZF[ALXIN1XSB][0]=XVAL[ALXIN1XSB]*ZF[ALSB][0]+(1.-XVAL[ALXIN1XSB])*ZF[INSB][0];
-    ZF[INXGA1XAS][0]=XVAL[INXGA1XAS]*ZF[INAS][0]+(1.-XVAL[INXGA1XAS])*ZF[GAAS][0];
-    ZF[INXAL1XAS][0]=XVAL[INXAL1XAS]*ZF[INAS][0]+(1.-XVAL[INXAL1XAS])*ZF[ALAS][0];
-    ZF[INXGAXXAS][0]=XVAL[INXGAXXAS]*ZF[INAS][0]+XVAL[INXGAXXAS]*ZF[GAAS][0];
-    // semiconductor compounds Crystal Density (Kg/m^3)
-    RHO[ALXINXSB]=XVAL[ALXINXSB]*(RHO[ALSB]+RHO[INSB]);
-    RHO[ALXIN1XSB]=XVAL[ALXIN1XSB]*RHO[ALSB]+(1.-XVAL[ALXIN1XSB])*RHO[INSB];
-    RHO[INXGA1XAS]=XVAL[INXGA1XAS]*RHO[INAS]+(1.-XVAL[INXGA1XAS])*RHO[GAAS];
-    RHO[INXAL1XAS]=XVAL[INXAL1XAS]*RHO[INAS]+(1.-XVAL[INXAL1XAS])*RHO[ALAS];
-    RHO[INXGAXXAS]=XVAL[INXGAXXAS]*RHO[INAS]+XVAL[INXGAXXAS]*RHO[GAAS];
-    // semiconductor compounds acoustic deformation potential (Joule)
-    DA[ALXINXSB]=XVAL[ALXINXSB]*(DA[ALSB]+DA[INSB]);
-    DA[ALXIN1XSB]=XVAL[ALXIN1XSB]*DA[ALSB]+(1.-XVAL[ALXIN1XSB])*DA[INSB];
-    DA[INXGA1XAS]=XVAL[INXGA1XAS]*DA[INAS]+(1.-XVAL[INXGA1XAS])*DA[GAAS];
-    DA[INXAL1XAS]=XVAL[INXAL1XAS]*DA[INAS]+(1.-XVAL[INXAL1XAS])*DA[ALAS];
-    DA[INXGAXXAS]=XVAL[INXGAXXAS]*DA[INAS]+XVAL[INXGAXXAS]*DA[GAAS];
-    // semiconductor compounds longitudinal sound velocity (m/sec)
-    UL[ALXINXSB]=XVAL[ALXINXSB]*(UL[ALSB]+UL[INSB]);
-    UL[ALXIN1XSB]=XVAL[ALXIN1XSB]*UL[ALSB]+(1.-XVAL[ALXIN1XSB])*UL[INSB];
-    UL[INXGA1XAS]=XVAL[INXGA1XAS]*UL[INAS]+(1.-XVAL[INXGA1XAS])*UL[GAAS];
-    UL[INXAL1XAS]=XVAL[INXAL1XAS]*UL[INAS]+(1.-XVAL[INXAL1XAS])*UL[ALAS];
-    UL[INXGAXXAS]=XVAL[INXGAXXAS]*UL[INAS]+XVAL[INXGAXXAS]*UL[GAAS];
-    // semiconductor compounds energy gap
-    EG[ALXINXSB]=XVAL[ALXINXSB]*(EG[ALSB]+EG[INSB]);
-    EG[ALXIN1XSB]=XVAL[ALXIN1XSB]*EG[ALSB]+(1.-XVAL[ALXIN1XSB])*EG[INSB];
-    EG[INXGA1XAS]=XVAL[INXGA1XAS]*EG[INAS]+(1.-XVAL[INXGA1XAS])*EG[GAAS];
-    EG[INXAL1XAS]=XVAL[INXAL1XAS]*EG[INAS]+(1.-XVAL[INXAL1XAS])*EG[ALAS];
-    EG[INXGAXXAS]=XVAL[INXGAXXAS]*EG[INAS]+XVAL[INXGAXXAS]*EG[GAAS];
-    // semiconductor compounds energy minimum of GAMMA-valley
-    EMIN[ALXINXSB][1]=XVAL[ALXINXSB]*(EMIN[ALSB][1]+EMIN[INSB][1]);
-    EMIN[ALXIN1XSB][1]=XVAL[ALXIN1XSB]*EMIN[ALSB][1]+(1.-XVAL[ALXIN1XSB])*EMIN[INSB][1];
-    EMIN[INXGA1XAS][1]=XVAL[INXGA1XAS]*EMIN[INAS][1]+(1.-XVAL[INXGA1XAS])*EMIN[GAAS][1];
-    EMIN[INXAL1XAS][1]=XVAL[INXAL1XAS]*EMIN[INAS][1]+(1.-XVAL[INXAL1XAS])*EMIN[ALAS][1];
-    EMIN[INXGAXXAS][1]=XVAL[INXGAXXAS]*EMIN[INAS][1]+XVAL[INXGAXXAS]*EMIN[GAAS][1];
-    // semiconductor compounds energy minimum 0f L-valley
-    EMIN[ALXINXSB][2]=XVAL[ALXINXSB]*(EMIN[ALSB][2]+EMIN[INSB][2]);
-    EMIN[ALXIN1XSB][2]=XVAL[ALXIN1XSB]*EMIN[ALSB][2]+(1.-XVAL[ALXIN1XSB])*EMIN[INSB][2];
-    EMIN[INXGA1XAS][2]=XVAL[INXGA1XAS]*EMIN[INAS][2]+(1.-XVAL[INXGA1XAS])*EMIN[GAAS][2];
-    EMIN[INXAL1XAS][2]=XVAL[INXAL1XAS]*EMIN[INAS][2]+(1.-XVAL[INXAL1XAS])*EMIN[ALAS][2];
-    EMIN[INXGAXXAS][2]=XVAL[INXGAXXAS]*EMIN[INAS][2]+XVAL[INXGAXXAS]*EMIN[GAAS][2];
-    // GAMMA-valley effective mass
-    MSTAR[ALXINXSB][1]=XVAL[ALXINXSB]*(MSTAR[ALSB][1]+MSTAR[INSB][1]);
-    MSTAR[ALXIN1XSB][1]=XVAL[ALXIN1XSB]*MSTAR[ALSB][1]+(1.-XVAL[ALXIN1XSB])*MSTAR[INSB][1];
-    MSTAR[INXGA1XAS][1]=XVAL[INXGA1XAS]*MSTAR[INAS][1]+(1.-XVAL[INXGA1XAS])*MSTAR[GAAS][1];
-    MSTAR[INXAL1XAS][1]=XVAL[INXAL1XAS]*MSTAR[INAS][1]+(1.-XVAL[INXAL1XAS])*MSTAR[ALAS][1];
-    MSTAR[INXGAXXAS][1]=XVAL[INXGAXXAS]*MSTAR[INAS][1]+XVAL[INXGAXXAS]*MSTAR[GAAS][1];
-    // L-valley effective mass
-    MSTAR[ALXINXSB][2]=XVAL[ALXINXSB]*(MSTAR[ALSB][2]+MSTAR[INSB][2]);
-    MSTAR[ALXIN1XSB][2]=XVAL[ALXIN1XSB]*MSTAR[ALSB][2]+(1.-XVAL[ALXIN1XSB])*MSTAR[INSB][2];
-    MSTAR[INXGA1XAS][2]=XVAL[INXGA1XAS]*MSTAR[INAS][2]+(1.-XVAL[INXGA1XAS])*MSTAR[GAAS][2];
-    MSTAR[INXAL1XAS][2]=XVAL[INXAL1XAS]*MSTAR[INAS][2]+(1.-XVAL[INXAL1XAS])*MSTAR[ALAS][2];
-    MSTAR[INXGAXXAS][2]=XVAL[INXGAXXAS]*MSTAR[INAS][2]+XVAL[INXGAXXAS]*MSTAR[GAAS][2];
-    // non-parabolicity coefficient for semiconductor compounds in the GAMMA-valley
-    alphaK[ALXINXSB][1]=XVAL[ALXINXSB]*(alphaK[ALSB][1]+alphaK[INSB][1]);
-    alphaK[ALXIN1XSB][1]=XVAL[ALXIN1XSB]*alphaK[ALSB][1]+(1.-XVAL[ALXIN1XSB])*alphaK[INSB][1];
-    alphaK[INXGA1XAS][1]=XVAL[INXGA1XAS]*alphaK[INAS][1]+(1.-XVAL[INXGA1XAS])*alphaK[GAAS][1];
-    alphaK[INXAL1XAS][1]=XVAL[INXAL1XAS]*alphaK[INAS][1]+(1.-XVAL[INXAL1XAS])*alphaK[ALAS][1];
-    alphaK[INXGAXXAS][1]=XVAL[INXGAXXAS]*alphaK[INAS][1]+XVAL[INXGAXXAS]*alphaK[GAAS][1];
-    // non-parabolicity coefficient for Al_x In_(1-x) Sb in the L-valley
-    alphaK[ALXINXSB][2]=XVAL[ALXINXSB]*(alphaK[ALSB][2]+alphaK[INSB][2]);
-    alphaK[ALXIN1XSB][2]=XVAL[ALXIN1XSB]*alphaK[ALSB][2]+(1.-XVAL[ALXIN1XSB])*alphaK[INSB][2];
-    alphaK[INXGA1XAS][2]=XVAL[INXGA1XAS]*alphaK[INAS][2]+(1.-XVAL[INXGA1XAS])*alphaK[GAAS][2];
-    alphaK[INXAL1XAS][2]=XVAL[INXAL1XAS]*alphaK[INAS][2]+(1.-XVAL[INXAL1XAS])*alphaK[ALAS][2];
-    alphaK[INXGAXXAS][2]=XVAL[INXGAXXAS]*alphaK[INAS][2]+XVAL[INXGAXXAS]*alphaK[GAAS][2];
-    // ***
 
     // Closure of the input file
     // =========================
