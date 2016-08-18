@@ -172,7 +172,7 @@ particle_info_t mc_calculate_particle_info(particle_t *p) {
     }
     else if(g_config->conduction_band == FULL) {
         real k, k2, k4;
-        real dx, dy, d;
+        real d;
         k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
         // periodicity on reciprocal lattice
         k2 = k * k;

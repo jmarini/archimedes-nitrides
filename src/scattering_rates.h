@@ -34,12 +34,11 @@
 
 void calc_scattering_rates(int material) {
     real wo,no,aco,oge[7],oga[7];
-    real cl,deq,dij;
-    real hwe,hwij,wij,we,ne,nij;
+    real cl,dij;
+    real hwij,wij,nij;
     real poe,poa,ope,opa,qmin,qmax;
-    real initialenergy,sei,finalenergy,sef;
-    real eps,epf,ep,bimp,cimp,qd;
-    real ak,qq,wk;
+    real initialenergy,finalenergy,sef;
+    real eps,epf,ep,cimp;
     int ie,i;
     real zf = 0.;
     real gamma1_initial, gamma1_final,
@@ -67,18 +66,16 @@ void calc_scattering_rates(int material) {
         // == Phonon Scattering ==
         // =======================
         cl = RHO[material] * pow(UL[material], 2.);  // rho * vs^2
-        deq = dij = DTK[material][0] * Q; // deformation potential
-        hwe = hwij = HWO[material][0]; // phonon energy
+        dij = DTK[material][0] * Q; // deformation potential
+        hwij = HWO[material][0]; // phonon energy
 
         // Phonon frequency
         wo  = HWO[material][0] * Q / HBAR;
         wij = hwij * Q / HBAR;
-        we  = hwe  * Q / HBAR;
 
         // Phonon number
         no  = 1. / (exp(HWO[material][0] / BKTQ) - 1.);
         nij = 1. / (exp(hwij / BKTQ) - 1.);
-        ne  = 1. / (exp(hwe  / BKTQ) - 1.);
 
         // Effective mass and density of states prefactor for each valley
         real mstar[MAX_VALLEYS];
@@ -119,8 +116,6 @@ void calc_scattering_rates(int material) {
         // =========================
         cimp = g_config->impurity_conc; // impurity concentration
         QD2 = Q * cimp / BKTQ / eps;
-        qd = sqrt(QD2);
-        bimp = 2. * PI * cimp * Q * Q / HBAR * Q / eps / eps;
 
 
         // =====================================
@@ -169,7 +164,6 @@ void calc_scattering_rates(int material) {
 
         for(ie = 1; ie <= DIME; ie++) {
             initialenergy = DE * (real)(ie);
-            sei = sqrt(initialenergy);
 
             for(int v = 1; v <= NOVALLEY[material]; ++v) {
 
@@ -446,7 +440,6 @@ void calc_scattering_rates(int material) {
    for(ie=1; ie<=DIME; ++ie) SWK[material][0][0][ie]=0.;
    for(ie=1; ie<=DIME; ++ie){
     initialenergy=DE*((real) ie);
-    sei=sqrt(initialenergy);
     if(g_config->optical_phonon_scattering==ON){
 // non polar optical phonons
      for(i=1;i<=6;i++){

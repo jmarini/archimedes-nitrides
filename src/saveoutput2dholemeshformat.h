@@ -55,7 +55,7 @@ SaveOutput2DHole_MeshFormat(int je)
   FILE *Yp;
   FILE *Qp;
   int i,j;
-  int size,dim,nbmet,nbval,type;
+  int dim,nbmet,nbval,type;
   int nx = g_mesh->nx,
       ny = g_mesh->ny;
 
@@ -135,7 +135,6 @@ SaveOutput2DHole_MeshFormat(int je)
 
  printf("Files opened...\n");
 
- size=NUM_VERT;
  dim=2; // dimension of the space
  nbmet=1; // number of related fields (in this case a scalar value)
  nbval=NUM_VERT; // number of information attached to the vertex

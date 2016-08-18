@@ -43,8 +43,7 @@ inline particle_t creation(int i, real t, int edge) {
          ky = 0.0,
          kz = 0.0,
          x  = 0.0,
-         y  = 0.0,
-         z  = 0.0;
+         y  = 0.0;
     real c1, c2, c3, c4, c5, c6, c7;
     int nx = g_mesh->nx,
         ny = g_mesh->ny;

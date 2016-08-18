@@ -55,3 +55,4 @@ archimedes_SOURCES = \
 	utility.h
 
 archimedes_LDADD = -lm
+archimedes_CFLAGS = -Wall -Wextra

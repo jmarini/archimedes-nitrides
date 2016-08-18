@@ -39,7 +39,7 @@ void electron_relaxation_step(void)
  int ND=2;
  register int i,j,c;
  real taup,t;
- real ktaup,ktauw;
+ real ktaup;
  
 // Source Term for the Hybrid MEP model
 // ====================================
@@ -54,7 +54,6 @@ void electron_relaxation_step(void)
    for(j=ND;j<=g_mesh->ny+ND;j++){
      t=(2./3.)*(u2d[i][j][4]/u2d[i][j][1])/KB;
      ktaup=M*MSTAR[i_dom[i][j]][1]*MIU0*g_config->lattice_temp/Q;
-     ktauw=MIU0*g_config->lattice_temp*KB/(Q*VS*VS);
      taup=ktaup/t;
      u2d[i][j][4]+=-g_config->dt/50.*(Q*(u2d[i][j][2]*E[i-1][j-1][0]
                   +u2d[i][j][3]*E[i-1][j-1][1])
