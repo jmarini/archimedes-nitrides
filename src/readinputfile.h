@@ -332,7 +332,7 @@ Read_Input_File(void)
       printf("%s: not valid final time\n",progname);
       exit(EXIT_FAILURE);
     }
-    printf("OXYDE = %g ---> Ok\n");
+    printf("OXYDE ---> Ok\n");
   }
 // setting the energy relaxation time
   else if(strcmp(s,"TAUW")==0){
