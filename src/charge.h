@@ -23,61 +23,64 @@
 */
 
 
+// calculate electron density per cell using particle in cell method
+int calculate_particles_per_cell(void) {
+    int i = 0,
+        j = 0;
+    real x = 0.,
+         y = 0.;
+    int nx  = g_mesh->nx,
+        ny  = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
-// ######################################################
-// Created on 06 sep.2004, Siracusa, J.M.Sellier
-// Last modif. : 12 Sep.2007, Siracusa, J.M.Sellier
-// ######################################################
-
-// computation of the macroscopic variables
-// (density, x momentum, y momentum, energy)
-
-void
-Charge(void)
-{
- int i,j,n;
- real x,y;
- int nx = g_mesh->nx,
-     ny = g_mesh->ny;
- real dx = g_mesh->dx,
-      dy = g_mesh->dy;
-
-// resetting of the electronic density
-// a simple way to avoid NaN propagation...
- for(i=1;i<=nx+1;i++)
-   for(j=1;j<=ny+1;j++)
-     u2d[i][j][1]=0.;
-
-//if(Material==SILICON || Material==GERMANIUM){
-// well known "cloud in cell" method
-  for(n=1;n<=g_config->num_particles;n++){
-    x=P[n].x/dx;
-    y=P[n].y/dy;
-    i=(int)(x+1.);
-    j=(int)(y+1.);
-// Cloud in cell method
-    u2d[i][j][1]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-    if(i<=nx)
-      u2d[i+1][j][1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
-    if(j<=ny)
-      u2d[i][j+1][1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));
-    if(i<=nx && j<=ny)
-     u2d[i+1][j+1][1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(1.-(y-(real)(j-1))));
-  }
-// =======================================
-  for(i=1;i<=nx+1;i++)
-    for(j=1;j<=ny+1;j++){
-      u2d[i][j][1]*=g_config->carriers_per_particle/(dx*dy);
-      if(i==1 || i==nx+1) u2d[i][j][1]*=2.;
-      if(j==1 || j==ny+1) u2d[i][j][1]*=2.;
+    // resetting of the electronic density
+    // a simple way to avoid NaN propagation...
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 1; j <= ny + 1; ++j) {
+            g_mesh->info[i][j].e.density = 0;
+        }
     }
-// This trick is to avoid the strange oscillations
-// in the ghost cells, when we plot the density.
-// This does not influence the resolution of the Poisson
-// equation, since this last is not computed on the
-// ghost cells. 08-12 oct.2004, J.M.Sellier, Siracusa.
-// bottom and upper edge contacts
-  u2d[nx+1][ny+1][1]=u2d[nx][ny+1][1];
-  u2d[1][ny+1][1]=u2d[1][ny][1];
-// }
+
+    // cloud in cell method
+    for(int n = 1; n <= g_config->num_particles; ++n) {
+        x = P[n].x / dx;
+        y = P[n].y / dy;
+        i = (int)(x + 1.);
+        j = (int)(y + 1.);
+
+        real x1 = (real)i - x;
+        real y1 = (real)j - y;
+        real x2  = x - (real)(i - 1);
+        real y2  = y - (real)(j - 1);
+
+        g_mesh->info[i][j].e.density += x1 * y1;
+        if(i <= nx) {
+            g_mesh->info[i+1][j].e.density += x2 * y1;
+        }
+        if(j <= ny) {
+            g_mesh->info[i][j+1].e.density += x1 * y2;
+        }
+        if(i <= nx && j <= ny) {
+            g_mesh->info[i+1][j+1].e.density += x2 * y2;
+        }
+    }
+
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 1; j <= ny + 1; ++j) {
+            g_mesh->info[i][j].e.density *= g_config->carriers_per_particle / (dx * dy);
+            if(i == 1 || i == nx + 1) { g_mesh->info[i][j].e.density *= 2.; }
+            if(j == 1 || j == ny + 1) { g_mesh->info[i][j].e.density *= 2.; }
+        }
+    }
+    g_mesh->info[nx+1][ny+1].e.density = g_mesh->info[nx][ny+1].e.density;
+    g_mesh->info[1][ny+1].e.density = g_mesh->info[1][ny].e.density;
+
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 1; j <= ny + 1; ++j) {
+            u2d[i][j][1] = g_mesh->info[i][j].e.density;
+        }
+    }
+
+    return 0;
 }
