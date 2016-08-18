@@ -15,13 +15,13 @@ int mc_build_mesh(mc_mesh_t *mesh) {
     real dx = mesh->dx,
          dy = mesh->dy;
 
-    // definition of mesh nodes
+    // definition of mesh node coordinates
     mesh->num_nodes = (nx + 1) * (ny + 1);
     for(i = 0; i < nx + 1; ++i) {
         for(j = 0; j < ny + 1; ++j) {
             index = j * (nx + 1) + i;
-            mesh->nodes[index][0] = (real)(i) * dx;
-            mesh->nodes[index][1] = (real)(j) * dy;
+            mesh->coordinates[index][0] = (real)(i) * dx;
+            mesh->coordinates[index][1] = (real)(j) * dy;
         }
     }
 
@@ -63,7 +63,7 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename) {
     fprintf(fp, "%d\n", mesh->num_nodes);
 
     for(i = 0; i< mesh->num_nodes; ++i) {
-        fprintf(fp, "%g %g 0\n", mesh->nodes[i][0], mesh->nodes[i][1]);
+        fprintf(fp, "%g %g 0\n", mesh->coordinates[i][0], mesh->coordinates[i][1]);
     }
 
     fprintf(fp, "\n");

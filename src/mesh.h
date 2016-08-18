@@ -25,13 +25,13 @@
 */
 
 
-// ######################################################
-// Created on 20 oct.2015, J. Marini
-// Last modif. : 20 oct.2015, J. Marini
-// ######################################################
-
 #ifndef ARCHIMEDES_MESH_H
 #define ARCHIMEDES_MESH_H
+
+
+#include "global_defines.h"
+#include "material.h"
+
 
 // maximum number of mesh cells in x and y
 #define NXM 308
@@ -64,7 +64,7 @@ typedef struct {
     mc_carrier_t h;     // holes
 
     mc_poisson_t poisson;
-} mc_node_information_t;
+} mc_node_t;
 
 
 typedef struct {
@@ -80,9 +80,9 @@ typedef struct {
     int num_nodes;
     int num_triangles;
 
-    mc_node_information_t info[NXM + 1][NYM + 1];
+    mc_node_t info[NXM + 1][NYM + 1];
 
-    real nodes[NXM * NYM][2];
+    real coordinates[NXM * NYM][2];
     int triangles[NXM * NYM][3];
 } mc_mesh_t;
 
@@ -91,6 +91,7 @@ extern mc_mesh_t *g_mesh;
 
 
 int mc_build_mesh(mc_mesh_t *mesh);
+
 
 int mc_save_mesh(mc_mesh_t *mesh, char *filename);
 

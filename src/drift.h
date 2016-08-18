@@ -34,15 +34,21 @@
 
 void drift(particle_t *particle, real tau)
 {
-    int iaux;
-    int i,j;
-    real dkx,dky,hmt,ksquared;
-    real vx,vy;
+    int iaux = 0,
+        material = 0;
+    int i = 0,
+        j = 0;
+    real dkx = 0.,
+         dky = 0.,
+         hmt = 0.,
+         ksquared = 0.;
+    real vx = 0.,
+         vy = 0.;
 
     if(!mc_does_particle_exist(particle)) { return; }
 
     mc_particle_coords(particle, &i, &j);
-    int material = g_mesh->info[i][j].material;
+    material = g_mesh->info[i][j].material;
 
     if(NOVALLEY[material] == 1) { iaux = 0; }
     if(NOVALLEY[material] >= 2) { iaux = particle->valley; }

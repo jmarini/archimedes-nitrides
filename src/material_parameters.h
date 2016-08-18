@@ -35,6 +35,7 @@
 // Band Structure Parameters
 // =========================
 
+
 // Number of valleys
 NOVALLEY[SILICON]   = 1;  // X-valley
 NOVALLEY[GERMANIUM] = 1;  // G-valley
@@ -54,6 +55,23 @@ NOVALLEY[INXAL1XAS] = 1;  // G-valley
 NOVALLEY[INXGAXXAS] = 1;  // only G-valley
 NOVALLEY[GAN]       = 2;  // G-1, M-L(U), G-3
 
+g_materials[SILICON].num_valleys   = 1;
+g_materials[GERMANIUM].num_valleys = 1;
+g_materials[GAAS].num_valleys      = 1;
+g_materials[INSB].num_valleys      = 1;
+g_materials[ALSB].num_valleys      = 1;
+g_materials[ALXINXSB].num_valleys  = 1;
+g_materials[ALXIN1XSB].num_valleys = 1;
+g_materials[ALAS].num_valleys      = 1;
+g_materials[ALP].num_valleys       = 1;
+g_materials[GAP].num_valleys       = 1;
+g_materials[GASB].num_valleys      = 1;
+g_materials[INAS].num_valleys      = 1;
+g_materials[INP].num_valleys       = 1;
+g_materials[INXGA1XAS].num_valleys = 1;
+g_materials[INXAL1XAS].num_valleys = 1;
+g_materials[INXGAXXAS].num_valleys = 1;
+g_materials[GAN].num_valleys       = 1;
 
 // Number of equivalent valleys
 // Scattering from first index to second index
@@ -81,6 +99,27 @@ ZSCATTER[GAN][3][2] = 6; // G3 -> ML
 ZSCATTER[GAN][3][3] = 0; // G3 -> G3
 
 
+g_materials[GAAS].zscatter[1][1] = 0; // G -> G
+g_materials[GAAS].zscatter[1][2] = 4; // G -> L
+g_materials[GAAS].zscatter[1][3] = 3; // G -> X
+g_materials[GAAS].zscatter[2][1] = 1; // L -> G
+g_materials[GAAS].zscatter[2][2] = 3; // L -> L
+g_materials[GAAS].zscatter[2][3] = 3; // L -> X
+g_materials[GAAS].zscatter[3][1] = 1; // X -> G
+g_materials[GAAS].zscatter[3][2] = 4; // X -> L
+g_materials[GAAS].zscatter[3][3] = 2; // X -> X
+
+g_materials[GAN].zscatter[1][1] = 0; // G1 -> G1
+g_materials[GAN].zscatter[1][2] = 6; // G1 -> ML
+g_materials[GAN].zscatter[1][3] = 1; // G1 -> G3
+g_materials[GAN].zscatter[2][1] = 1; // ML -> G1
+g_materials[GAN].zscatter[2][2] = 5; // ML -> ML
+g_materials[GAN].zscatter[2][3] = 1; // ML -> G3
+g_materials[GAN].zscatter[3][1] = 1; // G3 -> G1
+g_materials[GAN].zscatter[3][2] = 6; // G3 -> ML
+g_materials[GAN].zscatter[3][3] = 0; // G3 -> G3
+
+
 // Band minimum energy  - relative to CBM (eV)
 // first valley
 EMIN[SILICON][1]   = 0.0;    // Sellier, Fischetti, etc.
@@ -102,6 +141,26 @@ EMIN[GAN][2]       = 2.1;    // L-M
 EMIN[GAAS][3]      = 0.48;   // X
 EMIN[GAN][3]       = 1.9;    // G-2
 
+// first valley
+g_materials[SILICON].cb[1].emin   = 0.0;    // Sellier, Fischetti, etc.
+g_materials[GERMANIUM].cb[1].emin = 0.173;
+g_materials[GAAS].cb[1].emin      = 0.0;    // Tomizawa
+g_materials[INSB].cb[1].emin      = 0.0;
+g_materials[ALSB].cb[1].emin      = 0.507;
+g_materials[ALAS].cb[1].emin      = 0.767;
+g_materials[ALP].cb[1].emin       = 1.237;
+g_materials[GAP].cb[1].emin       = 0.496;
+g_materials[GASB].cb[1].emin      = 0.0;
+g_materials[INAS].cb[1].emin      = 0.0;
+g_materials[INP].cb[1].emin       = 0.0;
+g_materials[GAN].cb[1].emin       = 0.0;    // G-1
+// second valley
+g_materials[GAAS].cb[2].emin      = 0.323;  // L
+g_materials[GAN].cb[2].emin       = 2.1;    // L-M
+// third valley
+g_materials[GAAS].cb[3].emin      = 0.48;   // X
+g_materials[GAN].cb[3].emin       = 1.9;    // G-2
+
 
 // Definition of effective mass for all materials in all valleys
 MSTAR[SILICON][1]   = 0.32;    // see Sellier, Tomizawa, etc.
@@ -121,6 +180,23 @@ MSTAR[GAN][1]       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
 MSTAR[GAN][2]       = 0.4;     // L-M -- Bhapkar & Shur
 MSTAR[GAN][3]       = 0.6;     // G-2 -- Bhapkar & Shur
 
+g_materials[SILICON].cb[1].mstar   = 0.32;    // see Sellier, Tomizawa, etc.
+g_materials[GAAS].cb[1].mstar      = 0.067;   // Gamma-valley -- see Tomizawa
+g_materials[GAAS].cb[2].mstar      = 0.350;   // L-valley     -- see Tomizawa
+g_materials[GAAS].cb[3].mstar      = 0.27;    // X-valley
+g_materials[GERMANIUM].cb[1].mstar = 0.12;    // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
+g_materials[INSB].cb[1].mstar      = 0.0135;  // Gamma-valley -- see Ram-Mohan
+g_materials[ALSB].cb[1].mstar      = 0.14;    // Gamma-valley -- See Ram-Mohan
+g_materials[ALAS].cb[1].mstar      = 0.149;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[ALP].cb[1].mstar       = 0.22;    // Gamma-valley -- see Ram-Mohan
+g_materials[GAP].cb[1].mstar       = 0.13;    // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[GASB].cb[1].mstar      = 0.039;   // Gamma-valley -- see Ram-Mohan
+g_materials[INAS].cb[1].mstar      = 0.026;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[INP].cb[1].mstar       = 0.0795;  // Gamma-valley -- see Ram-Mohan
+g_materials[GAN].cb[1].mstar       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
+g_materials[GAN].cb[2].mstar       = 0.4;     // L-M -- Bhapkar & Shur
+g_materials[GAN].cb[3].mstar       = 0.6;     // G-2 -- Bhapkar & Shur
+
 
 // non-parabolicity coefficients (1/eV)
 alphaK[SILICON][1]   = 0.5;    // see Sellier, Tomizawa
@@ -129,14 +205,32 @@ alphaK[GAN][1]       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
 alphaK[GAN][2]       = 0.065;      // L-M -- Bhapkar & Shur
 alphaK[GAN][3]       = 0.029;      // G-2 -- Bhapkar & Shur
 
+g_materials[SILICON].cb[1].alpha   = 0.5;    // see Sellier, Tomizawa
+g_materials[GERMANIUM].cb[1].alpha = 0.3;  // Gamma valley - Jacoboni Reggiani
+g_materials[GAN].cb[1].alpha       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
+g_materials[GAN].cb[2].alpha       = 0.065;      // L-M -- Bhapkar & Shur
+g_materials[GAN].cb[3].alpha       = 0.029;      // G-2 -- Bhapkar & Shur
+
 
 MSTAR_VB[GAN][0] = 1.4; // heavy hole
 MSTAR_VB[GAN][1] = 0.3; // light hole
 MSTAR_VB[GAN][2] = 0.6; // split-off
 
+g_materials[GAN].vb[0].mstar = 1.4; // heavy hole
+g_materials[GAN].vb[1].mstar = 0.3; // light hole
+g_materials[GAN].vb[2].mstar = 0.6; // split-off
+
 DELTAE_VB[GAN][0] = 0.0;
 DELTAE_VB[GAN][1] = 0.008; // difference between heavy hole and light hole bands
 DELTAE_VB[GAN][2] = 0.04;  // difference between heavy hole and split-off bands
+
+g_materials[GAN].vb[0].emin = 0.0;
+g_materials[GAN].vb[1].emin = 0.008; // difference between heavy hole and light hole bands
+g_materials[GAN].vb[2].emin = 0.04;  // difference between heavy hole and split-off bands
+
+g_materials[GAN].vb[0].alpha = 0.0;
+g_materials[GAN].vb[1].alpha = 0.0;
+g_materials[GAN].vb[2].alpha = 0.0;
 
 
 // Dielectric constant for Silicon Oxide SiO2
@@ -158,6 +252,20 @@ EPSR[GASB]      = 15.69;      // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/b
 EPSR[INAS]      = 15.15;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
 EPSR[INP]       = 12.50;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
 EPSR[GAN]       = 9.7;        // E. Bellotti & F. Bertazzi
+
+g_materials[SILICON].eps_static   = 11.68;      // see http://en.wikipedia.org/wiki/Relative_permittivity
+g_materials[GERMANIUM].eps_static = 16.2;       // see http://www.ioffe.ru/SVA/NSM/Semicond/Ge/basic.html
+g_materials[GAAS].eps_static      = 12.90;      // see http://www.ioffe.ru/SVA/NSM/Semicond/GaAs/basic.html
+g_materials[INSB].eps_static      = 16.8;       // see http://www.ioffe.ru/SVA/NSM/Semicond/InSb/basic.html
+g_materials[ALSB].eps_static      = 12.04;      // Fischetti conversations
+g_materials[ALAS].eps_static      = 12.90-2.84; // see http://www.ioffe.ru/SVA/NSM/Semicond/AlGaAs/basic.html (x=1.0)
+g_materials[ALP].eps_static       = 9.80;       // Fischetti conversations
+g_materials[GAP].eps_static       = 11.10;      // see http://www.ioffe.ru/SVA/NSM/Semicond/GaP/basic.html
+g_materials[GASB].eps_static      = 15.69;      // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
+g_materials[INAS].eps_static      = 15.15;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
+g_materials[INP].eps_static       = 12.50;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
+g_materials[GAN].eps_static       = 9.7;        // E. Bellotti & F. Bertazzi
+
 // HIGH FREQUENCY
 // ==============
 EPF[GAAS] = 10.89;       // see http://www.ioffe.ru/SVA/NSM/Semicond/GaAs/basic.html
@@ -171,14 +279,28 @@ EPF[INAS] = 12.3;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.
 EPF[INP]  = 9.61;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
 EPF[GAN]  = 5.28;        // E. Bellotti & F. Bertazzi
 
+g_materials[GAAS].eps_hf = 10.89;       // see http://www.ioffe.ru/SVA/NSM/Semicond/GaAs/basic.html
+g_materials[INSB].eps_hf = 15.68;       // Fischetti conversations
+g_materials[ALSB].eps_hf = 9.88;        // Fiscehtti conversations
+g_materials[ALAS].eps_hf = 10.89-2.73;  // see http://www.ioffe.ru/SVA/NSM/Semicond/AlGaAs/basic.html (x=1.0)
+g_materials[ALP].eps_hf  = 7.54;        // Fischetti conversations
+g_materials[GAP].eps_hf  = 9.11;        // see http://www.ioffe.ru/SVA/NSM/Semicond/GaP/basic.html
+g_materials[GASB].eps_hf = 14.44;       // see http://www.ioffe.ru/SVA/NSM/Semicond/GaSb/basic.html
+g_materials[INAS].eps_hf = 12.3;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
+g_materials[INP].eps_hf  = 9.61;        // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
+g_materials[GAN].eps_hf  = 5.28;        // E. Bellotti & F. Bertazzi
 
-int ii;
-for(ii = 0; ii < NOAMTIA; ii++) {
-   int i;
+
+int m = 0,
+    i = 0;
+for(m = 0; m < NOAMTIA; m++) {
    for(i = 0; i < 6; i++){
-       HWO[ii][i] = 0.;
-       DTK[ii][i] = 0.;
-       ZF[ii][i]  = 0.;
+       HWO[m][i] = 0.;
+       DTK[m][i] = 0.;
+       ZF[m][i]  = 0.;
+       g_materials[m].hwo[i] = 0.;
+       g_materials[m].dtk[i] = 0.;
+       g_materials[m].zf[i]  = 0;
    }
 }
 
@@ -201,6 +323,25 @@ HWO[INAS][0]      = 0.03008;  // Fischetti
 HWO[INP][0]       = 0.04240;  // Fischetti
 HWO[GAN][0]       = 0.09212;  // LO -- E. Bellotti & F. Bertazzi
 HWO[GAN][1]       = 0.06955;  // TO -- E. Bellotti & F. Bertazzi
+
+g_materials[SILICON].hwo[0]   = 0.0120;   // Sellier, Tomizawa
+g_materials[SILICON].hwo[1]   = 0.0185;   // Sellier, Tomizawa
+g_materials[SILICON].hwo[2]   = 0.0190;   // Sellier, Tomizawa
+g_materials[SILICON].hwo[3]   = 0.0474;   // Sellier, Tomizawa
+g_materials[SILICON].hwo[4]   = 0.0612;   // Sellier, Tomizawa
+g_materials[SILICON].hwo[5]   = 0.0590;   // Sellier, Tomizawa
+g_materials[GERMANIUM].hwo[0] = 0.03704;  // Fischetti
+g_materials[GAAS].hwo[0]      = 0.03536;  // Fischetti
+g_materials[INSB].hwo[0]      = 0.02404;  // Fischetti
+g_materials[ALSB].hwo[0]      = 0.0360;   // Fischetti
+g_materials[ALAS].hwo[0]      = 0.05009;  // Fischetti
+g_materials[ALP].hwo[0]       = 0.06211;  // Fischetti
+g_materials[GAP].hwo[0]       = 0.04523;  // Fischetti
+g_materials[GASB].hwo[0]      = 0.02529;  // Fischetti
+g_materials[INAS].hwo[0]      = 0.03008;  // Fischetti
+g_materials[INP].hwo[0]       = 0.04240;  // Fischetti
+g_materials[GAN].hwo[0]       = 0.09212;  // LO -- E. Bellotti & F. Bertazzi
+g_materials[GAN].hwo[1]       = 0.06955;  // TO -- E. Bellotti & F. Bertazzi
 
 // Optical coupling constants (eV/m)
 DTK[SILICON][0]   = 0.05e11;  // Jacoboni Reggiani
@@ -227,6 +368,30 @@ DTK[INP][0]       = 2.46e11;  // see ???
 DTK[GAN][0]       = 1.0e11;   // E. Bellotti & F. Bertazzi
 DTK[GAN][1]       = 1.0e11;   // E. Bellotti & F. Bertazzi
 
+g_materials[SILICON].dtk[0]   = 0.05e11;  // Jacoboni Reggiani
+g_materials[SILICON].dtk[1]   = 0.08e11;  // Jacoboni Reggiani
+g_materials[SILICON].dtk[2]   = 0.03e11;  // Jacoboni Reggiani
+g_materials[SILICON].dtk[3]   = 0.20e11;  // Jacoboni Reggiani
+g_materials[SILICON].dtk[4]   = 1.14e11;  // Jacoboni Reggiani
+g_materials[SILICON].dtk[5]   = 0.20e11;  // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[0] = 0.0;      // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[1] = 0.079e11; // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[2] = 0.0;      // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[3] = 0.0;      // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[4] = 0.95e11;  // Jacoboni Reggiani
+g_materials[GERMANIUM].dtk[5] = 0.0;      // Jacoboni Reggiani
+g_materials[GAAS].dtk[0]      = 1.11e11;  // Sellier, Tomizawa
+g_materials[INSB].dtk[0]      = 0.47e11;  // see ???
+g_materials[ALSB].dtk[0]      = 0.55e11;  // see ???
+g_materials[ALAS].dtk[0]      = 3.0e11;   // see ???
+g_materials[ALP].dtk[0]       = 0.95e11;  // see ???
+g_materials[GAP].dtk[0]       = 5.33e11;  // see ???
+g_materials[GASB].dtk[0]      = 0.94e11;  // see ???
+g_materials[INAS].dtk[0]      = 3.59e11;  // see ???
+g_materials[INP].dtk[0]       = 2.46e11;  // see ???
+g_materials[GAN].dtk[0]       = 1.0e11;   // E. Bellotti & F. Bertazzi
+g_materials[GAN].dtk[1]       = 1.0e11;   // E. Bellotti & F. Bertazzi
+
 // Optical phonon Z-factor
 ZF[SILICON][0]   = 1.;  // Sellier
 ZF[SILICON][1]   = 1.;  // Sellier
@@ -245,7 +410,26 @@ ZF[GASB][0]      = 1.;  // see ???
 ZF[INAS][0]      = 1.;  // see ???
 ZF[INP][0]       = 1.;  // see ???
 ZF[GAN][0]       = 1.;  // guess for correct value
-// ZF[GAN][1]       = 1.;  // guess for correct value
+ZF[GAN][1]       = 1.;  // guess for correct value
+
+g_materials[SILICON].zf[0]   = 1.;  // Sellier
+g_materials[SILICON].zf[1]   = 1.;  // Sellier
+g_materials[SILICON].zf[2]   = 4.;  // Sellier
+g_materials[SILICON].zf[3]   = 4.;  // Sellier
+g_materials[SILICON].zf[4]   = 1.;  // Sellier
+g_materials[SILICON].zf[5]   = 4.;  // Sellier
+g_materials[GERMANIUM].zf[0] = 1.;  // see ???
+g_materials[GAAS].zf[0]      = 1.;  // Sellier
+g_materials[INSB].zf[0]      = 1.;  // see ???
+g_materials[ALSB].zf[0]      = 1.;  // see ???
+g_materials[ALAS].zf[0]      = 1.;  // see ???
+g_materials[ALP].zf[0]       = 1.;  // see ???
+g_materials[GAP].zf[0]       = 1.;  // see ???
+g_materials[GASB].zf[0]      = 1.;  // see ???
+g_materials[INAS].zf[0]      = 1.;  // see ???
+g_materials[INP].zf[0]       = 1.;  // see ???
+g_materials[GAN].zf[0]       = 1.;  // guess for correct value
+g_materials[GAN].zf[1]       = 1.;  // guess for correct value
 
 // Crystal Density (Kg/m^3)
 RHO[SILICON]   = 2.33e3;  // Fischetti conversations
@@ -261,6 +445,19 @@ RHO[INAS]      = 5.67e3;  // Fischetti conversations
 RHO[INP]       = 4.81e3;  // Fischetti conversations
 RHO[GAN]       = 6.087e3; // E. Bellotti & F. Bertazzi
 
+g_materials[SILICON].rho   = 2.33e3;  // Fischetti conversations
+g_materials[GERMANIUM].rho = 5.32e3;  // Fischetti conversations
+g_materials[GAAS].rho      = 5.36e3;  // Fischetti conversations
+g_materials[INSB].rho      = 5.78e3;  // Fischetti conversations
+g_materials[ALSB].rho      = 4.26e3;  // Fischetti conversations
+g_materials[ALAS].rho      = 3.76e3;  // Fischetti conversations
+g_materials[ALP].rho       = 2.40e3;  // Fischetti conversations
+g_materials[GAP].rho       = 4.14e3;  // Fischetti conversations
+g_materials[GASB].rho      = 5.61e3;  // Fischetti conversations
+g_materials[INAS].rho      = 5.67e3;  // Fischetti conversations
+g_materials[INP].rho       = 4.81e3;  // Fischetti conversations
+g_materials[GAN].rho       = 6.087e3; // E. Bellotti & F. Bertazzi
+
 // Acoustic deformation potential (Joule)
 DA[SILICON]   = 9.  * Q;  // Fischetti -- Jacoboni Reggiani
 DA[GERMANIUM] = 9.  * Q;  // Fischetti -- Jacoboni Reggiani
@@ -275,6 +472,19 @@ DA[INAS]      = 8.2 * Q;  // Fischetti
 DA[INP]       = 6.2 * Q;  // Fischetti
 DA[GAN]       = 8.3 * Q;  // E. Bellotti & F. Bertazzi
 
+g_materials[SILICON].da   = 9.  * Q;  // Fischetti -- Jacoboni Reggiani
+g_materials[GERMANIUM].da = 9.  * Q;  // Fischetti -- Jacoboni Reggiani
+g_materials[GAAS].da      = 7.  * Q;  // Fischetti - Gamma valley
+g_materials[INSB].da      = 7.  * Q;  // Fischetti
+g_materials[ALSB].da      = 4.6 * Q;  // Fischetti
+g_materials[ALAS].da      = 9.3 * Q;  // Fischetti
+g_materials[ALP].da       = 9.3 * Q;  // Fischetti
+g_materials[GAP].da       = 7.4 * Q;  // Fischetti
+g_materials[GASB].da      = 9.  * Q;  // Fischetti
+g_materials[INAS].da      = 8.2 * Q;  // Fischetti
+g_materials[INP].da       = 6.2 * Q;  // Fischetti
+g_materials[GAN].da       = 8.3 * Q;  // E. Bellotti & F. Bertazzi
+
 // Longitudinal sound velocity (m/sec)
 UL[SILICON]   = 9.18e3;  // Fischetti
 UL[GERMANIUM] = 5.4e3;   // Fischetti
@@ -288,6 +498,19 @@ UL[GASB]      = 3.97e3;  // Fischetti
 UL[INAS]      = 4.28e3;  // Fischetti
 UL[INP]       = 5.13e3;  // Fischetti
 UL[GAN]       = 6.56e3;  // Foutz, O'Leary, Shur, Eastman
+
+g_materials[SILICON].ul   = 9.18e3;  // Fischetti
+g_materials[GERMANIUM].ul = 5.4e3;   // Fischetti
+g_materials[GAAS].ul      = 5.24e3;  // Fischetti
+g_materials[INSB].ul      = 3.41e3;  // Fischetti
+g_materials[ALSB].ul      = 4.25e3;  // Fischetti
+g_materials[ALAS].ul      = 5.65e3;  // Fischetti
+g_materials[ALP].ul       = 7.41e3;  // Fischetti
+g_materials[GAP].ul       = 5.85e3;  // Fischetti
+g_materials[GASB].ul      = 3.97e3;  // Fischetti
+g_materials[INAS].ul      = 4.28e3;  // Fischetti
+g_materials[INP].ul       = 5.13e3;  // Fischetti
+g_materials[GAN].ul       = 6.56e3;  // Foutz, O'Leary, Shur, Eastman
 
 
 // Lattice constants (m)
@@ -304,9 +527,25 @@ LATTCONST[INAS]      = 605.83e-12;   // CODATA
 LATTCONST[INSB]      = 647.9e-12;    // CODATA
 LATTCONST[GAN]       = 318.9e-12;    // a lattice constant
 
+g_materials[GAAS].lattice_const      = 565.35e-12;   // CODATA
+g_materials[SILICON].lattice_const   = 543.102e-12;  // CODATA
+g_materials[GERMANIUM].lattice_const = 564.613e-12;  // CODATA
+g_materials[ALP].lattice_const       = 545.10e-12;   // CODATA
+g_materials[ALAS].lattice_const      = 565.05e-12;   // CODATA
+g_materials[ALSB].lattice_const      = 613.55e-12;   // CODATA
+g_materials[GAP].lattice_const       = 545.12e-12;   // CODATA
+g_materials[GASB].lattice_const      = 609.59e-12;   // CODATA
+g_materials[INP].lattice_const       = 586.87e-12;   // CODATA
+g_materials[INAS].lattice_const      = 605.83e-12;   // CODATA
+g_materials[INSB].lattice_const      = 647.9e-12;    // CODATA
+g_materials[GAN].lattice_const       = 318.9e-12;    // a lattice constant
+
 // electro-mechanical coupling constant
 KAV[GAAS] = 0.0252;
 KAV[GAN]  = 0.137;
+
+g_materials[GAAS].kav = 0.0252;
+g_materials[GAN].kav  = 0.137;
 
 // sp3s* Conduction Band calculated parameters for full band simulations
 #include "materials/Silicon.h"
@@ -350,6 +589,19 @@ KAV[GAN]  = 0.137;
     printf("EG[GAN]         = %g\n", EG[GAN]);
     printf("\n");
 
+    g_materials[SILICON].Eg=1.21-3.333e-4*g_config->lattice_temp;
+    g_materials[GERMANIUM].Eg=0.747-3.587e-4*g_config->lattice_temp;
+    g_materials[GAAS].Eg=1.54-4.036e-4*g_config->lattice_temp;
+    g_materials[INSB].Eg=0.2446-2.153e-4*g_config->lattice_temp;
+    g_materials[ALSB].Eg=1.696-2.20e-4*g_config->lattice_temp;
+    g_materials[ALAS].Eg=2.314-3.0e-4*g_config->lattice_temp;
+    g_materials[ALP].Eg=2.51-3.333e-4*g_config->lattice_temp;
+    g_materials[GAP].Eg=2.35-2.667e-4*g_config->lattice_temp;
+    g_materials[GASB].Eg=0.81-3.667e-4*g_config->lattice_temp;
+    g_materials[INAS].Eg=0.434-2.601e-4*g_config->lattice_temp;
+    g_materials[INP].Eg=1.445-3.296e-4*g_config->lattice_temp;
+    g_materials[GAN].Eg=3.47 - 7.7e-4 * g_config->lattice_temp * g_config->lattice_temp / (g_config->lattice_temp + 600.);
+
     if(g_config->conduction_band == KANE ||
        g_config->conduction_band == PARABOLIC ||
        g_config->conduction_band == FULL) {
@@ -386,9 +638,20 @@ KAV[GAN]  = 0.137;
         // non-parabolicity coefficient for InP in the GAMMA-valley
         alphaK[INP][1]=pow(1.-MSTAR[INP][1],2.)/(EG[INP]+EMIN[INP][1]);
         printf("alphaK_gamma[InP] = %g\n",alphaK[INP][1]);
-
         alphaK[GAN][1] = pow(1. - MSTAR[GAN][1], 2.) / (EG[GAN] + EMIN[GAN][1]); // expected value = 0.189
         printf("alphaK_gamma1[GAN] = %g\n", alphaK[GAN][1]);
+
+
+        g_materials[GAAS].cb[1].alpha=pow(1.-g_materials[GAAS].cb[1].mstar,2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb[1].emin);//expected value = 0.611
+        g_materials[GAAS].cb[2].alpha=pow(1.-g_materials[GAAS].cb[2].mstar,2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb[2].emin);//expected value = 0.242;
+        g_materials[INSB].cb[1].alpha=pow(1.-g_materials[INSB].cb[1].mstar,2.)/(g_materials[INSB].Eg+g_materials[INSB].cb[1].emin);//5.59;
+        g_materials[ALSB].cb[1].alpha=pow(1.-g_materials[ALSB].cb[1].mstar,2.)/(g_materials[ALSB].Eg+g_materials[ALSB].cb[1].emin);//0.321;
+        g_materials[ALAS].cb[1].alpha=pow(1.-g_materials[ALAS].cb[1].mstar,2.)/(g_materials[ALAS].Eg+g_materials[ALAS].cb[1].emin);
+        g_materials[ALP].cb[1].alpha=pow(1.-g_materials[ALP].cb[1].mstar,2.)/(g_materials[ALP].Eg+g_materials[ALP].cb[1].emin);
+        g_materials[GAP].cb[1].alpha=pow(1.-g_materials[GAP].cb[1].mstar,2.)/(g_materials[GAP].Eg+g_materials[GAP].cb[1].emin);
+        g_materials[GASB].cb[1].alpha=pow(1.-g_materials[GASB].cb[1].mstar,2.)/(g_materials[GASB].Eg+g_materials[GASB].cb[1].emin);
+        g_materials[INAS].cb[1].alpha=pow(1.-g_materials[INAS].cb[1].mstar,2.)/(g_materials[INAS].Eg+g_materials[INAS].cb[1].emin);
+        g_materials[INP].cb[1].alpha=pow(1.-g_materials[INP].cb[1].mstar,2.)/(g_materials[INP].Eg+g_materials[INP].cb[1].emin);
     }
 
     // Semiconductor compounds

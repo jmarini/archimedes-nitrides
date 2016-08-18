@@ -55,13 +55,18 @@
 #include "mep/mm.h"
 #include "mep/mm2.h"
 #include "particle.h"
+#include "material.h"
+
 mc_configuration_t *g_config;
 mc_mesh_t *g_mesh;
+mc_material_t g_materials[NOAMTIA];
+
 extern inline int mc_does_particle_exist(particle_t *particle);
 extern inline void mc_remove_particle(particle_t *particle);
 extern inline real mc_particle_ksquared(particle_t *particle);
 extern inline real mc_particle_k(particle_t *particle);
 // ===============================
+
 
 // All integers here...
 int NUM_VERT;            // number of vertices in the meshing
