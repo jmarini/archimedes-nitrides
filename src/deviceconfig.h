@@ -37,7 +37,8 @@ void MCdevice_config(void) {
         j  = 0,
         np = 0,
         m  = 0;
-    int valley = 0;
+    int valley   = 0,
+        material = 0;
     real c1 = 0.,
          c2 = 0.,
          c3 = 0.,
@@ -55,6 +56,7 @@ void MCdevice_config(void) {
 
     for(i=1;i<=nx+1;i++) {
         for(j=1;j<=ny+1;j++){
+            material = g_mesh->info[i][j].material;
             // np=number of particles in the (i,j)-th cell
             if(g_config->load_initial_data == 1) {
                 np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_particle + 0.5);
@@ -81,17 +83,17 @@ void MCdevice_config(void) {
                     if(g_config->load_initial_data == 0) {
                         valley=1;
                         c1=log(rnd());
-                        if(NOVALLEY[i_dom[i][j]]==1) {
-                            c2=SMH[i_dom[i][j]][0]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*BKTQ*c1));
+                        if(NOVALLEY[material]==1) {
+                            c2=SMH[material][0]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[material][1]*1.5*BKTQ*c1));
                         }
-                        if(NOVALLEY[i_dom[i][j]]>=2){
+                        if(NOVALLEY[material]>=2){
                             // 80% of the created particles goes in the first valley
                             valley=1;
-                            c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*BKTQ*c1));
+                            c2=SMH[material][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[material][1]*1.5*BKTQ*c1));
                             // 20% of the created particles goes in the second valley
                             if(rnd()>0.8){
                                 valley=2;
-                                c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*BKTQ*c1));
+                                c2=SMH[material][valley]*sqrt(-1.5*BKTQ*c1*(1.-alphaK[material][2]*1.5*BKTQ*c1));
                             }
                         }
                     }
@@ -102,15 +104,15 @@ void MCdevice_config(void) {
                         // loaded from precedent simulations and have nothing to
                         // do with the lattice energy.
                         c1=-u2d[i][j][4]/u2d[i][j][1]/Q;
-                        if(NOVALLEY[i_dom[i][j]]==1) {
-                            c2=SMH[i_dom[i][j]][0]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*c1));
+                        if(NOVALLEY[material]==1) {
+                            c2=SMH[material][0]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
                         }
-                        if(NOVALLEY[i_dom[i][j]]>=2){
+                        if(NOVALLEY[material]>=2){
                             valley=1;
-                            c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][1]*1.5*c1));
+                            c2=SMH[material][valley]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
                             if(rnd()>0.8){
                                 valley=2;
-                                c2=SMH[i_dom[i][j]][valley]*sqrt(-1.5*c1*(1.-alphaK[i_dom[i][j]][2]*1.5*c1));
+                                c2=SMH[material][valley]*sqrt(-1.5*c1*(1.-alphaK[material][2]*1.5*c1));
                             }
                         }
                     }
@@ -124,7 +126,7 @@ void MCdevice_config(void) {
                     P[n].kx = c2 * c3 * c6;
                     P[n].ky = c2 * c4 * c6;
                     P[n].kz = c2 * c7;
-                    P[n].t  = -log(rnd())/GM[i_dom[i][j]];
+                    P[n].t  = -log(rnd())/GM[material];
                     P[n].x  = dx*(rnd()+(real)(i)-1.5);
                     P[n].y  = dy*(rnd()+(real)(j)-1.5);
                     if(i==1) P[n].x=dx*0.5*rnd();

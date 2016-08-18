@@ -51,7 +51,7 @@ void media(void) {
 
         density[i][j]++;
         ener[i][j] += particle_info[n].energy;
-        ener[i][j] += EMIN[i_dom[i][j]][particle_info[n].valley];
+        ener[i][j] += EMIN[g_mesh->info[i][j].material][particle_info[n].valley];
         xvel[i][j] += particle_info[n].vx;
         yvel[i][j] += particle_info[n].vy;
     }

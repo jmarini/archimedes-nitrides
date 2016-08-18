@@ -99,7 +99,7 @@ Electric_Field(void)
        PSI[k][j]=u2d[k][j][0];
    for(k=2;k<=ny;k++)
      for(j=2;j<=nx;j++){
-       kappa=(EPSR[i_dom[k][j]]*EPS0)/Q;
+       kappa=(EPSR[g_mesh->info[k][j].material]*EPS0)/Q;
        deltat=factor*0.5/kappa/(1./(dx*dx)+1./(dy*dy));
        rho=(u2d[j][k][1]-g_mesh->info[j][k].donor_conc-h2d[j][k][1]+g_mesh->info[j][k].acceptor_conc);
        u2d[j][k][0]=PSI[j][k]-deltat*rho+deltat*kappa*
@@ -153,7 +153,7 @@ Electric_Field(void)
 // take into account heterostructures
    for(j=0;j<=ny+1;j++)
      for(i=0;i<=nx+1;i++)
-       u2d[i][j][0]-=EMIN[i_dom[i][j]][1];
+       u2d[i][j][0]-=EMIN[g_mesh->info[i][j].material][1];
 
  if(g_config->quantum_flag){
    printf("Calculation of Quantum Effective Potential\n");

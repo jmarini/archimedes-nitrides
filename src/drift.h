@@ -42,21 +42,22 @@ void drift(particle_t *particle, real tau)
     if(!mc_does_particle_exist(particle)) { return; }
 
     mc_particle_coords(particle, &i, &j);
+    int material = g_mesh->info[i][j].material;
 
-    if(NOVALLEY[i_dom[i][j]] == 1) { iaux = 0; }
-    if(NOVALLEY[i_dom[i][j]] >= 2) { iaux = particle->valley; }
+    if(NOVALLEY[material] == 1) { iaux = 0; }
+    if(NOVALLEY[material] >= 2) { iaux = particle->valley; }
 
     // Electron drift process
     // second order Runge-Kutta method
-    hmt = HM[i_dom[i][j]][iaux] * tau;
+    hmt = HM[material][iaux] * tau;
     ksquared = mc_particle_ksquared(particle);
 
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
-        gk = HHM[i_dom[i][j]][iaux] * ksquared;
-        thesquareroot = sqrt(1. + 4. * alphaK[i_dom[i][j]][particle->valley] * gk);
-        vx = particle->kx * HM[i_dom[i][j]][iaux] / thesquareroot;
-        vy = particle->ky * HM[i_dom[i][j]][iaux] / thesquareroot;
+        gk = HHM[material][iaux] * ksquared;
+        thesquareroot = sqrt(1. + 4. * alphaK[material][particle->valley] * gk);
+        vx = particle->kx * HM[material][iaux] / thesquareroot;
+        vy = particle->ky * HM[material][iaux] / thesquareroot;
         dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
         dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dkx) / thesquareroot;
@@ -65,8 +66,8 @@ void drift(particle_t *particle, real tau)
         particle->ky += dky;
     }
     else if(g_config->conduction_band == PARABOLIC) {
-        vx = particle->kx * HM[i_dom[i][j]][iaux];
-        vy = particle->ky * HM[i_dom[i][j]][iaux];
+        vx = particle->kx * HM[material][iaux];
+        vy = particle->ky * HM[material][iaux];
         dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
         dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dkx);
@@ -77,8 +78,8 @@ void drift(particle_t *particle, real tau)
     else if(g_config->conduction_band == FULL) {
         real k4, k2, ks;
         real dx, dy, d;
-        vx = particle->kx * HM[i_dom[i][j]][iaux];
-        vy = particle->ky * HM[i_dom[i][j]][iaux];
+        vx = particle->kx * HM[material][iaux];
+        vy = particle->ky * HM[material][iaux];
         dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
         dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
         k2 = (particle->kx + 0.5 * dkx) * (particle->kx + 0.5 * dkx)
@@ -87,16 +88,16 @@ void drift(particle_t *particle, real tau)
         ks = sqrt(k2) * 1.e-12 * 0.5 / PI;
         k2 = ks * ks;
         k4 = k2 * k2;
-        d = 10. * CB_FULL[i_dom[i][j]][0] * k4 * k4 * ks
-          +  9. * CB_FULL[i_dom[i][j]][1] * k4 * k4
-          +  8. * CB_FULL[i_dom[i][j]][2] * k4 * k2 * ks
-          +  7. * CB_FULL[i_dom[i][j]][3] * k4 * k2
-          +  6. * CB_FULL[i_dom[i][j]][4] * k4 * ks
-          +  5. * CB_FULL[i_dom[i][j]][5] * k4
-          +  4. * CB_FULL[i_dom[i][j]][6] * k2 * ks
-          +  3. * CB_FULL[i_dom[i][j]][7] * k2
-          +  2. * CB_FULL[i_dom[i][j]][8] * ks
-          +       CB_FULL[i_dom[i][j]][9];
+        d = 10. * CB_FULL[material][0] * k4 * k4 * ks
+          +  9. * CB_FULL[material][1] * k4 * k4
+          +  8. * CB_FULL[material][2] * k4 * k2 * ks
+          +  7. * CB_FULL[material][3] * k4 * k2
+          +  6. * CB_FULL[material][4] * k4 * ks
+          +  5. * CB_FULL[material][5] * k4
+          +  4. * CB_FULL[material][6] * k2 * ks
+          +  3. * CB_FULL[material][7] * k2
+          +  2. * CB_FULL[material][8] * ks
+          +       CB_FULL[material][9];
         ks *= 1.e+12 * 2.  * PI;
         d  *= 1.e-12 * 0.5 / PI;
         dx = QH * d * tau * (particle->kx + 0.5 * dkx) / ks;

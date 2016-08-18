@@ -81,18 +81,19 @@ inline particle_t creation(int i, real t, int edge) {
     if( j <= 1) {  j = 1; }
     if(ii >= nx + 1) { ii = nx + 1; }
     if( j >= ny + 1) {  j = ny + 1; }
-    if(NOVALLEY[i_dom[ii][j]] == 1) {
+    int material = g_mesh->info[ii][j].material;
+    if(NOVALLEY[material] == 1) {
         iv = 1;
         iaux = 0;
     }
-    else if(NOVALLEY[i_dom[ii][j]] >= 2) {
+    else if(NOVALLEY[material] >= 2) {
         iv = iaux = 1;
         // 20% of the created particles belongs to the L-valley
         if(rnd() >= 0.8) { iv = iaux = 2; }
     }
     c1 = log(rnd());
-    c2 = SMH[i_dom[ii][j]][iaux]
-       * sqrt(-1.5 * BKTQ * c1 * (1. - alphaK[i_dom[ii][j]][iv] * 1.5 * BKTQ * c1));
+    c2 = SMH[material][iaux]
+       * sqrt(-1.5 * BKTQ * c1 * (1. - alphaK[material][iv] * 1.5 * BKTQ * c1));
     c3 = rnd();
     c4 = sqrt(1. - c3 * c3);
     c5 = 2. * PI * rnd();
@@ -101,7 +102,7 @@ inline particle_t creation(int i, real t, int edge) {
     kx = c2 * c3;
     ky = c2 * c4 * c6;
     kz = c2 * c4 * c7;
-    ts = t - log(rnd()) / GM[i_dom[ii][j]];
+    ts = t - log(rnd()) / GM[material];
     if(edge == direction_t.TOP)   { ky *= -1.; }
     if(edge == direction_t.RIGHT) { kx *= -1.; }
 

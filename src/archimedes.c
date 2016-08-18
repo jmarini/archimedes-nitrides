@@ -70,7 +70,6 @@ int ISEED;               // seed for random number generator, starts at 38467
 int c;                   // iteration number
 int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
 int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
-int i_dom[NXM+1][NYM+1]; // material at each mesh node, array indexed by node (i, j)
 int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
 int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, array indexed by material, starting valley and ending valley
 

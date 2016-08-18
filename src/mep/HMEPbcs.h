@@ -39,6 +39,7 @@ HMEPBCs(void)
  real xvel,yvel;
  int nx = g_mesh->nx,
      ny = g_mesh->ny;
+ int material;
 
 // These are completely generic boundary conditions
 
@@ -80,11 +81,12 @@ HMEPBCs(void)
        u2d[i+2][1][3]=EDGE[0][i][2]*yvel;
        u2d[i+2][2][3]=EDGE[0][i][2]*yvel;
 // energy
-       u2d[i+2][0][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
+       material = g_mesh->info[i+2][3].material;
+       u2d[i+2][0][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[0][i][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
-       u2d[i+2][1][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
+       u2d[i+2][1][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[0][i][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
-       u2d[i+2][2][4]=0.5*MSTAR[i_dom[i+2][3]][1]*M*yvel*yvel*EDGE[0][i][2]
+       u2d[i+2][2][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[0][i][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[0][i][2];
      }
    }
@@ -126,11 +128,12 @@ HMEPBCs(void)
        u2d[1][j+2][3]=0.;
        u2d[2][j+2][3]=0.;
 // energy
-       u2d[0][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
+       material = g_mesh->info[3][j+2].material;
+       u2d[0][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[3][j][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
-       u2d[1][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
+       u2d[1][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[3][j][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
-       u2d[2][j+2][4]=0.5*MSTAR[i_dom[3][j+2]][1]*M*xvel*xvel*EDGE[3][j][2]
+       u2d[2][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[3][j][2]
                    +1.5*KB*g_config->lattice_temp*EDGE[3][j][2];
      }
    }
@@ -172,11 +175,12 @@ HMEPBCs(void)
        u2d[nx+3][j+2][3]=0.;
        u2d[nx+4][j+2][3]=0.;
 // energy
-       u2d[nx+2][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
+       material = g_mesh->info[nx-1][j+2].material;
+       u2d[nx+2][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[1][j][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
-       u2d[nx+3][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
+       u2d[nx+3][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[1][j][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
-       u2d[nx+4][j+2][4]=0.5*MSTAR[i_dom[nx-1][j+2]][1]*M*xvel*xvel*EDGE[1][j][2]
+       u2d[nx+4][j+2][4]=0.5*MSTAR[material][1]*M*xvel*xvel*EDGE[1][j][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[1][j][2];
      }
    }
@@ -218,14 +222,13 @@ HMEPBCs(void)
        u2d[i+2][ny+3][3]=EDGE[2][i][2]*yvel;
        u2d[i+2][ny+4][3]=EDGE[2][i][2]*yvel;
 // energy
-       u2d[i+2][ny+2][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
+       material = g_mesh->info[i+2][ny-1].material;
+       u2d[i+2][ny+2][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[2][i][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
-       u2d[i+2][ny+3][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
+       u2d[i+2][ny+3][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[2][i][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
-       u2d[i+2][ny+4][4]=0.5*MSTAR[i_dom[i+2][ny-1]][1]*M*yvel*yvel*EDGE[2][i][2]
+       u2d[i+2][ny+4][4]=0.5*MSTAR[material][1]*M*yvel*yvel*EDGE[2][i][2]
                       +1.5*KB*g_config->lattice_temp*EDGE[2][i][2];
      }
   }
 }
-
-// ######################################################

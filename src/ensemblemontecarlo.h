@@ -54,10 +54,10 @@ void EMC(void) {
             tau = particle->t - ti;                // the dt for the current step
             drift(particle, tau);                  // drift for dt
             mc_particle_coords(particle, &i, &j);  // get updated particle coords
-            scatter(particle, i_dom[i][j]);        // scatter particle
+            scatter(particle, g_mesh->info[i][j].material);        // scatter particle
             ti = particle->t;                      // update the time
             mc_particle_coords(particle, &i, &j);  // get updated particle coords
-            particle->t = ti - log(rnd()) / GM[i_dom[i][j]]; // update particle time
+            particle->t = ti - log(rnd()) / GM[g_mesh->info[i][j].material]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step

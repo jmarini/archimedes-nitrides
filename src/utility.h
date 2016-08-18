@@ -72,12 +72,14 @@ inline int mc_is_boundary_contact(int direction, int index) {
 real mc_particle_energy(particle_t *particle) {
     int i, j;
     mc_particle_coords(particle, &i, &j);
+    int material = g_mesh->info[i][j].material;
+
     if(g_config->conduction_band == PARABOLIC) {
-        return HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
+        return HHM[material][0] * mc_particle_ksquared(particle);
     }
     else if(g_config->conduction_band == KANE) {
-        real alpha = alphaK[i_dom[i][j]][0];
-        real gamma = HHM[i_dom[i][j]][0] * mc_particle_ksquared(particle);
+        real alpha = alphaK[material][0];
+        real gamma = HHM[material][0] * mc_particle_ksquared(particle);
         return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * gamma);
     }
     else {
@@ -138,7 +140,7 @@ particle_info_t mc_calculate_particle_info(particle_t *p) {
     if(j <= 1) { j = 1; }
     if(j >= ny + 1) { j = ny + 1; }
 
-    int material = i_dom[i][j];
+    int material = g_mesh->info[i][j].material;
 
     // calculate particle energy and velocity
     real ksquared = mc_particle_ksquared(p);

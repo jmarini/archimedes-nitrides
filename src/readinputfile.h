@@ -118,7 +118,6 @@ Read_Input_File(void)
       h2d[i][j][1]=NI;
       u2d[i][j][2]=u2d[i][j][3]=0.;
       h2d[i][j][2]=h2d[i][j][3]=0.;
-      i_dom[i][j]=SILICON; // Silicon everywhere as default
       B[i][j]=0.; // no magnetic field as default
    }
  SIO2_UP_FLAG=0; // No upper SiO2
@@ -182,7 +181,6 @@ Read_Input_File(void)
       for(j=0;j<=g_mesh->ny+4;j++){
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
-           i_dom[i][j]=type;
            g_mesh->info[i][j].material = type;
         }
       }

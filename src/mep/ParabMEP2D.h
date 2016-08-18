@@ -85,6 +85,7 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
  real dtodx2;
  real dtody2;
  int io,NXE,NYE;
+ int material = 0;
 
  NXE=nx+ND;
  NYE=ny+ND;
@@ -109,6 +110,7 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
 // Compute the fluxes f and g
    for(j=ND-2;j<=NYE+3;j++)
      for(i=ND-2;i<=NXE+3;i++){
+       material = g_mesh->info[i][j].material;
        den=u2d[i][j][1];
        xmt=u2d[i][j][2];
        ymt=u2d[i][j][3];
@@ -116,12 +118,12 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
        vex=xmt/den;
        vey=ymt/den;
        f2d[i][j][1]=xmt;
-       f2d[i][j][2]=2./(3.*MSTAR[i_dom[i][j]][1]*M)*eng;
+       f2d[i][j][2]=2./(3.*MSTAR[material][1]*M)*eng;
        f2d[i][j][3]=0.;
        f2d[i][j][4]=4./3.*eng*vex;
        g2d[i][j][1]=ymt;
        g2d[i][j][2]=0.0;
-       g2d[i][j][3]=2./(3.*MSTAR[i_dom[i][j]][1]*M)*eng;
+       g2d[i][j][3]=2./(3.*MSTAR[material][1]*M)*eng;
        g2d[i][j][4]=4./3.*eng*vey;
      }
 // Compute numerical slopes for f, g and h in x-, y-direction
@@ -141,6 +143,7 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
 // Compute the flux values of f, g at the center of the four faces
    for(j=ND;j<=NYE+1;j++)
      for(i=ND;i<=NXE+1;i++){
+       material = g_mesh->info[i][j].material;
        den=u2d[i][j][1]-dtodx2*fx2d[i][j][1]-dtody2*gy2d[i][j][1];
        xmt=u2d[i][j][2]-dtodx2*fx2d[i][j][2]-dtody2*gy2d[i][j][2];
        ymt=u2d[i][j][3]-dtodx2*fx2d[i][j][3]-dtody2*gy2d[i][j][3];
@@ -148,12 +151,12 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
        vex=xmt/den;
        vey=ymt/den;
        f2d[i][j][1]=xmt;
-       f2d[i][j][2]=2./(3.*MSTAR[i_dom[i][j]][1]*M)*eng;
+       f2d[i][j][2]=2./(3.*MSTAR[material][1]*M)*eng;
        f2d[i][j][3]=0.0;
        f2d[i][j][4]=4./3.*eng*vex;
        g2d[i][j][1]=ymt;
        g2d[i][j][2]=0.0;
-       g2d[i][j][3]=2./(3.*MSTAR[i_dom[i][j]][1]*M)*eng;
+       g2d[i][j][3]=2./(3.*MSTAR[material][1]*M)*eng;
        g2d[i][j][4]=4./3.*eng*vey;
      }
 // Compute time step size
