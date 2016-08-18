@@ -1,4 +1,4 @@
-/* mesh.h -- This file is part of Archimedes release 1.2.0.
+/* configuration.h -- This file is part of Archimedes release 1.2.0.
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for both
@@ -24,20 +24,19 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-// ######################################################
-// Created on 12 aug.2016, J. Marini
-// Last modif. : 12 aug.2016, J. Marini
-// ######################################################
-
 #ifndef ARCHIMEDES_CONFIGURATION_H
 #define ARCHIMEDES_CONFIGURATION_H
+
+#include "global_defines.h"
 
 
 typedef struct {
     int simulation_model;
+
+    // particle info
     long long int num_particles;
     long long int next_particle_id;
+    real carriers_per_particle;
 
     // scattering mechanism flags
     int optical_phonon_scattering;

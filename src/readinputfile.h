@@ -114,8 +114,8 @@ Read_Input_File(void)
 // standard doping concentration
  for(i=1;i<=g_mesh->nx+1;i++)
    for(j=1;j<=g_mesh->ny+1;j++){
-      u2d[i][j][1]=N_D[i][j]=NI;
-      h2d[i][j][1]=N_H[i][j]=NI;
+      u2d[i][j][1]=NI;
+      h2d[i][j][1]=NI;
       u2d[i][j][2]=u2d[i][j][3]=0.;
       h2d[i][j][2]=h2d[i][j][3]=0.;
       i_dom[i][j]=SILICON; // Silicon everywhere as default
@@ -499,7 +499,7 @@ Read_Input_File(void)
       for(j=1;j<=g_mesh->ny+1;j++)
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          &&(j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
-           u2d[i][j][1]=N_D[i][j]=conc;
+           u2d[i][j][1]=conc;
            g_mesh->info[i][j].donor_conc = conc;
            g_mesh->info[i][j].e.density = conc;
         }
@@ -508,7 +508,7 @@ Read_Input_File(void)
       for(j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
-           u2d[i+2][j+2][1]=N_D[i][j]=conc;
+           u2d[i+2][j+2][1]=conc;
            g_mesh->info[i][j].donor_conc = conc;
            g_mesh->info[i+2][j+2].e.density = conc;
            u2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
@@ -562,7 +562,7 @@ Read_Input_File(void)
       for(j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
-           h2d[i+2][j+2][1]=N_H[i][j]=conc;
+           h2d[i+2][j+2][1]=conc;
            g_mesh->info[i][j].acceptor_conc = conc;
            g_mesh->info[i+2][j+2].h.density = conc;
            h2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
@@ -929,12 +929,10 @@ Read_Input_File(void)
 // elseif(strcmp(s,"")==0){
  }while(!feof(fp));
 // computation of the maximum doping density
- DDmax=0.;
  g_config->max_doping = 0.;
  for(i=1;i<=g_mesh->nx+1;i++)
    for(j=1;j<=g_mesh->ny+1;j++){
-     if(DDmax<=N_D[i][j]) {
-        DDmax=N_D[i][j];
+     if(g_config->max_doping<=g_mesh->info[i][j].donor_conc) {
         g_config->max_doping = g_mesh->info[i][j].donor_conc;
     }
    }

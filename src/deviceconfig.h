@@ -33,31 +33,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void MCdevice_config(void) {
     long int n = 0;
-    int i, j, np, m;
+    int i  = 0,
+        j  = 0,
+        np = 0,
+        m  = 0;
     int valley = 0;
-    real c1,
-         c2,
-         c3,
-         c4,
-         c5,
-         c6,
-         c7;
-    int nx = g_mesh->nx,
-        ny = g_mesh->ny;
+    real c1 = 0.,
+         c2 = 0.,
+         c3 = 0.,
+         c4 = 0.,
+         c5 = 0.,
+         c6 = 0.,
+         c7 = 0.;
+    int nx  = g_mesh->nx,
+        ny  = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
 
     // Number of carriers per particle
-    EPP = DDmax * dx * dy / g_config->particles_per_cell;
+    g_config->carriers_per_particle = g_config->max_doping * dx * dy / g_config->particles_per_cell;
 
     for(i=1;i<=nx+1;i++) {
         for(j=1;j<=ny+1;j++){
             // np=number of particles in the (i,j)-th cell
             if(g_config->load_initial_data == 1) {
-                np = (int)(u2d[i][j][1] * dx * dy / EPP + 0.5);
+                np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_particle + 0.5);
             }
             else {
-                np = (int)(N_D[i][j] * dx * dy / EPP + 0.5);
+                np = (int)(g_mesh->info[i][j].donor_conc * dx * dy / g_config->carriers_per_particle + 0.5);
             }
             if((i == 1) || (i == nx + 1)) { np /= 2; }
             if((j == 1) || (j == ny + 1)) { np /= 2; }

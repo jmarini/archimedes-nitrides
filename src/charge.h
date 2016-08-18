@@ -67,7 +67,7 @@ Charge(void)
 // =======================================
   for(i=1;i<=nx+1;i++)
     for(j=1;j<=ny+1;j++){
-      u2d[i][j][1]*=EPP/(dx*dy);
+      u2d[i][j][1]*=g_config->carriers_per_particle/(dx*dy);
       if(i==1 || i==nx+1) u2d[i][j][1]*=2.;
       if(j==1 || j==ny+1) u2d[i][j][1]*=2.;
     }
@@ -80,62 +80,4 @@ Charge(void)
   u2d[nx+1][ny+1][1]=u2d[nx][ny+1][1];
   u2d[1][ny+1][1]=u2d[1][ny][1];
 // }
-/*if(Material==GAAS){
-// well known "cloud in cell" method
-  for(n=1;n<=INUM;n++){
-    x=P[n].x/dx;
-    y=P[n].y/dy;
-    i=(int)(x+1.);
-    j=(int)(y+1.);
-// Cloud in cell method
-// Gamma-valley
-    if(P[n].valley==1){
-      DG[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-      if(i<=nx)
-        DG[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
-      if(j<=ny)
-        DG[i][j+1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));
-      if(i<=nx && j<=ny)
-       DG[i+1][j+1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(1.-(y-(real)(j-1))));
-    }
-// L-valley
-    if(P[n].valley==2){
-      DL[i][j]+=(1.-(x-(real)(i-1)))*(1.-(y-(real)(j-1)));
-      if(i<=nx)
-        DL[i+1][j]+=(1.-(1.-(x-(real)(i-1))))*(1.-(y-(real)(j-1)));
-      if(j<=ny)
-        DL[i][j+1]+=(1.-(x-(real)(i-1)))*(1.-(1.-(y-(real)(j-1))));
-      if(i<=nx && j<=ny)
-       DL[i+1][j+1]+=(1.-(1.-(x-(real)(i-1))))*(1.-(1.-(y-(real)(j-1))));
-    }
-
-  }
-// =======================================
-  for(i=1;i<=nx+1;i++)
-    for(j=1;j<=ny+1;j++){
-      DG[i][j]*=EPP/(dx*dy);
-      DL[i][j]*=EPP/(dx*dy)/4.;
-      u2d[i][j][1]+=DG[i][j]+4.*DL[i][j];
-      if(i==1 || i==nx+1){
-        u2d[i][j][1]*=2.;
-        DG[i][j]*=2.;
-        DL[i][j]*=2.;
-      }
-      if(j==1 || j==ny+1){
-        u2d[i][j][1]*=2.;
-        DG[i][j]*=2.;
-        DL[i][j]*=2.;
-      }
-    }
-// This trick is to avoid the strange oscillations
-// in the ghost cells, when we plot the density.
-// This does not influence the resolution of the Poisson
-// equation, since this last is not computed on the
-// ghost cells. 08-12 oct.2004, J.M.Sellier, Siracusa.
-// bottom and upper edge contacts
-  u2d[nx+1][ny+1][1]=u2d[nx][ny+1][1];
-  u2d[1][ny+1][1]=u2d[1][ny][1];
- }*/
 }
-
-// ===========================================================

@@ -114,7 +114,7 @@ updating(int model)
     printf("Min. y-elec.field = %g V/m\n",mini);
 // Max and Min of Density
     maxi=0.;
-    mini=DDmax;
+    mini=g_config->max_doping;
     for(i=1;i<=g_mesh->nx+1;i++)
       for(j=1;j<=g_mesh->ny+1;j++){
        if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){

@@ -96,8 +96,6 @@ real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, a
                                     //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
 real PSI[NXM+1][NYM+1];             // Potential, indexed by mesh node
 real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
-real N_D[NXM+1][NYM+1];             // Donor concentration, indexed by mesh node, defaults to NI
-real N_H[NXM+1][NYM+1];             // Acceptor concentration, indexed by mesh node, defaults to NI
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
@@ -106,8 +104,6 @@ real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), 
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 particle_t P[NPMAX+1];              // particle information, array indexed by particle
-real EPP;                           // number of carriers per particle
-real DDmax;                         // maximum donor density
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
                                     //                                               cell index (i or j),
                                     //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
@@ -361,8 +357,7 @@ int main(int argc, char *argv[]) {
     // Initialization for Monte Carlo
     // ==============================
     if(g_config->simulation_model == MCE || g_config->simulation_model == MCEH) {
-        int i;
-        for(i = 0; i < NOAMTIA; i++) {
+        for(int i = 0; i < NOAMTIA; i++) {
             calc_scattering_rates(i);
         }
         printf("Scattering rates calculated...\n");

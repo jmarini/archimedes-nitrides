@@ -38,7 +38,7 @@
 // For more information see the manual of 
 // GNU Archimedes release 1.0.0.
 
-void 
+void
 Electric_Field(void)
 {
  register int i,j,k;
@@ -101,7 +101,7 @@ Electric_Field(void)
      for(j=2;j<=nx;j++){
        kappa=(EPSR[i_dom[k][j]]*EPS0)/Q;
        deltat=factor*0.5/kappa/(1./(dx*dx)+1./(dy*dy));
-       rho=(u2d[j][k][1]-N_D[j][k]-h2d[j][k][1]+N_H[j][k]);
+       rho=(u2d[j][k][1]-g_mesh->info[j][k].donor_conc-h2d[j][k][1]+g_mesh->info[j][k].acceptor_conc);
        u2d[j][k][0]=PSI[j][k]-deltat*rho+deltat*kappa*
              ((PSI[j+1][k]-2.0*PSI[j][k]+PSI[j-1][k])/(dx*dx)
              +(PSI[j][k+1]-2.0*PSI[j][k]+PSI[j][k-1])/(dy*dy));
