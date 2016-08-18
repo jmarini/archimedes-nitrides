@@ -132,10 +132,10 @@ void EMC(void) {
 
         if(mc_does_particle_exist(particle)) { n++; }
         else {
-            P[n] = P[INUM];
-            INUM--;
+            P[n] = P[g_config->num_particles];
+            g_config->num_particles--;
         }
-    } while(n < INUM);
+    } while(n < g_config->num_particles);
 
     // create particles at ohmic contacts of the bottom edge
     for(i=1; i<=nx+1; i++) {
@@ -146,10 +146,10 @@ void EMC(void) {
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
-                    n=INUM+j;
+                    n=g_config->num_particles+j;
                     P[n] = creation(i,g_config->time,direction_t.BOTTOM);
                 }
-            INUM += ni;
+            g_config->num_particles += ni;
             }
         }
     }
@@ -163,10 +163,10 @@ void EMC(void) {
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
-                    n=INUM+j;
+                    n=g_config->num_particles+j;
                     P[n] = creation(i,g_config->time,direction_t.TOP);
                 }
-            INUM += ni;
+            g_config->num_particles += ni;
             }
         }
     }
@@ -180,10 +180,10 @@ void EMC(void) {
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
-                    n=INUM+j;
+                    n=g_config->num_particles+j;
                     P[n] = creation(i,g_config->time,direction_t.RIGHT);
                 }
-            INUM += ni;
+            g_config->num_particles += ni;
             }
         }
     }
@@ -197,16 +197,16 @@ void EMC(void) {
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++){
-                    n=INUM+j;
+                    n=g_config->num_particles+j;
                     P[n] = creation(i,g_config->time,direction_t.LEFT);
                 }
-                INUM += ni;
+                g_config->num_particles += ni;
             }
         }
     }
 
-    printf("\nActual number of electron super-particles = %d\n", INUM);
-    if(INUM > NPMAX) {
+    printf("\nActual number of electron super-particles = %lld\n", g_config->num_particles);
+    if(g_config->num_particles > NPMAX) {
         printf("%s: too big actual number of particles\n", progname);
         exit(EXIT_FAILURE);
     }

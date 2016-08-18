@@ -44,7 +44,7 @@ void media(void) {
     memset(ener,    0, sizeof(ener[0][0])    * (NXM + 1) * (NYM + 1));
 
     // calculate info for each particle
-    for(n = 1; n <= INUM; n++) {
+    for(n = 1; n <= g_config->num_particles; n++) {
         particle_info[n] = mc_calculate_particle_info(&P[n]);
         i = particle_info[n].i;
         j = particle_info[n].j;

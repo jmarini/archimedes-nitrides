@@ -163,7 +163,7 @@ void SaveOutput2DGNUPLOT(int je) {
   // Particle Information
   // ====================
   fprintf(vo, "index id valley kx ky kz energy t x y i j vx vy\n");
-  for(i = 1; i <= INUM; ++i) {
+  for(i = 1; i <= g_config->num_particles; ++i) {
       // print all particle info
       particle_info_t *info = &particle_info[i];
       fprintf(vo, "%d %lld %d %g %g %g %g %g %g %g %d %d %g %g\n",

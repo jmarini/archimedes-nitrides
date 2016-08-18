@@ -67,14 +67,12 @@ extern inline real mc_particle_k(particle_t *particle);
 int NUM_VERT;            // number of vertices in the meshing
 int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
 int ISEED;               // seed for random number generator, starts at 38467
-int INUM;                // number of electrons sumulated
 int c;                   // iteration number
 int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
 int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
 int i_dom[NXM+1][NYM+1]; // material at each mesh node, array indexed by node (i, j)
 int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
 int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, array indexed by material, starting valley and ending valley
-long long int PARTICLE_ID;         // tracker for next particle id
 
 // All "real"'s here...
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:

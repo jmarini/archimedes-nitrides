@@ -116,7 +116,7 @@ void MCdevice_config(void) {
                     c5=2.*PI*rnd();
                     c6=sin(c5);
                     c7=cos(c5);
-                    P[n].id = PARTICLE_ID++;
+                    P[n].id = g_config->next_particle_id++;
                     P[n].valley = valley;
                     P[n].kx = c2 * c3 * c6;
                     P[n].ky = c2 * c4 * c6;
@@ -133,7 +133,7 @@ void MCdevice_config(void) {
         }
     }
 
-    INUM = n;
+    g_config->num_particles = n;
     for(i=1;i<=nx+1;i++) {
         for(j=1;j<=ny+1;j++) {
             u2d[i][j][2]=0.;
@@ -142,5 +142,5 @@ void MCdevice_config(void) {
         }
     }
 
-    printf("Initial Number of Electron Super-particles = %d\n", INUM);
+    printf("Initial Number of Electron Super-particles = %lld\n", g_config->num_particles);
 }

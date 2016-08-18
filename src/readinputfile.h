@@ -70,6 +70,8 @@ Read_Input_File(void)
     g_config->scattering_output = OFF;
     g_config->output_format = GNUPLOTFORMAT;
     g_config->load_initial_data = OFF; // leid_flag
+    g_config->num_particles = 0;
+    g_config->next_particle_id = 0;
 
     g_mesh->nx = 50;
     g_mesh->ny = 50;

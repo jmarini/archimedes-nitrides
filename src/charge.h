@@ -50,7 +50,7 @@ Charge(void)
 
 //if(Material==SILICON || Material==GERMANIUM){
 // well known "cloud in cell" method
-  for(n=1;n<=INUM;n++){
+  for(n=1;n<=g_config->num_particles;n++){
     x=P[n].x/dx;
     y=P[n].y/dy;
     i=(int)(x+1.);

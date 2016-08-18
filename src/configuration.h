@@ -36,6 +36,8 @@
 
 typedef struct {
     int simulation_model;
+    long long int num_particles;
+    long long int next_particle_id;
 
     // scattering mechanism flags
     int optical_phonon_scattering;
