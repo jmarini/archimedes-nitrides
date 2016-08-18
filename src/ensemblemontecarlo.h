@@ -36,6 +36,10 @@ void EMC(void) {
     long int n=1;  // index of current particle
     int i, ni, j, npt[NXM+NYM+1][4];
     real tdt, ti, tau;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
     memset(&npt, 0, sizeof(npt));
     tdt = g_config->time + g_config->dt;

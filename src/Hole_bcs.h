@@ -37,7 +37,8 @@ HoleHMEPBCs(void)
 { 
  int i,j;
  real xvel,yvel;
-
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
 // These are completely generic boundary conditions
 
 // Bottom Edge

@@ -38,9 +38,9 @@ Faraday(void)
 {
  int i,j;
 // Lax-Friedrichs-Sellier method (first-order in space)
- for(i=2;i<=nx;i++)
-  for(j=2;j<=ny;j++)
+ for(i=2;i<=g_mesh->nx;i++)
+  for(j=2;j<=g_mesh->ny;j++)
    B[i][j]=0.25*(B[i+1][j]+B[i][j+1]+B[i-1][j]+B[i][j-1])
-          -g_config->dt*(0.5*(E[i+1][j][1]-E[i-1][j][1])/dx
-	      -0.5*(E[i][j+1][0]-E[i][j-1][0])/dy);
+          -g_config->dt*(0.5*(E[i+1][j][1]-E[i-1][j][1])/g_mesh->dx
+	      -0.5*(E[i][j+1][0]-E[i][j-1][0])/g_mesh->dy);
 }

@@ -72,13 +72,13 @@ inline int mc_is_boundary_contact(int direction, int index) {
 
 inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
     // uses globabl variables dx & dy
-    *i = (int)(particle->x / dx) + 1;
+    *i = (int)(particle->x / g_mesh->dx) + 1;
     if(*i < 1) { *i = 1; }
-    if(*i > nx ) { *i = nx; }
+    if(*i > g_mesh->nx ) { *i = g_mesh->nx; }
 
-    *j = (int)(particle->y / dy) + 1;
+    *j = (int)(particle->y / g_mesh->dy) + 1;
     if(*j < 1) { *j = 1; }
-    if(*j > ny ) { *j = ny; }
+    if(*j > g_mesh->ny ) { *j = g_mesh->ny; }
 }
 
 
@@ -138,6 +138,10 @@ particle_info_t mc_calculate_particle_info(particle_t *p) {
     // calculate particle coordinates
     int i = 0,
         j = 0;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
     i = (int)(p->x / dx + 1.5);
     if(i <= 1) { i = 1; }

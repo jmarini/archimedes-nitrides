@@ -37,6 +37,10 @@ Compute_Currents(void)
  register int i;
  int cn;
  real sum;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
+ real dx = g_mesh->dx,
+      dy = g_mesh->dy;
 
 // Electron current computations
 // =============================

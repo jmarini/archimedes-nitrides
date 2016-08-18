@@ -46,6 +46,10 @@ inline particle_t creation(int i, real t, int edge) {
          y  = 0.0,
          z  = 0.0;
     real c1, c2, c3, c4, c5, c6, c7;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
     // We assume that the particles are initially
     // at near thermal equilibrium

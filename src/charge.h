@@ -37,6 +37,10 @@ Charge(void)
 {
  int i,j,n;
  real x,y;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
+ real dx = g_mesh->dx,
+      dy = g_mesh->dy;
 
 // resetting of the electronic density
 // a simple way to avoid NaN propagation...

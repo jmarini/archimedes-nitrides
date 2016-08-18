@@ -64,6 +64,10 @@ void SaveOutput2DGNUPLOT(int je) {
     FILE *fM;
     FILE *vo;
     register int i, j;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
     sprintf(s, "density%03d.xyz", je);
     fp = fopen(s, "w");

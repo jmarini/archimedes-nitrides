@@ -63,6 +63,8 @@ SaveOutput2D_MeshFormat(int je)
   FILE *fM;
   int i,j;
   int size,dim,nbmet,nbval,type;
+  int nx = g_mesh->nx,
+      ny = g_mesh->ny;
 
   printf("SaveOutput2D_MeshFormat\n\n");
 
@@ -198,7 +200,7 @@ else{
  fprintf(mp,"Vertices\n%d\n",NUM_VERT);
  for(j=1;j<=ny+1;j++)
    for(i=1;i<=nx+1;i++)
-       fprintf(mp,"%g %g 0\n",(i-1.)*dx,(j-1.)*dy);
+       fprintf(mp,"%g %g 0\n",(i-1.)*g_mesh->dx,(j-1.)*g_mesh->dy);
  fprintf(mp,"Quadrilaterals\n%d\n",6*NUM_EXAHEDRA);
  for(j=1;j<=ny;j++)
   for(i=1;i<=nx;i++)
@@ -245,7 +247,7 @@ else{
  fprintf(mp,"Vertices\n%d\n",NUM_VERT);
  for(j=1;j<=ny+1;j++)
    for(i=1;i<=nx+1;i++)
-       fprintf(mp,"%g %g 0\n",(i-1.)*dx,(j-1.)*dy);
+       fprintf(mp,"%g %g 0\n",(i-1.)*g_mesh->dx,(j-1.)*g_mesh->dy);
  fprintf(mp,"Quadrilaterals\n%d\n",6*NUM_EXAHEDRA);
  for(j=1;j<=ny;j++)
   for(i=1;i<=nx;i++)

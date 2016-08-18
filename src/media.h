@@ -60,8 +60,8 @@ void media(void) {
     // =======================================
 
     // Average velocity and energy over grid cell
-    for(i = 1; i <= nx + 1; i++) {
-        for(j = 1; j <= ny + 1; j++) {
+    for(i = 1; i <= g_mesh->nx + 1; i++) {
+        for(j = 1; j <= g_mesh->ny + 1; j++) {
             if(density[i][j] != 0) {
                 xvel[i][j] /= (real)density[i][j];
                 yvel[i][j] /= (real)density[i][j];
@@ -70,8 +70,8 @@ void media(void) {
         }
     }
 
-    for(i = 1; i <= nx + 1; i++) {
-        for(j = 1; j <= ny + 1; j++){
+    for(i = 1; i <= g_mesh->nx + 1; i++) {
+        for(j = 1; j <= g_mesh->ny + 1; j++){
             u2d[i][j][2] += xvel[i][j];
             u2d[i][j][3] += yvel[i][j];
             u2d[i][j][4] += ener[i][j];

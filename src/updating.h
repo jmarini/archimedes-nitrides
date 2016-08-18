@@ -60,7 +60,7 @@ updating(int model)
 // =======================
   if(model==MEPE || model==MEPEH){
    g_config->dt/=2.;
-   ParabMEP2D(nx,ny,dx,dy,0.475,1.0);
+   ParabMEP2D(g_mesh->nx, g_mesh->ny, g_mesh->dx, g_mesh->dy, 0.475,1.0);
    electron_relaxation_step();
    g_config->dt*=2.;
   }
@@ -68,7 +68,7 @@ updating(int model)
 // ===================
   if(model==MEPH || model==MEPEH){
    g_config->dt/=2.;
-   Hole_MEP2D(nx,ny,dx,dy,0.475,1.0);
+   Hole_MEP2D(g_mesh->nx, g_mesh->ny, g_mesh->dx, g_mesh->dy, 0.475,1.0);
    Relaxation_Step_Hole();
    g_config->dt*=2.;
   }
@@ -79,8 +79,8 @@ updating(int model)
 // Max and Min of Potential
     maxi=u2d[8][8][0];
     mini=u2d[8][8][0];
-    for(i=1;i<=nx+1;i++)
-      for(j=1;j<=ny+1;j++){
+    for(i=1;i<=g_mesh->nx+1;i++)
+      for(j=1;j<=g_mesh->ny+1;j++){
        if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
         if(u2d[i][j][0]>=maxi) maxi=u2d[i][j][0];
         if(u2d[i][j][0]<=mini) mini=u2d[i][j][0];
@@ -95,8 +95,8 @@ updating(int model)
 // Max and Min of x-component of electric field
     maxi=E[8][8][0];
     mini=E[8][8][0];
-    for(i=1;i<=nx+1;i++)
-      for(j=1;j<=ny+1;j++){
+    for(i=1;i<=g_mesh->nx+1;i++)
+      for(j=1;j<=g_mesh->ny+1;j++){
         if(E[i][j][0]>=maxi) maxi=E[i][j][0];
         if(E[i][j][0]<=mini) mini=E[i][j][0];
       }
@@ -105,8 +105,8 @@ updating(int model)
 // Max and Min of y-component of electric field
     maxi=E[8][8][1];
     mini=E[8][8][1];
-    for(i=1;i<=nx+1;i++)
-      for(j=1;j<=ny+1;j++){
+    for(i=1;i<=g_mesh->nx+1;i++)
+      for(j=1;j<=g_mesh->ny+1;j++){
         if(E[i][j][1]>=maxi) maxi=E[i][j][1];
         if(E[i][j][1]<=mini) mini=E[i][j][1];
       }
@@ -115,8 +115,8 @@ updating(int model)
 // Max and Min of Density
     maxi=0.;
     mini=DDmax;
-    for(i=1;i<=nx+1;i++)
-      for(j=1;j<=ny+1;j++){
+    for(i=1;i<=g_mesh->nx+1;i++)
+      for(j=1;j<=g_mesh->ny+1;j++){
        if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
         if(u2d[i][j][1]>=maxi) maxi=u2d[i][j][1];
         if(u2d[i][j][1]<=mini) mini=u2d[i][j][1];

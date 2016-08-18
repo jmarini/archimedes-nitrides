@@ -38,6 +38,8 @@ void
 FaradayBCs(void)
 {
  int i,j;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
 // Bottom Edge
 // ===========
    for(i=1;i<=nx+1;i++){
@@ -57,7 +59,7 @@ FaradayBCs(void)
      B[nx+2][j]=B[nx][j];
    }
 // Upper Edge
-// ==========   
+// ==========
    for(i=1;i<=nx+1;i++){
      B[i][ny+1]=B[i][ny];
      B[i][ny+2]=B[i][ny-1];

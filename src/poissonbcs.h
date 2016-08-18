@@ -36,6 +36,8 @@ void
 PoissonBCs(void)
 { 
  int i,j;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
 
 // These are completely generic boundary conditions
 
@@ -62,13 +64,13 @@ PoissonBCs(void)
 // ###
    if(SIO2_DOWN_FLAG==1)
    {
-    int sio2nx=(int)(fabs(SIO2_INI[1]-SIO2_FIN[1])/dx);
-    int sio2ny=(int)(SIO2_THICKNESS[1]/dy);
+    int sio2nx=(int)(fabs(SIO2_INI[1]-SIO2_FIN[1])/g_mesh->dx);
+    int sio2ny=(int)(SIO2_THICKNESS[1]/g_mesh->dy);
     if(sio2nx==0) sio2nx++;
     if(sio2ny==0) sio2ny++;
     for(i=1;i<=sio2nx+1;i++){
-       u2d[i+(int)(SIO2_INI[1]/dy)][0][0]=SIO2[1][i][sio2ny+2];
-       u2d[i+(int)(SIO2_INI[1]/dy)][1][0]=SIO2[1][i][sio2ny+1];
+       u2d[i+(int)(SIO2_INI[1]/g_mesh->dy)][0][0]=SIO2[1][i][sio2ny+2];
+       u2d[i+(int)(SIO2_INI[1]/g_mesh->dy)][1][0]=SIO2[1][i][sio2ny+1];
     }
    }
 // ###
@@ -133,13 +135,13 @@ PoissonBCs(void)
 // ###
    if(SIO2_UP_FLAG==1)
    {
-    int sio2nx=(int)(fabs(SIO2_INI[0]-SIO2_FIN[0])/dx);
-    int sio2ny=(int)(SIO2_THICKNESS[0]/dy);
+    int sio2nx=(int)(fabs(SIO2_INI[0]-SIO2_FIN[0])/g_mesh->dx);
+    int sio2ny=(int)(SIO2_THICKNESS[0]/g_mesh->dy);
     if(sio2nx==0) sio2nx++;
     if(sio2ny==0) sio2ny++;
     for(i=1;i<=sio2nx+1;i++){
-       u2d[i+(int)(SIO2_INI[0]/dy)][ny+1][0]=SIO2[0][i][0];
-       u2d[i+(int)(SIO2_INI[0]/dy)][ny+2][0]=SIO2[0][i][1];
+       u2d[i+(int)(SIO2_INI[0]/g_mesh->dy)][ny+1][0]=SIO2[0][i][0];
+       u2d[i+(int)(SIO2_INI[0]/g_mesh->dy)][ny+2][0]=SIO2[0][i][1];
     }
    }
 // ###

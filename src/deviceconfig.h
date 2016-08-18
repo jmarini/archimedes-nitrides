@@ -42,6 +42,10 @@ void MCdevice_config(void) {
          c5,
          c6,
          c7;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
 
     // Number of carriers per particle
     EPP = DDmax * dx * dy / g_config->particles_per_cell;

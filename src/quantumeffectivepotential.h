@@ -56,6 +56,10 @@
 void quantum_effective_potential(void)
 {
  register int i,j,k;
+ real dx = g_mesh->dx,
+      dy = g_mesh->dy;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
  real small=1.e-24;
  real n_x[NXM+1][NYM+1];
  real n_y[NXM+1][NYM+1];

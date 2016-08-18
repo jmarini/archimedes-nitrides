@@ -51,6 +51,10 @@ SaveOutput2DHoleGNUPLOT(int je)
  FILE *ep;
  FILE *qp;
  register int i,j;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
+ real dx = g_mesh->dx,
+      dy = g_mesh->dy;
 
  if(je<=9){
    sprintf(s,"hole_density00%d.xyz",je);

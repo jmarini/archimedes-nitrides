@@ -42,6 +42,8 @@ void Relaxation_Step_Hole(void)
  int ND=2;
  register int i,j,c;
  real taup,tauw,ktaup,ktauw,t;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
 
 // Euler Relaxation step
 for(c=1;c<=50;c++)

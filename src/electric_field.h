@@ -42,6 +42,10 @@ void
 Electric_Field(void)
 {
  register int i,j,k;
+ int nx = g_mesh->nx,
+     ny = g_mesh->ny;
+ real dx = g_mesh->dx,
+      dy = g_mesh->dy;
 
  real factor,kappa,deltat,rho;
 

@@ -66,7 +66,6 @@ extern inline real mc_particle_k(particle_t *particle);
 // All integers here...
 int NUM_VERT;            // number of vertices in the meshing
 int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
-int nx, ny;              // number of cells in x- and y-directions
 int ISEED;               // seed for random number generator, starts at 38467
 int INUM;                // number of electrons sumulated
 int c;                   // iteration number
@@ -101,7 +100,6 @@ real PSI[NXM+1][NYM+1];             // Potential, indexed by mesh node
 real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
 real N_D[NXM+1][NYM+1];             // Donor concentration, indexed by mesh node, defaults to NI
 real N_H[NXM+1][NYM+1];             // Acceptor concentration, indexed by mesh node, defaults to NI
-real dx, dy;                        // length of cells in x & y directions
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
