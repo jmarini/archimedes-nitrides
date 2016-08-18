@@ -50,10 +50,10 @@
 #include "configuration.h"
 #include "mesh.h"
 #include "constants.h"
-#include "extrema.h"
-#include "sign.h"
-#include "mm.h"
-#include "mm2.h"
+#include "mep/extrema.h"
+#include "mep/sign.h"
+#include "mep/mm.h"
+#include "mep/mm2.h"
 #include "particle.h"
 mc_configuration_t *g_config;
 mc_mesh_t *g_mesh;
@@ -172,6 +172,14 @@ FILE *fp;
 // All strings here...
 static char *progname;
 
+#include "mep/HMEPbcs.h"
+#include "mep/Hole_bcs.h"
+#include "mep/MEP_interpolation.h"
+#include "mep/ParabMEP2D.h"
+#include "mep/electron_relaxation.h"
+#include "mep/hole_relaxation.h"
+#include "mep/holemep2d.h"
+
 #include "utility.h"
 #include "poissonbcs.h"
 #include "faradaybcs.h"
@@ -194,16 +202,8 @@ static char *progname;
 #include "ensemblemontecarlo.h"
 #include "charge.h"
 #include "computecurrents.h"
-#include "MEP_interpolation.h"
-#include "electron_relaxation.h"
-#include "HMEPbcs.h"
-#include "ParabMEP2D.h"
-#include "Hole_bcs.h"
-#include "holemep2d.h"
-#include "hole_relaxation.h"
-#include "updating.h"
 #include "readinputfile.h"
-//#include "SaveRappture.h"
+#include "updating.h"
 
 // provide extern declarations of functions to fix compiler error
 extern inline real rnd(void);

@@ -12,29 +12,33 @@ archimedes_SOURCES = \
 	materials/InP.h \
 	materials/InSb.h \
 	materials/Silicon.h \
+	mep/HMEPbcs.h \
+	mep/Hole_bcs.h \
+	mep/MEP_interpolation.h \
+	mep/ParabMEP2D.h \
+	mep/electron_relaxation.h \
+	mep/extrema.h \
+	mep/hole_relaxation.h \
+	mep/holemep2d.h \
+	mep/mm.h \
+	mep/mm2.h \
+	mep/sign.h \
 	archimedes.c \
 	charge.h \
 	computecurrents.h \
+	configuration.h \
 	constants.h \
 	deviceconfig.h \
-	diode_density_gradient_potential.input \
 	drift.h \
 	electric_field.h \
-	electron_relaxation.h \
 	ensemblemontecarlo.h \
-	extrema.h \
-	faradaybcs.h \
 	faraday.h \
-	HMEPbcs.h \
-	Hole_bcs.h \
-	holemep2d.h \
-	hole_relaxation.h \
+	faradaybcs.h \
+	global_defines.h \
 	mcparameters.h \
 	media.h \
-	MEP_interpolation.h \
-	mm2.h \
-	mm.h \
-	ParabMEP2D.h \
+	mesh.c \
+	mesh.h \
 	particle.h \
 	particlecreation.h \
 	poissonbcs.h \
@@ -47,12 +51,7 @@ archimedes_SOURCES = \
 	saveoutput2dmeshformat.h \
 	saveoutputfiles.h \
 	scattering.h \
-	sign.h \
 	updating.h \
-	utility.h \
-	configuration.h \
-	mesh.h \
-	mesh.c \
-	global_defines.h
+	utility.h
 
 archimedes_LDADD = -lm
