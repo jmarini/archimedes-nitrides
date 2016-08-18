@@ -69,19 +69,6 @@ inline int mc_is_boundary_contact(int direction, int index) {
         || mc_is_boundary_ohmic(direction, index);
 }
 
-
-inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
-    // uses globabl variables dx & dy
-    *i = (int)(particle->x / g_mesh->dx) + 1;
-    if(*i < 1) { *i = 1; }
-    if(*i > g_mesh->nx ) { *i = g_mesh->nx; }
-
-    *j = (int)(particle->y / g_mesh->dy) + 1;
-    if(*j < 1) { *j = 1; }
-    if(*j > g_mesh->ny ) { *j = g_mesh->ny; }
-}
-
-
 real mc_particle_energy(particle_t *particle) {
     int i, j;
     mc_particle_coords(particle, &i, &j);
