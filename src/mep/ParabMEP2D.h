@@ -74,21 +74,22 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
 */
  const int ND=2;
 
- register int m,i,j;
- real den;
- real xmt;
- real ymt;
- real eng;
- real vex;
- real vey;
- real dt;
- real dtodx2;
- real dtody2;
- int io,NXE,NYE;
- int material = 0;
-
- NXE=nx+ND;
- NYE=ny+ND;
+ int m   = 0,
+     i   = 0,
+     j   = 0,
+     io  = 0,
+     NXE = nx + ND,
+     NYE = ny + ND,
+     material = 0;
+ real den = 0.,
+      xmt = 0.,
+      ymt = 0.,
+      eng = 0.,
+      vex = 0.,
+      vey = 0.,
+      dt  = 0.,
+      dtodx2 = 0.,
+      dtody2 = 0.;
 
 // Start a 2-stage time iteration
  for(io=0;io<=1;io++){

@@ -41,13 +41,18 @@
 void
 Electric_Field(void)
 {
- register int i,j,k;
+ int i = 0,
+     j = 0,
+     k = 0;
  int nx = g_mesh->nx,
      ny = g_mesh->ny;
  real dx = g_mesh->dx,
       dy = g_mesh->dy;
 
- real factor,kappa,deltat,rho;
+ real factor = 0.,
+      kappa  = 0.,
+      deltat = 0.,
+      rho    = 0.;
 
  PoissonBCs();
 // ===============================

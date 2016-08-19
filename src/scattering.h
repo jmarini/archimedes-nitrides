@@ -39,13 +39,40 @@
 
 void scatter(particle_t *particle, int material)
 {
-    int has_scattered = 0;
-    register int i, ie = 0;
-    real ksquared, thesquareroot, superparticle_energy;
-    real r1, finalenergy = 0., finalk, cosinus, sinus, fai;
-    real f, cb, cf, sf, skk, a11, a12, a13, a21, a22, a23, a32, a33, x1, x2,
-         x3, sb, r2;
-    real ki, kf, cs, sn;
+    int has_scattered = 0,
+        i  = 0,
+        ie = 0;
+    real ksquared = 0.,
+         thesquareroot = 0.,
+         superparticle_energy = 0.,
+         r1 = 0.,
+         finalenergy = 0.,
+         finalk = 0.,
+         cosinus = 0.,
+         sinus = 0.,
+         fai = 0.;
+    real f   = 0.,
+         cb  = 0.,
+         cf  = 0.,
+         sf  = 0.,
+         skk = 0.,
+         a11 = 0.,
+         a12 = 0.,
+         a13 = 0.,
+         a21 = 0.,
+         a22 = 0.,
+         a23 = 0.,
+         a32 = 0.,
+         a33 = 0.,
+         x1  = 0.,
+         x2  = 0.,
+         x3  = 0.,
+         sb  = 0.,
+         r2  = 0.,
+         ki  = 0.,
+         kf  = 0.,
+         cs  = 0.,
+         sn  = 0.;
 
     if(!mc_does_particle_exist(particle)) { return; }
 

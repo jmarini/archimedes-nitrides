@@ -62,14 +62,21 @@ Hole_MEP2D(int nx,int ny,real dx,
 */
  const int ND=2;
 
- register int m,i,j;
- int io,NXE,NYE;
- real den,xmt,ymt;
- real eng,vex,vey;
- real dtodx2,dtody2,dt;
-
- NXE=nx+ND;
- NYE=ny+ND;
+ int m   = 0,
+     i   = 0,
+     j   = 0,
+     io  = 0,
+     NXE = nx+ND,
+     NYE = ny+ND;
+ real den = 0.,
+      xmt = 0.,
+      ymt = 0.,
+      eng = 0.,
+      vex = 0.,
+      vey = 0.,
+      dt  = 0.,
+      dtodx2 = 0.,
+      dtody2 = 0.;
 
 // reset everything
  memset(bufx2d,0,sizeof(&bufx2d));
