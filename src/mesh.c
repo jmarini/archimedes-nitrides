@@ -22,6 +22,9 @@ int mc_build_mesh(mc_mesh_t *mesh) {
             index = j * (nx + 1) + i;
             mesh->coordinates[index][0] = (real)(i) * dx;
             mesh->coordinates[index][1] = (real)(j) * dy;
+
+            mesh->info[i+1][j+1].i = i+1;
+            mesh->info[i+1][j+1].j = j+1;
         }
     }
 
@@ -77,4 +80,9 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename) {
     fclose(fp);
 
     return 0;
+}
+
+
+mc_node_t * mc_node(int i, int j) {
+    return &g_mesh->info[i][j];
 }

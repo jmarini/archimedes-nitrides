@@ -32,6 +32,9 @@
 
 // Ensemble Monte Carlo method
 
+#include "particle.h"
+#include "mesh.h"
+
 void EMC(void) {
     long int n=1;  // index of current particle
     int i, ni, j, npt[NXM+NYM+1][4];
@@ -40,6 +43,7 @@ void EMC(void) {
         ny = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
+    mc_node_t *node = NULL;
 
     memset(&npt, 0, sizeof(npt));
     tdt = g_config->time + g_config->dt;
@@ -53,11 +57,10 @@ void EMC(void) {
         while(particle->t <= tdt) {
             tau = particle->t - ti;                // the dt for the current step
             drift(particle, tau);                  // drift for dt
-            mc_particle_coords(particle, &i, &j);  // get updated particle coords
-            scatter(particle, g_mesh->info[i][j].material);        // scatter particle
+            node = mc_get_particle_node(particle);
+            scatter(particle, node->material);        // scatter particle
             ti = particle->t;                      // update the time
-            mc_particle_coords(particle, &i, &j);  // get updated particle coords
-            particle->t = ti - log(rnd()) / GM[g_mesh->info[i][j].material]; // update particle time
+            particle->t = ti - log(rnd()) / GM[node->material]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step

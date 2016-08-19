@@ -56,6 +56,9 @@ typedef struct {
 
 
 typedef struct {
+    int i;
+    int j;
+
     int material;
     real donor_conc;
     real acceptor_conc;
@@ -94,6 +97,9 @@ int mc_build_mesh(mc_mesh_t *mesh);
 
 
 int mc_save_mesh(mc_mesh_t *mesh, char *filename);
+
+
+mc_node_t * mc_node(int i, int j);
 
 
 #endif

@@ -33,6 +33,11 @@
 #ifndef ARCHIMEDES_PARTICLE_H
 #define ARCHIMEDES_PARTICLE_H
 
+
+#include "global_defines.h"
+#include "mesh.h"
+
+
 typedef struct {
     long long int id;      // unique identifier used to track particle
     int valley;  // number id of the valley the particle is in
@@ -95,6 +100,14 @@ inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
     if(*j > g_mesh->ny ) { *j = g_mesh->ny; }
 }
 
+
+mc_node_t * mc_get_particle_node(particle_t *particle) {
+    int i = 0,
+        j = 0;
+    mc_particle_coords(particle, &i, &j);
+
+    return &g_mesh->info[i][j];
+}
 
 
 #endif

@@ -23,6 +23,9 @@
 */
 
 
+#include "mesh.h"
+
+
 // calculate electron density per cell using particle in cell method
 int calculate_particles_per_cell(void) {
     int i = 0,
@@ -34,11 +37,12 @@ int calculate_particles_per_cell(void) {
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
 
+
     // resetting of the electronic density
     // a simple way to avoid NaN propagation...
     for(i = 1; i <= nx + 1; ++i) {
         for(j = 1; j <= ny + 1; ++j) {
-            g_mesh->info[i][j].e.density = 0;
+            mc_node(i, j)->e.density = 0;
         }
     }
 
@@ -54,31 +58,31 @@ int calculate_particles_per_cell(void) {
         real x2  = x - (real)(i - 1);
         real y2  = y - (real)(j - 1);
 
-        g_mesh->info[i][j].e.density += x1 * y1;
+        mc_node(i, j)->e.density += x1 * y1;
         if(i <= nx) {
-            g_mesh->info[i+1][j].e.density += x2 * y1;
+            mc_node(i + 1, j)->e.density += x2 * y1;
         }
         if(j <= ny) {
-            g_mesh->info[i][j+1].e.density += x1 * y2;
+            mc_node(i, j + 1)->e.density += x1 * y2;
         }
         if(i <= nx && j <= ny) {
-            g_mesh->info[i+1][j+1].e.density += x2 * y2;
+            mc_node(i + 1, j + 1)->e.density += x2 * y2;
         }
     }
 
     for(i = 1; i <= nx + 1; ++i) {
         for(j = 1; j <= ny + 1; ++j) {
-            g_mesh->info[i][j].e.density *= g_config->carriers_per_particle / (dx * dy);
-            if(i == 1 || i == nx + 1) { g_mesh->info[i][j].e.density *= 2.; }
-            if(j == 1 || j == ny + 1) { g_mesh->info[i][j].e.density *= 2.; }
+            mc_node(i, j)->e.density *= g_config->carriers_per_particle / (dx * dy);
+            if(i == 1 || i == nx + 1) { mc_node(i, j)->e.density *= 2.; }
+            if(j == 1 || j == ny + 1) { mc_node(i, j)->e.density *= 2.; }
         }
     }
-    g_mesh->info[nx+1][ny+1].e.density = g_mesh->info[nx][ny+1].e.density;
-    g_mesh->info[1][ny+1].e.density = g_mesh->info[1][ny].e.density;
+    mc_node(nx + 1, ny + 1)->e.density = mc_node(nx, ny + 1)->e.density;
+    mc_node(     1, ny + 1)->e.density = mc_node( 1, ny    )->e.density;
 
     for(i = 1; i <= nx + 1; ++i) {
         for(j = 1; j <= ny + 1; ++j) {
-            u2d[i][j][1] = g_mesh->info[i][j].e.density;
+            u2d[i][j][1] = mc_node(i, j)->e.density;
         }
     }
 

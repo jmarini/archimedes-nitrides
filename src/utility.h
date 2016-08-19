@@ -69,6 +69,7 @@ inline int mc_is_boundary_contact(int direction, int index) {
         || mc_is_boundary_ohmic(direction, index);
 }
 
+
 real mc_particle_energy(particle_t *particle) {
     int i, j;
     mc_particle_coords(particle, &i, &j);
