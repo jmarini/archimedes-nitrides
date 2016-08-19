@@ -39,15 +39,6 @@
 
 
 typedef struct {
-    real qep;             // quantum effective potential
-    real potential;
-    real efield_x;        // electric field - x
-    real efield_y;        //                - y
-    real magnetic_field;
-} mc_poisson_t;
-
-
-typedef struct {
     real density;
     real xvel;    // running sum velocity - x
     real yvel;    //                      - y
@@ -66,7 +57,11 @@ typedef struct {
     mc_carrier_t e;     // electrons
     mc_carrier_t h;     // holes
 
-    mc_poisson_t poisson;
+    real qep;             // quantum effective potential
+    real potential;
+    real efield_x;        // electric field - x
+    real efield_y;        //                - y
+    real magnetic_field;
 } mc_node_t;
 
 

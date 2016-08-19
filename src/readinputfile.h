@@ -84,11 +84,11 @@ Read_Input_File(void)
         for(j = 1; j <= g_mesh->ny + 1; ++j) {
             g_mesh->info[i][j].material = SILICON;
 
-            g_mesh->info[i][j].poisson.qep = 0.;
-            g_mesh->info[i][j].poisson.potential = 0.;
-            g_mesh->info[i][j].poisson.efield_x = 0.;
-            g_mesh->info[i][j].poisson.efield_y = 0.;
-            g_mesh->info[i][j].poisson.magnetic_field = 0.;
+            g_mesh->info[i][j].qep = 0.;
+            g_mesh->info[i][j].potential = 0.;
+            g_mesh->info[i][j].efield_x = 0.;
+            g_mesh->info[i][j].efield_y = 0.;
+            g_mesh->info[i][j].magnetic_field = 0.;
 
             g_mesh->info[i][j].donor_conc = NI;
             g_mesh->info[i][j].acceptor_conc = NI;
@@ -393,7 +393,7 @@ Read_Input_File(void)
         g_mesh->info[i][j].e.energy = (real)(dum * Q * g_mesh->info[i][j].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
         PSI[i][j]=(real)(dum);
-        g_mesh->info[i][j].poisson.potential = (real)dum;
+        g_mesh->info[i][j].potential = (real)dum;
        }
     }
 // Load the initial data for electrons in case of Simplified MEP model
@@ -408,7 +408,7 @@ Read_Input_File(void)
         g_mesh->info[i+2][j+2].e.energy = (real)(dum * Q * g_mesh->info[i+2][j+2].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
         PSI[i][j]=(real)(dum);
-        g_mesh->info[i][j].poisson.potential = (real)dum;
+        g_mesh->info[i][j].potential = (real)dum;
        }
     }
     fclose(dp);
@@ -798,7 +798,7 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
            B[i][j]=value;
-           g_mesh->info[i][j].poisson.magnetic_field = value;
+           g_mesh->info[i][j].magnetic_field = value;
         }
     printf("Constant Magnetic Field %f %f %f %f %f ---> Ok\n",xi,yi,xf,yf,value);
   }
