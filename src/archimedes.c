@@ -313,9 +313,6 @@ int main(int argc, char *argv[]) {
     memset(&EDGE, 0, sizeof(EDGE));
     memset(&SIO2, 0, sizeof(SIO2));
 
-    // material constants definition
-    #include "material_parameters.h"
-
     // Read the geometrical and physical description of the MESFET
     // ===========================================================
     Read_Input_File();
@@ -338,6 +335,9 @@ int main(int argc, char *argv[]) {
     // =========================
     fclose(fp);
     printf("\nInput file read...\n");
+
+    // material constants definition
+    #include "material_parameters.h"
 
     // Read all the coefficients for MEP simulation
     // ============================================
