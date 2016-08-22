@@ -23,169 +23,120 @@
 */
 
 
-// ######################################################
-// Created on 10 Mar.2004, Siracusa, J.M.Sellier
-// Last modif. : 01 Sep.2011, Carry le Rouet, J.M.Sellier
-// ######################################################
-
 // Computation of the electrostatic potential,
 // i.e. resolution of the 2D Poisson equation,
-// by means of the computation of the stationary 
+// by means of the computation of the stationary
 // solution of a pseudo-transient Poisson equation.
-// From version 0.1.0 on, the potential is added to the 
+// From version 0.1.0 on, the potential is added to the
 // the minimum energy of the semiconductor material
 // in order to take into account heterostructures.
-// For more information see the manual of 
+// For more information see the manual of
 // GNU Archimedes release 1.0.0.
 
-void
-Electric_Field(void)
-{
- int i = 0,
-     j = 0,
-     k = 0;
- int nx = g_mesh->nx,
-     ny = g_mesh->ny;
- real dx = g_mesh->dx,
-      dy = g_mesh->dy;
 
- real factor = 0.,
-      kappa  = 0.,
-      deltat = 0.,
-      rho    = 0.;
+void Electric_Field(void) {
+    int i = 0,
+        j = 0;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    real dx = g_mesh->dx,
+         dy = g_mesh->dy;
+    real factor = 0.9,
+         kappa  = 0.,
+         deltat = 0.,
+         rho    = 0.;
+    real dx2 = 1. / (dx * dx),
+         dy2 = 1. / (dy * dy);
+    real potential[NXM + 1][NYM + 1];
+    real neighbors_x = 0.,
+         neighbors_y = 0.;
 
- PoissonBCs();
-// ===============================
- factor=0.9;
-// calcolo del potenziale "stazionario"
- for(i=1;i<=POISSONITMAX;i++){
-// Eventual Upper SiO2
-// ###
-   if(SIO2_UP_FLAG==1)
-   {
-    int sio2nx=(int)(fabs(SIO2_INI[0]-SIO2_FIN[0])/dx);
-    int sio2ny=(int)(SIO2_THICKNESS[0]/dy);
-    if(sio2nx==0) sio2nx++;
-    if(sio2ny==0) sio2ny++;
-// BCs for upper SiO2
-// ***
-// upper boundary
-    for(j=1;j<=sio2nx+1;j++){
-      SIO2[0][j][sio2ny+1]=SIO2_POT[0];
-      SIO2[0][j][sio2ny+2]=SIO2_POT[0];
+    if(SIO2_UP_FLAG || SIO2_DOWN_FLAG) {
+        printf("Error: SIO2 flag is deprecated.\n");
     }
-// left and right boundaries
-    for(j=1;j<=sio2ny+1;j++){
-      SIO2[0][0][j]=SIO2[0][3][j];
-      SIO2[0][1][j]=SIO2[0][2][j];
-      SIO2[0][sio2nx+1][j]=SIO2[0][sio2nx-1][j];
-      SIO2[0][sio2nx+2][j]=SIO2[0][sio2nx][j];
-    }
-// lower transmissive boundary
-    for(j=1;j<=sio2nx+1;j++){
-      SIO2[0][j][0]=u2d[j+(int)(SIO2_INI[0]/dx)][ny-1][0];
-      SIO2[0][j][1]=u2d[j+(int)(SIO2_INI[0]/dx)][ny][0];
-    }
-// ***
-    for(k=2;k<=sio2ny;k++)
-     for(j=2;j<=sio2nx;j++){
-       kappa=(EPSRSIO2)/Q;
-       deltat=factor*0.5/kappa/(1./(dx*dx)+1./(dy*dy));
-       SIO2[0][j][k]=SIO2[0][j][k]+deltat*kappa*
-          ((SIO2[0][j+1][k]-2.0*SIO2[0][j][k]+SIO2[0][j-1][k])/(dx*dx)
-          +(SIO2[0][j][k+1]-2.0*SIO2[0][j][k]+SIO2[0][j][k-1])/(dy*dy));
-     }
-   }
-// ###
-// Semiconducting material aprt
-   PoissonBCs();
-   for(j=0;j<=ny+2;j++)
-     for(k=0;k<=nx+2;k++)
-       PSI[k][j]=u2d[k][j][0];
-   for(k=2;k<=ny;k++)
-     for(j=2;j<=nx;j++){
-       kappa=(EPSR[g_mesh->info[k][j].material]*EPS0)/Q;
-       deltat=factor*0.5/kappa/(1./(dx*dx)+1./(dy*dy));
-       rho=(u2d[j][k][1]-g_mesh->info[j][k].donor_conc-h2d[j][k][1]+g_mesh->info[j][k].acceptor_conc);
-       u2d[j][k][0]=PSI[j][k]-deltat*rho+deltat*kappa*
-             ((PSI[j+1][k]-2.0*PSI[j][k]+PSI[j-1][k])/(dx*dx)
-             +(PSI[j][k+1]-2.0*PSI[j][k]+PSI[j][k-1])/(dy*dy));
-     }
-// Eventual lower SiO2
-// ###
-   if(SIO2_DOWN_FLAG==1)
-   {
-    int sio2nx=(int)(fabs(SIO2_INI[1]-SIO2_FIN[1])/dx);
-    int sio2ny=(int)(SIO2_THICKNESS[1]/dy);
-    if(sio2nx==0) sio2nx++;
-    if(sio2ny==0) sio2ny++;
-// BCs for lower SiO2
-// ***
-// lower boundary
-    for(j=1;j<=sio2nx+1;j++){
-      SIO2[1][j][0]=SIO2_POT[1];
-      SIO2[1][j][1]=SIO2_POT[1];
-    }
-// left and right boundaries
-    for(j=1;j<=sio2ny+1;j++){
-      SIO2[1][0][j]=SIO2[1][3][j];
-      SIO2[1][1][j]=SIO2[1][2][j];
-      SIO2[1][sio2nx+1][j]=SIO2[1][sio2nx-1][j];
-      SIO2[1][sio2nx+2][j]=SIO2[1][sio2nx][j];
-    }
-// upper transmissive boundary
-    for(j=1;j<=sio2nx+1;j++){
-      SIO2[1][j][sio2ny+1]=u2d[j+(int)(SIO2_INI[1]/dx)][1][0];
-      SIO2[1][j][sio2ny+2]=u2d[j+(int)(SIO2_INI[1]/dx)][0][0];
-    }
-// ***
-    for(k=2;k<=sio2ny;k++)
-     for(j=2;j<=sio2nx;j++){
-       SIO2[1][j][k]=SIO2[1][j][k]+deltat*kappa*
-          ((SIO2[1][j+1][k]-2.0*SIO2[1][j][k]+SIO2[1][j-1][k])/(dx*dx)
-          +(SIO2[1][j][k+1]-2.0*SIO2[1][j][k]+SIO2[1][j][k-1])/(dy*dy));
-     }
-   }
-// ###
- }
 
-// ===============================
- PoissonBCs();
+    poisson_boundary_conditions( );
 
-// We save the classical potential
-// and we substract the energy minimum of the
-// semiconductor material in order to 
-// take into account heterostructures
-   for(j=0;j<=ny+1;j++)
-     for(i=0;i<=nx+1;i++)
-       u2d[i][j][0]-=EMIN[g_mesh->info[i][j].material][1];
+    for(int n = 0; n < POISSONITMAX; ++n) {
+        poisson_boundary_conditions( );
 
- if(g_config->quantum_flag){
-   printf("Calculation of Quantum Effective Potential\n");
-// We take in account the Quantum Effects
-   quantum_effective_potential();
-   PoissonBCs();
-  }
+        for(i = 1; i <= nx + 1; ++i) {
+            for(j = 1; j <= ny + 1; ++j) {
+                potential[i][j] = g_mesh->info[i][j].potential;
+            }
+        }
 
-// Computation of the X-component of the electric Field
-// ====================================================
-  for(k=1;k<=ny+1;k++)
-   for(j=2;j<=nx;j++)
-    E[j][k][0]=-0.5*(u2d[j+1][k][0]-u2d[j-1][k][0])/dx;
-  for(k=1;k<=ny+1;k++){
-    E[1][k][0]=E[2][k][0];
-    E[nx+1][k][0]=E[nx][k][0];
-  }
+        // exclude edge nodes in iteration
+        for(j = 2; j <= ny; ++j) {
+            for(i = 2; i <= nx; ++i) {
+                kappa = EPSR[g_mesh->info[i][j].material] * EPS0 / Q;
+                deltat = factor * 0.5 / (kappa * (dx2 + dy2));
+                rho = (g_mesh->info[i][j].e.density - g_mesh->info[i][j].donor_conc)
+                    - (g_mesh->info[i][j].h.density - g_mesh->info[i][j].acceptor_conc); // charge neutrality eqn.
 
-// Computation of the Y-component of the electric Field
-// ====================================================
-  for(k=2;k<=ny;k++)
-   for(j=1;j<=nx+1;j++)
-    E[j][k][1]=-0.5*(u2d[j][k+1][0]-u2d[j][k-1][0])/dy;
-  for(j=1;j<=nx+1;j++){
-    E[j][1][1]=E[j][2][1];
-    E[j][ny+1][1]=E[j][ny][1];
-  }
+                // here we are calculating the difference in potential
+                // between nearest neighbors
+                //   e.g. for x-axis: (p(i+1,j) - p(i,j)) - (p(i,j) - p(i-1,j))
+                neighbors_x = potential[i+1][j  ] - 2. * potential[i][j] + potential[i-1][j  ];
+                neighbors_y = potential[i  ][j+1] - 2. * potential[i][j] + potential[i  ][j-1];
+                g_mesh->info[i][j].potential = potential[i][j]
+                                             - deltat * rho
+                                             + deltat * kappa * (neighbors_x * dx2 + neighbors_y * dy2);
+            }
+        }
+    }
+
+    poisson_boundary_conditions( );
+
+    // We save the classical potential
+    // and we substract the energy minimum of the
+    // semiconductor material in order to
+    // take into account heterostructures
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 1; j <= ny + 1; ++j) {
+            g_mesh->info[i][j].potential -= EMIN[g_mesh->info[i][j].material][1];
+        }
+    }
+
+    if(g_config->quantum_flag){
+        printf("Calculation of Quantum Effective Potential\n");
+        // We take in account the Quantum Effects
+        quantum_effective_potential( );
+        poisson_boundary_conditions( );
+    }
+
+    // Computation of the X-component of the electric Field
+    // ====================================================
+    for(j = 1; j <= ny + 1; ++j) {
+        for(i = 2; i <= nx; ++i) { // calculate e-field at edges separately
+            g_mesh->info[i][j].efield_x =
+                -0.5 * (g_mesh->info[i+1][j].potential - g_mesh->info[i-1][j].potential) / dx;
+        }
+
+        // set electric field at edges
+        g_mesh->info[     1][j].efield_x = g_mesh->info[ 2][j].efield_x;
+        g_mesh->info[nx + 1][j].efield_x = g_mesh->info[nx][j].efield_x;
+    }
+
+    // Computation of the Y-component of the electric Field
+    // ====================================================
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 2; j <= ny; ++j) {
+            g_mesh->info[i][j].efield_y =
+                -0.5 * (g_mesh->info[i][j+1].potential - g_mesh->info[i][j-1].potential) / dy;
+        }
+
+        // set electric field at edges
+        g_mesh->info[i][     1].efield_y = g_mesh->info[i][ 2].efield_y;
+        g_mesh->info[i][ny + 1].efield_y = g_mesh->info[i][ny].efield_y;
+    }
+
+    // compatability
+    for(i = 1; i <= nx + 1; ++i) {
+        for(j = 1; j <= ny + 1; ++j) {
+            E[i][j][0] = g_mesh->info[i][j].efield_x;
+            E[i][j][1] = g_mesh->info[i][j].efield_y;
+        }
+    }
+
 }
-
-// ==============================================================

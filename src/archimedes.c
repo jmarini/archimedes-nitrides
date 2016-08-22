@@ -352,7 +352,7 @@ int main(int argc, char *argv[]) {
 
     // Boundary conditions for the model simulated
     // ===========================================
-    PoissonBCs();
+    poisson_boundary_conditions();
     if(g_config->faraday_flag) {
         FaradayBCs();
     }
