@@ -34,7 +34,12 @@
 // GNU Archimedes release 1.0.0.
 
 
-void Electric_Field(void) {
+int electric_field(void) {
+    if(SIO2_UP_FLAG || SIO2_DOWN_FLAG) {
+        printf("Error: SIO2 flag is deprecated.\n");
+        return 1;
+    }
+
     int i = 0,
         j = 0;
     int nx = g_mesh->nx,
@@ -51,14 +56,16 @@ void Electric_Field(void) {
     real neighbors_x = 0.,
          neighbors_y = 0.;
 
-    if(SIO2_UP_FLAG || SIO2_DOWN_FLAG) {
-        printf("Error: SIO2 flag is deprecated.\n");
+    if(poisson_boundary_conditions( ) != 0) {
+        printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+        return 1;
     }
 
-    poisson_boundary_conditions( );
-
     for(int n = 0; n < POISSONITMAX; ++n) {
-        poisson_boundary_conditions( );
+        if(poisson_boundary_conditions( ) != 0) {
+            printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+            return 1;
+        }
 
         for(i = 1; i <= nx + 1; ++i) {
             for(j = 1; j <= ny + 1; ++j) {
@@ -86,8 +93,10 @@ void Electric_Field(void) {
         }
     }
 
-    poisson_boundary_conditions( );
-
+    if(poisson_boundary_conditions( ) != 0) {
+        printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+        return 1;
+    }
     // We save the classical potential
     // and we substract the energy minimum of the
     // semiconductor material in order to
@@ -102,7 +111,10 @@ void Electric_Field(void) {
         printf("Calculation of Quantum Effective Potential\n");
         // We take in account the Quantum Effects
         quantum_effective_potential( );
-        poisson_boundary_conditions( );
+        if(poisson_boundary_conditions( ) != 0) {
+            printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+            return 1;
+        }
     }
 
     // Computation of the X-component of the electric Field
@@ -139,4 +151,5 @@ void Electric_Field(void) {
         }
     }
 
+    return 0;
 }

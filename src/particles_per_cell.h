@@ -1,8 +1,8 @@
-/* charge.h -- This file is part of Archimedes release 0.1.2
+/* particles_per_cell.h -- This file is part of Archimedes release 0.1.2
    Archimedes is a simulator for Submicron 2D III-V semiconductor
    Devices. It implements the Monte Carlo method
    for the simulation of the semiclassical Boltzmann equation for
-   electrons. It also includes the quantum effects by means 
+   electrons. It also includes the quantum effects by means
    of Bohm effective potential method. It is now able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 

@@ -24,7 +24,6 @@ archimedes_SOURCES = \
 	mep/mm2.h \
 	mep/sign.h \
 	archimedes.c \
-	charge.h \
 	computecurrents.h \
 	configuration.h \
 	constants.h \
@@ -41,6 +40,7 @@ archimedes_SOURCES = \
 	mesh.h \
 	particle.h \
 	particlecreation.h \
+	particles_per_cell.h \
 	poissonbcs.h \
 	quantumeffectivepotential.h \
 	random.h \

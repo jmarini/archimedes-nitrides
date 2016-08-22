@@ -198,7 +198,7 @@ static char *progname;
 #include "drift.h"
 #include "scattering.h"
 #include "ensemblemontecarlo.h"
-#include "charge.h"
+#include "particles_per_cell.h"
 #include "computecurrents.h"
 #include "readinputfile.h"
 #include "updating.h"
@@ -352,7 +352,10 @@ int main(int argc, char *argv[]) {
 
     // Boundary conditions for the model simulated
     // ===========================================
-    poisson_boundary_conditions();
+    if(poisson_boundary_conditions( ) != 0) {
+        printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+        return 1;
+    }
     if(g_config->faraday_flag) {
         FaradayBCs();
     }
