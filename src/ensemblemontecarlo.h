@@ -25,33 +25,30 @@
 */
 
 
-// ######################################################
-// Created on 05 sep.2004, Siracusa, J.M.Sellier
-// Last modif. : 25 Aug.2011, Carry le Rouet, France, J.M.Sellier
-// ######################################################
-
-// Ensemble Monte Carlo method
-
 #include "particle.h"
 #include "mesh.h"
 
+
+// Ensemble Monte Carlo method
 void EMC(void) {
-    long int n=1;  // index of current particle
-    int i, ni, j, npt[NXM+NYM+1][4];
-    real tdt, ti, tau;
+    int i = 0,
+        j = 0;
+    real tdt = g_config->time + g_config->dt,
+         tau = 0.;
     int nx = g_mesh->nx,
         ny = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
     mc_node_t *node = NULL;
 
+    int npt[NXM+NYM+1][4];
     memset(&npt, 0, sizeof(npt));
-    tdt = g_config->time + g_config->dt;
 
+    long int n = 1;  // index of current particle
     do {
         particle_t *particle = &P[n];
         // information about particle n is set up in easy access variables
-        ti = g_config->time;
+        real ti = g_config->time;
 
         // while the particle's time is less than the time for the step...
         while(particle->t <= tdt) {
@@ -66,91 +63,96 @@ void EMC(void) {
         drift(particle, tau);        // drift for unused time in step
 
         // check if a particle is going out from the right edge of the device
+        int direction = direction_t.RIGHT;
         if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
-            if(i >= nx + 1 && mc_is_boundary_contact(direction_t.RIGHT, j)) {
+            if(i >= nx + 1 && mc_is_boundary_contact(direction, j)) {
                 mc_remove_particle(particle);
-                if(npt[j][1] < (g_config->particles_per_cell/2) && j > 1 && j < ny+1){
-                    npt[j][1]++;
+                if(npt[j][direction] < (g_config->particles_per_cell/2) && j > 1 && j < ny+1){
+                    npt[j][direction]++;
                     particle->valley = 1;
                 }
-                else if(npt[j][1] < (g_config->particles_per_cell/4) && (j <= 1 || j >= ny+1)){
-                    npt[j][1]++;
+                else if(npt[j][direction] < (g_config->particles_per_cell/4) && (j <= 1 || j >= ny+1)){
+                    npt[j][direction]++;
                     particle->valley = 1;
                 }
             }
         }
 
         // check if a particle is going out from the left edge of the device
+        direction = direction_t.LEFT;
         if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
-            if(i<=1 && mc_is_boundary_contact(direction_t.LEFT, j)) {
+            if(i<=1 && mc_is_boundary_contact(direction, j)) {
                 mc_remove_particle(particle);
-                if(npt[j][3]<(g_config->particles_per_cell/2) && j>1 && j<ny+1){
-                    npt[j][3]++;
+                if(npt[j][direction]<(g_config->particles_per_cell/2) && j>1 && j<ny+1){
+                    npt[j][direction]++;
                     particle->valley = 1;
                 }
-                else if(npt[j][3]<(g_config->particles_per_cell/4) && (j<=1 || j>=ny+1)){
-                    npt[j][3]++;
+                else if(npt[j][direction]<(g_config->particles_per_cell/4) && (j<=1 || j>=ny+1)){
+                    npt[j][direction]++;
                     particle->valley = 1;
                 }
             }
         }
 
         // check if a particle is going out from the bottom edge of the device
+        direction = direction_t.BOTTOM;
         if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
-            if(j<=1 && mc_is_boundary_contact(direction_t.BOTTOM, i)) {
+            if(j<=1 && mc_is_boundary_contact(direction, i)) {
                 mc_remove_particle(particle);
-                if(npt[i][0]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
-                    npt[i][0]++;
+                if(npt[i][direction]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
+                    npt[i][direction]++;
                     particle->valley = 1;
                 }
-                if(npt[i][0]<(g_config->particles_per_cell/4) && (i<=1 || i>=nx+1)){
-                    npt[i][0]++;
+                if(npt[i][direction]<(g_config->particles_per_cell/4) && (i<=1 || i>=nx+1)){
+                    npt[i][direction]++;
                     particle->valley = 1;
                 }
             }
         }
 
         // check if a particle is going out from the upper edge of the device
+        direction = direction_t.TOP;
         if(mc_does_particle_exist(particle)) {
             i = (int)(particle->x / dx + 1.5);
             j = (int)(particle->y / dy + 1.5);
-            if(j>=ny+1 && mc_is_boundary_contact(direction_t.TOP, i)) {
+            if(j>=ny+1 && mc_is_boundary_contact(direction, i)) {
                 mc_remove_particle(particle);
-                if(npt[i][2]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
-                    npt[i][2]++;
+                if(npt[i][direction]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
+                    npt[i][direction]++;
                     particle->valley = 1;
                 }
-                if(npt[i][2]<(g_config->particles_per_cell/4) && (i<=1 || i>=nx+1)){
-                    npt[i][2]++;
+                if(npt[i][direction]<(g_config->particles_per_cell/4) && (i<=1 || i>=nx+1)){
+                    npt[i][direction]++;
                     particle->valley = 1;
                 }
             }
         }
 
-        if(mc_does_particle_exist(particle)) { n++; }
+        if(mc_does_particle_exist(particle)) { ++n; }
         else {
             P[n] = P[g_config->num_particles];
-            g_config->num_particles--;
+            --g_config->num_particles;
         }
     } while(n < g_config->num_particles);
 
     // create particles at ohmic contacts of the bottom edge
     for(i=1; i<=nx+1; i++) {
-        if(mc_is_boundary_ohmic(direction_t.BOTTOM, i)) {
-            ni=(g_config->particles_per_cell/2)-npt[i][0];
+        int direction = direction_t.BOTTOM;
+        if(mc_is_boundary_ohmic(direction, i)) {
+            int ni=(g_config->particles_per_cell/2)-npt[i][direction];
             if(i==1 || i==nx+1) {
-                ni=g_config->particles_per_cell/4-npt[i][0];
+                ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i,g_config->time,direction_t.BOTTOM);
+                    P[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -159,15 +161,16 @@ void EMC(void) {
 
     // create particles at ohmic contacts of the upper edge
     for(i=1; i<=nx+1; i++) {
-        if(mc_is_boundary_ohmic(direction_t.TOP, i)) {
-            ni=(g_config->particles_per_cell/2)-npt[i][2];
+        int direction = direction_t.TOP;
+        if(mc_is_boundary_ohmic(direction, i)) {
+            int ni=(g_config->particles_per_cell/2)-npt[i][direction];
             if(i==1 || i==nx+1) {
-                ni=g_config->particles_per_cell/4-npt[i][2];
+                ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i,g_config->time,direction_t.TOP);
+                    P[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -176,15 +179,16 @@ void EMC(void) {
 
     // create particles at ohmic contacts of the right edge
     for(i=1; i<=ny+1; i++) {
-        if(mc_is_boundary_ohmic(direction_t.RIGHT, i)) {
-            ni=(g_config->particles_per_cell/2)-npt[i][1];
+        int direction = direction_t.RIGHT;
+        if(mc_is_boundary_ohmic(direction, i)) {
+            int ni=(g_config->particles_per_cell/2)-npt[i][direction];
             if(i==1 || i==ny+1) {
-                ni=g_config->particles_per_cell/4-npt[i][1];
+                ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i,g_config->time,direction_t.RIGHT);
+                    P[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -193,15 +197,16 @@ void EMC(void) {
 
     // create particles at ohmic contacts of the left edge
     for(i=1; i<=ny+1; i++) {
-        if(mc_is_boundary_ohmic(direction_t.LEFT, i)) {
-            ni=(g_config->particles_per_cell/2)-npt[i][3];
+        int direction = direction_t.LEFT;
+        if(mc_is_boundary_ohmic(direction, i)) {
+            int ni=(g_config->particles_per_cell/2)-npt[i][direction];
             if(i==1 || i==ny+1) {
-                ni=g_config->particles_per_cell/4-npt[i][3];
+                ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
                 for(j=1;j<=ni;j++){
                     n=g_config->num_particles+j;
-                    P[n] = creation(i,g_config->time,direction_t.LEFT);
+                    P[n] = creation(i, g_config->time, direction);
                 }
                 g_config->num_particles += ni;
             }

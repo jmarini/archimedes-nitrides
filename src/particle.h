@@ -25,11 +25,6 @@
 */
 
 
-// ######################################################
-// Created on 20 oct.2015, J. Marini
-// Last modif. : 20 oct.2015, J. Marini
-// ######################################################
-
 #ifndef ARCHIMEDES_PARTICLE_H
 #define ARCHIMEDES_PARTICLE_H
 

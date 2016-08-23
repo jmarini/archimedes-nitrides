@@ -37,7 +37,7 @@
 // For more informations and references see the manual.
 
 
-void Relaxation_Step_Hole(void)
+void hole_relaxation_step(void)
 {
  int ND=2;
  register int i,j,c;

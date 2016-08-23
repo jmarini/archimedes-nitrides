@@ -84,5 +84,5 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename) {
 
 
 mc_node_t * mc_node(int i, int j) {
-    return &g_mesh->info[i][j];
+    return &(g_mesh->info[i][j]);
 }

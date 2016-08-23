@@ -28,10 +28,6 @@
 
 // calculate electron density per cell using particle in cell method
 int calculate_particles_per_cell(void) {
-    int i = 0,
-        j = 0;
-    real x = 0.,
-         y = 0.;
     int nx  = g_mesh->nx,
         ny  = g_mesh->ny;
     real dx = g_mesh->dx,
@@ -40,18 +36,18 @@ int calculate_particles_per_cell(void) {
 
     // resetting of the electronic density
     // a simple way to avoid NaN propagation...
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 1; j <= ny + 1; ++j) {
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 1; j <= ny + 1; ++j) {
             mc_node(i, j)->e.density = 0;
         }
     }
 
     // cloud in cell method
     for(int n = 1; n <= g_config->num_particles; ++n) {
-        x = P[n].x / dx;
-        y = P[n].y / dy;
-        i = (int)(x + 1.);
-        j = (int)(y + 1.);
+        real x = P[n].x / dx;
+        real y = P[n].y / dy;
+        int i = (int)(x + 1.);
+        int j = (int)(y + 1.);
 
         real x1 = (real)i - x;
         real y1 = (real)j - y;
@@ -70,8 +66,8 @@ int calculate_particles_per_cell(void) {
         }
     }
 
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 1; j <= ny + 1; ++j) {
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 1; j <= ny + 1; ++j) {
             mc_node(i, j)->e.density *= g_config->carriers_per_particle / (dx * dy);
             if(i == 1 || i == nx + 1) { mc_node(i, j)->e.density *= 2.; }
             if(j == 1 || j == ny + 1) { mc_node(i, j)->e.density *= 2.; }
@@ -80,8 +76,8 @@ int calculate_particles_per_cell(void) {
     mc_node(nx + 1, ny + 1)->e.density = mc_node(nx, ny + 1)->e.density;
     mc_node(     1, ny + 1)->e.density = mc_node( 1, ny    )->e.density;
 
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 1; j <= ny + 1; ++j) {
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 1; j <= ny + 1; ++j) {
             u2d[i][j][1] = mc_node(i, j)->e.density;
         }
     }

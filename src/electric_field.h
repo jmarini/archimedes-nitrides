@@ -30,8 +30,6 @@
 // From version 0.1.0 on, the potential is added to the
 // the minimum energy of the semiconductor material
 // in order to take into account heterostructures.
-// For more information see the manual of
-// GNU Archimedes release 1.0.0.
 
 
 int electric_field(void) {
@@ -40,52 +38,45 @@ int electric_field(void) {
         return 1;
     }
 
-    int i = 0,
-        j = 0;
     int nx = g_mesh->nx,
         ny = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
-    real factor = 0.9,
-         kappa  = 0.,
-         deltat = 0.,
-         rho    = 0.;
-    real dx2 = 1. / (dx * dx),
-         dy2 = 1. / (dy * dy);
-    real potential[NXM + 1][NYM + 1];
-    real neighbors_x = 0.,
-         neighbors_y = 0.;
+    real factor = 0.9;
 
     if(poisson_boundary_conditions( ) != 0) {
         printf("Error: Unknown error calculating Poisson boundary conditions.\n");
         return 1;
     }
 
+    real potential[NXM + 1][NYM + 1];
     for(int n = 0; n < POISSONITMAX; ++n) {
         if(poisson_boundary_conditions( ) != 0) {
             printf("Error: Unknown error calculating Poisson boundary conditions.\n");
             return 1;
         }
 
-        for(i = 1; i <= nx + 1; ++i) {
-            for(j = 1; j <= ny + 1; ++j) {
+        for(int i = 1; i <= nx + 1; ++i) {
+            for(int j = 1; j <= ny + 1; ++j) {
                 potential[i][j] = g_mesh->info[i][j].potential;
             }
         }
 
         // exclude edge nodes in iteration
-        for(j = 2; j <= ny; ++j) {
-            for(i = 2; i <= nx; ++i) {
-                kappa = EPSR[g_mesh->info[i][j].material] * EPS0 / Q;
-                deltat = factor * 0.5 / (kappa * (dx2 + dy2));
-                rho = (g_mesh->info[i][j].e.density - g_mesh->info[i][j].donor_conc)
-                    - (g_mesh->info[i][j].h.density - g_mesh->info[i][j].acceptor_conc); // charge neutrality eqn.
+        for(int j = 2; j <= ny; ++j) {
+            for(int i = 2; i <= nx; ++i) {
+                real dx2 = 1. / (dx * dx),
+                     dy2 = 1. / (dy * dy);
+                real kappa = EPSR[g_mesh->info[i][j].material] * EPS0 / Q;
+                real deltat = factor * 0.5 / (kappa * (dx2 + dy2));
+                real rho = (g_mesh->info[i][j].e.density - g_mesh->info[i][j].donor_conc)
+                         - (g_mesh->info[i][j].h.density - g_mesh->info[i][j].acceptor_conc); // charge neutrality eqn.
 
                 // here we are calculating the difference in potential
                 // between nearest neighbors
                 //   e.g. for x-axis: (p(i+1,j) - p(i,j)) - (p(i,j) - p(i-1,j))
-                neighbors_x = potential[i+1][j  ] - 2. * potential[i][j] + potential[i-1][j  ];
-                neighbors_y = potential[i  ][j+1] - 2. * potential[i][j] + potential[i  ][j-1];
+                real neighbors_x = potential[i+1][j  ] - 2. * potential[i][j] + potential[i-1][j  ];
+                real neighbors_y = potential[i  ][j+1] - 2. * potential[i][j] + potential[i  ][j-1];
                 g_mesh->info[i][j].potential = potential[i][j]
                                              - deltat * rho
                                              + deltat * kappa * (neighbors_x * dx2 + neighbors_y * dy2);
@@ -97,12 +88,10 @@ int electric_field(void) {
         printf("Error: Unknown error calculating Poisson boundary conditions.\n");
         return 1;
     }
-    // We save the classical potential
-    // and we substract the energy minimum of the
-    // semiconductor material in order to
-    // take into account heterostructures
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 1; j <= ny + 1; ++j) {
+    // We save the classical potential and we subtract the energy minimum of the
+    // semiconductor material in order to take into account heterostructures
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 1; j <= ny + 1; ++j) {
             g_mesh->info[i][j].potential -= EMIN[g_mesh->info[i][j].material][1];
         }
     }
@@ -119,8 +108,8 @@ int electric_field(void) {
 
     // Computation of the X-component of the electric Field
     // ====================================================
-    for(j = 1; j <= ny + 1; ++j) {
-        for(i = 2; i <= nx; ++i) { // calculate e-field at edges separately
+    for(int j = 1; j <= ny + 1; ++j) {
+        for(int i = 2; i <= nx; ++i) { // calculate e-field at edges separately
             g_mesh->info[i][j].efield_x =
                 -0.5 * (g_mesh->info[i+1][j].potential - g_mesh->info[i-1][j].potential) / dx;
         }
@@ -132,8 +121,8 @@ int electric_field(void) {
 
     // Computation of the Y-component of the electric Field
     // ====================================================
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 2; j <= ny; ++j) {
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 2; j <= ny; ++j) {
             g_mesh->info[i][j].efield_y =
                 -0.5 * (g_mesh->info[i][j+1].potential - g_mesh->info[i][j-1].potential) / dy;
         }
@@ -144,8 +133,8 @@ int electric_field(void) {
     }
 
     // compatability
-    for(i = 1; i <= nx + 1; ++i) {
-        for(j = 1; j <= ny + 1; ++j) {
+    for(int i = 1; i <= nx + 1; ++i) {
+        for(int j = 1; j <= ny + 1; ++j) {
             E[i][j][0] = g_mesh->info[i][j].efield_x;
             E[i][j][1] = g_mesh->info[i][j].efield_y;
         }
