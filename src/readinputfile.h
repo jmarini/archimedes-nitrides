@@ -32,6 +32,8 @@
 //
 // For the syntax see the manual
 
+#include "vec.h"
+
 void
 Read_Input_File(void)
 {
@@ -86,21 +88,18 @@ Read_Input_File(void)
 
             g_mesh->info[i][j].qep = 0.;
             g_mesh->info[i][j].potential = 0.;
-            g_mesh->info[i][j].efield_x = 0.;
-            g_mesh->info[i][j].efield_y = 0.;
+            g_mesh->info[i][j].efield = (vec2d){.x=0., .y=0.};
             g_mesh->info[i][j].magnetic_field = 0.;
 
             g_mesh->info[i][j].donor_conc = NI;
             g_mesh->info[i][j].acceptor_conc = NI;
 
             g_mesh->info[i][j].e.density = NI;
-            g_mesh->info[i][j].e.xvel = 0.;
-            g_mesh->info[i][j].e.yvel = 0.;
+            g_mesh->info[i][j].e.velocity = (vec2d){.x=0., .y=0.};
             g_mesh->info[i][j].e.energy = 0.;
 
             g_mesh->info[i][j].h.density = NI;
-            g_mesh->info[i][j].h.xvel = 0.;
-            g_mesh->info[i][j].h.yvel = 0.;
+            g_mesh->info[i][j].h.velocity = (vec2d){.x=0., .y=0.};
             g_mesh->info[i][j].h.energy = 0.;
         }
     }

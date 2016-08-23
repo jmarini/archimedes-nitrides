@@ -31,6 +31,7 @@
 
 #include "global_defines.h"
 #include "material.h"
+#include "vec.h"
 
 
 // maximum number of mesh cells in x and y
@@ -40,15 +41,16 @@
 
 typedef struct {
     real density;
-    real xvel;    // running sum velocity - x
-    real yvel;    //                      - y
+    vec2d velocity; // running sum velocity
     real energy;  // running sum energy
 } mc_carrier_t;
 
 
 typedef struct {
-    int i;
-    int j;
+    union {     // index of the node, provides i & j
+        struct  index_s;
+        index_s index;
+    };
 
     int material;
     real donor_conc;
@@ -59,8 +61,7 @@ typedef struct {
 
     real qep;             // quantum effective potential
     real potential;
-    real efield_x;        // electric field - x
-    real efield_y;        //                - y
+    vec2d efield;         // electric field
     real magnetic_field;
 } mc_node_t;
 
@@ -72,8 +73,10 @@ typedef struct {
     real dx; // cell size in x-direction
     real dy; //              y-direction
 
-    real width;  // device width
-    real height; //        height
+    union { // size of the mesh, provides width & height
+        struct  size_s;
+        size_s size;
+    };
 
     int num_nodes;
     int num_triangles;
@@ -85,9 +88,6 @@ typedef struct {
 } mc_mesh_t;
 
 
-extern mc_mesh_t *g_mesh;
-
-
 int mc_build_mesh(mc_mesh_t *mesh);
 
 
@@ -95,6 +95,11 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename);
 
 
 mc_node_t * mc_node(int i, int j);
+mc_node_t * mc_node_s(index_s index);
+
+
+// define global extern variable
+extern mc_mesh_t *g_mesh;
 
 
 #endif

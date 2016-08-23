@@ -33,6 +33,9 @@
 #ifndef ARCHIMEDES_UTILITY_H
 #define ARCHIMEDES_UTILITY_H
 
+#include "particle.h"
+#include "mesh.h"
+
 
 struct {
     int BOTTOM;
@@ -71,16 +74,14 @@ inline int mc_is_boundary_contact(int direction, int index) {
 
 
 real mc_particle_energy(particle_t *particle) {
-    int i, j;
-    mc_particle_coords(particle, &i, &j);
-    int material = g_mesh->info[i][j].material;
+    mc_node_t *node = mc_get_particle_node(particle);
 
     if(g_config->conduction_band == PARABOLIC) {
-        return HHM[material][0] * mc_particle_ksquared(particle);
+        return HHM[node->material][0] * mc_particle_ksquared(particle);
     }
     else if(g_config->conduction_band == KANE) {
-        real alpha = alphaK[material][0];
-        real gamma = HHM[material][0] * mc_particle_ksquared(particle);
+        real alpha = alphaK[node->material][0];
+        real gamma = HHM[node->material][0] * mc_particle_ksquared(particle);
         return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * gamma);
     }
     else {

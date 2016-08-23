@@ -110,33 +110,33 @@ int electric_field(void) {
     // ====================================================
     for(int j = 1; j <= ny + 1; ++j) {
         for(int i = 2; i <= nx; ++i) { // calculate e-field at edges separately
-            g_mesh->info[i][j].efield_x =
+            g_mesh->info[i][j].efield.x =
                 -0.5 * (g_mesh->info[i+1][j].potential - g_mesh->info[i-1][j].potential) / dx;
         }
 
         // set electric field at edges
-        g_mesh->info[     1][j].efield_x = g_mesh->info[ 2][j].efield_x;
-        g_mesh->info[nx + 1][j].efield_x = g_mesh->info[nx][j].efield_x;
+        g_mesh->info[     1][j].efield.x = g_mesh->info[ 2][j].efield.x;
+        g_mesh->info[nx + 1][j].efield.x = g_mesh->info[nx][j].efield.x;
     }
 
     // Computation of the Y-component of the electric Field
     // ====================================================
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 2; j <= ny; ++j) {
-            g_mesh->info[i][j].efield_y =
+            g_mesh->info[i][j].efield.y =
                 -0.5 * (g_mesh->info[i][j+1].potential - g_mesh->info[i][j-1].potential) / dy;
         }
 
         // set electric field at edges
-        g_mesh->info[i][     1].efield_y = g_mesh->info[i][ 2].efield_y;
-        g_mesh->info[i][ny + 1].efield_y = g_mesh->info[i][ny].efield_y;
+        g_mesh->info[i][     1].efield.y = g_mesh->info[i][ 2].efield.y;
+        g_mesh->info[i][ny + 1].efield.y = g_mesh->info[i][ny].efield.y;
     }
 
     // compatability
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
-            E[i][j][0] = g_mesh->info[i][j].efield_x;
-            E[i][j][1] = g_mesh->info[i][j].efield_y;
+            E[i][j][0] = g_mesh->info[i][j].efield.x;
+            E[i][j][1] = g_mesh->info[i][j].efield.y;
         }
     }
 

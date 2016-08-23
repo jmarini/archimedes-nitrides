@@ -39,6 +39,7 @@ archimedes_SOURCES = \
 	mesh.c \
 	mesh.h \
 	particle.h \
+	particle.c \
 	particlecreation.h \
 	particles_per_cell.h \
 	poissonbcs.h \
@@ -52,7 +53,8 @@ archimedes_SOURCES = \
 	saveoutputfiles.h \
 	scattering.h \
 	updating.h \
-	utility.h
+	utility.h \
+	vec.h
 
 archimedes_LDADD = -lm
-archimedes_CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -pedantic -std=c11 -O3
+archimedes_CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -pedantic -std=c11 -O3 -fms-extensions

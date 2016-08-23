@@ -24,13 +24,15 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef ARCHIMEDES_PARTICLE_H
 #define ARCHIMEDES_PARTICLE_H
 
 
+#include <math.h>
+
 #include "global_defines.h"
 #include "mesh.h"
+#include "vec.h"
 
 
 typedef struct {
@@ -84,25 +86,9 @@ inline real mc_particle_k(particle_t *particle) {
 }
 
 
-inline void mc_particle_coords(particle_t *particle, int *i, int *j) {
-    // uses globabl variables dx & dy
-    *i = (int)(particle->x / g_mesh->dx) + 1;
-    if(*i < 1) { *i = 1; }
-    if(*i > g_mesh->nx ) { *i = g_mesh->nx; }
-
-    *j = (int)(particle->y / g_mesh->dy) + 1;
-    if(*j < 1) { *j = 1; }
-    if(*j > g_mesh->ny ) { *j = g_mesh->ny; }
-}
+index_s mc_particle_coords(particle_t *particle);
 
 
-mc_node_t * mc_get_particle_node(particle_t *particle) {
-    int i = 0,
-        j = 0;
-    mc_particle_coords(particle, &i, &j);
-
-    return &g_mesh->info[i][j];
-}
-
+mc_node_t * mc_get_particle_node(particle_t *particle);
 
 #endif

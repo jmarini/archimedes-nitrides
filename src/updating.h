@@ -77,8 +77,8 @@ int updating(int model) {
         maxi = mini = 0.;
         for(i = 1; i <= g_mesh-> nx + 1; ++i) {
             for(j = 1; j <= g_mesh-> ny + 1; ++j) {
-                if(g_mesh->info[i][j].efield_x >= maxi) { maxi = g_mesh->info[i][j].efield_x; }
-                if(g_mesh->info[i][j].efield_x <= mini) { mini = g_mesh->info[i][j].efield_x; }
+                if(g_mesh->info[i][j].efield.x >= maxi) { maxi = g_mesh->info[i][j].efield.x; }
+                if(g_mesh->info[i][j].efield.x <= mini) { mini = g_mesh->info[i][j].efield.x; }
             }
         }
         printf("Max. x-elec.field = %g V/m\n", maxi);
@@ -88,8 +88,8 @@ int updating(int model) {
         maxi = mini = 0.;
         for(i = 1; i <= g_mesh-> nx + 1; ++i) {
             for(j = 1; j <= g_mesh-> ny + 1; ++j) {
-                if(g_mesh->info[i][j].efield_y >= maxi) { maxi = g_mesh->info[i][j].efield_y; }
-                if(g_mesh->info[i][j].efield_y <= mini) { mini = g_mesh->info[i][j].efield_y; }
+                if(g_mesh->info[i][j].efield.y >= maxi) { maxi = g_mesh->info[i][j].efield.y; }
+                if(g_mesh->info[i][j].efield.y <= mini) { mini = g_mesh->info[i][j].efield.y; }
             }
         }
         printf("Max. y-elec.field = %g V/m\n", maxi);

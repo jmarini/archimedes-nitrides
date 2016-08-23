@@ -25,72 +25,60 @@
 */
 
 
-// ######################################################
-// Created on 06 sep.2004, Siracusa, J.M.Sellier
-// Last modif. : 31 Aug.2011, Carry le Rouet, J.M.Sellier
-// ######################################################
+#include "particle.h"
+#include "vec.h"
 
-// calculation of drift process
 
-void drift(particle_t *particle, real tau)
-{
-    int iaux = 0,
-        material = 0;
-    int i = 0,
-        j = 0;
-    real dkx = 0.,
-         dky = 0.,
-         hmt = 0.,
-         ksquared = 0.;
-    real vx = 0.,
-         vy = 0.;
+// calculation of drift process over time tau
+void drift(particle_t *particle, real tau) {
+    vec2d dk = {0., 0.};
+    vec2d v = {0., 0.};
 
     if(!mc_does_particle_exist(particle)) { return; }
 
-    mc_particle_coords(particle, &i, &j);
-    material = g_mesh->info[i][j].material;
-
-    if(NOVALLEY[material] == 1) { iaux = 0; }
-    if(NOVALLEY[material] >= 2) { iaux = particle->valley; }
+    mc_node_t *node = mc_get_particle_node(particle);
+    int i = node->i,
+        j = node->j;
+    int material = node->material;
 
     // Electron drift process
     // second order Runge-Kutta method
-    hmt = HM[material][iaux] * tau;
-    ksquared = mc_particle_ksquared(particle);
+    real hmt = HM[material][particle->valley] * tau;
+    real ksquared = mc_particle_ksquared(particle);
 
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
-        gk = HHM[material][iaux] * ksquared;
+        gk = HHM[material][particle->valley] * ksquared;
         thesquareroot = sqrt(1. + 4. * alphaK[material][particle->valley] * gk);
-        vx = particle->kx * HM[material][iaux] / thesquareroot;
-        vy = particle->ky * HM[material][iaux] / thesquareroot;
-        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
-        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
-        particle->x += hmt * (particle->kx + 0.5 * dkx) / thesquareroot;
-        particle->y += hmt * (particle->ky + 0.5 * dky) / thesquareroot;
-        particle->kx += dkx;
-        particle->ky += dky;
+        v.x = particle->kx * HM[material][particle->valley] / thesquareroot;
+        v.y = particle->ky * HM[material][particle->valley] / thesquareroot;
+        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
+        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        particle->x += hmt * (particle->kx + 0.5 * dk.x) / thesquareroot;
+        particle->y += hmt * (particle->ky + 0.5 * dk.y) / thesquareroot;
+        particle->kx += dk.x;
+        particle->ky += dk.y;
     }
     else if(g_config->conduction_band == PARABOLIC) {
-        vx = particle->kx * HM[material][iaux];
-        vy = particle->ky * HM[material][iaux];
-        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
-        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
-        particle->x += hmt * (particle->kx + 0.5 * dkx);
-        particle->y += hmt * (particle->ky + 0.5 * dky);
-        particle->kx += dkx;
-        particle->ky += dky;
+        v.x = particle->kx * HM[material][particle->valley];
+        v.y = particle->ky * HM[material][particle->valley];
+        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
+        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        particle->x += hmt * (particle->kx + 0.5 * dk.x);
+        particle->y += hmt * (particle->ky + 0.5 * dk.y);
+        particle->kx += dk.x;
+        particle->ky += dk.y;
     }
     else if(g_config->conduction_band == FULL) {
         real k4, k2, ks;
         real dx, dy, d;
-        vx = particle->kx * HM[material][iaux];
-        vy = particle->ky * HM[material][iaux];
-        dkx = -QH * (E[i][j][0] + vy * B[i][j]) * tau;
-        dky = -QH * (E[i][j][1] - vx * B[i][j]) * tau;
-        k2 = (particle->kx + 0.5 * dkx) * (particle->kx + 0.5 * dkx)
-           + (particle->ky + 0.5 * dky) * (particle->ky + 0.5 * dky)
-           +  particle->kz              *  particle->kz;
+        v.x = particle->kx * HM[material][particle->valley];
+        v.y = particle->ky * HM[material][particle->valley];
+        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
+        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        k2 = (particle->kx + 0.5 * dk.x) * (particle->kx + 0.5 * dk.x)
+           + (particle->ky + 0.5 * dk.y) * (particle->ky + 0.5 * dk.y)
+           +  particle->kz               *  particle->kz;
         ks = sqrt(k2) * 1.e-12 * 0.5 / PI;
         k2 = ks * ks;
         k4 = k2 * k2;
@@ -106,16 +94,18 @@ void drift(particle_t *particle, real tau)
           +       CB_FULL[material][9];
         ks *= 1.e+12 * 2.  * PI;
         d  *= 1.e-12 * 0.5 / PI;
-        dx = QH * d * tau * (particle->kx + 0.5 * dkx) / ks;
-        dy = QH * d * tau * (particle->ky + 0.5 * dky) / ks;
-        particle->kx += dkx;
-        particle->ky += dky;
+        dx = QH * d * tau * (particle->kx + 0.5 * dk.x) / ks;
+        dy = QH * d * tau * (particle->ky + 0.5 * dk.y) / ks;
+        particle->kx += dk.x;
+        particle->ky += dk.y;
         particle->x += dx;
         particle->y += dy;
     }
 
     // check if some particles are out of the device
-    mc_particle_coords(particle, &i, &j);
+    node = mc_get_particle_node(particle);
+    i = node->i;
+    j = node->j;
 
 
     // Generic boundary conditions for the super-particles
