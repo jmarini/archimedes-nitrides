@@ -37,8 +37,6 @@ void drift(particle_t *particle, real tau) {
     if(!mc_does_particle_exist(particle)) { return; }
 
     mc_node_t *node = mc_get_particle_node(particle);
-    int i = node->i,
-        j = node->j;
     int material = node->material;
 
     // Electron drift process
@@ -49,11 +47,11 @@ void drift(particle_t *particle, real tau) {
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
         gk = HHM[material][particle->valley] * ksquared;
-        thesquareroot = sqrt(1. + 4. * alphaK[material][particle->valley] * gk);
+        thesquareroot = sqrt(1. + 4. * node->mat->cb[particle->valley].alpha * gk);
         v.x = particle->kx * HM[material][particle->valley] / thesquareroot;
         v.y = particle->ky * HM[material][particle->valley] / thesquareroot;
-        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
-        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
+        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dk.x) / thesquareroot;
         particle->y += hmt * (particle->ky + 0.5 * dk.y) / thesquareroot;
         particle->kx += dk.x;
@@ -62,8 +60,8 @@ void drift(particle_t *particle, real tau) {
     else if(g_config->conduction_band == PARABOLIC) {
         v.x = particle->kx * HM[material][particle->valley];
         v.y = particle->ky * HM[material][particle->valley];
-        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
-        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
+        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dk.x);
         particle->y += hmt * (particle->ky + 0.5 * dk.y);
         particle->kx += dk.x;
@@ -74,8 +72,8 @@ void drift(particle_t *particle, real tau) {
         real dx, dy, d;
         v.x = particle->kx * HM[material][particle->valley];
         v.y = particle->ky * HM[material][particle->valley];
-        dk.x = -QH * (E[i][j][0] + v.y * B[i][j]) * tau;
-        dk.y = -QH * (E[i][j][1] - v.x * B[i][j]) * tau;
+        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
+        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         k2 = (particle->kx + 0.5 * dk.x) * (particle->kx + 0.5 * dk.x)
            + (particle->ky + 0.5 * dk.y) * (particle->ky + 0.5 * dk.y)
            +  particle->kz               *  particle->kz;
@@ -104,8 +102,6 @@ void drift(particle_t *particle, real tau) {
 
     // check if some particles are out of the device
     node = mc_get_particle_node(particle);
-    i = node->i;
-    j = node->j;
 
 
     // Generic boundary conditions for the super-particles
@@ -114,13 +110,13 @@ void drift(particle_t *particle, real tau) {
     // left edge
     // =========
     // ---Insulator---
-    if(particle->x <= 0. && mc_is_boundary_insulator(direction_t.LEFT, j)) {
+    if(particle->x <= 0. && mc_is_boundary_insulator(direction_t.LEFT, node->j)) {
         particle->x  *= -1.;
         particle->kx *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->x <= 0. && mc_is_boundary_contact(direction_t.LEFT, j)) {
+    else if(particle->x <= 0. && mc_is_boundary_contact(direction_t.LEFT, node->j)) {
         mc_remove_particle(particle);
         return;
     }
@@ -128,13 +124,13 @@ void drift(particle_t *particle, real tau) {
     // right edge
     // ==========
     // ---Insulator---
-    if(particle->x >= g_mesh->width && mc_is_boundary_insulator(direction_t.RIGHT, j)) {
+    if(particle->x >= g_mesh->width && mc_is_boundary_insulator(direction_t.RIGHT, node->j)) {
         particle->x = g_mesh->width - (particle->x - g_mesh->width);
         particle->kx *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->x >= g_mesh->width && mc_is_boundary_contact(direction_t.RIGHT, j)) {
+    else if(particle->x >= g_mesh->width && mc_is_boundary_contact(direction_t.RIGHT, node->j)) {
         mc_remove_particle(particle);
         return;
     }
@@ -142,13 +138,13 @@ void drift(particle_t *particle, real tau) {
     // bottom edge
     // ===========
     // ---Insulator---
-    if(particle->y <= 0. && mc_is_boundary_insulator(direction_t.BOTTOM, i)) {
+    if(particle->y <= 0. && mc_is_boundary_insulator(direction_t.BOTTOM, node->i)) {
         particle->y  *= -1.;
         particle->ky *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->y <= 0. && mc_is_boundary_contact(direction_t.BOTTOM, i)) {
+    else if(particle->y <= 0. && mc_is_boundary_contact(direction_t.BOTTOM, node->i)) {
         mc_remove_particle(particle);
         return;
     }
@@ -156,17 +152,15 @@ void drift(particle_t *particle, real tau) {
     // upper edge
     // ==========
     // ---Insulator---
-    if(particle->y >= g_mesh->height && mc_is_boundary_insulator(direction_t.TOP, i)) {
+    if(particle->y >= g_mesh->height && mc_is_boundary_insulator(direction_t.TOP, node->i)) {
         particle->y = g_mesh->height - (particle->y - g_mesh->height);
         particle->ky *= -1.;
         return;
     }
     // ---Schottky or ohmic contact---
-    else if(particle->y >= g_mesh->height && mc_is_boundary_contact(direction_t.TOP, i)) {
+    else if(particle->y >= g_mesh->height && mc_is_boundary_contact(direction_t.TOP, node->i)) {
         mc_remove_particle(particle);
         return;
     }
 
 }
-
-// ============================================================

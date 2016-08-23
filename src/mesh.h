@@ -52,6 +52,7 @@ typedef struct {
         index_s index;
     };
 
+    mc_material_t *mat;
     int material;
     real donor_conc;
     real acceptor_conc;

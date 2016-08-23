@@ -181,6 +181,7 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
            g_mesh->info[i][j].material = type;
+           g_mesh->info[i][j].mat = &(g_materials[type]);
         }
       }
     printf("MATERIAL %s X=[%g,%g] Y=[%g,%g] ---> Ok\n",s,xi,xf,yi,yf);

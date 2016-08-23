@@ -71,7 +71,7 @@ g_materials[INP].num_valleys       = 1;
 g_materials[INXGA1XAS].num_valleys = 1;
 g_materials[INXAL1XAS].num_valleys = 1;
 g_materials[INXGAXXAS].num_valleys = 1;
-g_materials[GAN].num_valleys       = 1;
+g_materials[GAN].num_valleys       = 2;
 
 // Number of equivalent valleys
 // Scattering from first index to second index
@@ -652,6 +652,8 @@ g_materials[GAN].kav  = 0.137;
         g_materials[GASB].cb[1].alpha=pow(1.-g_materials[GASB].cb[1].mstar,2.)/(g_materials[GASB].Eg+g_materials[GASB].cb[1].emin);
         g_materials[INAS].cb[1].alpha=pow(1.-g_materials[INAS].cb[1].mstar,2.)/(g_materials[INAS].Eg+g_materials[INAS].cb[1].emin);
         g_materials[INP].cb[1].alpha=pow(1.-g_materials[INP].cb[1].mstar,2.)/(g_materials[INP].Eg+g_materials[INP].cb[1].emin);
+        g_materials[GAN].cb[1].alpha = pow(1. - g_materials[GAN].cb[1].mstar, 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb[1].emin); // expected value = 0.189
+
     }
 
     // Semiconductor compounds

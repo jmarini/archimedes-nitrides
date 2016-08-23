@@ -126,7 +126,7 @@ void SaveOutput2DGNUPLOT(int je) {
 // ==============
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
-      fprintf(fM,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,B[i][j]);
+      fprintf(fM,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,g_mesh->info[i][j].magnetic_field);
     fprintf(fM,"\n");
   }
 // X-component of electric field
