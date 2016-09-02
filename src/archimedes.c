@@ -204,7 +204,6 @@ static char *progname;
 #include "updating.h"
 
 // provide extern declarations of functions to fix compiler error
-extern inline real rnd(void);
 extern inline Particle creation(int i, real t, int edge);
 extern inline real MM(real a, real b);
 extern inline real MM2(real x, real a, real b);

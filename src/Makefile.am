@@ -44,6 +44,7 @@ archimedes_SOURCES = \
 	particles_per_cell.h \
 	poissonbcs.h \
 	quantumeffectivepotential.h \
+	random.c \
 	random.h \
 	readinputfile.h \
 	saveoutput2dgnuplot.h \
