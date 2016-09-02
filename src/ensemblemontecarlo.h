@@ -39,14 +39,14 @@ void EMC(void) {
         ny = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
-    mc_node_t *node = NULL;
+    Node *node = NULL;
 
     int npt[NXM+NYM+1][4];
     memset(&npt, 0, sizeof(npt));
 
     long int n = 1;  // index of current particle
     do {
-        particle_t *particle = &P[n];
+        Particle *particle = &P[n];
         // information about particle n is set up in easy access variables
         real ti = g_config->time;
 

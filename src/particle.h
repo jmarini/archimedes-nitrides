@@ -44,7 +44,7 @@ typedef struct {
     real t;      // time
     real x;      // real coordinates
     real y;
-} particle_t;
+} Particle;
 
 
 typedef struct {
@@ -64,31 +64,31 @@ typedef struct {
 } particle_info_t;
 
 
-inline int mc_does_particle_exist(particle_t *particle) {
+inline int mc_does_particle_exist(Particle *particle) {
     return particle->valley != 9;
 }
 
 
-inline void mc_remove_particle(particle_t *particle) {
+inline void mc_remove_particle(Particle *particle) {
     particle->valley = 9;
 }
 
 
-inline real mc_particle_ksquared(particle_t *particle) {
+inline real mc_particle_ksquared(Particle *particle) {
     return (particle->kx * particle->kx +
             particle->ky * particle->ky +
             particle->kz * particle->kz);
 }
 
 
-inline real mc_particle_k(particle_t *particle) {
+inline real mc_particle_k(Particle *particle) {
     return sqrt(mc_particle_ksquared(particle));
 }
 
 
-Index mc_particle_coords(particle_t *particle);
-Index mc_particle_edge_coords(particle_t *particle);
+Index mc_particle_coords(Particle *particle);
+Index mc_particle_edge_coords(Particle *particle);
 
-mc_node_t * mc_get_particle_node(particle_t *particle);
+Node * mc_get_particle_node(Particle *particle);
 
 #endif

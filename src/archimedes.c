@@ -57,14 +57,14 @@
 #include "particle.h"
 #include "material.h"
 
-mc_configuration_t *g_config;
-mc_mesh_t *g_mesh;
-mc_material_t g_materials[NOAMTIA];
+Configuration *g_config;
+Mesh *g_mesh;
+Material g_materials[NOAMTIA];
 
-extern inline int mc_does_particle_exist(particle_t *particle);
-extern inline void mc_remove_particle(particle_t *particle);
-extern inline real mc_particle_ksquared(particle_t *particle);
-extern inline real mc_particle_k(particle_t *particle);
+extern inline int mc_does_particle_exist(Particle *particle);
+extern inline void mc_remove_particle(Particle *particle);
+extern inline real mc_particle_ksquared(Particle *particle);
+extern inline real mc_particle_k(Particle *particle);
 // ===============================
 
 
@@ -107,7 +107,7 @@ real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / (2 * m* * 
 real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), array indexed by material and valley number
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
-particle_t P[NPMAX+1];              // particle information, array indexed by particle
+Particle P[NPMAX+1];              // particle information, array indexed by particle
 real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
                                     //                                               cell index (i or j),
                                     //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
@@ -205,7 +205,7 @@ static char *progname;
 
 // provide extern declarations of functions to fix compiler error
 extern inline real rnd(void);
-extern inline particle_t creation(int i, real t, int edge);
+extern inline Particle creation(int i, real t, int edge);
 extern inline real MM(real a, real b);
 extern inline real MM2(real x, real a, real b);
 extern inline real sign(real a, real b);
@@ -217,7 +217,7 @@ extern inline int mc_is_boundary_ohmic(int direction, int index);
 extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline char* mc_material_name(int material);
 extern inline char* mc_band_model_name(int model);
-particle_info_t mc_calculate_particle_info(particle_t *p);
+particle_info_t mc_calculate_particle_info(Particle *p);
 
 
 int main(int argc, char *argv[]) {

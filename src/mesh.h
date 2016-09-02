@@ -43,7 +43,7 @@ typedef struct {
     real density;
     Vec2 velocity; // running sum velocity
     real energy;  // running sum energy
-} mc_carrier_t;
+} Carrier_Info;
 
 
 typedef struct {
@@ -52,19 +52,19 @@ typedef struct {
         Index index;
     };
 
-    mc_material_t *mat;
+    Material *mat;
     int material;
     real donor_conc;
     real acceptor_conc;
 
-    mc_carrier_t e;     // electrons
-    mc_carrier_t h;     // holes
+    Carrier_Info e;     // electrons
+    Carrier_Info h;     // holes
 
     real qep;             // quantum effective potential
     real potential;
     Vec2 efield;         // electric field
     real magnetic_field;
-} mc_node_t;
+} Node;
 
 
 typedef struct {
@@ -82,25 +82,25 @@ typedef struct {
     int num_nodes;
     int num_triangles;
 
-    mc_node_t info[NXM + 1][NYM + 1];
+    Node info[NXM + 1][NYM + 1];
 
     real coordinates[NXM * NYM][2];
     int triangles[NXM * NYM][3];
-} mc_mesh_t;
+} Mesh;
 
 
-int mc_build_mesh(mc_mesh_t *mesh);
+int mc_build_mesh(Mesh *mesh);
 
 
-int mc_save_mesh(mc_mesh_t *mesh, char *filename);
+int mc_save_mesh(Mesh *mesh, char *filename);
 
 
-mc_node_t * mc_node(int i, int j);
-mc_node_t * mc_node_s(Index index);
+Node * mc_node(int i, int j);
+Node * mc_node_s(Index index);
 
 
 // define global extern variable
-extern mc_mesh_t *g_mesh;
+extern Mesh *g_mesh;
 
 
 #endif

@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-int mc_build_mesh(mc_mesh_t *mesh) {
+int mc_build_mesh(Mesh *mesh) {
     int i = 0,
         j = 0,
         index = 0;
@@ -50,7 +50,7 @@ int mc_build_mesh(mc_mesh_t *mesh) {
 }
 
 
-int mc_save_mesh(mc_mesh_t *mesh, char *filename) {
+int mc_save_mesh(Mesh *mesh, char *filename) {
     int i = 0;
     FILE *fp;
 
@@ -83,11 +83,11 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename) {
 }
 
 
-mc_node_t * mc_node(int i, int j) {
+Node * mc_node(int i, int j) {
     return &(g_mesh->info[i][j]);
 }
 
 
-mc_node_t * mc_node_s(Index index) {
+Node * mc_node_s(Index index) {
     return &(g_mesh->info[index.i][index.j]);
 }

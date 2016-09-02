@@ -76,10 +76,13 @@ typedef struct {
     real tauw; // MEP
 
     real max_doping;
-} mc_configuration_t;
+} Configuration;
 
 
-extern mc_configuration_t *g_config;
+void mc_initialize_config(Configuration *config);
+
+
+extern Configuration *g_config;
 
 
 #endif

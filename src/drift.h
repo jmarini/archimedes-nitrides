@@ -31,13 +31,13 @@
 
 
 // calculation of drift process over time tau
-void drift(particle_t *particle, real tau) {
+void drift(Particle *particle, real tau) {
     Vec2 dk = {0., 0.};
     Vec2 v = {0., 0.};
 
     if(!mc_does_particle_exist(particle)) { return; }
 
-    mc_node_t *node = mc_get_particle_node(particle);
+    Node *node = mc_get_particle_node(particle);
     int material = node->material;
 
     // Electron drift process

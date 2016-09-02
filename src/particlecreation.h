@@ -34,7 +34,7 @@
 // edge = 2 Upper edge
 // edge = 3 Left edge
 
-inline particle_t creation(int i, real t, int edge) {
+inline Particle creation(int i, real t, int edge) {
     int iaux = 0,
         iv   = 0,
         ii   = 0,
@@ -109,7 +109,7 @@ inline particle_t creation(int i, real t, int edge) {
 
     int id = g_config->next_particle_id++;
 
-    return (particle_t){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y};
+    return (Particle){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y};
 }
 
 // =================================================

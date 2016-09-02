@@ -67,7 +67,7 @@ int electric_field(void) {
             for(int i = 2; i <= nx; ++i) {
                 real dx2 = 1. / (dx * dx),
                      dy2 = 1. / (dy * dy);
-                mc_node_t *node = mc_node(i, j);
+                Node *node = mc_node(i, j);
                 real kappa = node->mat->eps_static * EPS0 / Q;
                 real deltat = factor * 0.5 / (kappa * (dx2 + dy2));
                 real rho = (node->e.density - node->donor_conc)
@@ -93,7 +93,7 @@ int electric_field(void) {
     // semiconductor material in order to take into account heterostructures
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
-            mc_node_t *node = mc_node(i, j);
+            Node *node = mc_node(i, j);
             node->potential -= node->mat->cb[1].emin;
         }
     }

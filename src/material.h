@@ -40,14 +40,14 @@ typedef struct {
     real emin;
     real mstar;
     real alpha;
-} mc_band_t;
+} Band_Info;
 
 
 typedef struct {
     int num_valleys;
     real Eg;
-    mc_band_t cb[6];
-    mc_band_t vb[6];
+    Band_Info cb[6];
+    Band_Info vb[6];
 
     int  zscatter[6][6];
 
@@ -62,10 +62,10 @@ typedef struct {
     real lattice_const;
     real kav;
 
-} mc_material_t;
+} Material;
 
 
-extern mc_material_t g_materials[NOAMTIA];
+extern Material g_materials[NOAMTIA];
 
 
 #endif

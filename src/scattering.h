@@ -37,7 +37,7 @@
 // From version 1.1.0 on, the scattering effects can be excluded
 // to simulate ballistic transport.
 
-void scatter(particle_t *particle, int material)
+void scatter(Particle *particle, int material)
 {
     int has_scattered = 0,
         i  = 0,

@@ -73,8 +73,8 @@ inline int mc_is_boundary_contact(int direction, int index) {
 }
 
 
-real mc_particle_energy(particle_t *particle) {
-    mc_node_t *node = mc_get_particle_node(particle);
+real mc_particle_energy(Particle *particle) {
+    Node *node = mc_get_particle_node(particle);
 
     if(g_config->conduction_band == PARABOLIC) {
         return HHM[node->material][0] * mc_particle_ksquared(particle);
@@ -125,7 +125,7 @@ inline char* mc_band_model_name(int model) {
 }
 
 
-particle_info_t mc_calculate_particle_info(particle_t *p) {
+particle_info_t mc_calculate_particle_info(Particle *p) {
     // calculate particle coordinates
     int i = 0,
         j = 0;
