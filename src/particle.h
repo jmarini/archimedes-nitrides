@@ -86,8 +86,8 @@ inline real mc_particle_k(particle_t *particle) {
 }
 
 
-index_s mc_particle_coords(particle_t *particle);
-
+Index mc_particle_coords(particle_t *particle);
+Index mc_particle_edge_coords(particle_t *particle);
 
 mc_node_t * mc_get_particle_node(particle_t *particle);
 

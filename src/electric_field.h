@@ -67,19 +67,20 @@ int electric_field(void) {
             for(int i = 2; i <= nx; ++i) {
                 real dx2 = 1. / (dx * dx),
                      dy2 = 1. / (dy * dy);
-                real kappa = EPSR[g_mesh->info[i][j].material] * EPS0 / Q;
+                mc_node_t *node = mc_node(i, j);
+                real kappa = node->mat->eps_static * EPS0 / Q;
                 real deltat = factor * 0.5 / (kappa * (dx2 + dy2));
-                real rho = (g_mesh->info[i][j].e.density - g_mesh->info[i][j].donor_conc)
-                         - (g_mesh->info[i][j].h.density - g_mesh->info[i][j].acceptor_conc); // charge neutrality eqn.
+                real rho = (node->e.density - node->donor_conc)
+                         - (node->h.density - node->acceptor_conc); // charge neutrality eqn.
 
                 // here we are calculating the difference in potential
                 // between nearest neighbors
                 //   e.g. for x-axis: (p(i+1,j) - p(i,j)) - (p(i,j) - p(i-1,j))
                 real neighbors_x = potential[i+1][j  ] - 2. * potential[i][j] + potential[i-1][j  ];
                 real neighbors_y = potential[i  ][j+1] - 2. * potential[i][j] + potential[i  ][j-1];
-                g_mesh->info[i][j].potential = potential[i][j]
-                                             - deltat * rho
-                                             + deltat * kappa * (neighbors_x * dx2 + neighbors_y * dy2);
+                node->potential = potential[i][j]
+                                - deltat * rho
+                                + deltat * kappa * (neighbors_x * dx2 + neighbors_y * dy2);
             }
         }
     }
@@ -92,7 +93,8 @@ int electric_field(void) {
     // semiconductor material in order to take into account heterostructures
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
-            g_mesh->info[i][j].potential -= EMIN[g_mesh->info[i][j].material][1];
+            mc_node_t *node = mc_node(i, j);
+            node->potential -= node->mat->cb[1].emin;
         }
     }
 

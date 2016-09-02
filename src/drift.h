@@ -25,14 +25,15 @@
 */
 
 
+#include "mesh.h"
 #include "particle.h"
 #include "vec.h"
 
 
 // calculation of drift process over time tau
 void drift(particle_t *particle, real tau) {
-    vec2d dk = {0., 0.};
-    vec2d v = {0., 0.};
+    Vec2 dk = {0., 0.};
+    Vec2 v = {0., 0.};
 
     if(!mc_does_particle_exist(particle)) { return; }
 

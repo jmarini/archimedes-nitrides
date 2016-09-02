@@ -88,18 +88,18 @@ Read_Input_File(void)
 
             g_mesh->info[i][j].qep = 0.;
             g_mesh->info[i][j].potential = 0.;
-            g_mesh->info[i][j].efield = (vec2d){.x=0., .y=0.};
+            g_mesh->info[i][j].efield = (Vec2){.x=0., .y=0.};
             g_mesh->info[i][j].magnetic_field = 0.;
 
             g_mesh->info[i][j].donor_conc = NI;
             g_mesh->info[i][j].acceptor_conc = NI;
 
             g_mesh->info[i][j].e.density = NI;
-            g_mesh->info[i][j].e.velocity = (vec2d){.x=0., .y=0.};
+            g_mesh->info[i][j].e.velocity = (Vec2){.x=0., .y=0.};
             g_mesh->info[i][j].e.energy = 0.;
 
             g_mesh->info[i][j].h.density = NI;
-            g_mesh->info[i][j].h.velocity = (vec2d){.x=0., .y=0.};
+            g_mesh->info[i][j].h.velocity = (Vec2){.x=0., .y=0.};
             g_mesh->info[i][j].h.energy = 0.;
         }
     }

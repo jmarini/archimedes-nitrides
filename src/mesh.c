@@ -88,6 +88,6 @@ mc_node_t * mc_node(int i, int j) {
 }
 
 
-mc_node_t * mc_node_s(index_s index) {
+mc_node_t * mc_node_s(Index index) {
     return &(g_mesh->info[index.i][index.j]);
 }

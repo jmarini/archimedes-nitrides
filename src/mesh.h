@@ -41,15 +41,15 @@
 
 typedef struct {
     real density;
-    vec2d velocity; // running sum velocity
+    Vec2 velocity; // running sum velocity
     real energy;  // running sum energy
 } mc_carrier_t;
 
 
 typedef struct {
     union {     // index of the node, provides i & j
-        struct  index_s;
-        index_s index;
+        struct  Index;
+        Index index;
     };
 
     mc_material_t *mat;
@@ -62,7 +62,7 @@ typedef struct {
 
     real qep;             // quantum effective potential
     real potential;
-    vec2d efield;         // electric field
+    Vec2 efield;         // electric field
     real magnetic_field;
 } mc_node_t;
 
@@ -75,8 +75,8 @@ typedef struct {
     real dy; //              y-direction
 
     union { // size of the mesh, provides width & height
-        struct  size_s;
-        size_s size;
+        struct  Dimensions;
+        Dimensions size;
     };
 
     int num_nodes;
@@ -96,7 +96,7 @@ int mc_save_mesh(mc_mesh_t *mesh, char *filename);
 
 
 mc_node_t * mc_node(int i, int j);
-mc_node_t * mc_node_s(index_s index);
+mc_node_t * mc_node_s(Index index);
 
 
 // define global extern variable

@@ -65,8 +65,9 @@ void EMC(void) {
         // check if a particle is going out from the right edge of the device
         int direction = direction_t.RIGHT;
         if(mc_does_particle_exist(particle)) {
-            i = (int)(particle->x / dx + 1.5);
-            j = (int)(particle->y / dy + 1.5);
+            Index index = mc_particle_edge_coords(particle);
+            int i = index.i,
+                j = index.j;
             if(i >= nx + 1 && mc_is_boundary_contact(direction, j)) {
                 mc_remove_particle(particle);
                 if(npt[j][direction] < (g_config->particles_per_cell/2) && j > 1 && j < ny+1){

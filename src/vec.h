@@ -30,31 +30,31 @@
 
 
 // struct to hold real xy data
-typedef struct vec2d {
+typedef struct Vec2 {
     double x;
     double y;
-} vec2d;
+} Vec2;
 
 
 // struct to hold real xyz data
-typedef struct vec3d {
+typedef struct Vec3 {
     double x;
     double y;
     double z;
-} vec3d;
+} Vec3;
 
 
 // struct to hold node index data
-typedef struct index_s {
+typedef struct Index {
     int i;
     int j;
-} index_s;
+} Index;
 
 
 // struct to hold size information
-typedef struct size_s {
+typedef struct Dimensions {
     double width;
     double height;
-} size_s;
+} Dimensions;
 
 #endif

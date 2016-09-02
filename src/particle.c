@@ -2,7 +2,7 @@
 #include "vec.h"
 
 
-index_s mc_particle_coords(particle_t *particle) {
+Index mc_particle_coords(particle_t *particle) {
     // uses globabl variables dx & dy
     int i = (int)(particle->x / g_mesh->dx) + 1;
     if(i < 1) { i = 1; }
@@ -12,7 +12,16 @@ index_s mc_particle_coords(particle_t *particle) {
     if(j < 1) { j = 1; }
     if(j > g_mesh->ny ) { j = g_mesh->ny; }
 
-    return (index_s){.i=i, .j=j};
+    return (Index){.i=i, .j=j};
+}
+
+
+Index mc_particle_edge_coords(particle_t *particle) {
+    // uses globabl variables dx & dy
+    int i = (int)(particle->x / g_mesh->dx + 1.5);
+    int j = (int)(particle->y / g_mesh->dy + 1.5);
+
+    return (Index){.i=i, .j=j};
 }
 
 
