@@ -44,6 +44,8 @@ typedef struct {
 
 
 typedef struct {
+    int id;
+
     int num_valleys;
     real Eg;
     Band_Info cb[6];

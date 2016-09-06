@@ -35,6 +35,24 @@
 // Band Structure Parameters
 // =========================
 
+g_materials[SILICON].id   = SILICON;
+g_materials[GERMANIUM].id = GERMANIUM;
+g_materials[GAAS].id      = GAAS;
+g_materials[INSB].id      = INSB;
+g_materials[ALSB].id      = ALSB;
+g_materials[ALXINXSB].id  = ALXINXSB;
+g_materials[ALXIN1XSB].id = ALXIN1XSB;
+g_materials[ALAS].id      = ALAS;
+g_materials[ALP].id       = ALP;
+g_materials[GAP].id       = GAP;
+g_materials[GASB].id      = GASB;
+g_materials[INAS].id      = INAS;
+g_materials[INP].id       = INP;
+g_materials[INXGA1XAS].id = INXGA1XAS;
+g_materials[INXAL1XAS].id = INXAL1XAS;
+g_materials[INXGAXXAS].id = INXGAXXAS;
+g_materials[GAN].id       = GAN;
+
 
 // Number of valleys
 NOVALLEY[SILICON]   = 1;  // X-valley
