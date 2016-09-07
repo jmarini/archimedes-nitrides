@@ -47,8 +47,6 @@ void calc_scattering_rates(int material) {
          sqgamma_initial, sqgamma_final;
     real overlapA, overlapB, overlapC, overlap, rate;
 
-    ISEED = 38467.;  //  initial value for random number generator
-
     // These definitions are valid for every material
     BKTQ=KB*g_config->lattice_temp/Q; // in eV
     QH=Q/HBAR;

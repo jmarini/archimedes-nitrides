@@ -56,6 +56,8 @@ int electric_field(void) {
             return 1;
         }
 
+        // copy potential to temporary variable to avoid issues when looking
+        //   at neighbors
         for(int i = 1; i <= nx + 1; ++i) {
             for(int j = 1; j <= ny + 1; ++j) {
                 potential[i][j] = g_mesh->info[i][j].potential;

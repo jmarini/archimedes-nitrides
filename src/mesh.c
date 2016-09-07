@@ -1,5 +1,6 @@
 #include "global_defines.h"
 #include "mesh.h"
+#include "random.h"
 
 #include <stdio.h>
 
@@ -90,4 +91,11 @@ Node * mc_node(int i, int j) {
 
 Node * mc_node_s(Index index) {
     return &(g_mesh->info[index.i][index.j]);
+}
+
+
+Vec2 mc_random_location_in_node(Node *node) {
+    double x = g_mesh->dx * ((double)node->i - rnd());
+    double y = g_mesh->dy * ((double)node->j - rnd());
+    return (Vec2){.x=x, .y=y};
 }

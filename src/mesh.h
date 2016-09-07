@@ -99,6 +99,9 @@ Node * mc_node(int i, int j);
 Node * mc_node_s(Index index);
 
 
+Vec2 mc_random_location_in_node(Node *node);
+
+
 // define global extern variable
 extern Mesh *g_mesh;
 
