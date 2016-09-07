@@ -77,12 +77,12 @@ real mc_particle_energy(Particle *particle) {
     Node *node = mc_get_particle_node(particle);
 
     if(g_config->conduction_band == PARABOLIC) {
-        return HHM[node->material][0] * mc_particle_ksquared(particle);
+        return HHM[node->material][particle->valley] * mc_particle_ksquared(particle);
     }
     else if(g_config->conduction_band == KANE) {
-        real alpha = alphaK[node->material][0];
-        real gamma = HHM[node->material][0] * mc_particle_ksquared(particle);
-        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * gamma);
+        real alpha = alphaK[node->material][particle->valley];
+        real gamma = HHM[node->material][particle->valley] * mc_particle_ksquared(particle);
+        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
     }
     else {
         return -1.0;
