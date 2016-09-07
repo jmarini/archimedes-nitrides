@@ -251,6 +251,28 @@ g_materials[GAN].vb[1].alpha = 0.0;
 g_materials[GAN].vb[2].alpha = 0.0;
 
 
+// correction factor - multiplied by the calculated absorption constant
+// used to correct for the fact that we are not taking into account all
+// possible transistions which leads to a lower absorption rate
+g_materials[SILICON].abs_correction   = 1.;
+g_materials[GERMANIUM].abs_correction = 1.;
+g_materials[GAAS].abs_correction      = 1.;
+g_materials[INSB].abs_correction      = 1.;
+g_materials[ALSB].abs_correction      = 1.;
+g_materials[ALXINXSB].abs_correction  = 1.;
+g_materials[ALXIN1XSB].abs_correction = 1.;
+g_materials[ALAS].abs_correction      = 1.;
+g_materials[ALP].abs_correction       = 1.;
+g_materials[GAP].abs_correction       = 1.;
+g_materials[GASB].abs_correction      = 1.;
+g_materials[INAS].abs_correction      = 1.;
+g_materials[INP].abs_correction       = 1.;
+g_materials[INXGA1XAS].abs_correction = 1.;
+g_materials[INXAL1XAS].abs_correction = 1.;
+g_materials[INXGAXXAS].abs_correction = 1.;
+g_materials[GAN].abs_correction       = 6.;
+
+
 // Dielectric constant for Silicon Oxide SiO2
 // see http://en.wikipedia.org/wiki/Relative_permittivity
 EPSRSIO2 = 3.9 * EPS0;

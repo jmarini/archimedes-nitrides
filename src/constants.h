@@ -49,6 +49,8 @@
  const real PI=3.141592654;
 // electron energy step (eV) for the MC method
  const real DE=0.002;
+// speed of light
+ const real VLIGHT=2.99792458e8; // m/s
 // Silicon low field mobility (m^2/(V*sec))
  real MIU0=1400.e-4;
 // Silicon saturation velocity (m/sec)

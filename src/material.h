@@ -53,6 +53,7 @@ typedef struct {
 
     int  zscatter[6][6];
 
+    real abs_correction; // absorption coefficient correction
     real eps_static;
     real eps_hf;
     real hwo[6];
