@@ -22,41 +22,25 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef ARCHIMEDES_CONSTANTS_H
-#define ARCHIMEDES_CONSTANTS_H
+#ifndef ARCHIMEDES_MEP_CONSTANTS_H
+#define ARCHIMEDES_MEP_CONSTANTS_H
 
 
 // Universal Physical Constants in M.K.S.C. system
 
-// Boltzmann constant (Joule/Kelvin)
-const double KB=1.380658e-23;
+// Silicon low field mobility (m^2/(V*sec))
+double MIU0=1400.e-4;
 
-// Electron charge in absolute value (Coulomb)
-const double Q=1.60217733e-19;
+// Silicon saturation velocity (m/sec)
+double VS=1.e5;
 
-// Reduced Planck constant (Joule*sec)
-const double HBAR=1.05457266e-34;
+// Silicon heavy hole effective mass
+double mstarhole=0.57;
 
-// Permittivity of free space (F/m)
-const double EPS0=8.854187817e-12;
+// Silicon heavy hole low field mobility (m^2/(V*sec))
+double MIU0hole=0.0471;
 
-// Electron Mass (Kg)
-const double M=9.1093897e-31;
-
-// Silicon intrinsic density for room temperature
-const double NI=1.45e16;
-
-// Pi number
-const double PI=3.141592654;
-
-// electron energy step (eV) for the MC method
-const double DE=0.002;
-
-// speed of light (m/s)
-const double VLIGHT=2.99792458e8;
-
-// Silicon Schottky contact density (1/m^3)
-double NGATE=3.9e11;
+// Silicon heavy hole saturation velocity (m/sec)
+double VShole=1.e5;
 
 #endif

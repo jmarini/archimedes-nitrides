@@ -12,6 +12,7 @@ archimedes_SOURCES = \
 	materials/InP.h \
 	materials/InSb.h \
 	materials/Silicon.h \
+	mep/constants.h \
 	mep/HMEPbcs.h \
 	mep/Hole_bcs.h \
 	mep/MEP_interpolation.h \

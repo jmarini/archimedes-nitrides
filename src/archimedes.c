@@ -50,6 +50,7 @@
 #include "configuration.h"
 #include "mesh.h"
 #include "constants.h"
+#include "mep/constants.h"
 #include "mep/extrema.h"
 #include "mep/sign.h"
 #include "mep/mm.h"
