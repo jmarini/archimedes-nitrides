@@ -377,6 +377,7 @@ int main(int argc, char *argv[]) {
 
 
     FILE *fp = fopen("photoexcited_particles.csv", "w");
+    fprintf(fp, "index x y kx ky kz energy\n");
     for(int n = 0; n < g_config->num_particles; ++n) {
         Particle *p = &P[n];
         fprintf(fp, "%d %g %g %g %g %g %g\n", n, p->x, p->y, p->kx, p->ky, p->kz, mc_particle_energy(p));
