@@ -73,23 +73,42 @@ NOVALLEY[INXAL1XAS] = 1;  // G-valley
 NOVALLEY[INXGAXXAS] = 1;  // only G-valley
 NOVALLEY[GAN]       = 2;  // G-1, M-L(U), G-3
 
-g_materials[SILICON].num_valleys   = 1;
-g_materials[GERMANIUM].num_valleys = 1;
-g_materials[GAAS].num_valleys      = 1;
-g_materials[INSB].num_valleys      = 1;
-g_materials[ALSB].num_valleys      = 1;
-g_materials[ALXINXSB].num_valleys  = 1;
-g_materials[ALXIN1XSB].num_valleys = 1;
-g_materials[ALAS].num_valleys      = 1;
-g_materials[ALP].num_valleys       = 1;
-g_materials[GAP].num_valleys       = 1;
-g_materials[GASB].num_valleys      = 1;
-g_materials[INAS].num_valleys      = 1;
-g_materials[INP].num_valleys       = 1;
-g_materials[INXGA1XAS].num_valleys = 1;
-g_materials[INXAL1XAS].num_valleys = 1;
-g_materials[INXGAXXAS].num_valleys = 1;
-g_materials[GAN].num_valleys       = 2;
+g_materials[SILICON].cb.num_valleys   = 1;
+g_materials[GERMANIUM].cb.num_valleys = 1;
+g_materials[GAAS].cb.num_valleys      = 1;
+g_materials[INSB].cb.num_valleys      = 1;
+g_materials[ALSB].cb.num_valleys      = 1;
+g_materials[ALXINXSB].cb.num_valleys  = 1;
+g_materials[ALXIN1XSB].cb.num_valleys = 1;
+g_materials[ALAS].cb.num_valleys      = 1;
+g_materials[ALP].cb.num_valleys       = 1;
+g_materials[GAP].cb.num_valleys       = 1;
+g_materials[GASB].cb.num_valleys      = 1;
+g_materials[INAS].cb.num_valleys      = 1;
+g_materials[INP].cb.num_valleys       = 1;
+g_materials[INXGA1XAS].cb.num_valleys = 1;
+g_materials[INXAL1XAS].cb.num_valleys = 1;
+g_materials[INXGAXXAS].cb.num_valleys = 1;
+g_materials[GAN].cb.num_valleys       = 2;
+
+g_materials[SILICON].vb.num_valleys   = 1;
+g_materials[GERMANIUM].vb.num_valleys = 1;
+g_materials[GAAS].vb.num_valleys      = 1;
+g_materials[INSB].vb.num_valleys      = 1;
+g_materials[ALSB].vb.num_valleys      = 1;
+g_materials[ALXINXSB].vb.num_valleys  = 1;
+g_materials[ALXIN1XSB].vb.num_valleys = 1;
+g_materials[ALAS].vb.num_valleys      = 1;
+g_materials[ALP].vb.num_valleys       = 1;
+g_materials[GAP].vb.num_valleys       = 1;
+g_materials[GASB].vb.num_valleys      = 1;
+g_materials[INAS].vb.num_valleys      = 1;
+g_materials[INP].vb.num_valleys       = 1;
+g_materials[INXGA1XAS].vb.num_valleys = 1;
+g_materials[INXAL1XAS].vb.num_valleys = 1;
+g_materials[INXGAXXAS].vb.num_valleys = 1;
+g_materials[GAN].vb.num_valleys       = 3;
+
 
 // Number of equivalent valleys
 // Scattering from first index to second index
@@ -160,24 +179,24 @@ EMIN[GAAS][3]      = 0.48;   // X
 EMIN[GAN][3]       = 1.9;    // G-2
 
 // first valley
-g_materials[SILICON].cb[1].emin   = 0.0;    // Sellier, Fischetti, etc.
-g_materials[GERMANIUM].cb[1].emin = 0.173;
-g_materials[GAAS].cb[1].emin      = 0.0;    // Tomizawa
-g_materials[INSB].cb[1].emin      = 0.0;
-g_materials[ALSB].cb[1].emin      = 0.507;
-g_materials[ALAS].cb[1].emin      = 0.767;
-g_materials[ALP].cb[1].emin       = 1.237;
-g_materials[GAP].cb[1].emin       = 0.496;
-g_materials[GASB].cb[1].emin      = 0.0;
-g_materials[INAS].cb[1].emin      = 0.0;
-g_materials[INP].cb[1].emin       = 0.0;
-g_materials[GAN].cb[1].emin       = 0.0;    // G-1
+g_materials[SILICON].cb.emin[1]   = 0.0;    // Sellier, Fischetti, etc.
+g_materials[GERMANIUM].cb.emin[1] = 0.173;
+g_materials[GAAS].cb.emin[1]      = 0.0;    // Tomizawa
+g_materials[INSB].cb.emin[1]      = 0.0;
+g_materials[ALSB].cb.emin[1]      = 0.507;
+g_materials[ALAS].cb.emin[1]      = 0.767;
+g_materials[ALP].cb.emin[1]       = 1.237;
+g_materials[GAP].cb.emin[1]       = 0.496;
+g_materials[GASB].cb.emin[1]      = 0.0;
+g_materials[INAS].cb.emin[1]      = 0.0;
+g_materials[INP].cb.emin[1]       = 0.0;
+g_materials[GAN].cb.emin[1]       = 0.0;    // G-1
 // second valley
-g_materials[GAAS].cb[2].emin      = 0.323;  // L
-g_materials[GAN].cb[2].emin       = 2.1;    // L-M
+g_materials[GAAS].cb.emin[2]      = 0.323;  // L
+g_materials[GAN].cb.emin[2]       = 2.1;    // L-M
 // third valley
-g_materials[GAAS].cb[3].emin      = 0.48;   // X
-g_materials[GAN].cb[3].emin       = 1.9;    // G-2
+g_materials[GAAS].cb.emin[3]      = 0.48;   // X
+g_materials[GAN].cb.emin[3]       = 1.9;    // G-2
 
 
 // Definition of effective mass for all materials in all valleys
@@ -198,22 +217,22 @@ MSTAR[GAN][1]       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
 MSTAR[GAN][2]       = 0.4;     // L-M -- Bhapkar & Shur
 MSTAR[GAN][3]       = 0.6;     // G-2 -- Bhapkar & Shur
 
-g_materials[SILICON].cb[1].mstar   = 0.32;    // see Sellier, Tomizawa, etc.
-g_materials[GAAS].cb[1].mstar      = 0.067;   // Gamma-valley -- see Tomizawa
-g_materials[GAAS].cb[2].mstar      = 0.350;   // L-valley     -- see Tomizawa
-g_materials[GAAS].cb[3].mstar      = 0.27;    // X-valley
-g_materials[GERMANIUM].cb[1].mstar = 0.12;    // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
-g_materials[INSB].cb[1].mstar      = 0.0135;  // Gamma-valley -- see Ram-Mohan
-g_materials[ALSB].cb[1].mstar      = 0.14;    // Gamma-valley -- See Ram-Mohan
-g_materials[ALAS].cb[1].mstar      = 0.149;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-g_materials[ALP].cb[1].mstar       = 0.22;    // Gamma-valley -- see Ram-Mohan
-g_materials[GAP].cb[1].mstar       = 0.13;    // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-g_materials[GASB].cb[1].mstar      = 0.039;   // Gamma-valley -- see Ram-Mohan
-g_materials[INAS].cb[1].mstar      = 0.026;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
-g_materials[INP].cb[1].mstar       = 0.0795;  // Gamma-valley -- see Ram-Mohan
-g_materials[GAN].cb[1].mstar       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
-g_materials[GAN].cb[2].mstar       = 0.4;     // L-M -- Bhapkar & Shur
-g_materials[GAN].cb[3].mstar       = 0.6;     // G-2 -- Bhapkar & Shur
+g_materials[SILICON].cb.mstar[1]   = 0.32;    // see Sellier, Tomizawa, etc.
+g_materials[GAAS].cb.mstar[1]      = 0.067;   // Gamma-valley -- see Tomizawa
+g_materials[GAAS].cb.mstar[2]      = 0.350;   // L-valley     -- see Tomizawa
+g_materials[GAAS].cb.mstar[3]      = 0.27;    // X-valley
+g_materials[GERMANIUM].cb.mstar[1] = 0.12;    // Gamma valley -- see http://ecee.colorado.edu/~bart/book/effmass.htm#long
+g_materials[INSB].cb.mstar[1]      = 0.0135;  // Gamma-valley -- see Ram-Mohan
+g_materials[ALSB].cb.mstar[1]      = 0.14;    // Gamma-valley -- See Ram-Mohan
+g_materials[ALAS].cb.mstar[1]      = 0.149;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[ALP].cb.mstar[1]       = 0.22;    // Gamma-valley -- see Ram-Mohan
+g_materials[GAP].cb.mstar[1]       = 0.13;    // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[GASB].cb.mstar[1]      = 0.039;   // Gamma-valley -- see Ram-Mohan
+g_materials[INAS].cb.mstar[1]      = 0.026;   // Gamma-valley -- see Ram-Mohan J.App.Phys. Vol.89, Num.11
+g_materials[INP].cb.mstar[1]       = 0.0795;  // Gamma-valley -- see Ram-Mohan
+g_materials[GAN].cb.mstar[1]       = 0.2;     // G-1 -- Foutz, O'Leary, Shur, Eastman
+g_materials[GAN].cb.mstar[2]       = 0.4;     // L-M -- Bhapkar & Shur
+g_materials[GAN].cb.mstar[3]       = 0.6;     // G-2 -- Bhapkar & Shur
 
 
 // non-parabolicity coefficients (1/eV)
@@ -223,33 +242,42 @@ alphaK[GAN][1]       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
 alphaK[GAN][2]       = 0.065;      // L-M -- Bhapkar & Shur
 alphaK[GAN][3]       = 0.029;      // G-2 -- Bhapkar & Shur
 
-g_materials[SILICON].cb[1].alpha   = 0.5;    // see Sellier, Tomizawa
-g_materials[GERMANIUM].cb[1].alpha = 0.3;  // Gamma valley - Jacoboni Reggiani
-g_materials[GAN].cb[1].alpha       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
-g_materials[GAN].cb[2].alpha       = 0.065;      // L-M -- Bhapkar & Shur
-g_materials[GAN].cb[3].alpha       = 0.029;      // G-2 -- Bhapkar & Shur
+g_materials[SILICON].cb.alpha[1]   = 0.5;    // see Sellier, Tomizawa
+g_materials[GERMANIUM].cb.alpha[1] = 0.3;  // Gamma valley - Jacoboni Reggiani
+g_materials[GAN].cb.alpha[1]       = 0.189;      // G-1 -- Foutz, O'Leary, Shur, Eastman
+g_materials[GAN].cb.alpha[2]       = 0.065;      // L-M -- Bhapkar & Shur
+g_materials[GAN].cb.alpha[3]       = 0.029;      // G-2 -- Bhapkar & Shur
 
 
 MSTAR_VB[GAN][0] = 1.4; // heavy hole
 MSTAR_VB[GAN][1] = 0.3; // light hole
 MSTAR_VB[GAN][2] = 0.6; // split-off
 
-g_materials[GAN].vb[0].mstar = 1.4; // heavy hole
-g_materials[GAN].vb[1].mstar = 0.3; // light hole
-g_materials[GAN].vb[2].mstar = 0.6; // split-off
+g_materials[GAN].vb.mstar[0] = 1.4; // heavy hole
+g_materials[GAN].vb.mstar[1] = 0.3; // light hole
+g_materials[GAN].vb.mstar[2] = 0.6; // split-off
 
 DELTAE_VB[GAN][0] = 0.0;
 DELTAE_VB[GAN][1] = 0.008; // difference between heavy hole and light hole bands
 DELTAE_VB[GAN][2] = 0.04;  // difference between heavy hole and split-off bands
 
-g_materials[GAN].vb[0].emin = 0.0;
-g_materials[GAN].vb[1].emin = 0.008; // difference between heavy hole and light hole bands
-g_materials[GAN].vb[2].emin = 0.04;  // difference between heavy hole and split-off bands
+g_materials[GAN].vb.emin[0] = 0.0;
+g_materials[GAN].vb.emin[1] = 0.008; // difference between heavy hole and light hole bands
+g_materials[GAN].vb.emin[2] = 0.04;  // difference between heavy hole and split-off bands
 
-g_materials[GAN].vb[0].alpha = 0.0;
-g_materials[GAN].vb[1].alpha = 0.0;
-g_materials[GAN].vb[2].alpha = 0.0;
+g_materials[GAN].vb.alpha[0] = 0.0;
+g_materials[GAN].vb.alpha[1] = 0.0;
+g_materials[GAN].vb.alpha[2] = 0.0;
 
+
+// precomputed constants
+for(int m = 0; m < NOAMTIA; ++m) {
+    for(int v = 1; v <= g_materials[m].cb.num_valleys; ++v) {
+        g_materials[m].cb.smh[v] = sqrt(2. * g_materials[m].cb.mstar[v] * M * Q) / HBAR;
+        g_materials[m].cb.hhm[v] = HBAR * HBAR / (2. * g_materials[m].cb.mstar[v] * M  * Q);
+        g_materials[m].cb.hm[v]  = HBAR / (g_materials[m].cb.mstar[v] * M);
+    }
+}
 
 // correction factor - multiplied by the calculated absorption constant
 // used to correct for the fact that we are not taking into account all
@@ -682,17 +710,17 @@ g_materials[GAN].kav  = 0.137;
         printf("alphaK_gamma1[GAN] = %g\n", alphaK[GAN][1]);
 
 
-        g_materials[GAAS].cb[1].alpha=pow(1.-g_materials[GAAS].cb[1].mstar,2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb[1].emin);//expected value = 0.611
-        g_materials[GAAS].cb[2].alpha=pow(1.-g_materials[GAAS].cb[2].mstar,2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb[2].emin);//expected value = 0.242;
-        g_materials[INSB].cb[1].alpha=pow(1.-g_materials[INSB].cb[1].mstar,2.)/(g_materials[INSB].Eg+g_materials[INSB].cb[1].emin);//5.59;
-        g_materials[ALSB].cb[1].alpha=pow(1.-g_materials[ALSB].cb[1].mstar,2.)/(g_materials[ALSB].Eg+g_materials[ALSB].cb[1].emin);//0.321;
-        g_materials[ALAS].cb[1].alpha=pow(1.-g_materials[ALAS].cb[1].mstar,2.)/(g_materials[ALAS].Eg+g_materials[ALAS].cb[1].emin);
-        g_materials[ALP].cb[1].alpha=pow(1.-g_materials[ALP].cb[1].mstar,2.)/(g_materials[ALP].Eg+g_materials[ALP].cb[1].emin);
-        g_materials[GAP].cb[1].alpha=pow(1.-g_materials[GAP].cb[1].mstar,2.)/(g_materials[GAP].Eg+g_materials[GAP].cb[1].emin);
-        g_materials[GASB].cb[1].alpha=pow(1.-g_materials[GASB].cb[1].mstar,2.)/(g_materials[GASB].Eg+g_materials[GASB].cb[1].emin);
-        g_materials[INAS].cb[1].alpha=pow(1.-g_materials[INAS].cb[1].mstar,2.)/(g_materials[INAS].Eg+g_materials[INAS].cb[1].emin);
-        g_materials[INP].cb[1].alpha=pow(1.-g_materials[INP].cb[1].mstar,2.)/(g_materials[INP].Eg+g_materials[INP].cb[1].emin);
-        g_materials[GAN].cb[1].alpha = pow(1. - g_materials[GAN].cb[1].mstar, 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb[1].emin); // expected value = 0.189
+        g_materials[GAAS].cb.alpha[1] = pow(1.-g_materials[GAAS].cb.mstar[1],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[1]);//expected value = 0.611
+        g_materials[GAAS].cb.alpha[2] = pow(1.-g_materials[GAAS].cb.mstar[2],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[2]);//expected value = 0.242;
+        g_materials[INSB].cb.alpha[1] = pow(1.-g_materials[INSB].cb.mstar[1],2.)/(g_materials[INSB].Eg+g_materials[INSB].cb.emin[1]);//5.59;
+        g_materials[ALSB].cb.alpha[1] = pow(1.-g_materials[ALSB].cb.mstar[1],2.)/(g_materials[ALSB].Eg+g_materials[ALSB].cb.emin[1]);//0.321;
+        g_materials[ALAS].cb.alpha[1] = pow(1.-g_materials[ALAS].cb.mstar[1],2.)/(g_materials[ALAS].Eg+g_materials[ALAS].cb.emin[1]);
+        g_materials[ALP].cb.alpha[1]  = pow(1.-g_materials[ALP].cb.mstar[1],2.)/(g_materials[ALP].Eg+g_materials[ALP].cb.emin[1]);
+        g_materials[GAP].cb.alpha[1]  = pow(1.-g_materials[GAP].cb.mstar[1],2.)/(g_materials[GAP].Eg+g_materials[GAP].cb.emin[1]);
+        g_materials[GASB].cb.alpha[1] = pow(1.-g_materials[GASB].cb.mstar[1],2.)/(g_materials[GASB].Eg+g_materials[GASB].cb.emin[1]);
+        g_materials[INAS].cb.alpha[1] = pow(1.-g_materials[INAS].cb.mstar[1],2.)/(g_materials[INAS].Eg+g_materials[INAS].cb.emin[1]);
+        g_materials[INP].cb.alpha[1]  = pow(1.-g_materials[INP].cb.mstar[1],2.)/(g_materials[INP].Eg+g_materials[INP].cb.emin[1]);
+        g_materials[GAN].cb.alpha[1]  = pow(1. - g_materials[GAN].cb.mstar[1], 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb.emin[1]); // expected value = 0.189
 
     }
 

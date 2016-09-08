@@ -84,20 +84,17 @@ int mc_save_mesh(Mesh *mesh, char *filename) {
 }
 
 
-Node * mc_node(int i, int j) {
-    return &(g_mesh->info[i][j]);
-}
+Node * mc_node(int i, int j)  { return &(g_mesh->info[i][j]); }
 
 
-Node * mc_node_s(Index index) {
-    return &(g_mesh->info[index.i][index.j]);
-}
+Node * mc_node_s(Index index) { return &(g_mesh->info[index.i][index.j]); }
 
 
 Vec2 mc_random_location_in_node(Node *node) {
     double x = g_mesh->dx * ((double)node->i - rnd());
     double y = g_mesh->dy * ((double)node->j - rnd());
 
+    // fixes for top and right edges
     if(node->i == g_mesh->nx + 1) {
         x = g_mesh->width - g_mesh->dx * 0.5 * rnd();
     }

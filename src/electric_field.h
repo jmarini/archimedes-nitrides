@@ -96,7 +96,7 @@ int electric_field(void) {
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
             Node *node = mc_node(i, j);
-            node->potential -= node->mat->cb[1].emin;
+            node->potential -= node->mat->cb.emin[1];
         }
     }
 

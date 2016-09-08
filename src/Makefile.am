@@ -39,6 +39,8 @@ archimedes_SOURCES = \
 	media.h \
 	mesh.c \
 	mesh.h \
+	optical_absorption.h \
+	optical_absorption.c \
 	particle.h \
 	particle.c \
 	particlecreation.h \

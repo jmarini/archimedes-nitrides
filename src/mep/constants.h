@@ -29,18 +29,18 @@
 // Universal Physical Constants in M.K.S.C. system
 
 // Silicon low field mobility (m^2/(V*sec))
-double MIU0=1400.e-4;
+static const double MIU0=1400.e-4;
 
 // Silicon saturation velocity (m/sec)
-double VS=1.e5;
+static const double VS=1.e5;
 
 // Silicon heavy hole effective mass
-double mstarhole=0.57;
+static const double mstarhole=0.57;
 
 // Silicon heavy hole low field mobility (m^2/(V*sec))
-double MIU0hole=0.0471;
+static const double MIU0hole=0.0471;
 
 // Silicon heavy hole saturation velocity (m/sec)
-double VShole=1.e5;
+static const double VShole=1.e5;
 
 #endif

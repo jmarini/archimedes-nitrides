@@ -362,15 +362,26 @@ int main(int argc, char *argv[]) {
 
     // Initialization for Monte Carlo
     // ==============================
+    double transistion_rate[NOAMTIA][DIME][3];
     if(g_config->simulation_model == MCE || g_config->simulation_model == MCEH) {
         for(int i = 0; i < NOAMTIA; i++) {
             calc_scattering_rates(i);
+            calc_absorption_rates(g_materials[i], transistion_rate);
         }
         printf("Scattering rates calculated...\n");
-        MCdevice_config( );
+        photoexcite_carriers(g_mesh, 4.0, transistion_rate, GM, P);
+        // MCdevice_config( );
         printf("Device configuration complete...\n");
     }
     printf("\n");
+
+
+    FILE *fp = fopen("photoexcited_particles.csv", "w");
+    for(int n = 0; n < g_config->num_particles; ++n) {
+        Particle *p = &P[n];
+        fprintf(fp, "%d %g %g %g %g %g %g\n", n, p->x, p->y, p->kx, p->ky, p->kz, mc_particle_energy(p));
+    }
+    fclose(fp);
 
 
     // HERE IS THE SIMULATION

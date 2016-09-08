@@ -37,9 +37,15 @@
 
 
 typedef struct {
-    real emin;
-    real mstar;
-    real alpha;
+    int num_valleys;
+    double emin[MAX_VALLEYS];
+    double mstar[MAX_VALLEYS];
+    double alpha[MAX_VALLEYS];
+
+    // precomputed constants
+    double smh[MAX_VALLEYS];  // sqrt(2 * m* * m_e * q)
+    double hhm[MAX_VALLEYS];  // hbar^2 / (2 * m* * m_e * q)
+    double hm[MAX_VALLEYS];   // hbar / (m* * m_e)
 } Band_Info;
 
 
@@ -47,23 +53,25 @@ typedef struct {
     int id;
 
     int num_valleys;
-    real Eg;
-    Band_Info cb[6];
-    Band_Info vb[6];
+    double Eg;
+    Band_Info cb;
+    Band_Info vb;
 
-    int  zscatter[6][6];
+    int  zscatter[MAX_VALLEYS][MAX_VALLEYS];
 
-    real abs_correction; // absorption coefficient correction
-    real eps_static;
-    real eps_hf;
-    real hwo[6];
-    real dtk[6];
-    int  zf[6];
-    real rho;
-    real da;
-    real ul;
-    real lattice_const;
-    real kav;
+    double abs_correction; // absorption coefficient correction
+    double eps_static;
+    double eps_hf;
+    double hwo[6];
+    double dtk[6];
+    int    zf[6];
+    double rho;
+    double da;
+    double ul;
+    double lattice_const;
+    double kav;
+
+    // precomputed constants
 
 } Material;
 

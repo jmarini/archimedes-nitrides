@@ -30,33 +30,33 @@
 // Universal Physical Constants in M.K.S.C. system
 
 // Boltzmann constant (Joule/Kelvin)
-const double KB=1.380658e-23;
+static const double KB=1.380658e-23;
 
 // Electron charge in absolute value (Coulomb)
-const double Q=1.60217733e-19;
+static const double Q=1.60217733e-19;
 
 // Reduced Planck constant (Joule*sec)
-const double HBAR=1.05457266e-34;
+static const double HBAR=1.05457266e-34;
 
 // Permittivity of free space (F/m)
-const double EPS0=8.854187817e-12;
+static const double EPS0=8.854187817e-12;
 
 // Electron Mass (Kg)
-const double M=9.1093897e-31;
+static const double M=9.1093897e-31;
 
 // Silicon intrinsic density for room temperature
-const double NI=1.45e16;
+static const double NI=1.45e16;
 
 // Pi number
-const double PI=3.141592654;
+static const double PI=3.141592654;
 
 // electron energy step (eV) for the MC method
-const double DE=0.002;
+static const double DE=0.002;
 
 // speed of light (m/s)
-const double VLIGHT=2.99792458e8;
+static const double VLIGHT=2.99792458e8;
 
 // Silicon Schottky contact density (1/m^3)
-double NGATE=3.9e11;
+static const double NGATE=3.9e11;
 
 #endif

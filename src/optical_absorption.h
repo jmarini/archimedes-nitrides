@@ -24,143 +24,51 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef ARCHIMEDES_ABSORPTION_H
+#define ARCHIMEDES_ABSORPTION_H
+
+
+#include "material.h"
+#include "mesh.h"
+#include "particle.h"
+
 
 // Returns the optical joint density of states for the given conduction and valence bands
 // evaluated at the given energy
-double optical_joint_DOS(Material material, int conduction_band, int valence_band, double energy) {
-    double mc = material.cb[conduction_band].mstar,
-           mv = material.vb[valence_band].mstar;
-    double mr = mc * mv / (mc + mv);
-    double alpha = material.cb[conduction_band].alpha;
-
-    double deltaE = material.cb[conduction_band].emin + material.Eg;
-    double e2 = (mr / mc) * (energy - deltaE);
-
-    double gamma = Q * e2 * (1. + alpha * e2);
-    double gamma2 = (1. + 2. * alpha * e2);
-
-    double dos = mr * M * sqrt(2. * mr * M) * sqrt(gamma) * gamma2 / (PI * PI * HBAR * HBAR * HBAR);
-    return dos;
-}
+double optical_joint_DOS(Material material, int conduction_band, int valence_band, double energy);
 
 
 // Returns the transition rate (1/s) between the given conduction and valence bands at the given
 // energy
 double optical_transition_rate(Material material, int conduction_band,
-                               int valence_band, double photon_energy) {
-    if(photon_energy < material.Eg + material.cb[conduction_band].emin + material.vb[valence_band].emin) {
-        return 0.; // photon energy too small
-    }
-
-    double prefactor = PI * HBAR * Q * Q * material.Eg
-                     / (3. * material.eps_static * EPS0 * M * photon_energy);
-    double rate = prefactor * optical_joint_DOS(material, conduction_band, valence_band, photon_energy);
-    return rate;
-}
+                               int valence_band, double photon_energy);
 
 
 // Returns the absorption coefficient at the given energy. Takes into account direct interband
 // transitions only from HH, LH, SO valence bands to G-1 conduction band
-double absorption_coefficient(Material material, double photon_energy) {
-    double rate = 0.;
-    for(int v = 0; v < 3; ++v) {
-        rate += optical_transition_rate(material, 1, v, photon_energy) * sqrt(material.eps_static) / VLIGHT;
-    }
-
-    return rate * material.abs_correction;
-}
+double absorption_coefficient(Material material, double photon_energy);
 
 
 // Calculates the number of photoexcited electrons in the given node at the specified energy.
 // Photons are assumed to enter device at x=0
 // TODO: number of carriers needs to depend on energy - relative W @ E vs max W
-int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy) {
-    double xmin = mesh->dx * (double)(node->i - 1),
-           xmax = mesh->dx * (double)(node->i);
-
-    double alpha = absorption_coefficient(*(node->mat), photon_energy);
-
-    return (int)(g_config->particles_per_cell * 10 * (exp(-alpha * xmin) - exp(-alpha * xmax)));
-}
+int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy);
 
 
 // Calculated relative absorption rates for the different possible transitions at the given
 // energy.
-int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DIME][3]) {
-    for(int e = 0; e < DIME; ++e) {
-        double energy = (double)e * DE + material.Eg;
-        double sum = 0.;
-
-        for(int v = 0; v < 3; ++v) {
-            sum += optical_transition_rate(material, 1, v, energy);
-            transistion_rate[material.id][e][v] = sum;
-        }
-        for(int v = 0; v < 3; ++v) {
-            transistion_rate[material.id][e][v] /= sum;
-        }
-    }
-
-    return 1;
-}
+int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DIME][3]);
 
 
-Particle create_photoexcited_carrier(Node *node, double photon_energy, int conduction_band, int valence_band) {
-    double mc = node->mat->cb[conduction_band].mstar,
-           mv = node->mat->vb[valence_band].mstar;
-    double mr = mc * mv / (mc + mv);
-
-    double e2 = (mr / mc) * (photon_energy - node->mat->Eg - node->mat->vb[valence_band].emin);
-    printf("%g\n", e2);
-
-    Vec2 loc = mc_random_location_in_node(node);
-
-    double kf = SMH[node->material][conduction_band]
-              * sqrt(e2 * (1. + node->mat->cb[conduction_band].alpha * e2));
-    double cs  = 1. - 2. * rnd();     // random number -1 -> 1
-    double sn  = sqrt(1. - cs * cs);
-    double fai = 2. * PI * rnd();     // random angle (radians) 0 -> 2pi
-    double kx = kf * cs,
-           ky = kf * sn * cos(fai),
-           kz = kf * sn * sin(fai);
-    int id = g_config->next_particle_id++;
-    double time = -log(rnd())/GM[node->material];
-
-    return (Particle){.id=id,
-                      .t=time,
-                      .valley=conduction_band,
-                      .x=loc.x,
-                      .y=loc.y,
-                      .kx=kx,
-                      .ky=ky,
-                      .kz=kz};
-}
+Particle create_photoexcited_carrier(Node *node, double photon_energy,
+                                     double total_scattering_rate[NOAMTIA+1],
+                                     int conduction_band, int valence_band);
 
 
-int photoexcite_carriers(Mesh *mesh, double photon_energy, double transistion_rate[NOAMTIA][DIME][3]) {
+int photoexcite_carriers(Mesh *mesh, double photon_energy,
+                         double transistion_rate[NOAMTIA][DIME][3],
+                         double total_scattering_rate[NOAMTIA+1],
+                         Particle particles[NPMAX+1]);
 
-    int p = 0;
 
-    for(int j = 1; j <= mesh->ny + 1; ++j) {
-        for(int i = 1; i <= mesh->nx + 1; ++i) {
-            Node *node = mc_node(i, j);
-            int e = (int)((photon_energy - node->mat->Eg) / DE);
-            int num_carriers = electrons_in_cell(mesh, node, photon_energy);
-
-            for(int n = 0; n < num_carriers; ++n) {
-                double r = rnd();
-                for(int v = 0; v < 3; ++v) {
-                    if(r <= transistion_rate[node->material][e][v]) {
-                        P[p] = create_photoexcited_carrier(node, photon_energy, 1, v);
-                        ++p;
-                        break;
-                    }
-                }
-            } // carriers per cell
-
-        } // i
-    } // j
-
-    g_config->num_particles = p;
-    g_config->carriers_per_particle = g_config->max_doping * mesh->dx * mesh->dy / g_config->particles_per_cell;
-    return 0;
-}
+#endif

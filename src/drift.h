@@ -48,7 +48,7 @@ void drift(Particle *particle, real tau) {
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
         gk = HHM[material][particle->valley] * ksquared;
-        thesquareroot = sqrt(1. + 4. * node->mat->cb[particle->valley].alpha * gk);
+        thesquareroot = sqrt(1. + 4. * node->mat->cb.alpha[particle->valley] * gk);
         v.x = particle->kx * HM[material][particle->valley] / thesquareroot;
         v.y = particle->ky * HM[material][particle->valley] / thesquareroot;
         dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
