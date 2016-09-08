@@ -97,5 +97,13 @@ Node * mc_node_s(Index index) {
 Vec2 mc_random_location_in_node(Node *node) {
     double x = g_mesh->dx * ((double)node->i - rnd());
     double y = g_mesh->dy * ((double)node->j - rnd());
+
+    if(node->i == g_mesh->nx + 1) {
+        x = g_mesh->width - g_mesh->dx * 0.5 * rnd();
+    }
+    if(node->j == g_mesh->ny + 1) {
+        y = g_mesh->height - g_mesh->dy * 0.5 * rnd();
+    }
+
     return (Vec2){.x=x, .y=y};
 }
