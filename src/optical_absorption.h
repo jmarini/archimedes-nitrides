@@ -74,9 +74,9 @@ double absorption_coefficient(Material material, double photon_energy) {
 // Calculates the number of photoexcited electrons in the given node at the specified energy.
 // Photons are assumed to enter device at x=0
 // TODO: number of carriers needs to depend on energy - relative W @ E vs max W
-int electrons_in_cell(Node *node, double photon_energy) {
-    double xmin = g_mesh->dx * (double)(node->i - 1),
-           xmax = g_mesh->dx * (double)(node->i);
+int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy) {
+    double xmin = mesh->dx * (double)(node->i - 1),
+           xmax = mesh->dx * (double)(node->i);
 
     double alpha = absorption_coefficient(*(node->mat), photon_energy);
 
@@ -144,7 +144,7 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy, double transistion_ra
         for(int i = 1; i <= mesh->nx + 1; ++i) {
             Node *node = mc_node(i, j);
             int e = (int)((photon_energy - node->mat->Eg) / DE);
-            int num_carriers = electrons_in_cell(node, photon_energy);
+            int num_carriers = electrons_in_cell(mesh, node, photon_energy);
 
             for(int n = 0; n < num_carriers; ++n) {
                 double r = rnd();
