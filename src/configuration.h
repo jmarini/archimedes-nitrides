@@ -27,8 +27,6 @@
 #ifndef ARCHIMEDES_CONFIGURATION_H
 #define ARCHIMEDES_CONFIGURATION_H
 
-#include "global_defines.h"
-
 
 typedef struct {
     int simulation_model;
@@ -36,7 +34,7 @@ typedef struct {
     // particle info
     long long int num_particles;
     long long int next_particle_id;
-    real carriers_per_particle;
+    double carriers_per_superparticle;
 
     // scattering mechanism flags
     int optical_phonon_scattering;
@@ -48,18 +46,18 @@ typedef struct {
     int conduction_band;
     int quantum_flag;
     int qep_model;
-    real qep_alpha;
-    real qep_gamma;
+    double qep_alpha;
+    double qep_gamma;
 
     int faraday_flag;
 
-    real lattice_temp;
-    real impurity_conc;
+    double lattice_temp;
+    double impurity_conc;
 
     // averaging
     int particles_per_cell;
     int avg_steps; // media
-    real avg_alpha;
+    double avg_alpha;
 
     // intput / output
     int save_mesh;
@@ -70,12 +68,12 @@ typedef struct {
     int load_initial_data;
 
     // simulation timing parameters
-    real time;
-    real tf;
-    real dt;
-    real tauw; // MEP
+    double time;
+    double tf;
+    double dt;
+    double tauw; // MEP
 
-    real max_doping;
+    double max_doping;
 } Configuration;
 
 

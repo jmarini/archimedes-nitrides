@@ -68,7 +68,7 @@ int calculate_particles_per_cell(void) {
 
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
-            mc_node(i, j)->e.density *= g_config->carriers_per_particle / (dx * dy);
+            mc_node(i, j)->e.density *= g_config->carriers_per_superparticle / (dx * dy);
             if(i == 1 || i == nx + 1) { mc_node(i, j)->e.density *= 2.; }
             if(j == 1 || j == ny + 1) { mc_node(i, j)->e.density *= 2.; }
         }
