@@ -88,6 +88,8 @@ int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DI
 }
 
 
+// Create a photoexcited carrier at the given Node for a the given photon energies.
+// The transistion will be between the given cb and vb. Returns the created particle.
 Particle create_photoexcited_carrier(Node *node, double photon_energy,
                                      double total_scattering_rate[NOAMTIA+1],
                                      int conduction_band, int valence_band) {
@@ -121,6 +123,8 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
 }
 
 
+// Photoexcite carriers at the given energy. Returns the number of photogenerated
+// carriers
 int photoexcite_carriers(Mesh *mesh, double photon_energy,
                          double transistion_rate[NOAMTIA][DIME][3],
                          double total_scattering_rate[NOAMTIA+1],
@@ -148,6 +152,6 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
     } // j
 
     g_config->num_particles = p;
-    g_config->carriers_per_particle = g_config->max_doping * mesh->dx * mesh->dy / g_config->particles_per_cell;
-    return 0;
+    g_config->carriers_per_superparticle = g_config->max_doping * mesh->dx * mesh->dy / g_config->particles_per_cell;
+    return p;
 }
