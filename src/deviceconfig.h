@@ -52,17 +52,17 @@ void MCdevice_config(void) {
          dy = g_mesh->dy;
 
     // Number of carriers per particle
-    g_config->carriers_per_particle = g_config->max_doping * dx * dy / g_config->particles_per_cell;
+    g_config->carriers_per_superparticle = g_config->max_doping * dx * dy / g_config->particles_per_cell;
 
     for(i=1;i<=nx+1;i++) {
         for(j=1;j<=ny+1;j++){
             material = g_mesh->info[i][j].material;
             // np=number of particles in the (i,j)-th cell
             if(g_config->load_initial_data == 1) {
-                np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_particle + 0.5);
+                np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_superparticle + 0.5);
             }
             else {
-                np = (int)(g_mesh->info[i][j].donor_conc * dx * dy / g_config->carriers_per_particle + 0.5);
+                np = (int)(g_mesh->info[i][j].donor_conc * dx * dy / g_config->carriers_per_superparticle + 0.5);
             }
             if((i == 1) || (i == nx + 1)) { np /= 2; }
             if((j == 1) || (j == ny + 1)) { np /= 2; }
