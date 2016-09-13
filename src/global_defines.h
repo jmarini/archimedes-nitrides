@@ -40,8 +40,6 @@
 #define QEP_FULL 2             // quantum effective potential, full effective potential
 #define QEP_DENSITY_GRADIENT 3 // quantum effective potential, density gradient
 #define MN3 4                  // number of summary values to save per cell
-#define NXM 308                // maximum number of cells in x-direction
-#define NYM 308                // maximum number of cells in y-direction
 #define DIME 3003              // maximum number of points in energy mesh
 #define ITMAX 10000000         // maximum number of monte carlo iterations
 #define POISSONITMAX 1500      // maximum number of poisson iterations

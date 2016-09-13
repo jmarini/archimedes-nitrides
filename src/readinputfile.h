@@ -75,8 +75,8 @@ Read_Input_File(void)
     g_config->num_particles = 0;
     g_config->next_particle_id = 0;
 
-    g_mesh->nx = 50;
-    g_mesh->ny = 50;
+    g_mesh->nx = NXM - 1;
+    g_mesh->ny = NYM - 1;
     g_mesh->dx = 0.;
     g_mesh->dy = 0.;
     g_mesh->width = 0.;

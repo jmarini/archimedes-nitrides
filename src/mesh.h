@@ -36,7 +36,7 @@
 
 // maximum number of mesh cells in x and y
 #define NXM 308
-#define NXY 308
+#define NYM 308
 
 
 typedef struct {
