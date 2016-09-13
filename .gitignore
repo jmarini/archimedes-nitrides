@@ -39,7 +39,9 @@ archimedes
 # Autotools
 Makefile
 Makefile.in
-config.*
+config.h
+config.log
+config.status
 
 /autom4te.cache
 /aclocal.m4
