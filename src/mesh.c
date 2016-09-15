@@ -1,4 +1,3 @@
-#include "global_defines.h"
 #include "mesh.h"
 #include "random.h"
 
@@ -13,16 +12,16 @@ int mc_build_mesh(Mesh *mesh) {
     // saving into local variables for readability
     int nx = mesh->nx,
         ny = mesh->ny;
-    real dx = mesh->dx,
-         dy = mesh->dy;
+    double dx = mesh->dx,
+           dy = mesh->dy;
 
     // definition of mesh node coordinates
     mesh->num_nodes = (nx + 1) * (ny + 1);
     for(i = 0; i < nx + 1; ++i) {
         for(j = 0; j < ny + 1; ++j) {
             index = j * (nx + 1) + i;
-            mesh->coordinates[index][0] = (real)(i) * dx;
-            mesh->coordinates[index][1] = (real)(j) * dy;
+            mesh->coordinates[index][0] = (double)(i) * dx;
+            mesh->coordinates[index][1] = (double)(j) * dy;
 
             mesh->info[i+1][j+1].i = i+1;
             mesh->info[i+1][j+1].j = j+1;
@@ -93,14 +92,6 @@ Node * mc_node_s(Index index) { return &(g_mesh->info[index.i][index.j]); }
 Vec2 mc_random_location_in_node(Node *node) {
     double x = g_mesh->dx * ((double)node->i - rnd());
     double y = g_mesh->dy * ((double)node->j - rnd());
-
-    // fixes for top and right edges
-    if(node->i == g_mesh->nx + 1) {
-        x = g_mesh->width - g_mesh->dx * 0.5 * rnd();
-    }
-    if(node->j == g_mesh->ny + 1) {
-        y = g_mesh->height - g_mesh->dy * 0.5 * rnd();
-    }
 
     return (Vec2){.x=x, .y=y};
 }

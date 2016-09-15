@@ -93,6 +93,7 @@ Read_Input_File(void)
 
             g_mesh->info[i][j].donor_conc = NI;
             g_mesh->info[i][j].acceptor_conc = NI;
+            g_mesh->info[i][j].fixed_charge = 0.;
 
             g_mesh->info[i][j].e.density = NI;
             g_mesh->info[i][j].e.velocity = (Vec2){.x=0., .y=0.};

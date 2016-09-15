@@ -29,7 +29,6 @@
 #define ARCHIMEDES_MESH_H
 
 
-#include "global_defines.h"
 #include "material.h"
 #include "vec.h"
 
@@ -40,30 +39,31 @@
 
 
 typedef struct {
-    real density;
-    Vec2 velocity; // running sum velocity
-    real energy;  // running sum energy
+    double density;
+    Vec2   velocity; // running sum velocity
+    double energy;   // running sum energy
 } Carrier_Info;
 
 
 typedef struct {
     union {     // index of the node, provides i & j
-        struct  Index;
+        struct Index;
         Index index;
     };
 
     Material *mat;
     int material;
-    real donor_conc;
-    real acceptor_conc;
+    double donor_conc;
+    double acceptor_conc;
+    double fixed_charge;
 
     Carrier_Info e;     // electrons
     Carrier_Info h;     // holes
 
-    real qep;             // quantum effective potential
-    real potential;
+    double qep;             // quantum effective potential
+    double potential;
     Vec2 efield;         // electric field
-    real magnetic_field;
+    double magnetic_field;
 } Node;
 
 
@@ -71,11 +71,11 @@ typedef struct {
     int nx; // number of cells in x-direction
     int ny; //                    y-direction
 
-    real dx; // cell size in x-direction
-    real dy; //              y-direction
+    double dx; // cell size in x-direction
+    double dy; //              y-direction
 
     union { // size of the mesh, provides width & height
-        struct  Dimensions;
+        struct Dimensions;
         Dimensions size;
     };
 
@@ -84,7 +84,7 @@ typedef struct {
 
     Node info[NXM + 1][NYM + 1];
 
-    real coordinates[NXM * NYM][2];
+    double coordinates[NXM * NYM][2];
     int triangles[NXM * NYM][3];
 } Mesh;
 

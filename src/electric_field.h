@@ -73,7 +73,7 @@ int electric_field(void) {
                 real kappa = node->mat->eps_static * EPS0 / Q;
                 real deltat = factor * 0.5 / (kappa * (dx2 + dy2));
                 real rho = (node->e.density - node->donor_conc)
-                         - (node->h.density - node->acceptor_conc); // charge neutrality eqn.
+                         - (node->h.density - node->acceptor_conc) + node->fixed_charge; // charge neutrality eqn.
 
                 // here we are calculating the difference in potential
                 // between nearest neighbors
