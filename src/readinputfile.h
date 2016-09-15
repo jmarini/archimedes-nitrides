@@ -84,24 +84,24 @@ Read_Input_File(void)
 
     for(i = 1; i <= g_mesh->nx + 1; ++i) {
         for(j = 1; j <= g_mesh->ny + 1; ++j) {
-            g_mesh->info[i][j].material = SILICON;
+            g_mesh->nodes[i][j].material = SILICON;
 
-            g_mesh->info[i][j].qep = 0.;
-            g_mesh->info[i][j].potential = 0.;
-            g_mesh->info[i][j].efield = (Vec2){.x=0., .y=0.};
-            g_mesh->info[i][j].magnetic_field = 0.;
+            g_mesh->nodes[i][j].qep = 0.;
+            g_mesh->nodes[i][j].potential = 0.;
+            g_mesh->nodes[i][j].efield = (Vec2){.x=0., .y=0.};
+            g_mesh->nodes[i][j].magnetic_field = 0.;
 
-            g_mesh->info[i][j].donor_conc = NI;
-            g_mesh->info[i][j].acceptor_conc = NI;
-            g_mesh->info[i][j].fixed_charge = 0.;
+            g_mesh->nodes[i][j].donor_conc = NI;
+            g_mesh->nodes[i][j].acceptor_conc = NI;
+            g_mesh->nodes[i][j].fixed_charge = 0.;
 
-            g_mesh->info[i][j].e.density = NI;
-            g_mesh->info[i][j].e.velocity = (Vec2){.x=0., .y=0.};
-            g_mesh->info[i][j].e.energy = 0.;
+            g_mesh->nodes[i][j].e.density = NI;
+            g_mesh->nodes[i][j].e.velocity = (Vec2){.x=0., .y=0.};
+            g_mesh->nodes[i][j].e.energy = 0.;
 
-            g_mesh->info[i][j].h.density = NI;
-            g_mesh->info[i][j].h.velocity = (Vec2){.x=0., .y=0.};
-            g_mesh->info[i][j].h.energy = 0.;
+            g_mesh->nodes[i][j].h.density = NI;
+            g_mesh->nodes[i][j].h.velocity = (Vec2){.x=0., .y=0.};
+            g_mesh->nodes[i][j].h.energy = 0.;
         }
     }
 
@@ -181,8 +181,8 @@ Read_Input_File(void)
       for(j=0;j<=g_mesh->ny+4;j++){
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
-           g_mesh->info[i][j].material = type;
-           g_mesh->info[i][j].mat = &(g_materials[type]);
+           g_mesh->nodes[i][j].material = type;
+           g_mesh->nodes[i][j].mat = &(g_materials[type]);
         }
       }
     printf("MATERIAL %s X=[%g,%g] Y=[%g,%g] ---> Ok\n",s,xi,xf,yi,yf);
@@ -388,13 +388,13 @@ Read_Input_File(void)
        for(i=1;i<=g_mesh->nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i][j][1]=(real)(dum);
-        g_mesh->info[i][j].e.density = (real)dum;
+        g_mesh->nodes[i][j].e.density = (real)dum;
         fscanf(ep,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i][j][4]=(real)(dum*Q*u2d[i][j][1]);
-        g_mesh->info[i][j].e.energy = (real)(dum * Q * g_mesh->info[i][j].e.density);
+        g_mesh->nodes[i][j].e.energy = (real)(dum * Q * g_mesh->nodes[i][j].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
         PSI[i][j]=(real)(dum);
-        g_mesh->info[i][j].potential = (real)dum;
+        g_mesh->nodes[i][j].potential = (real)dum;
        }
     }
 // Load the initial data for electrons in case of Simplified MEP model
@@ -403,13 +403,13 @@ Read_Input_File(void)
        for(i=1;i<=g_mesh->nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i+2][j+2][1]=(real)(dum);
-        g_mesh->info[i+2][j+2].e.density = (real)dum;
+        g_mesh->nodes[i+2][j+2].e.density = (real)dum;
         fscanf(ep,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i+2][j+2][4]=(real)(dum*Q*u2d[i+2][j+2][1]);
-        g_mesh->info[i+2][j+2].e.energy = (real)(dum * Q * g_mesh->info[i+2][j+2].e.density);
+        g_mesh->nodes[i+2][j+2].e.energy = (real)(dum * Q * g_mesh->nodes[i+2][j+2].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
         PSI[i][j]=(real)(dum);
-        g_mesh->info[i][j].potential = (real)dum;
+        g_mesh->nodes[i][j].potential = (real)dum;
        }
     }
     fclose(dp);
@@ -499,8 +499,8 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          &&(j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            u2d[i][j][1]=conc;
-           g_mesh->info[i][j].donor_conc = conc;
-           g_mesh->info[i][j].e.density = conc;
+           g_mesh->nodes[i][j].donor_conc = conc;
+           g_mesh->nodes[i][j].e.density = conc;
         }
     if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH)
     for(i=1;i<=g_mesh->nx+1;i++)
@@ -508,10 +508,10 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            u2d[i+2][j+2][1]=conc;
-           g_mesh->info[i][j].donor_conc = conc;
-           g_mesh->info[i+2][j+2].e.density = conc;
+           g_mesh->nodes[i][j].donor_conc = conc;
+           g_mesh->nodes[i+2][j+2].e.density = conc;
            u2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
-           g_mesh->info[i+2][j+2].e.energy = conc * 1.5 * KB * g_config->lattice_temp;
+           g_mesh->nodes[i+2][j+2].e.energy = conc * 1.5 * KB * g_config->lattice_temp;
         }
       }
     printf("DONOR DENSITY %g %g %g %g %g ---> Ok\n",
@@ -562,10 +562,10 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            h2d[i+2][j+2][1]=conc;
-           g_mesh->info[i][j].acceptor_conc = conc;
-           g_mesh->info[i+2][j+2].h.density = conc;
+           g_mesh->nodes[i][j].acceptor_conc = conc;
+           g_mesh->nodes[i+2][j+2].h.density = conc;
            h2d[i+2][j+2][4]=conc*1.5*KB*g_config->lattice_temp;
-           g_mesh->info[i+2][j+2].h.energy = conc * 1.5 * KB * g_config->lattice_temp;
+           g_mesh->nodes[i+2][j+2].h.energy = conc * 1.5 * KB * g_config->lattice_temp;
         }
       }
   }
@@ -799,7 +799,7 @@ Read_Input_File(void)
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
            B[i][j]=value;
-           g_mesh->info[i][j].magnetic_field = value;
+           g_mesh->nodes[i][j].magnetic_field = value;
         }
     printf("Constant Magnetic Field %f %f %f %f %f ---> Ok\n",xi,yi,xf,yf,value);
   }
@@ -931,8 +931,8 @@ Read_Input_File(void)
  g_config->max_doping = 0.;
  for(i=1;i<=g_mesh->nx+1;i++)
    for(j=1;j<=g_mesh->ny+1;j++){
-     if(g_config->max_doping<=g_mesh->info[i][j].donor_conc) {
-        g_config->max_doping = g_mesh->info[i][j].donor_conc;
+     if(g_config->max_doping<=g_mesh->nodes[i][j].donor_conc) {
+        g_config->max_doping = g_mesh->nodes[i][j].donor_conc;
     }
    }
  printf("=========================\n");

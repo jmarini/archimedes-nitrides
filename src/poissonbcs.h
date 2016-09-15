@@ -50,18 +50,18 @@ int poisson_boundary_conditions(void) {
         // insulator
         if(mc_is_boundary_insulator(direction_t.BOTTOM, i)) {
             // if there is no potential on insulator
-            g_mesh->info[i][1].potential = g_mesh->info[i][2].potential;
+            g_mesh->nodes[i][1].potential = g_mesh->nodes[i][2].potential;
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
             if(EDGE[direction_t.BOTTOM][i][1] != 0.0) {
-                g_mesh->info[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
+                g_mesh->nodes[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.BOTTOM, i)) {
-            g_mesh->info[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
+            g_mesh->nodes[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
         }
 
         // Upper Edge
@@ -70,18 +70,18 @@ int poisson_boundary_conditions(void) {
         // insulator
         if(mc_is_boundary_insulator(direction_t.TOP, i)) {
             // if there is no potential on insulator
-            g_mesh->info[i][ny + 1].potential = g_mesh->info[i][ny    ].potential;
+            g_mesh->nodes[i][ny + 1].potential = g_mesh->nodes[i][ny    ].potential;
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
             if(EDGE[direction_t.TOP][i][1] != 0.0) {
-                g_mesh->info[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
+                g_mesh->nodes[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.TOP, i)) {
-            g_mesh->info[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
+            g_mesh->nodes[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
         }
 
     }
@@ -93,18 +93,18 @@ int poisson_boundary_conditions(void) {
 
         // insulator
         if(mc_is_boundary_insulator(direction_t.LEFT, j)) {
-            g_mesh->info[1][j].potential = g_mesh->info[2][j].potential;
+            g_mesh->nodes[1][j].potential = g_mesh->nodes[2][j].potential;
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
             if(EDGE[direction_t.LEFT][j][1] != 0.0) {
-                g_mesh->info[1][j].potential = EDGE[direction_t.LEFT][j][1];
+                g_mesh->nodes[1][j].potential = EDGE[direction_t.LEFT][j][1];
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.LEFT, j)) {
-            g_mesh->info[1][j].potential = EDGE[direction_t.LEFT][j][1];
+            g_mesh->nodes[1][j].potential = EDGE[direction_t.LEFT][j][1];
         }
 
         // Right Edge
@@ -112,18 +112,18 @@ int poisson_boundary_conditions(void) {
 
         // insulator
         if(mc_is_boundary_insulator(direction_t.RIGHT, j)) {
-            g_mesh->info[nx + 1][j].potential = g_mesh->info[nx - 1][j].potential;
+            g_mesh->nodes[nx + 1][j].potential = g_mesh->nodes[nx - 1][j].potential;
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
             if(EDGE[direction_t.RIGHT][j][1] != 0.0) {
-                g_mesh->info[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
+                g_mesh->nodes[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.RIGHT, j)) {
-            g_mesh->info[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
+            g_mesh->nodes[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
         }
 
     }

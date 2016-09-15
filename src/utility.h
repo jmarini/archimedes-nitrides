@@ -142,7 +142,7 @@ particle_info_t mc_calculate_particle_info(Particle *p) {
     if(j <= 1) { j = 1; }
     if(j >= ny + 1) { j = ny + 1; }
 
-    int material = g_mesh->info[i][j].material;
+    int material = g_mesh->nodes[i][j].material;
 
     // calculate particle energy and velocity
     real ksquared = mc_particle_ksquared(p);

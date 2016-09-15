@@ -82,7 +82,7 @@ inline Particle creation(int i, real t, int edge) {
     if( j <= 1) {  j = 1; }
     if(ii >= nx + 1) { ii = nx + 1; }
     if( j >= ny + 1) {  j = ny + 1; }
-    int material = g_mesh->info[ii][j].material;
+    int material = g_mesh->nodes[ii][j].material;
     if(NOVALLEY[material] == 1) {
         iv = 1;
         iaux = 0;

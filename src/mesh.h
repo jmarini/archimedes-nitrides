@@ -82,7 +82,7 @@ typedef struct {
     int num_nodes;
     int num_triangles;
 
-    Node info[NXM + 1][NYM + 1];
+    Node nodes[NXM + 1][NYM + 1];
 
     double coordinates[NXM * NYM][2];
     int triangles[NXM * NYM][3];

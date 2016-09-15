@@ -23,8 +23,8 @@ int mc_build_mesh(Mesh *mesh) {
             mesh->coordinates[index][0] = (double)(i) * dx;
             mesh->coordinates[index][1] = (double)(j) * dy;
 
-            mesh->info[i+1][j+1].i = i+1;
-            mesh->info[i+1][j+1].j = j+1;
+            mesh->nodes[i+1][j+1].i = i+1;
+            mesh->nodes[i+1][j+1].j = j+1;
         }
     }
 
@@ -83,10 +83,10 @@ int mc_save_mesh(Mesh *mesh, char *filename) {
 }
 
 
-Node * mc_node(int i, int j)  { return &(g_mesh->info[i][j]); }
+Node * mc_node(int i, int j)  { return &(g_mesh->nodes[i][j]); }
 
 
-Node * mc_node_s(Index index) { return &(g_mesh->info[index.i][index.j]); }
+Node * mc_node_s(Index index) { return &(g_mesh->nodes[index.i][index.j]); }
 
 
 Vec2 mc_random_location_in_node(Node *node) {
