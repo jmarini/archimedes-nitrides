@@ -53,6 +53,7 @@ typedef struct {
 
     Material *mat;
     int material;
+
     double donor_conc;
     double acceptor_conc;
     double fixed_charge;
@@ -84,7 +85,7 @@ typedef struct {
 
     Node nodes[NXM + 1][NYM + 1];
 
-    double coordinates[NXM * NYM][2];
+    Vec2 coordinates[NXM * NYM];
     int triangles[NXM * NYM][3];
 } Mesh;
 

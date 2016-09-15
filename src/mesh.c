@@ -1,14 +1,11 @@
 #include "mesh.h"
-#include "random.h"
 
 #include <stdio.h>
 
+#include "random.h"
+
 
 int mc_build_mesh(Mesh *mesh) {
-    int i = 0,
-        j = 0,
-        index = 0;
-
     // saving into local variables for readability
     int nx = mesh->nx,
         ny = mesh->ny;
@@ -17,23 +14,22 @@ int mc_build_mesh(Mesh *mesh) {
 
     // definition of mesh node coordinates
     mesh->num_nodes = (nx + 1) * (ny + 1);
-    for(i = 0; i < nx + 1; ++i) {
-        for(j = 0; j < ny + 1; ++j) {
-            index = j * (nx + 1) + i;
-            mesh->coordinates[index][0] = (double)(i) * dx;
-            mesh->coordinates[index][1] = (double)(j) * dy;
+    for(int i = 0; i < nx + 1; ++i) {
+        for(int j = 0; j < ny + 1; ++j) {
+            int index = j * (nx + 1) + i;
 
-            mesh->nodes[i+1][j+1].i = i+1;
-            mesh->nodes[i+1][j+1].j = j+1;
+            mesh->coordinates[index] = (Vec2){.x=(double)(i) * dx,
+                                              .y=(double)(j) * dy};
+            mesh->nodes[i+1][j+1].index = (Index){.i=i+1, .j=j+1};
         }
     }
 
     // definition of mesh triangles
     mesh->num_triangles = 2 * nx * ny;
-    for(i = 0; i < nx; ++i) {
-        for(j = 0; j < ny; ++j) {
+    for(int i = 0; i < nx; ++i) {
+        for(int j = 0; j < ny; ++j) {
             // bottom up triangle
-            index = j * nx + i;
+            int index = j * nx + i;
             mesh->triangles[index][0] =  j      * (nx + 1) + i - 1;
             mesh->triangles[index][1] =  j      * (nx + 1) + i;
             mesh->triangles[index][2] = (j + 1) * (nx + 1) + i;
@@ -66,7 +62,7 @@ int mc_save_mesh(Mesh *mesh, char *filename) {
     fprintf(fp, "%d\n", mesh->num_nodes);
 
     for(i = 0; i< mesh->num_nodes; ++i) {
-        fprintf(fp, "%g %g 0\n", mesh->coordinates[i][0], mesh->coordinates[i][1]);
+        fprintf(fp, "%g %g 0\n", mesh->coordinates[i].x, mesh->coordinates[i].y);
     }
 
     fprintf(fp, "\n");
