@@ -369,7 +369,7 @@ int main(int argc, char *argv[]) {
             calc_absorption_rates(g_materials[i], transistion_rate);
         }
         printf("Scattering rates calculated...\n");
-        MCdevice_config( );
+        MCdevice_config(g_mesh);
         // photoexcite_carriers(g_mesh, 4.0, transistion_rate, GM, P);
         printf("Device configuration complete...\n");
     }
