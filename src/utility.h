@@ -49,7 +49,8 @@ struct {
     int INSULATOR;
     int SCHOTTKY;
     int OHMIC;
-} boundary_t = {.INSULATOR=0, .SCHOTTKY=1, .OHMIC=2};
+    int VACUUM;
+} boundary_t = {.INSULATOR=0, .SCHOTTKY=1, .OHMIC=2, .VACUUM=3};
 
 
 inline int mc_is_boundary_insulator(int direction, int index) {
@@ -64,6 +65,11 @@ inline int mc_is_boundary_schottky(int direction, int index) {
 
 inline int mc_is_boundary_ohmic(int direction, int index) {
     return EDGE[direction][index][0] == boundary_t.OHMIC;
+}
+
+
+inline int mc_is_boundary_vacuum(int direction, int index) {
+    return EDGE[direction][index][0] == boundary_t.VACUUM;
 }
 
 
