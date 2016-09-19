@@ -121,6 +121,18 @@ void drift(Particle *particle, real tau) {
         mc_remove_particle(particle);
         return;
     }
+    else if(particle->x <= 0. && mc_is_boundary_vacuum(direction_t.LEFT, node->j)) {
+        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
+        if(energy >= 0.) { // emitted
+            particle->valley = 9;
+            particle->photoemission_flag = 2;
+        }
+        else { // not emitted, reflect off boundary
+            particle->x  *= -1;
+            particle->kx *= -1;
+        }
+        return;
+    }
 
     // right edge
     // ==========
@@ -133,6 +145,18 @@ void drift(Particle *particle, real tau) {
     // ---Schottky or ohmic contact---
     else if(particle->x >= g_mesh->width && mc_is_boundary_contact(direction_t.RIGHT, node->j)) {
         mc_remove_particle(particle);
+        return;
+    }
+    else if(particle->x >= g_mesh->width && mc_is_boundary_vacuum(direction_t.RIGHT, node->j)) {
+        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
+        if(energy >= 0.) { // emitted
+            particle->valley = 9;
+            particle->photoemission_flag = 2;
+        }
+        else { // not emitted, reflect off boundary
+            particle->x = g_mesh->width - (particle->x - g_mesh->width);
+            particle->kx *= -1.;
+        }
         return;
     }
 
@@ -149,6 +173,18 @@ void drift(Particle *particle, real tau) {
         mc_remove_particle(particle);
         return;
     }
+    else if(particle->y <= 0. && mc_is_boundary_vacuum(direction_t.BOTTOM, node->i)) {
+        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
+        if(energy >= 0.) { // emitted
+            particle->valley = 9;
+            particle->photoemission_flag = 2;
+        }
+        else { // not emitted, reflect off boundary
+            particle->y  *= -1.;
+            particle->ky *= -1.;
+        }
+        return;
+    }
 
     // upper edge
     // ==========
@@ -161,6 +197,18 @@ void drift(Particle *particle, real tau) {
     // ---Schottky or ohmic contact---
     else if(particle->y >= g_mesh->height && mc_is_boundary_contact(direction_t.TOP, node->i)) {
         mc_remove_particle(particle);
+        return;
+    }
+    else if(particle->y >= g_mesh->height && mc_is_boundary_vacuum(direction_t.TOP, node->i)) {
+        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
+        if(energy >= 0.) { // emitted
+            particle->valley = 9;
+            particle->photoemission_flag = 2;
+        }
+        else { // not emitted, reflect off boundary
+            particle->y = g_mesh->height - (particle->y - g_mesh->height);
+            particle->ky *= -1.;
+        }
         return;
     }
 

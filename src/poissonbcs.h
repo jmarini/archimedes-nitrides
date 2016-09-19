@@ -48,7 +48,7 @@ int poisson_boundary_conditions(void) {
         // ===========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.BOTTOM, i)) {
+        if(mc_is_boundary_insulator(direction_t.BOTTOM, i) || mc_is_boundary_vacuum(direction_t.BOTTOM, i)) {
             // if there is no potential on insulator
             g_mesh->nodes[i][1].potential = g_mesh->nodes[i][2].potential;
 
@@ -68,7 +68,7 @@ int poisson_boundary_conditions(void) {
         // ==========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.TOP, i)) {
+        if(mc_is_boundary_insulator(direction_t.TOP, i) || mc_is_boundary_vacuum(direction_t.TOP, i)) {
             // if there is no potential on insulator
             g_mesh->nodes[i][ny + 1].potential = g_mesh->nodes[i][ny    ].potential;
 
@@ -92,7 +92,7 @@ int poisson_boundary_conditions(void) {
         // =========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.LEFT, j)) {
+        if(mc_is_boundary_insulator(direction_t.LEFT, j) || mc_is_boundary_vacuum(direction_t.LEFT, j)) {
             g_mesh->nodes[1][j].potential = g_mesh->nodes[2][j].potential;
 
             // if there is potential on the insulator
@@ -111,7 +111,7 @@ int poisson_boundary_conditions(void) {
         // ==========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.RIGHT, j)) {
+        if(mc_is_boundary_insulator(direction_t.RIGHT, j) || mc_is_boundary_vacuum(direction_t.RIGHT, j)) {
             g_mesh->nodes[nx + 1][j].potential = g_mesh->nodes[nx - 1][j].potential;
 
             // if there is potential on the insulator

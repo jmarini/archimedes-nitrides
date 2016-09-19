@@ -1,4 +1,6 @@
 #include "particle.h"
+
+#include "configuration.h"
 #include "vec.h"
 
 
@@ -27,4 +29,9 @@ Index mc_particle_edge_coords(Particle *particle) {
 
 Node * mc_get_particle_node(Particle *particle) {
     return mc_node_s(mc_particle_coords(particle));
+}
+
+
+long long int mc_next_particle_id( ) {
+    return g_config->next_particle_id++;
 }

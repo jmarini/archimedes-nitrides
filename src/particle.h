@@ -44,6 +44,11 @@ typedef struct {
     real t;      // time
     real x;      // real coordinates
     real y;
+
+    int photoemission_flag; // flag tracking state of electron through photoemission
+                            //   0: normal electron (default)
+                            //   1: photoexcited carrier
+                            //   2: photoemitted carrier
 } Particle;
 
 
@@ -61,6 +66,11 @@ typedef struct {
     int j;
     real vx;        // real-space velocity
     real vy;
+
+    int photoemission_flag; // flag tracking state of electron through photoemission
+                            //   0: normal electron (default)
+                            //   1: photoexcited carrier
+                            //   2: photoemitted carrier
 } particle_info_t;
 
 
@@ -90,5 +100,7 @@ Index mc_particle_coords(Particle *particle);
 Index mc_particle_edge_coords(Particle *particle);
 
 Node * mc_get_particle_node(Particle *particle);
+
+long long int mc_next_particle_id( );
 
 #endif

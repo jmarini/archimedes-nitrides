@@ -52,16 +52,16 @@ typedef struct {
 typedef struct {
     int id;
 
-    int num_valleys;
-    double Eg;
+    double Eg;       // band gap [eV]
+    double affinity; // electron affinity [eV]
     Band_Info cb;
     Band_Info vb;
 
     int  zscatter[MAX_VALLEYS][MAX_VALLEYS];
 
     double abs_correction; // absorption coefficient correction
-    double eps_static;
-    double eps_hf;
+    double eps_static;     // static dielectric constant (relative)
+    double eps_hf;         // high frequency dielectric constant (relative)
     double hwo[6];
     double dtk[6];
     int    zf[6];
@@ -70,8 +70,6 @@ typedef struct {
     double ul;
     double lattice_const;
     double kav;
-
-    // precomputed constants
 
 } Material;
 

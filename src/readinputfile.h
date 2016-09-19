@@ -605,8 +605,8 @@ Read_Input_File(void)
 // Definition of an eventual contact
   else if(strcmp(s,"CONTACT")==0){
     char pos[80],kind[80];
-    real ipos,fpos,delt,dens,denshole;
-    real potential;
+    real ipos,fpos,delt,dens = 0.,denshole = 0.;
+    real potential = 0.;
     int i,j,k;
 // read and check the "qualitative" position of the contact
     fscanf(fp,"%s",pos);
@@ -638,18 +638,21 @@ Read_Input_File(void)
     if(ipos>=fpos){
       printf("%s: not valid position of contact\n",progname);
       exit(EXIT_FAILURE);
-    } 
-// read and check the kind of contact
-// It can be : Insulator, Schottky or Ohmic.
-    fscanf(fp,"%s",kind);
-    if(strcmp(kind,"INSULATOR")!=0 && strcmp(kind,"SCHOTTKY")!=0
-       && strcmp(kind,"OHMIC")!=0){
-      printf("%s: specified physical contact unknown\n",progname);
-      exit(EXIT_FAILURE);
     }
-    if(strcmp(kind,"INSULATOR")==0) k=0;
-    if(strcmp(kind,"SCHOTTKY")==0) k=1;
-    if(strcmp(kind,"OHMIC")==0) k=2;
+// read and check the kind of contact
+// It can be : Insulator, Schottky, Ohmic, Vacuum.
+    fscanf(fp,"%s",kind);
+    if(strcmp(kind,"INSULATOR") != 0 &&
+       strcmp(kind,"SCHOTTKY") != 0 &&
+       strcmp(kind,"OHMIC") != 0 &&
+       strcmp(kind, "VACUUM") != 0) {
+        printf("%s: specified physical contact unknown\n", progname);
+        exit(EXIT_FAILURE);
+    }
+    if(strcmp(kind, "INSULATOR") ==0) { k = 0; }
+    if(strcmp(kind, "SCHOTTKY") ==0)  { k = 1; }
+    if(strcmp(kind, "OHMIC") ==0)     { k = 2; }
+    if(strcmp(kind, "VACUUM") ==0)    { k = 3; }
 // read the voltage applied to the contact
     fscanf(fp,"%lf",&num);
     potential=num;
@@ -677,12 +680,11 @@ Read_Input_File(void)
 // ref = 0 INSULATOR
 // ref = 1 SCHOTTKY
 // ref = 2 OHMIC
+// ref = 3 VACUUM
 // k = 1
 // ref is the applied potential reference
 // k = 2
 // ref is the density of electron reservoirs at the contact
-// k = 3
-// ref is the density of hole reservoirs at the contact
     ini=(int)(ipos/delt)+1;
     fin=(int)(fpos/delt)+2;
     for(j=ini;j<=fin;j++){
@@ -702,11 +704,18 @@ Read_Input_File(void)
           || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)
          EDGE[i][j][3]=denshole;
       }
+      else if(k == 3) {
+        EDGE[i][j][1] = potential;
+        EDGE[i][j][2] = 0.;
+        EDGE[i][j][3] = 0.;
+      }
     }
 
 // Then everything is ok in the contact definition...
-    if(k!=2)printf("CONTACT %s %g %g %s %g ---> Ok\n",
+    if(k!=2) {
+        printf("CONTACT %s %g %g %s %g ---> Ok\n",
             pos,ipos,fpos,kind,potential);
+    }
     else if(k==2){
      printf("CONTACT %s %g %g %s %g %g ",
             pos,ipos,fpos,kind,potential,dens);

@@ -110,6 +110,9 @@ g_materials[INXGAXXAS].vb.num_valleys = 1;
 g_materials[GAN].vb.num_valleys       = 3;
 
 
+g_materials[GAN].affinity = 3.18;
+
+
 // Number of equivalent valleys
 // Scattering from first index to second index
 // Repeated indexes mean scattering between equivalent valleys

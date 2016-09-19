@@ -119,7 +119,8 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
                       .y=loc.y,
                       .kx=kx,
                       .ky=ky,
-                      .kz=kz};
+                      .kz=kz,
+                      .photoemission_flag=1};
 }
 
 
