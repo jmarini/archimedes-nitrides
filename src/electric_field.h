@@ -67,11 +67,12 @@ int electric_field(void) {
         // exclude edge nodes in iteration
         for(int j = 2; j <= ny; ++j) {
             for(int i = 2; i <= nx; ++i) {
-                real dx2 = 1. / (dx * dx),
-                     dy2 = 1. / (dy * dy);
+                real dx2 = dx * dx,
+                     dy2 = dy * dy;
                 Node *node = mc_node(i, j);
                 real kappa = node->mat->eps_static * EPS0 / Q;
-                real deltat = factor * 0.5 / (kappa * (dx2 + dy2));
+                real deltat = (factor / kappa) * (dx2 * dy2)
+                            / ((2 * (dx2 + dy2)) + dx2 * dy2 * g_config->screening_length);
                 real rho = (node->e.density - node->donor_conc)
                          - (node->h.density - node->acceptor_conc) + node->fixed_charge; // charge neutrality eqn.
 
@@ -82,7 +83,7 @@ int electric_field(void) {
                 real neighbors_y = potential[i  ][j+1] - 2. * potential[i][j] + potential[i  ][j-1];
                 node->potential = potential[i][j]
                                 - deltat * rho
-                                + deltat * kappa * (neighbors_x * dx2 + neighbors_y * dy2);
+                                + deltat * kappa * (neighbors_x / dx2 + neighbors_y / dy2);
             }
         }
     }

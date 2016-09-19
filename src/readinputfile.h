@@ -61,6 +61,7 @@ Read_Input_File(void)
     g_config->dt = 0.001e-12;
     g_config->tauw = 0.4e-12;
     g_config->faraday_flag = OFF;
+    g_config->screening_length = 0.;
     g_config->impurity_conc = 1.0e20; // cimp
     g_config->lattice_temp = 300.0;
     g_config->particles_per_cell = 2500; // np1 aka statistical weight
@@ -924,6 +925,11 @@ Read_Input_File(void)
   else if(strcmp(s,"SAVEMESH")==0){
    g_config->save_mesh = ON;
    printf("SAVE THE MESH --> Ok\n");
+  }
+  else if(strcmp(s, "SCREENING_LENGTH") == 0) {
+      fscanf(fp, "%lf", &num);
+      g_config->screening_length = num;
+      printf("SCREENING LENGTH = %g ---> Ok\n", g_config->screening_length);
   }
 // elseif(strcmp(s,"")==0){
  }while(!feof(fp));

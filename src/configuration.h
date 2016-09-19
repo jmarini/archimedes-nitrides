@@ -50,6 +50,7 @@ typedef struct {
     double qep_gamma;
 
     int faraday_flag;
+    double screening_length;
 
     double lattice_temp;
     double impurity_conc;
