@@ -966,9 +966,12 @@ Read_Input_File(void)
                Nd = 0.,
                 V = 0.,
                 n = 0.,
-                p = 0.;
+                p = 0.,
+                efieldX = 0.,
+                efieldY = 0.;
         for(int i = 1; i <= g_mesh->nx + 1; ++i){
-            fscanf(input, "%d %lf %lf %lf %lf %lf %lf", &id, &x, &Na, &Nd, &V, &n, &p);
+            fscanf(input, "%d %lf %lf %lf %lf %lf %lf %lf %lf",
+                   &id, &x, &Na, &Nd, &V, &n, &p, &efieldX, &efieldY);
             for(int j = 1; j <= g_mesh->ny + 1; ++j) {
                 g_mesh->nodes[i][j].acceptor_conc = Na;
                 g_mesh->nodes[i][j].h.density     = p;
@@ -976,6 +979,8 @@ Read_Input_File(void)
                 g_mesh->nodes[i][j].e.density     = n;
                 g_mesh->nodes[i][j].e.energy      = n * 1.5 * KB * g_config->lattice_temp;
                 g_mesh->nodes[i][j].potential     = V;
+                g_mesh->nodes[i][j].efield.x      = efieldX;
+                g_mesh->nodes[i][j].efield.y      = 0.;
             }
         }
         fclose(input);
