@@ -372,7 +372,8 @@ int main(int argc, char *argv[]) {
         printf("Scattering rates calculated...\n");
         MCdevice_config(g_mesh);
         if(g_config->photoexcitation_flag == ON) {
-          photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM, P);
+            int num = photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM, P);
+            printf("Photoexcited %d carriers\n", num);
         }
         printf("Device configuration complete...\n");
     }

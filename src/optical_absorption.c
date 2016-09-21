@@ -152,7 +152,7 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
         } // i
     } // j
 
+    int num_photoexcited = p - g_config->num_particles;
     g_config->num_particles = p;
-    g_config->carriers_per_superparticle = g_config->max_doping * mesh->dx * mesh->dy / g_config->particles_per_cell;
-    return p;
+    return num_photoexcited;
 }

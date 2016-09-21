@@ -991,6 +991,10 @@ Read_Input_File(void)
         g_config->max_doping = g_mesh->nodes[i][j].donor_conc;
     }
    }
+ g_config->carriers_per_superparticle = g_config->max_doping * g_mesh->dx * g_mesh->dy / g_config->particles_per_cell;
+ printf("Max Doping: %.2e\n"
+        "Carriers per Superparticle: %.2e\n",
+        g_config->max_doping, g_config->carriers_per_superparticle);
  printf("=========================\n");
 }
 

@@ -39,9 +39,6 @@ void MCdevice_config(Mesh *mesh) {
     real dx = mesh->dx,
          dy = mesh->dy;
 
-    // Number of carriers per particle
-    g_config->carriers_per_superparticle = g_config->max_doping * dx * dy / g_config->particles_per_cell;
-
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j){
             Node *node = mc_node(i, j);
