@@ -935,11 +935,20 @@ Read_Input_File(void)
    g_config->save_mesh = ON;
    printf("SAVE THE MESH --> Ok\n");
   }
-  else if(strcmp(s, "SCREENING_LENGTH") == 0) {
-      fscanf(fp, "%lf", &num);
-      g_config->screening_length = num;
-      printf("SCREENING LENGTH = %g ---> Ok\n", g_config->screening_length);
-  }
+    else if(strcmp(s, "SCREENING_LENGTH") == 0) {
+        fscanf(fp, "%lf", &num);
+        g_config->screening_length = num;
+        printf("SCREENING LENGTH = %g ---> Ok\n", g_config->screening_length);
+    }
+    else if(strcmp(s, "FIXED_CHARGE") == 0) {
+        int index = 0;
+        fscanf(fp, "%d", &index);
+        fscanf(fp, "%lf", &num);
+        for(int j = 1; j <= g_mesh->nx + 1; ++j) {
+            g_mesh->nodes[index][j].fixed_charge = num;
+        }
+        printf("FIXED CHARGE %d %g ---> Ok\n", index, num);
+    }
 // elseif(strcmp(s,"")==0){
  }while(!feof(fp));
 // computation of the maximum doping density
