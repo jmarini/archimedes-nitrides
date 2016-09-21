@@ -42,7 +42,7 @@ int electric_field(void) {
         ny = g_mesh->ny;
     real dx = g_mesh->dx,
          dy = g_mesh->dy;
-    real factor = 0.9;
+    real factor = 0.9; // successive over-relaxation factor
 
     if(poisson_boundary_conditions( ) != 0) {
         printf("Error: Unknown error calculating Poisson boundary conditions.\n");
@@ -50,21 +50,21 @@ int electric_field(void) {
     }
 
     real potential[NXM + 1][NYM + 1];
+    // TODO: stop iteration based on residual OR iteration max - should lead to faster sim
     for(int n = 0; n < POISSONITMAX; ++n) {
         if(poisson_boundary_conditions( ) != 0) {
             printf("Error: Unknown error calculating Poisson boundary conditions.\n");
             return 1;
         }
 
-        // copy potential to temporary variable to avoid issues when looking
-        //   at neighbors
+        // potential from previous iteration
         for(int i = 1; i <= nx + 1; ++i) {
             for(int j = 1; j <= ny + 1; ++j) {
                 potential[i][j] = g_mesh->nodes[i][j].potential;
             }
         }
 
-        // exclude edge nodes in iteration
+        // exclude edge nodes
         for(int j = 2; j <= ny; ++j) {
             for(int i = 2; i <= nx; ++i) {
                 real dx2 = dx * dx,
