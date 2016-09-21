@@ -62,6 +62,8 @@ Read_Input_File(void)
     g_config->tauw = 0.4e-12;
     g_config->faraday_flag = OFF;
     g_config->screening_length = 0.;
+    g_config->photon_energy = 0.;
+    g_config->photoexcitation_flag = OFF;
     g_config->impurity_conc = 1.0e20; // cimp
     g_config->lattice_temp = 300.0;
     g_config->particles_per_cell = 2500; // np1 aka statistical weight
@@ -939,6 +941,12 @@ Read_Input_File(void)
         fscanf(fp, "%lf", &num);
         g_config->screening_length = num;
         printf("SCREENING LENGTH = %g ---> Ok\n", g_config->screening_length);
+    }
+    else if(strcmp(s, "PHOTON") == 0) {
+        fscanf(fp, "%lf", &num);
+        g_config->photon_energy = num;
+        g_config->photoexcitation_flag = ON;
+        printf("PHOTON ENERGY = %g ---> Ok\n", g_config->photon_energy);
     }
     else if(strcmp(s, "FIXED_CHARGE") == 0) {
         int index = 0;

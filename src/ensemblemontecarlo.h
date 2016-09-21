@@ -137,6 +137,9 @@ void EMC(void) {
 
         if(mc_does_particle_exist(particle)) { ++n; }
         else {
+            if(particle->photoemission_flag == 2) {
+                printf("Photoemitted particle %lld\n", particle->id);
+            }
             P[n] = P[g_config->num_particles];
             --g_config->num_particles;
         }

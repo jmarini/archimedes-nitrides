@@ -122,10 +122,12 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x <= 0. && mc_is_boundary_vacuum(direction_t.LEFT, node->j)) {
-        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
-        if(energy >= 0.) { // emitted
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
+        double energy = node->mat->affinity - e2;
+        if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
+            printf("%lld emitted left: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
         }
         else { // not emitted, reflect off boundary
             particle->x  *= -1;
@@ -148,10 +150,12 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x >= g_mesh->width && mc_is_boundary_vacuum(direction_t.RIGHT, node->j)) {
-        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
-        if(energy >= 0.) { // emitted
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
+        double energy = node->mat->affinity - e2;
+        if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
+            printf("%lld emitted right: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
         }
         else { // not emitted, reflect off boundary
             particle->x = g_mesh->width - (particle->x - g_mesh->width);
@@ -174,10 +178,12 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y <= 0. && mc_is_boundary_vacuum(direction_t.BOTTOM, node->i)) {
-        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
-        if(energy >= 0.) { // emitted
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
+        double energy = node->mat->affinity - e2;
+        if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
+            printf("%lld emitted bottom: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
         }
         else { // not emitted, reflect off boundary
             particle->y  *= -1.;
@@ -200,10 +206,12 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y >= g_mesh->height && mc_is_boundary_vacuum(direction_t.TOP, node->i)) {
-        double energy = node->mat->affinity - (mc_particle_energy(particle) + node->mat->cb.emin[particle->valley]);
-        if(energy >= 0.) { // emitted
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
+        double energy = node->mat->affinity - e2;
+        if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
+            printf("%lld emitted top: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
         }
         else { // not emitted, reflect off boundary
             particle->y = g_mesh->height - (particle->y - g_mesh->height);

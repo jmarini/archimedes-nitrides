@@ -130,7 +130,7 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
                          double transistion_rate[NOAMTIA][DIME][3],
                          double total_scattering_rate[NOAMTIA+1],
                          Particle particles[NPMAX+1]) {
-    int p = 0;
+    int p = g_config->num_particles;
 
     for(int j = 1; j <= mesh->ny + 1; ++j) {
         for(int i = 1; i <= mesh->nx + 1; ++i) {

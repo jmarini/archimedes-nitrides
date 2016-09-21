@@ -370,10 +370,14 @@ int main(int argc, char *argv[]) {
         }
         printf("Scattering rates calculated...\n");
         MCdevice_config(g_mesh);
-        // photoexcite_carriers(g_mesh, 4.0, transistion_rate, GM, P);
+        if(g_config->photoexcitation_flag == ON) {
+          photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM, P);
+        }
         printf("Device configuration complete...\n");
     }
     printf("\n");
+
+    int before = g_config->num_particles;
 
 
     // FILE *fp = fopen("photoexcited_particles.csv", "w");
@@ -395,6 +399,12 @@ int main(int argc, char *argv[]) {
     // ========================
     SaveOutputFiles(g_config->output_format, 0);
     printf("\nFinal Output has been saved\n");
+
+    int after = g_config->num_particles;
+    if(g_config->photoexcitation_flag == ON) {
+        printf("%d -> %d\n", before, after);
+        printf("%d (%lf%%) Particles emitted\n", before - after, 100.0 * (double)(before - after) / (double)before);
+    }
 
     binarytime=time(NULL);
     nowtm=localtime(&binarytime);

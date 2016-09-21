@@ -49,6 +49,9 @@ typedef struct {
     double qep_alpha;
     double qep_gamma;
 
+    int photoexcitation_flag;
+    double photon_energy;
+
     int faraday_flag;
     double screening_length;
 
