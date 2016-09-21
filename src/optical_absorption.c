@@ -63,8 +63,9 @@ int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy) {
            xmax = mesh->dx * (double)(node->i);
 
     double alpha = absorption_coefficient(*(node->mat), photon_energy);
+    double n = 1e25 * mesh->dx * mesh->dy / g_config->carriers_per_superparticle + 0.5;
 
-    return (int)(g_config->particles_per_cell * 10 * (exp(-alpha * xmin) - exp(-alpha * xmax)));
+    return (int)(n * (exp(-alpha * xmin) - exp(-alpha * xmax)));
 }
 
 
