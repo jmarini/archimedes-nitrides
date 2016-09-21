@@ -75,6 +75,7 @@ Read_Input_File(void)
     g_config->scattering_output = OFF;
     g_config->output_format = GNUPLOTFORMAT;
     g_config->load_initial_data = OFF; // leid_flag
+    g_config->tcad_data = OFF;
     g_config->num_particles = 0;
     g_config->next_particle_id = 0;
 
@@ -956,6 +957,29 @@ Read_Input_File(void)
             g_mesh->nodes[index][j].fixed_charge = num;
         }
         printf("FIXED CHARGE %d %g ---> Ok\n", index, num);
+    }
+    else if(strcmp(s, "TCAD") == 0) {
+        FILE *input = fopen("tcad.csv", "r");
+        int id = 0;
+        double x  = 0.,
+               Na = 0.,
+               Nd = 0.,
+                V = 0.,
+                n = 0.,
+                p = 0.;
+        for(int i = 1; i <= g_mesh->nx + 1; ++i){
+            fscanf(input, "%d %lf %lf %lf %lf %lf %lf", &id, &x, &Na, &Nd, &V, &n, &p);
+            for(int j = 1; j <= g_mesh->ny + 1; ++j) {
+                g_mesh->nodes[i][j].acceptor_conc = Na;
+                g_mesh->nodes[i][j].h.density     = p;
+                g_mesh->nodes[i][j].donor_conc    = Nd;
+                g_mesh->nodes[i][j].e.density     = n;
+                g_mesh->nodes[i][j].e.energy      = n * 1.5 * KB * g_config->lattice_temp;
+                g_mesh->nodes[i][j].potential     = V;
+            }
+        }
+        fclose(input);
+        g_config->tcad_data = ON;
     }
 // elseif(strcmp(s,"")==0){
  }while(!feof(fp));

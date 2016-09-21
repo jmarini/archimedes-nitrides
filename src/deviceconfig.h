@@ -47,8 +47,11 @@ void MCdevice_config(Mesh *mesh) {
             Node *node = mc_node(i, j);
             int material = node->material;
             int np = 0; // number of superparticles in the (i,j)-th cell
-            if(g_config->load_initial_data == 1) {
+            if(g_config->load_initial_data == ON) {
                 np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_superparticle + 0.5);
+            }
+            else if(g_config->tcad_data == ON) {
+                np = (int)(node->e.density * dx * dy / g_config->carriers_per_superparticle + 0.5);
             }
             else {
                 np = (int)(node->donor_conc * dx * dy / g_config->carriers_per_superparticle + 0.5);
@@ -71,17 +74,9 @@ void MCdevice_config(Mesh *mesh) {
                     // in the L-valley.
                     int valley = 1;
                     double kf = 0.;
-                    if(g_config->load_initial_data == 0) {
-                        double tmp = 1.5 * BKTQ * log(rnd());;
-                        valley = 1;
-                        if(node->mat->cb.num_valleys >= 2 && rnd() > 0.8) {
-                            valley = 2; // 80% of particles in 1st valley, 20% in 2nd valley
-                        }
-                        kf = node->mat->cb.smh[valley]
-                           * sqrt(-tmp * (1. - node->mat->cb.alpha[valley] * tmp));
-                    }
+
                     // The following is in case of precendtly loaded initial data.
-                    else if(g_config->load_initial_data == 1) {
+                    if(g_config->load_initial_data == ON) {
                         valley = 1;
                         // In this case c1 represents the mean electron energy
                         // loaded from precedent simulations and have nothing to
@@ -99,6 +94,15 @@ void MCdevice_config(Mesh *mesh) {
                             }
                         }
                     }
+                    else {
+                        double tmp = 1.5 * BKTQ * log(rnd());;
+                        valley = 1;
+                        if(node->mat->cb.num_valleys >= 2 && rnd() > 0.8) {
+                            valley = 2; // 80% of particles in 1st valley, 20% in 2nd valley
+                        }
+                        kf = node->mat->cb.smh[valley]
+                           * sqrt(-tmp * (1. - node->mat->cb.alpha[valley] * tmp));
+                    }
 
                     double c3 = 1. - 2. * rnd();
                     double c4 = sqrt(1. - c3 * c3);
@@ -114,6 +118,7 @@ void MCdevice_config(Mesh *mesh) {
                     P[n].x  = dx * (rnd() + (double)(i) - 1.5);
                     P[n].y  = dy * (rnd() + (double)(j) - 1.5);
                     P[n].photoemission_flag = 0;
+
                     if(i == 1) { P[n].x = dx * 0.5 * rnd(); }
                     if(j == 1) { P[n].y = dy * 0.5 * rnd(); }
                     if(i == nx + 1) { P[n].x = mesh->width  - dx * 0.5 * rnd(); }

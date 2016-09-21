@@ -70,6 +70,7 @@ typedef struct {
     int scattering_output;
     int output_format;
     int load_initial_data;
+    int tcad_data;
 
     // simulation timing parameters
     double time;
