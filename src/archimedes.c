@@ -215,6 +215,7 @@ extern inline int mc_is_boundary_insulator(int direction, int index);
 extern inline int mc_is_boundary_schottky(int direction, int index);
 extern inline int mc_is_boundary_ohmic(int direction, int index);
 extern inline int mc_is_boundary_contact(int direction, int index);
+extern inline int mc_is_boundary_vacuum(int direction, int index);
 extern inline char* mc_material_name(int material);
 extern inline char* mc_band_model_name(int model);
 particle_info_t mc_calculate_particle_info(Particle *p);
