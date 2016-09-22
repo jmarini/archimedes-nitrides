@@ -416,6 +416,9 @@ void calc_scattering_rates(int material) {
   SMH[material][0]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
   HHM[material][0]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
   HM[material][0]=HBAR/(MSTAR[material][1]*M);
+  SMH[material][1]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
+  HHM[material][1]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
+  HM[material][1]=HBAR/(MSTAR[material][1]*M);
 // Density of states
   real dos=pow((sqrt(2.*MSTAR[material][1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
 // constant for the acoustic phonon
