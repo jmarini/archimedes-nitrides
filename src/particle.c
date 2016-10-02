@@ -1,6 +1,7 @@
 #include "particle.h"
 
 #include "configuration.h"
+#include "global_defines.h"
 #include "vec.h"
 
 
@@ -34,4 +35,21 @@ Node * mc_get_particle_node(Particle *particle) {
 
 long long int mc_next_particle_id( ) {
     return g_config->next_particle_id++;
+}
+
+
+double mc_particle_energy(Particle *particle) {
+    Node *node = mc_get_particle_node(particle);
+
+    if(g_config->conduction_band == PARABOLIC) {
+        return node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
+    }
+    else if(g_config->conduction_band == KANE) {
+        real alpha = node->mat->cb.alpha[particle->valley];
+        real gamma = node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
+        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
+    }
+    else {
+        return -1.0;
+    }
 }

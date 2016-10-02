@@ -224,20 +224,11 @@ void scatter(Particle *particle, int material)
         ksquared = mc_particle_ksquared(particle);
         ki = sqrt(ksquared);
 
-        if(g_config->conduction_band == KANE) {
-            thesquareroot = sqrt(1. + 4. * alphaK[material][particle->valley]
-                                         * HHM[material][particle->valley]
-                                         * ksquared);
-            superparticle_energy = (thesquareroot - 1.)
-                                 / (2. * alphaK[material][particle->valley]);
-        }
-        if(g_config->conduction_band == PARABOLIC) {
-            superparticle_energy = HHM[material][particle->valley] * ksquared;
-        }
+        superparticle_energy = mc_particle_energy(particle);
 
         if(superparticle_energy <= 0.) { return; }
-        ie=((int)(superparticle_energy / DE)) + 1;
-        if(ie > DIME) { ie=DIME; }
+        ie = ((int)(superparticle_energy / DE)) + 1;
+        if(ie > DIME) { ie = DIME; }
 
 
         // ===================================================

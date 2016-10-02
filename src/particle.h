@@ -84,17 +84,19 @@ inline void mc_remove_particle(Particle *particle) {
 }
 
 
-inline real mc_particle_ksquared(Particle *particle) {
+inline double mc_particle_ksquared(Particle *particle) {
     return (particle->kx * particle->kx +
             particle->ky * particle->ky +
             particle->kz * particle->kz);
 }
 
 
-inline real mc_particle_k(Particle *particle) {
+inline double mc_particle_k(Particle *particle) {
     return sqrt(mc_particle_ksquared(particle));
 }
 
+
+double mc_particle_energy(Particle *particle);
 
 Index mc_particle_coords(Particle *particle);
 Index mc_particle_edge_coords(Particle *particle);

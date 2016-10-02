@@ -79,23 +79,6 @@ inline int mc_is_boundary_contact(int direction, int index) {
 }
 
 
-real mc_particle_energy(Particle *particle) {
-    Node *node = mc_get_particle_node(particle);
-
-    if(g_config->conduction_band == PARABOLIC) {
-        return node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
-    }
-    else if(g_config->conduction_band == KANE) {
-        real alpha = node->mat->cb.alpha[particle->valley];
-        real gamma = node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
-        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
-    }
-    else {
-        return -1.0;
-    }
-}
-
-
 inline char* mc_material_name(int material) {
     switch(material) {
         case iSIO2: return "iSIO2";
