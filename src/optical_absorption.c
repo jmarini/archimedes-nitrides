@@ -110,7 +110,7 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
     double kx = kf * cs,
            ky = kf * sn * cos(fai),
            kz = kf * sn * sin(fai);
-    int id = g_config->next_particle_id++;
+    long long int id = mc_next_particle_id( );
     double time = -log(rnd()) / total_scattering_rate[node->material];
 
     return (Particle){.id=id,

@@ -107,7 +107,7 @@ inline Particle creation(int i, real t, int edge) {
     if(edge == direction_t.TOP)   { ky *= -1.; }
     if(edge == direction_t.RIGHT) { kx *= -1.; }
 
-    int id = g_config->next_particle_id++;
+    long long int id = mc_next_particle_id( );
 
     return (Particle){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y, .photoemission_flag=0};
 }

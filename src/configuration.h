@@ -33,7 +33,6 @@ typedef struct {
 
     // particle info
     long long int num_particles;
-    long long int next_particle_id;
     double carriers_per_superparticle;
 
     // scattering mechanism flags

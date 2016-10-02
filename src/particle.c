@@ -34,7 +34,8 @@ Node * mc_get_particle_node(Particle *particle) {
 
 
 long long int mc_next_particle_id( ) {
-    return g_config->next_particle_id++;
+    static long long int next_particle_id = 0;
+    return next_particle_id++;
 }
 
 

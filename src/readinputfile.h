@@ -77,7 +77,6 @@ Read_Input_File(void)
     g_config->load_initial_data = OFF; // leid_flag
     g_config->tcad_data = OFF;
     g_config->num_particles = 0;
-    g_config->next_particle_id = 0;
 
     g_mesh->nx = NXM - 1;
     g_mesh->ny = NYM - 1;

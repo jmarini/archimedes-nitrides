@@ -106,7 +106,7 @@ void MCdevice_config(Mesh *mesh) {
                     double c5 = 2. * PI * rnd();
                     double c6 = sin(c5);
                     double c7 = cos(c5);
-                    P[n].id = g_config->next_particle_id++;
+                    P[n].id = mc_next_particle_id( );
                     P[n].valley = valley;
                     P[n].kx = kf * c3 * c6;
                     P[n].ky = kf * c4 * c6;
