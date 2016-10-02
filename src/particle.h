@@ -36,14 +36,16 @@
 
 
 typedef struct {
-    long long int id;      // unique identifier used to track particle
-    int valley;  // number id of the valley the particle is in
-    real kx;     // momentum coordinates - relative to valley minimum
-    real ky;
-    real kz;
-    real t;      // time
-    real x;      // real coordinates
-    real y;
+    long long int id;   // unique identifier used to track particle
+    int valley;         // number id of the valley the particle is in
+    double kx;          // momentum coordinates - relative to valley minimum
+    double ky;
+    double kz;
+    double t;           // time
+    union {             // position of the particle
+        struct Vec2;    //   - provides particle.x/y
+        Vec2 position;  //   - provides particle.position
+    };
 
     int photoemission_flag; // flag tracking state of electron through photoemission
                             //   0: normal electron (default)
