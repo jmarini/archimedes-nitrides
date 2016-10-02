@@ -98,6 +98,8 @@ inline double mc_particle_k(Particle *particle) {
 }
 
 
+int mc_calculate_isotropic_k(Particle *particle, double new_energy);
+
 double mc_particle_energy(Particle *particle);
 
 Index mc_particle_coords(Particle *particle);

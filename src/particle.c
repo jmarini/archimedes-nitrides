@@ -1,7 +1,9 @@
 #include "particle.h"
 
 #include "configuration.h"
+#include "constants.h"
 #include "global_defines.h"
+#include "random.h"
 #include "vec.h"
 
 
@@ -53,4 +55,28 @@ double mc_particle_energy(Particle *particle) {
     else {
         return -1.0;
     }
+}
+
+
+int mc_calculate_isotropic_k(Particle *particle, double new_energy) {
+    double k = 0.;
+    Node *node = mc_get_particle_node(particle);
+    if(g_config->conduction_band == KANE) {
+        k = node->mat->cb.smh[particle->valley]
+          * sqrt(new_energy * (1. + node->mat->cb.alpha[particle->valley] * new_energy));
+    }
+    else if(g_config->conduction_band == PARABOLIC) {
+        k = node->mat->cb.smh[particle->valley] * sqrt(new_energy);
+    }
+    else { return 0; }
+
+    double cs  = 1. - 2. * rnd( );
+    double sn  = sqrt(1. - cs * cs);
+    double fai = 2. * PI * rnd( );
+
+    particle->kx = k * cs;
+    particle->ky = k * sn * cos(fai);
+    particle->kz = k * sn * sin(fai);
+
+    return 1;
 }
