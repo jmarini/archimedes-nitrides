@@ -14,13 +14,13 @@ archimedes_SOURCES = \
 	materials/Silicon.h \
 	mep/constants.h \
 	mep/HMEPbcs.h \
-	mep/Hole_bcs.h \
+	mep/hole_bcs.h \
 	mep/MEP_interpolation.h \
 	mep/ParabMEP2D.h \
 	mep/electron_relaxation.h \
 	mep/extrema.h \
 	mep/hole_relaxation.h \
-	mep/holemep2d.h \
+	mep/hole_mep.h \
 	mep/mm.h \
 	mep/mm2.h \
 	mep/sign.h \

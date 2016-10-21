@@ -172,12 +172,12 @@ FILE *fp;
 static char *progname;
 
 #include "mep/HMEPbcs.h"
-#include "mep/Hole_bcs.h"
 #include "mep/MEP_interpolation.h"
 #include "mep/ParabMEP2D.h"
 #include "mep/electron_relaxation.h"
+#include "mep/hole_bcs.h"
 #include "mep/hole_relaxation.h"
-#include "mep/holemep2d.h"
+#include "mep/hole_mep.h"
 
 #include "utility.h"
 #include "poissonbcs.h"
