@@ -58,6 +58,35 @@ double mc_particle_energy(Particle *particle) {
 }
 
 
+double mc_particle_norm_energy(Particle *particle, int axis) {
+    Node *node = mc_get_particle_node(particle);
+
+    double ksquared = 0.;
+    switch(axis) {
+        case 0: // x
+            ksquared = particle->kx * particle->kx; break;
+        case 1: // y
+            ksquared = particle->ky * particle->ky; break;
+        case 2: // z
+            ksquared = particle->kz * particle->kz; break;
+        default:
+            ksquared = mc_particle_ksquared(particle);
+    }
+
+    if(g_config->conduction_band == PARABOLIC) {
+        return node->mat->cb.hhm[particle->valley] * ksquared;
+    }
+    else if(g_config->conduction_band == KANE) {
+        real alpha = node->mat->cb.alpha[particle->valley];
+        real gamma = node->mat->cb.hhm[particle->valley] * ksquared;
+        return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
+    }
+    else {
+        return -1.0;
+    }
+}
+
+
 int mc_calculate_isotropic_k(Particle *particle, double new_energy) {
     double k = 0.;
     Node *node = mc_get_particle_node(particle);
