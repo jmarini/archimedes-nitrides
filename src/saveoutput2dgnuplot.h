@@ -162,26 +162,26 @@ void SaveOutput2DGNUPLOT(int je) {
 
   // Particle Information
   // ====================
-  fprintf(vo, "index id valley kx ky kz energy t x y i j vx vy\n");
-  for(i = 1; i <= g_config->num_particles; ++i) {
-      // print all particle info
-      particle_info_t *info = &particle_info[i];
-      fprintf(vo, "%d %lld %d %g %g %g %g %g %g %g %d %d %g %g\n",
-              i,
-              info->id,
-              info->valley,
-              info->kx,
-              info->ky,
-              info->kz,
-              info->energy,
-              info->t,
-              info->x,
-              info->y,
-              info->i,
-              info->j,
-              info->vx,
-              info->vy);
-  }
+  // fprintf(vo, "index id valley kx ky kz energy t x y i j vx vy\n");
+  // for(i = 1; i <= g_config->num_particles; ++i) {
+  //     // print all particle info
+  //     particle_info_t *info = &particle_info[i];
+  //     fprintf(vo, "%d %lld %d %g %g %g %g %g %g %g %d %d %g %g\n",
+  //             i,
+  //             info->id,
+  //             info->valley,
+  //             info->kx,
+  //             info->ky,
+  //             info->kz,
+  //             info->energy,
+  //             info->t,
+  //             info->x,
+  //             info->y,
+  //             info->i,
+  //             info->j,
+  //             info->vx,
+  //             info->vy);
+  // }
 
 // Closure of output files
 // =======================

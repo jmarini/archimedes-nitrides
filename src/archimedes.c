@@ -168,6 +168,7 @@ struct option longopts[] =
 };
 // All files here...
 FILE *fp;
+FILE *emitted_fp;
 // All strings here...
 static char *progname;
 
@@ -382,20 +383,33 @@ int main(int argc, char *argv[]) {
     int before = g_config->num_particles;
 
 
-    // FILE *fp = fopen("photoexcited_particles.csv", "w");
-    // fprintf(fp, "index x y kx ky kz energy\n");
-    // for(int n = 0; n < g_config->num_particles; ++n) {
-    //     Particle *p = &P[n];
-    //     fprintf(fp, "%d %g %g %g %g %g %g\n", n, p->x, p->y, p->kx, p->ky, p->kz, mc_particle_energy(p));
-    // }
-    // fclose(fp);
+    FILE *fp = fopen("photoexcited_particles.csv", "w");
+    // fprintf(fp, "index id x y kx ky kz energy\n");
+    fprintf(fp, "id x y energy\n");
+    for(int n = 0; n < g_config->num_particles; ++n) {
+        Particle *p = &P[n];
+        // fprintf(fp, "%d %lld %g %g %g %g %g %g\n", n, p->id, p->x, p->y, p->kx, p->ky, p->kz, mc_particle_energy(p));
+        fprintf(fp, "%lld %g %g %g\n", p->id, p->x, p->y, mc_particle_energy(p));
+    }
+    fclose(fp);
+
+    emitted_fp = fopen("emitted.csv", "w");
+    fprintf(emitted_fp, "id time energy\n");
+
+
+    FILE *particles_fp = fopen("particles.csv", "w");
+    fprintf(particles_fp, "timestep time count\n");
 
 
     // HERE IS THE SIMULATION
     // ======================
     for(c = 1; c <= ITMAX; c++) {
+        fprintf(particles_fp, "%d %g %lld\n", c, g_config->time, g_config->num_particles);
         updating(g_config->simulation_model);
     }
+
+    fclose(particles_fp);
+    fclose(emitted_fp);
 
     // Here we save the outputs
     // ========================

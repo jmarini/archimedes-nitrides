@@ -127,7 +127,7 @@ void drift(Particle *particle, real tau) {
         if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
-            printf("%lld emitted left: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
+            fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
         }
         else { // not emitted, reflect off boundary
             particle->x  *= -1;
@@ -155,7 +155,7 @@ void drift(Particle *particle, real tau) {
         if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
-            printf("%lld emitted right: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
+            fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
         }
         else { // not emitted, reflect off boundary
             particle->x = g_mesh->width - (particle->x - g_mesh->width);
@@ -183,7 +183,7 @@ void drift(Particle *particle, real tau) {
         if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
-            printf("%lld emitted bottom: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
+            fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
         }
         else { // not emitted, reflect off boundary
             particle->y  *= -1.;
@@ -211,7 +211,7 @@ void drift(Particle *particle, real tau) {
         if(energy <= 0.) { // emitted
             particle->valley = 9;
             particle->photoemission_flag = 2;
-            printf("%lld emitted top: E=%lfeV del=%lfeV\n", particle->id, e2, e2 - node->mat->affinity);
+            fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
         }
         else { // not emitted, reflect off boundary
             particle->y = g_mesh->height - (particle->y - g_mesh->height);
