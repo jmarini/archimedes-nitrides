@@ -7,15 +7,24 @@
 #include "vec.h"
 
 
+
+static inline int clamp(int value, int min, int max) {
+    int ret = value < min ? min : value;
+    return ret > max ? max : ret;
+}
+
+
 Index mc_particle_coords(Particle *particle) {
     // uses globabl variables dx & dy
-    int i = (int)(particle->x / g_mesh->dx) + 1;
-    if(i < 1) { i = 1; }
-    if(i > g_mesh->nx ) { i = g_mesh->nx; }
+    int i = clamp((int)(particle->x / g_mesh->dx) + 1, 1, g_mesh->nx);
+    // int i = (int)(particle->x / g_mesh->dx) + 1;
+    // if(i < 1) { i = 1; }
+    // else if(i > g_mesh->nx ) { i = g_mesh->nx; }
 
-    int j = (int)(particle->y / g_mesh->dy) + 1;
-    if(j < 1) { j = 1; }
-    if(j > g_mesh->ny ) { j = g_mesh->ny; }
+    int j = clamp((int)(particle->y / g_mesh->dy) + 1, 1, g_mesh->ny);
+    // int j = (int)(particle->y / g_mesh->dy) + 1;
+    // if(j < 1) { j = 1; }
+    // else if(j > g_mesh->ny ) { j = g_mesh->ny; }
 
     return (Index){.i=i, .j=j};
 }
