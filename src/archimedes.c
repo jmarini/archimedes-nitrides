@@ -371,10 +371,13 @@ int main(int argc, char *argv[]) {
             calc_absorption_rates(g_materials[i], transistion_rate);
         }
         printf("Scattering rates calculated...\n");
-        MCdevice_config(g_mesh);
+
         if(g_config->photoexcitation_flag == ON) {
             int num = photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM, P);
             printf("Photoexcited %d carriers\n", num);
+        }
+        else {
+            MCdevice_config(g_mesh);
         }
         printf("Device configuration complete...\n");
     }
@@ -383,15 +386,15 @@ int main(int argc, char *argv[]) {
     int before = g_config->num_particles;
 
 
-    FILE *fp = fopen("photoexcited_particles.csv", "w");
-    // fprintf(fp, "index id x y kx ky kz energy\n");
-    fprintf(fp, "id x y energy\n");
-    for(int n = 0; n < g_config->num_particles; ++n) {
-        Particle *p = &P[n];
-        // fprintf(fp, "%d %lld %g %g %g %g %g %g\n", n, p->id, p->x, p->y, p->kx, p->ky, p->kz, mc_particle_energy(p));
-        fprintf(fp, "%lld %g %g %g\n", p->id, p->x, p->y, mc_particle_energy(p));
+    if(g_config->photoexcitation_flag == ON) {
+        FILE *excited_fp = fopen("photoexcited_particles.csv", "w");
+        fprintf(excited_fp, "id x y energy\n");
+        for(int n = 0; n < g_config->num_particles; ++n) {
+            Particle *p = &P[n];
+            fprintf(excited_fp, "%lld %g %g %g\n", p->id, p->x, p->y, mc_particle_energy(p));
+        }
+        fclose(excited_fp);
     }
-    fclose(fp);
 
     emitted_fp = fopen("emitted.csv", "w");
     fprintf(emitted_fp, "id time energy\n");

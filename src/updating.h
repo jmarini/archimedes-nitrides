@@ -38,8 +38,10 @@ int updating(int model) {
 
     // Computation of the electric field
     // =================================
-    electric_field( );
-    if(g_config->faraday_flag) { Faraday( ); }
+    if(g_config->tcad_data == OFF) {
+        electric_field( );
+        if(g_config->faraday_flag) { Faraday( ); }
+    }
 
 
     // Monte Carlo Simulation
