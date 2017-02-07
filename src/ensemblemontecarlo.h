@@ -137,10 +137,10 @@ void EMC(void) {
 
         if(mc_does_particle_exist(particle)) { ++n; }
         else {
-            if(particle->photoemission_flag == 2) {
-                printf("Photoemitted particle %lld\n", particle->id);
-            }
-            P[n] = P[g_config->num_particles];
+            // move the last particle to the now empty spot to keep
+            // a dense array in constant time. Entries beyond num_particles
+            // can be assumed to be "empty"
+            P[n] = P[g_config->num_particles - 1];
             --g_config->num_particles;
         }
     } while(n < g_config->num_particles);
