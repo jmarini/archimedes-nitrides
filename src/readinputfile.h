@@ -958,7 +958,7 @@ Read_Input_File(void)
         printf("FIXED CHARGE %d %g ---> Ok\n", index, num);
     }
     else if(strcmp(s, "TCAD") == 0) {
-        FILE *input = fopen("tcad.csv", "r");
+        FILE *input = fopen("tcad.tsv", "r");
         int id = 0;
         double x  = 0.,
                Na = 0.,
@@ -968,7 +968,11 @@ Read_Input_File(void)
                 p = 0.,
                 efieldX = 0.,
                 efieldY = 0.;
+        char ignore[1024];
+        fgets(ignore, sizeof(ignore), input);
         for(int i = 1; i <= g_mesh->nx + 1; ++i){
+            //             id x   Na  Nd  V   n   p   Ex  Ey
+            //             1  2   3   4   5   6   7   8   9
             fscanf(input, "%d %lf %lf %lf %lf %lf %lf %lf %lf",
                    &id, &x, &Na, &Nd, &V, &n, &p, &efieldX, &efieldY);
             for(int j = 1; j <= g_mesh->ny + 1; ++j) {
