@@ -240,12 +240,12 @@ void calc_scattering_rates(int material) {
 
                             // Emission
                             if(n == 1) {
-                                finalenergy = initialenergy - hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
+                                finalenergy = initialenergy - hwij + (EMIN[material][v] - EMIN[material][v2]);
                                 prefactor = ope * Q;
                             }
                             // Absorption
                             if(n == 2) {
-                                finalenergy = initialenergy + hwij - fabs(EMIN[material][v] - EMIN[material][v2]);
+                                finalenergy = initialenergy + hwij + (EMIN[material][v] - EMIN[material][v2]);
                                 prefactor = opa * Q;
                             }
 
