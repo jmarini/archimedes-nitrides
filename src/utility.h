@@ -204,4 +204,28 @@ particle_info_t mc_calculate_particle_info(Particle *p) {
 }
 
 
+char *trim(char *s) {
+    char *start = s;
+    char *end = NULL;
+
+    // skip spaces at start
+    while(*start && isspace(*start)) {
+        ++start;
+    }
+
+    char *i = start;
+    // iterate over the rest remebering last non-whitespace
+    while(*i) {
+        if(!isspace(*(i++))) {
+            end = i;
+        }
+    }
+
+    // white the terminating zero after last non-whitespace
+    *end = 0;
+
+    return start;
+}
+
+
 #endif

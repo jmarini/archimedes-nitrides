@@ -1,6 +1,5 @@
-# This file is for the simulation of
-# a GaN BULK device. To run it type:
-# archimedes bulk.input
+# This file is for the simulation of a GaN TCAD device.
+# To run it type: archimedes tcad.input
 
 TRANSPORT MC ELECTRONS
 
@@ -10,7 +9,7 @@ TIMESTEP 0.001e-12
 XLENGTH 0.5e-6
 YLENGTH 0.2e-6
 
-XSPATIALSTEP 100
+XSPATIALSTEP 200
 YSPATIALSTEP 10
 
 # Phonons scattering
@@ -25,12 +24,6 @@ CONDUCTIONBAND KANE
 # definition of the material (all the device is made of GaN)
 MATERIAL X 0.0 1.0e-6    Y 0.0 0.2e-6  GAN
 
-# Definition of the doping concentration
-# ======================================
-# Nd=1E17
-#DONORDENSITY       0.5e-6       0.         1e-6     0.2e-6    5.e25
-#ACCEPTORDENSITY    0.       0.         0.5e-6    0.2e-6    3.e23
-
 # Definition of the various contacts
 # ==================================
 CONTACT LEFT  0.0    0.5e-6  VACUUM   0.0
@@ -40,16 +33,16 @@ CONTACT UP    0.0    0.2e-6  INSULATOR   0.0
 
 LATTICETEMPERATURE 300.
 
-STATISTICALWEIGHT 1000
+STATISTICALWEIGHT 2e5
 MEDIA 500
 
-CIMP 5e25
+CIMP 5e23
 
-TCAD
+TCAD tcad.tsv
 
-MAXIMINI
+PHOTON 6
+
+# SCATTERING_OUTPUT
+# MAXIMINI
 # SAVEEACHSTEP
-
 OUTPUTFORMAT GNUPLOT
-
-# end of BULK test-1
