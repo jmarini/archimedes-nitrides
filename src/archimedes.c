@@ -352,16 +352,18 @@ int main(int argc, char *argv[]) {
 
     printf("\n\nComputation Started at %s\n", asctime(nowtm));
 
-    // Boundary conditions for the model simulated
-    // ===========================================
-    if(poisson_boundary_conditions( ) != 0) {
-        printf("Error: Unknown error calculating Poisson boundary conditions.\n");
-        return 1;
+    if(g_config->poisson_flag == ON) {
+        // Boundary conditions for the model simulated
+        // ===========================================
+        if(poisson_boundary_conditions( ) != 0) {
+            printf("Error: Unknown error calculating Poisson boundary conditions.\n");
+            return 1;
+        }
+        if(g_config->faraday_flag) {
+            FaradayBCs();
+        }
+        printf("Boundary conditions calculated...\n");
     }
-    if(g_config->faraday_flag) {
-        FaradayBCs();
-    }
-    printf("Boundary conditions calculated...\n");
 
     // Initialization for Monte Carlo
     // ==============================

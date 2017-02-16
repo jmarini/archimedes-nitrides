@@ -61,6 +61,7 @@ Read_Input_File(void)
     g_config->dt = 0.001e-12;
     g_config->tauw = 0.4e-12;
     g_config->faraday_flag = OFF;
+    g_config->poisson_flag = ON;
     g_config->screening_length = 0.;
     g_config->photon_energy = 0.;
     g_config->photoexcitation_flag = OFF;
@@ -965,6 +966,21 @@ Read_Input_File(void)
         g_config->tracking_output = ON;
         g_config->tracking_mod = mod;
         printf("ELECTRON TRACKING = id %% %d ---> Ok\n", g_config->tracking_mod);
+    }
+    else if(strcmp(s, "POISSON") == 0) {
+        fscanf(fp, "%s", s);
+        if(strcmp(s, "ON") == 0) {
+            g_config->poisson_flag = ON;
+            printf("POISSON CALCULATION = ON ---> Ok\n");
+        }
+        else if(strcmp(s, "OFF") == 0) {
+            g_config->poisson_flag = OFF;
+            printf("POISSON CALCULATION = OFF ---> Ok\n");
+        }
+        else {
+            printf("%s : command POISSON accept ON or OFF.\n", progname);
+            exit(0);
+        }
     }
     else if(strcmp(s, "TCAD") == 0) {
         char tcad[1024];

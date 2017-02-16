@@ -38,7 +38,7 @@ int updating(int model) {
 
     // Computation of the electric field
     // =================================
-    if(g_config->tcad_data == OFF) {
+    if(g_config->poisson_flag == ON) {
         electric_field( );
         if(g_config->faraday_flag) { Faraday( ); }
     }

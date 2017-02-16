@@ -53,6 +53,7 @@ typedef struct {
 
     int faraday_flag;
     double screening_length;
+    int poisson_flag;
 
     double lattice_temp;
     double impurity_conc;

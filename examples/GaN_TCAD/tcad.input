@@ -20,6 +20,7 @@ PIEZOELECTRIC ON
 
 # Parabolic conduction band
 CONDUCTIONBAND KANE
+POISSON OFF
 
 # definition of the material (all the device is made of GaN)
 MATERIAL X 0.0 1.0e-6    Y 0.0 0.2e-6  GAN
