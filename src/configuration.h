@@ -68,6 +68,8 @@ typedef struct {
     int save_step_output;
     int scattering_output;
     int output_format;
+    int tracking_output;
+    int tracking_mod;
     int load_initial_data;
     int tcad_data;
 

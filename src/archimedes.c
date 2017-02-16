@@ -169,6 +169,7 @@ struct option longopts[] =
 // All files here...
 FILE *fp;
 FILE *emitted_fp;
+FILE *tracking_fp;
 // All strings here...
 static char *progname;
 
@@ -399,6 +400,10 @@ int main(int argc, char *argv[]) {
     emitted_fp = fopen("emitted.csv", "w");
     fprintf(emitted_fp, "id time energy\n");
 
+    if(g_config->tracking_output == ON) {
+      tracking_fp = fopen("tracking.csv", "w");
+      fprintf(tracking_fp, "id time x y E valley\n");
+    }
 
     FILE *particles_fp = fopen("particles.csv", "w");
     fprintf(particles_fp, "timestep time count\n");
@@ -413,6 +418,9 @@ int main(int argc, char *argv[]) {
 
     fclose(particles_fp);
     fclose(emitted_fp);
+    if(g_config->tracking_output == ON) {
+        fclose(tracking_fp);
+    }
 
     // Here we save the outputs
     // ========================

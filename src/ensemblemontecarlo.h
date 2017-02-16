@@ -62,6 +62,17 @@ void EMC(void) {
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step
 
+        if(g_config->tracking_output == ON
+           && particle->id % g_config->tracking_mod == 0) {
+            fprintf(tracking_fp, "%lld %g %g %g %g %d\n",
+                    particle->id,
+                    tdt,
+                    particle->x,
+                    particle->y,
+                    mc_particle_energy(particle),
+                    particle->valley);
+        }
+
         // check if a particle is going out from the right edge of the device
         int direction = direction_t.RIGHT;
         if(mc_does_particle_exist(particle)) {

@@ -73,6 +73,8 @@ Read_Input_File(void)
     g_config->max_min_output = OFF; // maximini
     g_config->save_step_output = OFF; // savealways
     g_config->scattering_output = OFF;
+    g_config->tracking_output = OFF;
+    g_config->tracking_mod = 1000;
     g_config->output_format = GNUPLOTFORMAT;
     g_config->load_initial_data = OFF; // leid_flag
     g_config->tcad_data = OFF;
@@ -956,6 +958,13 @@ Read_Input_File(void)
             g_mesh->nodes[index][j].fixed_charge = num;
         }
         printf("FIXED CHARGE %d %g ---> Ok\n", index, num);
+    }
+    else if(strcmp(s, "TRACKING") == 0) {
+        int mod = 0;
+        fscanf(fp, "%d", &mod);
+        g_config->tracking_output = ON;
+        g_config->tracking_mod = mod;
+        printf("ELECTRON TRACKING = id %% %d ---> Ok\n", g_config->tracking_mod);
     }
     else if(strcmp(s, "TCAD") == 0) {
         char tcad[1024];
