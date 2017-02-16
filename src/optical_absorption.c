@@ -63,7 +63,7 @@ int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy) {
            xmax = mesh->dx * (double)(node->i);
 
     double alpha = absorption_coefficient(*(node->mat), photon_energy);
-    double n = 1e25 * mesh->dx * mesh->dy / g_config->carriers_per_superparticle + 0.5;
+    double n = g_config->particles_per_cell / (double)g_mesh->ny;
 
     return (int)(n * (exp(-alpha * xmin) - exp(-alpha * xmax)));
 }
@@ -91,6 +91,7 @@ int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DI
 
 // Create a photoexcited carrier at the given Node for a the given photon energies.
 // The transistion will be between the given cb and vb. Returns the created particle.
+// Takes statistical weight as approx the total number of photoexcited carriers
 Particle create_photoexcited_carrier(Node *node, double photon_energy,
                                      double total_scattering_rate[NOAMTIA+1],
                                      int conduction_band, int valence_band) {
