@@ -170,6 +170,7 @@ struct option longopts[] =
 FILE *fp;
 FILE *emitted_fp;
 FILE *tracking_fp;
+FILE *valley_occupation_fp;
 // All strings here...
 static char *progname;
 
@@ -410,16 +411,28 @@ int main(int argc, char *argv[]) {
     FILE *particles_fp = fopen("particles.csv", "w");
     fprintf(particles_fp, "timestep time count\n");
 
+    valley_occupation_fp = fopen("valley_occupation.csv", "w");
+    fprintf(valley_occupation_fp, "timestep time c1 c2\n");
+
 
     // HERE IS THE SIMULATION
     // ======================
+    int valley_occupation[10];
     for(c = 1; c <= ITMAX; c++) {
+        memset(&valley_occupation, 0, sizeof(valley_occupation));
+        for(int n = 0; n < g_config->num_particles; ++n) {
+            valley_occupation[P[n].valley] += 1;
+        }
+        fprintf(valley_occupation_fp, "%d %g %d %d\n", c, g_config->time, valley_occupation[1], valley_occupation[2]);
+
         fprintf(particles_fp, "%d %g %lld\n", c, g_config->time, g_config->num_particles);
+
         updating(g_config->simulation_model);
     }
 
     fclose(particles_fp);
     fclose(emitted_fp);
+    fclose(valley_occupation_fp);
     if(g_config->tracking_output == ON) {
         fclose(tracking_fp);
     }
