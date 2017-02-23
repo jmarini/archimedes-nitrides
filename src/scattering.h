@@ -77,7 +77,7 @@ void scatter(Particle *particle, int material) {
     // ########################################
     // One-valley material Scattering Selection
     // ########################################
-    if(NOVALLEY[material] == 1) {
+    if(g_materials[material].cb.num_valleys == 1) {
         ksquared = mc_particle_ksquared(particle);
 
         if(g_config->conduction_band==FULL){
@@ -217,7 +217,7 @@ void scatter(Particle *particle, int material) {
     // ########################################
     // Two-valley material Scattering Selection
     // ########################################
-    if(NOVALLEY[material] == 2) {
+    if(g_materials[material].cb.num_valleys == 2) {
         ksquared = mc_particle_ksquared(particle);
         ki = sqrt(ksquared);
 

@@ -68,9 +68,9 @@ SaveOutput2D_MeshFormat(int je)
 
   printf("SaveOutput2D_MeshFormat\n\n");
 
- NUM_VERT=(nx+1)*(ny+1);
+ int NUM_VERT=(nx+1)*(ny+1);
  printf("\nNUM_VERT=%d\n",NUM_VERT);
- NUM_EXAHEDRA=nx*ny;
+ int NUM_EXAHEDRA=nx*ny;
  printf("\nNUM_EXAHEDRA=%d\n",NUM_EXAHEDRA);
 
 

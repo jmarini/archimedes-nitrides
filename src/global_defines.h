@@ -58,8 +58,7 @@
 
 // definition of the material reference table
 #define NOAMTIA 17   // Number Of All Material Taken Into Account (excluding SiO2)
-// ********************
-#define iSIO2 -1     // reference number to Silicon Oxide
+
 #define SILICON 0    // reference number to Silicon
 #define GAAS 1       // reference number to GaAs
 #define GERMANIUM 2  // reference number to Germanium
@@ -77,8 +76,5 @@
 #define INXAL1XAS 14 // reference number to In_x Al_(1-x) As
 #define INXGAXXAS 15 // reference number to In_x Ga_(1-x) As (second zone)
 #define GAN 16       // reference number to GaN
-// ********************
-
-#define NUMSIO2 2 // maximum number of SiO2 interfaces
 
 #endif

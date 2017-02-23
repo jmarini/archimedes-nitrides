@@ -50,10 +50,11 @@ void calc_scattering_rates(int material) {
     // These definitions are valid for every material
     BKTQ=KB*g_config->lattice_temp/Q; // in eV
     QH=Q/HBAR;
+    int num_valleys = g_materials[material].cb.num_valleys;
 
     // Material with 2 valleys
     // #######################
-    if(NOVALLEY[material] >= 2) {
+    if(num_valleys >= 2) {
         // Dielectric constant - static, hi-freq and combination
         eps = EPSR[material] * EPS0;
         epf = EPF[material]  * EPS0;
@@ -80,7 +81,7 @@ void calc_scattering_rates(int material) {
         real dos[MAX_VALLEYS];
         real alpha[MAX_VALLEYS];
         // band structure parameters
-        for(int v = 1; v <= NOVALLEY[material]; v++) {
+        for(int v = 1; v <= num_valleys; v++) {
             mstar[v] = MSTAR[material][v] * M;
             dos[v] = pow(sqrt(2. * mstar[v]) / HBAR, 3.) / (2. * PI * PI);
             if(g_config->conduction_band == PARABOLIC) { alpha[v] = 0.; }
@@ -146,7 +147,7 @@ void calc_scattering_rates(int material) {
             char filename[150];
 
             for(int s = 1; s <= 9; ++s ) {
-                for(int v = 1; v <= NOVALLEY[material]; ++v) {
+                for(int v = 1; v <= num_valleys; ++v) {
                     if(s >= 3 && s <= 6) {
                         int v2 = (int)((s - 1) / 2);
                         sprintf(filename, "%s_%d-%d-%s-%s.csv", f_scattering[s], v, v2, f_material, f_band_model);
@@ -163,7 +164,7 @@ void calc_scattering_rates(int material) {
         for(ie = 1; ie <= DIME; ie++) {
             initialenergy = DE * (real)(ie);
 
-            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+            for(int v = 1; v <= num_valleys; ++v) {
 
                 // ===============================
                 // == Optical Phonon Scattering ==
@@ -229,7 +230,7 @@ void calc_scattering_rates(int material) {
 
                     // Non-polar Optical Phonons - Intervalley
                     // ---------------------------------------
-                    for(int v2 = 1; v2 <= NOVALLEY[material]; ++v2) {
+                    for(int v2 = 1; v2 <= num_valleys; ++v2) {
                         // scatter from valley v -> v2
                         // when v == v2, scattering to equivalent valley
                         for(int n = 1; n <=2; ++n) {
@@ -265,7 +266,7 @@ void calc_scattering_rates(int material) {
                                 sqgamma_initial = sqrt(gamma_initial);
                                 sqgamma_final   = sqrt(gamma_final);
                                 overlap = (gamma1_initial * gamma1_final) / (gamma2_initial * gamma2_final);
-                                zf = ZSCATTER[material][v][v2];
+                                zf = g_materials[material].zscatter[v][v2];
 
                                 rate = prefactor * zf * dos[v2] * sqgamma_final * gamma2_final * overlap;
                                 SWK[material][v][i][ie] += rate;
@@ -277,7 +278,7 @@ void calc_scattering_rates(int material) {
                     } // secondary loop over valleys
                 }
                 else { // no optical phonon scattering
-                    for(int i = 1; i <= 2 * NOVALLEY[material] + 2; ++i) {
+                    for(int i = 1; i <= 2 * num_valleys + 2; ++i) {
                         SWK[material][v][i][ie] = 0.;
                     }
                 } // optical phonon scattering
@@ -382,7 +383,7 @@ void calc_scattering_rates(int material) {
         // Evalutation of gamma
         GM[material] = 0.0;
         for(ie = 1; ie <= DIME; ie++) {
-            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+            for(int v = 1; v <= num_valleys; ++v) {
                 if(SWK[material][v][9][ie] > GM[material]) {
                     GM[material] = SWK[material][v][9][ie];
                 }
@@ -390,7 +391,7 @@ void calc_scattering_rates(int material) {
         }
         printf("GAMMA[%s] = %g\n", f_material, GM[material]);
         for(ie = 1; ie <= DIME; ie++) {
-            for(int v = 1; v <= NOVALLEY[material]; ++v) {
+            for(int v = 1; v <= num_valleys; ++v) {
                 for(i = 1; i <= 9; i++) {
                     SWK[material][v][i][ie] /= GM[material];
                 }
@@ -399,7 +400,7 @@ void calc_scattering_rates(int material) {
 
         if(g_config->scattering_output) {
             for(int i = 1; i <= 9; ++i) {
-                for(int v = 1; v <= NOVALLEY[material]; ++v) {
+                for(int v = 1; v <= num_valleys; ++v) {
                     fclose(scattering_rates[i][v]);
                 }
             }
@@ -411,7 +412,7 @@ void calc_scattering_rates(int material) {
 
 // Material = one valley
 // #####################
- if(NOVALLEY[material]==1){
+ if(num_valleys==1){
         char *f_material = mc_material_name(material);
   SMH[material][0]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
   HHM[material][0]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);

@@ -45,15 +45,15 @@ void media(void) {
 
     // calculate info for each particle
     for(n = 1; n <= g_config->num_particles; n++) {
-        particle_info[n] = mc_calculate_particle_info(&P[n]);
-        i = particle_info[n].i;
-        j = particle_info[n].j;
+        particle_info_t info = mc_calculate_particle_info(&P[n]);
+        i = info.i;
+        j = info.j;
 
         density[i][j]++;
-        ener[i][j] += particle_info[n].energy;
-        ener[i][j] += EMIN[g_mesh->nodes[i][j].material][particle_info[n].valley];
-        xvel[i][j] += particle_info[n].vx;
-        yvel[i][j] += particle_info[n].vy;
+        ener[i][j] += info.energy;
+        ener[i][j] += EMIN[g_mesh->nodes[i][j].material][info.valley];
+        xvel[i][j] += info.vx;
+        yvel[i][j] += info.vy;
     }
 
     // Mean Value of the macroscopic variables

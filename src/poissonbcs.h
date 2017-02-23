@@ -34,11 +34,6 @@
 
 
 int poisson_boundary_conditions(void) {
-    if(SIO2_UP_FLAG || SIO2_DOWN_FLAG) {
-        printf("Error: SIO2 flag is deprecated.\n");
-        return 1;
-    }
-
     int nx = g_mesh->nx,
         ny = g_mesh->ny;
 

@@ -79,10 +79,10 @@ void MCdevice_config(Mesh *mesh) {
                         // loaded from precedent simulations and have nothing to
                         // do with the lattice energy.
                         double c1=-u2d[i][j][4]/u2d[i][j][1]/Q;
-                        if(NOVALLEY[material]==1) {
+                        if(g_materials[material].cb.num_valleys == 1) {
                             kf=SMH[material][0]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
                         }
-                        if(NOVALLEY[material]>=2){
+                        else if(g_materials[material].cb.num_valleys >= 2) {
                             valley=1;
                             kf=SMH[material][valley]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
                             if(rnd()>0.8){

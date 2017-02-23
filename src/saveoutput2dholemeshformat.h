@@ -63,9 +63,9 @@ SaveOutput2DHole_MeshFormat(int je)
 
 // Definition of the number of vertex and hexaedra
 // ===============================================
- NUM_VERT=nx*ny;
+ int NUM_VERT=nx*ny;
  printf("\nNUM_VERT=%d\n",NUM_VERT);
- NUM_EXAHEDRA=(nx-1)*(ny-1);
+ int NUM_EXAHEDRA=(nx-1)*(ny-1);
  printf("\nNUM_EXAHEDRA=%d\n",NUM_EXAHEDRA);
 // =========================================
 

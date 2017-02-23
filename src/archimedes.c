@@ -70,14 +70,7 @@ extern inline real mc_particle_k(Particle *particle);
 
 
 // All integers here...
-int NUM_VERT;            // number of vertices in the meshing
-int NUM_EXAHEDRA;        // number of quadrilaterals in the meshing
-int ISEED;               // seed for random number generator, starts at 38467
 int c;                   // iteration number
-int SIO2_UP_FLAG;        // boolean, controls whether SIO2 is above the devide, defaults to 0
-int SIO2_DOWN_FLAG;      // boolean, controls whether SIO2 is below the devide, defaults to 0
-int NOVALLEY[NOAMTIA+1]; // number of valleys to simulate, array indexed by material
-int ZSCATTER[NOAMTIA+1][6][6]; // number of equivalent valleys for scattering, array indexed by material, starting valley and ending valley
 
 // All "real"'s here...
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
@@ -86,7 +79,6 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 2: particle x-velocity
                                           //  type = 3: particle y-velocity
                                           //  type = 4: particle energy
-particle_info_t particle_info[NPMAX+1];   // Holds summary information for particles to be output, array indexed by particle index
 real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: electron density
@@ -116,7 +108,6 @@ real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexe
                                     //                                                                 2=contact electron density,
                                     //                                                                 3=contact hole density)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
-real EPSRSIO2;
 real bufx2d[NXM+1][NYM+1];          // MEP
 real bufy2d[NXM+1][NYM+1];          // MEP
 real ux2d[NXM+1][NYM+1][MN3+1];     // MEP
@@ -127,11 +118,6 @@ real fx2d[NXM+1][NYM+1][MN3+1];     // MEP
 real gy2d[NXM+1][NYM+1][MN3+1];     // MEP
 real c11[7],c12[7],c21[7],c22[7];   // MEP
 real u[7],f[7],g[7],cw[7];          // MEP
-real SIO2_INI[NUMSIO2];
-real SIO2_FIN[NUMSIO2];
-real SIO2_POT[NUMSIO2];
-real SIO2_THICKNESS[NUMSIO2];
-real SIO2[NUMSIO2][NXM+1][NYM+1];
 real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
 real EPSR[NOAMTIA+1];         // static dielectric constant, array indexed by material
 real EPF[NOAMTIA+1];          // high frequency dielectric constant, array indexed by material
@@ -314,7 +300,6 @@ int main(int argc, char *argv[]) {
     memset(&u2d, 0, sizeof(u2d));
     memset(&E, 0, sizeof(E));
     memset(&EDGE, 0, sizeof(EDGE));
-    memset(&SIO2, 0, sizeof(SIO2));
 
     // Read the geometrical and physical description of the MESFET
     // ===========================================================

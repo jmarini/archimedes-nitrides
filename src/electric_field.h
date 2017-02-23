@@ -33,11 +33,6 @@
 
 
 int electric_field(void) {
-    if(SIO2_UP_FLAG || SIO2_DOWN_FLAG) {
-        printf("Error: SIO2 flag is deprecated.\n");
-        return 1;
-    }
-
     int nx = g_mesh->nx,
         ny = g_mesh->ny;
     real dx = g_mesh->dx,

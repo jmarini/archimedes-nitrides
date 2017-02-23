@@ -81,7 +81,6 @@ inline int mc_is_boundary_contact(int direction, int index) {
 
 inline char* mc_material_name(int material) {
     switch(material) {
-        case iSIO2: return "iSIO2";
         case SILICON: return "Si";
         case GAAS: return "GaAs";
         case GERMANIUM: return "Ge";

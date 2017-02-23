@@ -14,7 +14,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   MERCHANTABILITY or FITNESS FOR A PARTICULfAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
@@ -33,6 +33,7 @@
 // For the syntax see the manual
 
 #include "vec.h"
+#include <stdio.h>
 
 void
 Read_Input_File(void)
@@ -126,8 +127,6 @@ Read_Input_File(void)
       h2d[i][j][2]=h2d[i][j][3]=0.;
       B[i][j]=0.; // no magnetic field as default
    }
- SIO2_UP_FLAG=0; // No upper SiO2
- SIO2_DOWN_FLAG=0; // No lower SiO2
 
 // =====================
 
@@ -281,65 +280,6 @@ Read_Input_File(void)
       printf("%s: not valid final time\n",progname);
     }
     printf("FINAL TIME = %lg ---> Ok\n",g_config->tf);
-  }
-// Setting the Silicon Oxyde interface
-  else if(strcmp(s,"OXYDE")==0){
-    fscanf(fp,"%s",s);
-    if(strcmp(s,"UP")==0){
-      SIO2_UP_FLAG=1;
-      fscanf(fp,"%lf",&num);
-      SIO2_INI[0]=num;
-      if(num<0.){
-        printf("%s: not valid upper SiO2 initial position\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      fscanf(fp,"%lf",&num);
-      SIO2_FIN[0]=num;
-      if(num<=SIO2_INI[0] || num>g_mesh->width){
-        printf("%s: not valid upper SiO2 final position\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      fscanf(fp,"%lf",&num);
-      if(num<=0.){
-        printf("%s: not valid upper SiO2 thickness\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      SIO2_THICKNESS[0]=num;
-      fscanf(fp,"%lf",&num);
-      SIO2_POT[0]=num;
-      printf("OXYDE ---> UP %g %g %g %g\n",
-              SIO2_INI[0],SIO2_FIN[0],SIO2_THICKNESS[0],SIO2_POT[0]);
-    }
-    else if(strcmp(s,"DOWN")==0){
-      SIO2_DOWN_FLAG=1;
-      fscanf(fp,"%lf",&num);
-      SIO2_INI[1]=num;
-      if(num<0.){
-        printf("%s: not valid lower SiO2 initial position\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      fscanf(fp,"%lf",&num);
-      SIO2_FIN[1]=num;
-      if(num<=SIO2_INI[1] || num>g_mesh->width){
-        printf("%s: not valid lower SiO2 final position\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      fscanf(fp,"%lf",&num);
-      if(num<=0.){
-        printf("%s: not valid lower SiO2 thickness\n",progname);
-        exit(EXIT_FAILURE);
-      }
-      SIO2_THICKNESS[1]=num;
-      fscanf(fp,"%lf",&num);
-      SIO2_POT[1]=num;
-      printf("OXYDE ---> DOWN %g %g %g %g\n",
-              SIO2_INI[1],SIO2_FIN[1],SIO2_THICKNESS[1],SIO2_POT[1]);
-    }
-    else {
-      printf("%s: not valid final time\n",progname);
-      exit(EXIT_FAILURE);
-    }
-    printf("OXYDE ---> Ok\n");
   }
 // setting the energy relaxation time
   else if(strcmp(s,"TAUW")==0){
@@ -978,7 +918,7 @@ Read_Input_File(void)
             printf("POISSON CALCULATION = OFF ---> Ok\n");
         }
         else {
-            printf("%s : command POISSON accept ON or OFF.\n", progname);
+            printf("%s: command POISSON accept ON or OFF, given '%s'.\n", progname, s);
             exit(0);
         }
     }

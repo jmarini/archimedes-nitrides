@@ -83,11 +83,11 @@ inline Particle creation(int i, real t, int edge) {
     if(ii >= nx + 1) { ii = nx + 1; }
     if( j >= ny + 1) {  j = ny + 1; }
     int material = g_mesh->nodes[ii][j].material;
-    if(NOVALLEY[material] == 1) {
+    if(g_materials[material].cb.num_valleys == 1) {
         iv = 1;
         iaux = 0;
     }
-    else if(NOVALLEY[material] >= 2) {
+    else if(g_materials[material].cb.num_valleys >= 2) {
         iv = iaux = 1;
         // 20% of the created particles belongs to the L-valley
         if(rnd() >= 0.8) { iv = iaux = 2; }

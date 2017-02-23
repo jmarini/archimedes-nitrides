@@ -62,7 +62,6 @@ void SaveOutput2DGNUPLOT(int je) {
     FILE *ep;
     FILE *qp;
     FILE *fM;
-    FILE *vo;
     register int i, j;
     int nx = g_mesh->nx,
         ny = g_mesh->ny;
@@ -87,8 +86,6 @@ void SaveOutput2DGNUPLOT(int je) {
     lyp = fopen(s, "w");
     sprintf(s, "quantum_potential%03d.xyz", je);
     qp = fopen(s, "w");
-    sprintf(s, "particle_info%03d.xyz", je);
-    vo = fopen(s, "w");
 
 // Save the Monte Carlo results
  if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
@@ -160,28 +157,6 @@ void SaveOutput2DGNUPLOT(int je) {
     fprintf(qp,"\n");
   }
 
-  // Particle Information
-  // ====================
-  // fprintf(vo, "index id valley kx ky kz energy t x y i j vx vy\n");
-  // for(i = 1; i <= g_config->num_particles; ++i) {
-  //     // print all particle info
-  //     particle_info_t *info = &particle_info[i];
-  //     fprintf(vo, "%d %lld %d %g %g %g %g %g %g %g %d %d %g %g\n",
-  //             i,
-  //             info->id,
-  //             info->valley,
-  //             info->kx,
-  //             info->ky,
-  //             info->kz,
-  //             info->energy,
-  //             info->t,
-  //             info->x,
-  //             info->y,
-  //             info->i,
-  //             info->j,
-  //             info->vx,
-  //             info->vy);
-  // }
 
 // Closure of output files
 // =======================
@@ -194,7 +169,6 @@ void SaveOutput2DGNUPLOT(int je) {
    fclose(lyp);
    fclose(ep);
    fclose(qp);
-   fclose(vo);
   }
 // Save the Hybrid MEP results
  if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){

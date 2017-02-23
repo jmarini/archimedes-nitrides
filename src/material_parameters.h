@@ -55,41 +55,23 @@ g_materials[GAN].id       = GAN;
 
 
 // Number of valleys
-NOVALLEY[SILICON]   = 1;  // X-valley
-NOVALLEY[GERMANIUM] = 1;  // G-valley
-NOVALLEY[GAAS]      = 2;  // G and L-valleys
-NOVALLEY[INSB]      = 1;  // G valley
-NOVALLEY[ALSB]      = 1;  // G-valley
-NOVALLEY[ALXINXSB]  = 1;  // G-valley
-NOVALLEY[ALXIN1XSB] = 1;  // G-valley
-NOVALLEY[ALAS]      = 1;  // G-valley
-NOVALLEY[ALP]       = 1;  // G-valley
-NOVALLEY[GAP]       = 1;  // G-valley
-NOVALLEY[GASB]      = 1;  // G-valley
-NOVALLEY[INAS]      = 1;  // G-valley
-NOVALLEY[INP]       = 1;  // G-valley
-NOVALLEY[INXGA1XAS] = 1;  // only G-valley
-NOVALLEY[INXAL1XAS] = 1;  // G-valley
-NOVALLEY[INXGAXXAS] = 1;  // only G-valley
-NOVALLEY[GAN]       = 2;  // G-1, M-L(U), G-3
-
-g_materials[SILICON].cb.num_valleys   = 1;
-g_materials[GERMANIUM].cb.num_valleys = 1;
-g_materials[GAAS].cb.num_valleys      = 1;
-g_materials[INSB].cb.num_valleys      = 1;
-g_materials[ALSB].cb.num_valleys      = 1;
-g_materials[ALXINXSB].cb.num_valleys  = 1;
-g_materials[ALXIN1XSB].cb.num_valleys = 1;
-g_materials[ALAS].cb.num_valleys      = 1;
-g_materials[ALP].cb.num_valleys       = 1;
-g_materials[GAP].cb.num_valleys       = 1;
-g_materials[GASB].cb.num_valleys      = 1;
-g_materials[INAS].cb.num_valleys      = 1;
-g_materials[INP].cb.num_valleys       = 1;
-g_materials[INXGA1XAS].cb.num_valleys = 1;
-g_materials[INXAL1XAS].cb.num_valleys = 1;
-g_materials[INXGAXXAS].cb.num_valleys = 1;
-g_materials[GAN].cb.num_valleys       = 2;
+g_materials[SILICON].cb.num_valleys   = 1;  // X-valley
+g_materials[GERMANIUM].cb.num_valleys = 1;  // G-valley
+g_materials[GAAS].cb.num_valleys      = 1;  // G and L-valleys
+g_materials[INSB].cb.num_valleys      = 1;  // G valley
+g_materials[ALSB].cb.num_valleys      = 1;  // G-valley
+g_materials[ALXINXSB].cb.num_valleys  = 1;  // G-valley
+g_materials[ALXIN1XSB].cb.num_valleys = 1;  // G-valley
+g_materials[ALAS].cb.num_valleys      = 1;  // G-valley
+g_materials[ALP].cb.num_valleys       = 1;  // G-valley
+g_materials[GAP].cb.num_valleys       = 1;  // G-valley
+g_materials[GASB].cb.num_valleys      = 1;  // G-valley
+g_materials[INAS].cb.num_valleys      = 1;  // G-valley
+g_materials[INP].cb.num_valleys       = 1;  // G-valley
+g_materials[INXGA1XAS].cb.num_valleys = 1;  // only G-valley
+g_materials[INXAL1XAS].cb.num_valleys = 1;  // G-valley
+g_materials[INXGAXXAS].cb.num_valleys = 1;  // only G-valley
+g_materials[GAN].cb.num_valleys       = 2;  // G-1, M-L(U), G-3
 
 g_materials[SILICON].vb.num_valleys   = 1;
 g_materials[GERMANIUM].vb.num_valleys = 1;
@@ -116,29 +98,6 @@ g_materials[GAN].affinity = 3.18;
 // Number of equivalent valleys
 // Scattering from first index to second index
 // Repeated indexes mean scattering between equivalent valleys
-memset(ZSCATTER, 0, sizeof(ZSCATTER[0][0][0]) * NOAMTIA * 6 * 6);
-
-ZSCATTER[GAAS][1][1] = 0; // G -> G
-ZSCATTER[GAAS][1][2] = 4; // G -> L
-ZSCATTER[GAAS][1][3] = 3; // G -> X
-ZSCATTER[GAAS][2][1] = 1; // L -> G
-ZSCATTER[GAAS][2][2] = 3; // L -> L
-ZSCATTER[GAAS][2][3] = 3; // L -> X
-ZSCATTER[GAAS][3][1] = 1; // X -> G
-ZSCATTER[GAAS][3][2] = 4; // X -> L
-ZSCATTER[GAAS][3][3] = 2; // X -> X
-
-ZSCATTER[GAN][1][1] = 0; // G1 -> G1
-ZSCATTER[GAN][1][2] = 6; // G1 -> ML
-ZSCATTER[GAN][1][3] = 1; // G1 -> G3
-ZSCATTER[GAN][2][1] = 1; // ML -> G1
-ZSCATTER[GAN][2][2] = 5; // ML -> ML
-ZSCATTER[GAN][2][3] = 1; // ML -> G3
-ZSCATTER[GAN][3][1] = 1; // G3 -> G1
-ZSCATTER[GAN][3][2] = 6; // G3 -> ML
-ZSCATTER[GAN][3][3] = 0; // G3 -> G3
-
-
 g_materials[GAAS].zscatter[1][1] = 0; // G -> G
 g_materials[GAAS].zscatter[1][2] = 4; // G -> L
 g_materials[GAAS].zscatter[1][3] = 3; // G -> X
@@ -303,10 +262,6 @@ g_materials[INXAL1XAS].abs_correction = 1.;
 g_materials[INXGAXXAS].abs_correction = 1.;
 g_materials[GAN].abs_correction       = 6.;
 
-
-// Dielectric constant for Silicon Oxide SiO2
-// see http://en.wikipedia.org/wiki/Relative_permittivity
-EPSRSIO2 = 3.9 * EPS0;
 
 // Dielectric constant for Semiconducting materials
 // STATIC
