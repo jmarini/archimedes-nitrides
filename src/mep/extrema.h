@@ -2,11 +2,11 @@
    Archimedes is a simulator for Submicron 2D Silicon/GaAs
    Devices. It implements both the Monte Carlo method and Hybrid MEP model
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method.
 
    Copyright (C) 2004, 2005, 2006, 2007 Jean Michel Sellier <sellier@dmi.unict.it>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
@@ -28,26 +28,16 @@
 // Last modif. : 26 feb.2005, Siracusa, J.M.Sellier
 // ######################################################
 
-// Maximum and minimum functions.
 
-// **********************************************
-
-inline real minimus(real x,real y)
-{
-/* this function returns the minimum between x and y */
-
- if(x<=y) return(x);
- else return(y);
+// this function returns the minimum between x and y
+inline double minimus(double x, double y) {
+    if(x <= y) { return x; }
+    return y;
 }
 
-// **********************************************
 
-inline real maximus(real x,real y)
-{
-/* this function returns the maximum between x and y */
-
- if(x<=y) return(y);
- else return(x);
+// this function returns the maximum between x and y
+inline double maximus(double x, double y) {
+    if(x <= y) { return y; }
+    return x;
 }
-
-// **********************************************

@@ -2,11 +2,11 @@
    Archimedes is a simulator for Submicron 2D Silicon/GaAs
    Devices. It implements both the Monte Carlo method and Hybrid MEP model
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method.
 
    Copyright (C) 2004, 2005, 2006, 2007 Jean Michel Sellier <sellier@dmi.unict.it>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
@@ -28,11 +28,14 @@
 // Last modif. : 26 feb.2005, Siracusa, J.M.Sellier
 // ######################################################
 
-// Function used in the Jang-Tadmor method
 
-inline real MM(real a,real b)
-{
- return 0.5*(sign(1.,a)+sign(1.,b))*minimus(fabs(a),fabs(b));
+// Function used in the Jang-Tadmor method
+inline double MM(double a, double b) {
+    return 0.5 * (sign(1., a) + sign(1., b)) * minimus(fabs(a), fabs(b));
 }
 
-// ==========================================
+
+// Function used in the Jang-Tadmor method
+inline double MM2(double x, double a, double b) {
+    return MM(x * MM(a, b), 0.5 * (a + b));
+}

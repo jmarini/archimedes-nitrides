@@ -44,17 +44,10 @@
     #include <strings.h>
 #endif
 
-// Preprocessor Definitions
 #include "global_defines.h"
-// ===============================
 #include "configuration.h"
 #include "mesh.h"
 #include "constants.h"
-#include "mep/constants.h"
-#include "mep/extrema.h"
-#include "mep/sign.h"
-#include "mep/mm.h"
-#include "mep/mm2.h"
 #include "particle.h"
 #include "material.h"
 
@@ -108,16 +101,6 @@ real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexe
                                     //                                                                 2=contact electron density,
                                     //                                                                 3=contact hole density)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
-real bufx2d[NXM+1][NYM+1];          // MEP
-real bufy2d[NXM+1][NYM+1];          // MEP
-real ux2d[NXM+1][NYM+1][MN3+1];     // MEP
-real uy2d[NXM+1][NYM+1][MN3+1];     // MEP
-real f2d[NXM+1][NYM+1][MN3+1];      // MEP
-real g2d[NXM+1][NYM+1][MN3+1];      // MEP
-real fx2d[NXM+1][NYM+1][MN3+1];     // MEP
-real gy2d[NXM+1][NYM+1][MN3+1];     // MEP
-real c11[7],c12[7],c21[7],c22[7];   // MEP
-real u[7],f[7],g[7],cw[7];          // MEP
 real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
 real EPSR[NOAMTIA+1];         // static dielectric constant, array indexed by material
 real EPF[NOAMTIA+1];          // high frequency dielectric constant, array indexed by material
@@ -149,24 +132,21 @@ time_t binarytime;
 struct tm *nowtm;
 struct option longopts[] =
 {
-  { "version", no_argument, NULL, 'v' },
-  { "help", no_argument, NULL, 'h' }
+    { "version", no_argument, NULL, 'v' },
+    { "help", no_argument, NULL, 'h' }
 };
+
 // All files here...
 FILE *fp;
 FILE *emitted_fp;
 FILE *tracking_fp;
 FILE *valley_occupation_fp;
+
 // All strings here...
 static char *progname;
 
-#include "mep/HMEPbcs.h"
-#include "mep/MEP_interpolation.h"
-#include "mep/ParabMEP2D.h"
-#include "mep/electron_relaxation.h"
-#include "mep/hole_bcs.h"
-#include "mep/hole_relaxation.h"
-#include "mep/hole_mep.h"
+
+#include "mep/mep.h"
 
 #include "utility.h"
 #include "poissonbcs.h"

@@ -12,17 +12,17 @@ archimedes_SOURCES = \
 	materials/InP.h \
 	materials/InSb.h \
 	materials/Silicon.h \
+	mep/mep.h \
 	mep/constants.h \
-	mep/HMEPbcs.h \
+	mep/electron_bcs.h \
 	mep/hole_bcs.h \
-	mep/MEP_interpolation.h \
-	mep/ParabMEP2D.h \
+	mep/mep_interpolation.h \
+	mep/electron_mep.h \
 	mep/electron_relaxation.h \
 	mep/extrema.h \
 	mep/hole_relaxation.h \
 	mep/hole_mep.h \
 	mep/mm.h \
-	mep/mm2.h \
 	mep/sign.h \
 	archimedes.c \
 	computecurrents.h \

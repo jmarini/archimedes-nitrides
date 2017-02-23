@@ -28,12 +28,10 @@
 // Last modif. : 26 feb.2005, Siracusa, J.M.Sellier
 // ######################################################
 
+
 // This function is exactly the same as the FORTRAN SIGN(A,B) function.
+inline double sign(double a, double b) {
+    if(b >= 0.) { return fabs(a); }
 
-inline real sign(real a,real b)
-{
- if(b>=0.) return(+1.*fabs(a));
- else return(-1.*fabs(a));
+    return -1. * fabs(a);
 }
-
-// ===================================================
