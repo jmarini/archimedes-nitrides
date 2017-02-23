@@ -119,12 +119,12 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
        vex=xmt/den;
        vey=ymt/den;
        f2d[i][j][1]=xmt;
-       f2d[i][j][2]=2./(3.*MSTAR[material][1]*M)*eng;
+       f2d[i][j][2]=2./(3.*g_materials[material].cb.mstar[1]*M)*eng;
        f2d[i][j][3]=0.;
        f2d[i][j][4]=4./3.*eng*vex;
        g2d[i][j][1]=ymt;
        g2d[i][j][2]=0.0;
-       g2d[i][j][3]=2./(3.*MSTAR[material][1]*M)*eng;
+       g2d[i][j][3]=2./(3.*g_materials[material].cb.mstar[1]*M)*eng;
        g2d[i][j][4]=4./3.*eng*vey;
      }
 // Compute numerical slopes for f, g and h in x-, y-direction
@@ -152,12 +152,12 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
        vex=xmt/den;
        vey=ymt/den;
        f2d[i][j][1]=xmt;
-       f2d[i][j][2]=2./(3.*MSTAR[material][1]*M)*eng;
+       f2d[i][j][2]=2./(3.*g_materials[material].cb.mstar[1]*M)*eng;
        f2d[i][j][3]=0.0;
        f2d[i][j][4]=4./3.*eng*vex;
        g2d[i][j][1]=ymt;
        g2d[i][j][2]=0.0;
-       g2d[i][j][3]=2./(3.*MSTAR[material][1]*M)*eng;
+       g2d[i][j][3]=2./(3.*g_materials[material].cb.mstar[1]*M)*eng;
        g2d[i][j][4]=4./3.*eng*vey;
      }
 // Compute time step size

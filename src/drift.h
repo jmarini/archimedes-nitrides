@@ -42,15 +42,15 @@ void drift(Particle *particle, real tau) {
 
     // Electron drift process
     // second order Runge-Kutta method
-    real hmt = HM[material][particle->valley] * tau;
+    real hmt = g_materials[material].cb.hm[particle->valley] * tau;
     real ksquared = mc_particle_ksquared(particle);
 
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
-        gk = HHM[material][particle->valley] * ksquared;
+        gk = g_materials[material].cb.hhm[particle->valley] * ksquared;
         thesquareroot = sqrt(1. + 4. * node->mat->cb.alpha[particle->valley] * gk);
-        v.x = particle->kx * HM[material][particle->valley] / thesquareroot;
-        v.y = particle->ky * HM[material][particle->valley] / thesquareroot;
+        v.x = particle->kx * g_materials[material].cb.hm[particle->valley] / thesquareroot;
+        v.y = particle->ky * g_materials[material].cb.hm[particle->valley] / thesquareroot;
         dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
         dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dk.x) / thesquareroot;
@@ -59,8 +59,8 @@ void drift(Particle *particle, real tau) {
         particle->ky += dk.y;
     }
     else if(g_config->conduction_band == PARABOLIC) {
-        v.x = particle->kx * HM[material][particle->valley];
-        v.y = particle->ky * HM[material][particle->valley];
+        v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
+        v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
         dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
         dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         particle->x += hmt * (particle->kx + 0.5 * dk.x);
@@ -71,8 +71,8 @@ void drift(Particle *particle, real tau) {
     else if(g_config->conduction_band == FULL) {
         real k4, k2, ks;
         real dx, dy, d;
-        v.x = particle->kx * HM[material][particle->valley];
-        v.y = particle->ky * HM[material][particle->valley];
+        v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
+        v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
         dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
         dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
         k2 = (particle->kx + 0.5 * dk.x) * (particle->kx + 0.5 * dk.x)

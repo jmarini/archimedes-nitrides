@@ -203,7 +203,7 @@ Fi(real t)
 // output : F in (Joule^2)/kg
  real W=t/Q; // energy in eV
  return(f[1]*pow(W,5.)+f[2]*pow(W,4.)
-	 +f[3]*pow(W,3.)+f[4]*pow(W,2.)+f[5]*W+f[6])*Q*Q/MSTAR[SILICON][1]; 
+	 +f[3]*pow(W,3.)+f[4]*pow(W,2.)+f[5]*W+f[6])*Q*Q/g_materials[SILICON].cb.mstar[1];
 }
 
 // ********************************
@@ -216,7 +216,7 @@ Gi(real t)
 // output : G in Joule/kg
  real W=t/Q; // energy in eV
  return(g[1]*pow(W,5.)+g[2]*pow(W,4.)
-	 +g[3]*pow(W,3.)+g[4]*pow(W,2.)+g[5]*W+g[6])*Q/MSTAR[SILICON][1];
+	 +g[3]*pow(W,3.)+g[4]*pow(W,2.)+g[5]*W+g[6])*Q/g_materials[SILICON].cb.mstar[1];
 }
 
 // *********************************

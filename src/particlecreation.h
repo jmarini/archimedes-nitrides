@@ -93,8 +93,8 @@ inline Particle creation(int i, real t, int edge) {
         if(rnd() >= 0.8) { iv = iaux = 2; }
     }
     c1 = log(rnd());
-    c2 = SMH[material][iaux]
-       * sqrt(-1.5 * BKTQ * c1 * (1. - alphaK[material][iv] * 1.5 * BKTQ * c1));
+    c2 = g_materials[material].cb.smh[iaux]
+       * sqrt(-1.5 * BKTQ * c1 * (1. - g_materials[material].cb.alpha[iv] * 1.5 * BKTQ * c1));
     c3 = rnd();
     c4 = sqrt(1. - c3 * c3);
     c5 = 2. * PI * rnd();

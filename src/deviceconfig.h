@@ -80,14 +80,14 @@ void MCdevice_config(Mesh *mesh) {
                         // do with the lattice energy.
                         double c1=-u2d[i][j][4]/u2d[i][j][1]/Q;
                         if(g_materials[material].cb.num_valleys == 1) {
-                            kf=SMH[material][0]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
+                            kf=g_materials[material].cb.smh[0]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[1]*1.5*c1));
                         }
                         else if(g_materials[material].cb.num_valleys >= 2) {
                             valley=1;
-                            kf=SMH[material][valley]*sqrt(-1.5*c1*(1.-alphaK[material][1]*1.5*c1));
+                            kf=g_materials[material].cb.smh[valley]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[1]*1.5*c1));
                             if(rnd()>0.8){
                                 valley=2;
-                                kf=SMH[material][valley]*sqrt(-1.5*c1*(1.-alphaK[material][2]*1.5*c1));
+                                kf=g_materials[material].cb.smh[valley]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[2]*1.5*c1));
                             }
                         }
                     }

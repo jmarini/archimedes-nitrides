@@ -88,9 +88,6 @@ real PSI[NXM+1][NYM+1];             // Potential, indexed by mesh node
 real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
-real SMH[NOAMTIA+1][3];             // precomputed constant, sqrt(2 * m* * m_e * q) / hbar, array indexed by material and valley number
-real HHM[NOAMTIA+1][3];             // precomputed constant, hbar^2 / (2 * m* * m_e * q), array indexed by material and valley number
-real HM[NOAMTIA+1][3];              // precomputed constant, hbar / (m* * m_e), array indexed by material and valley number
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 Particle P[NPMAX+1];              // particle information, array indexed by particle
@@ -102,30 +99,8 @@ real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexe
                                     //                                                                 3=contact hole density)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
-real EPSR[NOAMTIA+1];         // static dielectric constant, array indexed by material
-real EPF[NOAMTIA+1];          // high frequency dielectric constant, array indexed by material
-real MSTAR[NOAMTIA+1][6];     // effective mass, array indexed by material and by valley number
-real MSTAR_VB[NOAMTIA+1][3];  // effective valence band mass, array indexed by material and by valley number
-                              //   valley = 0: heavy hole
-                              //   valley = 1: light hole
-                              //   valley = 2: split-off
-real DELTAE_VB[NOAMTIA+1][3]; // energy difference between VBM and valence band, array indexed by material and by valley number
-                              //   valley = 0: heavy hole
-                              //   valley = 1: light hole
-                              //   valley = 2: split-off
-real alphaK[NOAMTIA+1][4];    // valley non-parabolicity, array indexed by material annd by valley number
-real EG[NOAMTIA+1];           // band gap, array indexed by material
-real HWO[NOAMTIA+1][6];       // optical phonon scattering energy, array indexed by material and up to 6 different values
-real DTK[NOAMTIA+1][6];       // optical coupling constant, array indexed by material and by up to 6 different values
-real ZF[NOAMTIA+1][6];        // optical phonon z-factor, array indexed by material and by up to 6 different values
-real RHO[NOAMTIA+1];          // crystal density, array indexed by material
-real DA[NOAMTIA+1];           // acoustic deformation potential, array indexed by material
-real UL[NOAMTIA+1];           // longitudinal sound velocity, array indexed by material
-real EMIN[NOAMTIA+1][4];      // energy difference between valley minimum and CB minimum, array indexed by material and by valley number
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
-real LATTCONST[NOAMTIA+1];    // lattice constant, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
-real KAV[NOAMTIA+1];          // electro-mechanical coupling constants, array indexed by material
 
 // All structures here...
 time_t binarytime;

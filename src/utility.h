@@ -139,15 +139,15 @@ particle_info_t mc_calculate_particle_info(Particle *p) {
          yvelocity = 0.;
 
     if(g_config->conduction_band == PARABOLIC) {
-        energy = HHM[material][p->valley] * ksquared;
-        xvelocity = p->kx * HM[material][p->valley];
-        yvelocity = p->ky * HM[material][p->valley];
+        energy = g_materials[material].cb.hhm[p->valley] * ksquared;
+        xvelocity = p->kx * g_materials[material].cb.hm[p->valley];
+        yvelocity = p->ky * g_materials[material].cb.hm[p->valley];
     }
     else if(g_config->conduction_band == KANE) {
-        real sq = sqrt(1. + 4. * alphaK[material][p->valley] * HHM[material][p->valley] * ksquared);
-        energy = (sq - 1.) / (2. * alphaK[material][p->valley]);
-        xvelocity = p->kx * HM[material][p->valley] / sq;
-        yvelocity = p->ky * HM[material][p->valley] / sq;
+        real sq = sqrt(1. + 4. * g_materials[material].cb.alpha[p->valley] * g_materials[material].cb.hhm[p->valley] * ksquared);
+        energy = (sq - 1.) / (2. * g_materials[material].cb.alpha[p->valley]);
+        xvelocity = p->kx * g_materials[material].cb.hm[p->valley] / sq;
+        yvelocity = p->ky * g_materials[material].cb.hm[p->valley] / sq;
     }
     else if(g_config->conduction_band == FULL) {
         real k, k2, k4;

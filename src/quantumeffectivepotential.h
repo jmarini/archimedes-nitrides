@@ -168,13 +168,14 @@ void quantum_effective_potential(void)
   for(i=3;i<=nx-1;i++)
     for(j=3;j<=ny-1;j++){
      if(n_x[i][j]>0.0){
-      tmp=((MSTAR[g_mesh->nodes[i+1][j].material][1]-MSTAR[g_mesh->nodes[i][j].material][1])/(MSTAR[g_mesh->nodes[i+1][j].material][1]*MSTAR[g_mesh->nodes[i][j].material][1]*M))
+      tmp=((material_node(i+1, j).cb.mstar[1] - material_node(i, j).cb.mstar[1]) /
+           (material_node(i+1, j).cb.mstar[1] * material_node(i, j).cb.mstar[1] * M))
                 *E*pow(n_x[i][j],D)*(n_x[i+1][j]-n_x[i][j])*odx2
-               +((MSTAR[g_mesh->nodes[i][j+1].material][1]-MSTAR[g_mesh->nodes[i][j].material][1])/(MSTAR[g_mesh->nodes[i][j+1].material][1]*MSTAR[g_mesh->nodes[i][j].material][1]*M))
+               +((material_node(i, j+1).cb.mstar[1]-material_node(i, j).cb.mstar[1])/(material_node(i, j+1).cb.mstar[1]*material_node(i, j).cb.mstar[1]*M))
                 *E*pow(n_y[i][j],D)*(n_y[i][j+1]-n_y[i][j])*ody2
                 +((pow(n_x[i+1][j],g_config->qep_alpha)-2.*pow(n_x[i][j],g_config->qep_alpha)+pow(n_x[i-1][j],g_config->qep_alpha))*odx2
                 +(pow(n_y[i][j+1],g_config->qep_alpha)-2.*pow(n_y[i][j],g_config->qep_alpha)+pow(n_y[i][j-1],g_config->qep_alpha))*ody2)
-               /(MSTAR[g_mesh->nodes[i][j].material][1]*M);
+               /(material_node(i, j).cb.mstar[1]*M);
       Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),g_config->qep_alpha);
      } else {
       // no quantum effective potential when no particles are present
@@ -277,7 +278,7 @@ void quantum_effective_potential(void)
      if(n_x[i][j]>0.0){
       tmp=((pow(n_x[i+1][j],g_config->qep_alpha)-2.*pow(n_x[i][j],g_config->qep_alpha)+pow(n_x[i-1][j],g_config->qep_alpha))*odx2
          +(pow(n_y[i][j+1],g_config->qep_alpha)-2.*pow(n_y[i][j],g_config->qep_alpha)+pow(n_y[i][j-1],g_config->qep_alpha))*ody2)
-         /(MSTAR[g_mesh->nodes[i][j].material][1]*M);
+         /(material_node(i, j).cb.mstar[1]*M);
       Qeff[i][j]=C*tmp/pow(0.5*(n_x[i][j]+n_y[i][j]),g_config->qep_alpha);
      } else {
       // no quantum effective potential when no particles are present
@@ -306,7 +307,7 @@ void quantum_effective_potential(void)
   for(i=2;i<=nx;i++)
    for(j=2;j<=ny;j++){
     // electron wavelenght
-    alpha2=HBAR*HBAR/(8.*M*MSTAR[g_mesh->nodes[i][j].material][1]*KB*g_config->lattice_temp);
+    alpha2=HBAR*HBAR/(8.*M*material_node(i, j).cb.mstar[1]*KB*g_config->lattice_temp);
     // Mac-Laurin series up to second derivative (leading correction term)
     Qeff[i][j]=alpha2*((PSI[i+1][j]-2.*PSI[i][j]+PSI[i-1][j])*odx2
                       +(PSI[i][j+1]-2.*PSI[i][j]+PSI[i][j-1])*ody2);

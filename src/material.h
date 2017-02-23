@@ -52,8 +52,8 @@ typedef struct {
 typedef struct {
     int id;
 
-    double Eg;       // band gap [eV]
-    double affinity; // electron affinity [eV]
+    double Eg;             // band gap [eV]
+    double affinity;       // electron affinity [eV]
     Band_Info cb;
     Band_Info vb;
 
@@ -62,19 +62,22 @@ typedef struct {
     double abs_correction; // absorption coefficient correction
     double eps_static;     // static dielectric constant (relative)
     double eps_hf;         // high frequency dielectric constant (relative)
-    double hwo[6];
-    double dtk[6];
-    int    zf[6];
-    double rho;
-    double da;
-    double ul;
-    double lattice_const;
-    double kav;
+    double hwo[6];         // optical phonon energy [eV]
+    double dtk[6];         // optical coupling constant [eV/m]
+    int    zf[6];          // optical phonon z-factor
+    double da;             // acoustic deformation potential [J]
+    double ul;             // longitudinal sound velocity [m/s]
+    double rho;            // crystal density [kg/m^3]
+    double lattice_const;  // crystal lattice constant [m]
+    double kav;            // electro-mechanical coupling constant
 
 } Material;
 
 
 extern Material g_materials[NOAMTIA];
+
+
+Material material_node(int i, int j);
 
 
 #endif

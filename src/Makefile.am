@@ -35,6 +35,8 @@ archimedes_SOURCES = \
 	faraday.h \
 	faradaybcs.h \
 	global_defines.h \
+	material.c \
+	material.h \
 	mcparameters.h \
 	media.h \
 	mesh.c \

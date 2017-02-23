@@ -56,24 +56,24 @@ void calc_scattering_rates(int material) {
     // #######################
     if(num_valleys >= 2) {
         // Dielectric constant - static, hi-freq and combination
-        eps = EPSR[material] * EPS0;
-        epf = EPF[material]  * EPS0;
+        eps = g_materials[material].eps_static * EPS0;
+        epf = g_materials[material].eps_hf  * EPS0;
         ep  = 1. / ((1. / epf) - (1. / eps));
 
 
         // =======================
         // == Phonon Scattering ==
         // =======================
-        cl = RHO[material] * pow(UL[material], 2.);  // rho * vs^2
-        dij = DTK[material][0] * Q; // deformation potential
-        hwij = HWO[material][0]; // phonon energy
+        cl = g_materials[material].rho * pow(g_materials[material].ul, 2.);  // rho * vs^2
+        dij = g_materials[material].dtk[0] * Q; // deformation potential
+        hwij = g_materials[material].hwo[0]; // phonon energy
 
         // Phonon frequency
-        wo  = HWO[material][0] * Q / HBAR;
+        wo  = g_materials[material].hwo[0] * Q / HBAR;
         wij = hwij * Q / HBAR;
 
         // Phonon number
-        no  = 1. / (exp(HWO[material][0] / BKTQ) - 1.);
+        no  = 1. / (exp(g_materials[material].hwo[0] / BKTQ) - 1.);
         nij = 1. / (exp(hwij / BKTQ) - 1.);
 
         // Effective mass and density of states prefactor for each valley
@@ -82,13 +82,10 @@ void calc_scattering_rates(int material) {
         real alpha[MAX_VALLEYS];
         // band structure parameters
         for(int v = 1; v <= num_valleys; v++) {
-            mstar[v] = MSTAR[material][v] * M;
+            mstar[v] = g_materials[material].cb.mstar[v] * M;
             dos[v] = pow(sqrt(2. * mstar[v]) / HBAR, 3.) / (2. * PI * PI);
             if(g_config->conduction_band == PARABOLIC) { alpha[v] = 0.; }
-            else if(g_config->conduction_band == KANE) { alpha[v] = alphaK[material][v]; }
-            SMH[material][v] = sqrt(2. * mstar[v] * Q) / HBAR;
-            HHM[material][v] = HBAR * HBAR / (2. * mstar[v] * Q);
-            HM[material][v] = HBAR / mstar[v];
+            else if(g_config->conduction_band == KANE) { alpha[v] = g_materials[material].cb.alpha[v]; }
         }
 
 
@@ -102,11 +99,11 @@ void calc_scattering_rates(int material) {
         poa= poe * no / (1. + no);
 
         // Acoustic Prefactor (Elastic)
-        aco = 2. * PI * DA[material] / Q * DA[material] * BKTQ / HBAR * Q / cl;
+        aco = 2. * PI * g_materials[material].da / Q * g_materials[material].da * BKTQ / HBAR * Q / cl;
 
         // Non-polar Optical Prefactor
         //   Emission
-        ope = PI * dij / wij * dij / RHO[material] / Q * (nij + 1.);
+        ope = PI * dij / wij * dij / g_materials[material].rho / Q * (nij + 1.);
         //   Absorption
         opa = ope * nij / (1. + nij);
 
@@ -180,12 +177,12 @@ void calc_scattering_rates(int material) {
                         real prefactor = 0.;
                         // Emission
                         if(i == 1) {
-                            finalenergy = initialenergy - HWO[material][0];
+                            finalenergy = initialenergy - g_materials[material].hwo[0];
                             prefactor = poe;
                         }
                         // Absorption
                         if(i == 2) {
-                            finalenergy = initialenergy + HWO[material][0];
+                            finalenergy = initialenergy + g_materials[material].hwo[0];
                             prefactor = poa;
                         }
 
@@ -220,7 +217,7 @@ void calc_scattering_rates(int material) {
                                           * gamma2_initial * gamma2_final;
                             overlap = (overlapA * log(qmax / qmin) - overlapB) / overlapC;
 
-                            rate = prefactor * SMH[material][v] * gamma2_final / sqgamma_initial * overlap / Q;
+                            rate = prefactor * g_materials[material].cb.smh[v] * gamma2_final / sqgamma_initial * overlap / Q;
                             SWK[material][v][i][ie] += rate;
                             if(g_config->scattering_output) {
                                 fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
@@ -241,12 +238,12 @@ void calc_scattering_rates(int material) {
 
                             // Emission
                             if(n == 1) {
-                                finalenergy = initialenergy - hwij + (EMIN[material][v] - EMIN[material][v2]);
+                                finalenergy = initialenergy - hwij + (g_materials[material].cb.emin[v] - g_materials[material].cb.emin[v2]);
                                 prefactor = ope * Q;
                             }
                             // Absorption
                             if(n == 2) {
-                                finalenergy = initialenergy + hwij + (EMIN[material][v] - EMIN[material][v2]);
+                                finalenergy = initialenergy + hwij + (g_materials[material].cb.emin[v] - g_materials[material].cb.emin[v2]);
                                 prefactor = opa * Q;
                             }
 
@@ -358,7 +355,7 @@ void calc_scattering_rates(int material) {
                     real gamma = finalenergy * Q * gamma1;
                     real sqgamma = sqrt(gamma);
 
-                    real prefactor = Q*Q * KAV[material] * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
+                    real prefactor = Q*Q * g_materials[material].kav * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
                     real qd2 = Q * Q * mstar[v] * pow(3.0 * g_config->impurity_conc, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
                     real a = mstar[v] * finalenergy * Q / (HBAR * HBAR * qd2);
                     real screening = log(1. + a) - a / (1. + a);
@@ -414,27 +411,21 @@ void calc_scattering_rates(int material) {
 // #####################
  if(num_valleys==1){
         char *f_material = mc_material_name(material);
-  SMH[material][0]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
-  HHM[material][0]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
-  HM[material][0]=HBAR/(MSTAR[material][1]*M);
-  SMH[material][1]=sqrt(2.*MSTAR[material][1]*M*Q)/HBAR;
-  HHM[material][1]=HBAR*HBAR/(2.*MSTAR[material][1]*M*Q);
-  HM[material][1]=HBAR/(MSTAR[material][1]*M);
 // Density of states
-  real dos=pow((sqrt(2.*MSTAR[material][1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
+  real dos=pow((sqrt(2.*g_materials[material].cb.mstar[1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
 // constant for the acoustic phonon
-  aco=2.*PI*(DA[material]/Q)*DA[material]*(BKTQ/HBAR)
-     *(Q/(RHO[material]*UL[material]*UL[material]));
+  aco=2.*PI*(g_materials[material].da/Q)*g_materials[material].da*(BKTQ/HBAR)
+     *(Q/(g_materials[material].rho*g_materials[material].ul*g_materials[material].ul));
 // Constants for the 6 Silicon-like non-polar optical phonons
    for(i=1;i<=6;i++){
 // i-th Optical Phonon
     oge[i]=0.;
     oga[i]=0.;
-    if(ZF[material][i-1]!=0.){
-      wo=HWO[material][i-1]*Q/HBAR; // frequency of phonon
-      no=1./(exp(HWO[material][i-1]/BKTQ) - 1.); // population of phonons
-      oge[i]=ZF[material][i-1]*PI*(DTK[material][i-1]*Q/wo)
-            *((DTK[material][i-1]*Q/RHO[material])/Q)*(no+1.);
+    if(g_materials[material].zf[i-1]!=0.){
+      wo=g_materials[material].hwo[i-1]*Q/HBAR; // frequency of phonon
+      no=1./(exp(g_materials[material].hwo[i-1]/BKTQ) - 1.); // population of phonons
+      oge[i]=g_materials[material].zf[i-1]*PI*(g_materials[material].dtk[i-1]*Q/wo)
+            *((g_materials[material].dtk[i-1]*Q/g_materials[material].rho)/Q)*(no+1.);
       oga[i]=oge[i]*no/(1.+no);
     }
    }
@@ -445,19 +436,19 @@ void calc_scattering_rates(int material) {
     if(g_config->optical_phonon_scattering==ON){
 // non polar optical phonons
      for(i=1;i<=6;i++){
-      finalenergy=initialenergy-HWO[material][i-1];
+      finalenergy=initialenergy-g_materials[material].hwo[i-1];
       SWK[material][0][i*2-1][ie]=SWK[material][0][i*2-2][ie];
       if(finalenergy>0.){
-       sef=sqrt(finalenergy*(1.+alphaK[material][1]*finalenergy));
+       sef=sqrt(finalenergy*(1.+g_materials[material].cb.alpha[1]*finalenergy));
        SWK[material][0][i*2-1][ie]=SWK[material][0][i*2-2][ie]
-                     +oge[i]*sef*dos*(1.+2.*alphaK[material][1]*finalenergy);
+                     +oge[i]*sef*dos*(1.+2.*g_materials[material].cb.alpha[1]*finalenergy);
       }
-      finalenergy=initialenergy+HWO[material][i-1];
+      finalenergy=initialenergy+g_materials[material].hwo[i-1];
       SWK[material][0][i*2][ie]=SWK[material][0][i*2-1][ie];
       if(finalenergy>0.){
-       sef=sqrt(finalenergy*(1.+alphaK[material][1]*finalenergy));
+       sef=sqrt(finalenergy*(1.+g_materials[material].cb.alpha[1]*finalenergy));
        SWK[material][0][i*2][ie]=SWK[material][0][i*2-1][ie]
-                   +oga[i]*sef*dos*(1.+2.*alphaK[material][1]*finalenergy);
+                   +oga[i]*sef*dos*(1.+2.*g_materials[material].cb.alpha[1]*finalenergy);
       }
      }
     }
@@ -479,9 +470,9 @@ void calc_scattering_rates(int material) {
     if(g_config->acoustic_phonon_scattering==ON){
 // Acoustic phonon
     finalenergy=initialenergy;
-    sef=sqrt(finalenergy*(1.+alphaK[material][1]*finalenergy));
+    sef=sqrt(finalenergy*(1.+g_materials[material].cb.alpha[1]*finalenergy));
     SWK[material][0][13][ie]=SWK[material][0][12][ie]
-                  +aco*sef*dos*(1.+2.*alphaK[material][1]*finalenergy);
+                  +aco*sef*dos*(1.+2.*g_materials[material].cb.alpha[1]*finalenergy);
     }
     else {
     // NO ACOUSTIC PHONONS
