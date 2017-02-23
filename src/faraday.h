@@ -3,12 +3,12 @@
    Devices. It implements the Monte Carlo method and a simplfied
    version of the MEP model (Maximum Entropy Principle model)
    for the simulation of the semiclassical Boltzmann equation for both
-   electrons and holes. It also includes the quantum effects by means 
+   electrons and holes. It also includes the quantum effects by means
    of effective potential method. It is now able to simulate applied
    magnetic fields along with self consistent Faraday equation.
 
    Copyright (C) 2004, 2005, 2006, 2007 Jean Michel Sellier <sellier@dmi.unict.it>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -25,22 +25,21 @@
    USA.  */
 
 
-// ######################################################
-// Created on 18 Aug.2007, Siracusa, J.M.Sellier
-// Last modif. : 18 Apr.2007, Siracusa, J.M.Sellier
-// ######################################################
-
 // Computation of the electrostatic potential,
 // i.e. resolution of the 2D Faraday equation.
-
-void
-Faraday(void)
-{
- int i,j;
 // Lax-Friedrichs-Sellier method (first-order in space)
- for(i=2;i<=g_mesh->nx;i++)
-  for(j=2;j<=g_mesh->ny;j++)
-   B[i][j]=0.25*(B[i+1][j]+B[i][j+1]+B[i-1][j]+B[i][j-1])
-          -g_config->dt*(0.5*(E[i+1][j][1]-E[i-1][j][1])/g_mesh->dx
-	      -0.5*(E[i][j+1][0]-E[i][j-1][0])/g_mesh->dy);
+int faraday( ) {
+    for(int i = 2; i <= g_mesh->nx; ++i) {
+        for(int j = 2; j <= g_mesh->ny; ++j) {
+            double delEx = 0.5 * (mc_node(i, j+1)->efield.x - mc_node(i, j-1)->efield.x) / g_mesh->dy;
+            double delEy = 0.5 * (mc_node(i+1, j)->efield.y - mc_node(i-1, j)->efield.y) / g_mesh->dx;
+
+            mc_node(i, j)->magnetic_field = 0.25
+                * (mc_node(i+1, j)->magnetic_field + mc_node(i, j+1)->magnetic_field +
+                   mc_node(i-1, j)->magnetic_field + mc_node(i, j-1)->magnetic_field)
+                - g_config->dt * (delEy - delEx);
+        }
+    }
+
+    return 0;
 }

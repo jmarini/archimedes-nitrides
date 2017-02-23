@@ -40,7 +40,7 @@ int updating(int model) {
     // =================================
     if(g_config->poisson_flag == ON) {
         electric_field( );
-        if(g_config->faraday_flag) { Faraday( ); }
+        if(g_config->faraday_flag) { faraday( ); }
     }
 
 

@@ -8,7 +8,7 @@
    self consistent Faraday equation.
 
    Copyright (C) 2004, 2005, 2006, 2007 Jean Michel Sellier <sellier@dmi.unict.it>
- 
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 3, or (at your option)
@@ -25,43 +25,32 @@
    USA.  */
 
 
-// ######################################################
-// Created on 18 Aug.2007, Siracusa, J.M.Sellier
-// Last modif. : 18 Aug.2007, Siracusa, J.M.Sellier
-// ######################################################
-
 // Boundary Conditions for the Faraday equation
 // For more informations about this equation
 // see the manual of GNU Archimedes release 0.0.8.
+int faraday_boundary_conditions( ) {
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
 
-void
-FaradayBCs(void)
-{
- int i,j;
- int nx = g_mesh->nx,
-     ny = g_mesh->ny;
-// Bottom Edge
-// ===========
-   for(i=1;i<=nx+1;i++){
-     B[i][0]=B[i][3];
-     B[i][1]=B[i][2];
-   }
-// Left Edge
-// =========
-   for(j=1;j<=ny+1;j++){
-     B[0][j]=B[3][j];
-     B[1][j]=B[2][j];
-   }
-// Right Edge
-// ==========
-   for(j=1;j<=ny+1;j++){
-     B[nx+1][j]=B[nx-1][j];
-     B[nx+2][j]=B[nx][j];
-   }
-// Upper Edge
-// ==========
-   for(i=1;i<=nx+1;i++){
-     B[i][ny+1]=B[i][ny];
-     B[i][ny+2]=B[i][ny-1];
-   }
+    for(int i = 1; i <= nx + 1; ++i) {
+        // Bottom Edge
+        g_mesh->nodes[i][0].magnetic_field = g_mesh->nodes[i][3].magnetic_field;
+        g_mesh->nodes[i][1].magnetic_field = g_mesh->nodes[i][2].magnetic_field;
+
+        // Upper Edge
+        g_mesh->nodes[i][ny+1].magnetic_field = g_mesh->nodes[i][ny  ].magnetic_field;
+        g_mesh->nodes[i][ny+2].magnetic_field = g_mesh->nodes[i][ny-1].magnetic_field;
+    }
+
+    for(int j = 1; j <= ny + 1; ++j) {
+        // Left Edge
+        g_mesh->nodes[0][j].magnetic_field = g_mesh->nodes[3][j].magnetic_field;
+        g_mesh->nodes[1][j].magnetic_field = g_mesh->nodes[2][j].magnetic_field;
+
+        // Right Edge
+        g_mesh->nodes[nx+1][j].magnetic_field = g_mesh->nodes[nx-1][j].magnetic_field;
+        g_mesh->nodes[nx+2][j].magnetic_field = g_mesh->nodes[nx  ][j].magnetic_field;
+    }
+
+    return 0;
 }

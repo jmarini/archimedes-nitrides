@@ -56,12 +56,12 @@ void electron_relaxation_step(void)
      t=(2./3.)*(u2d[i][j][4]/u2d[i][j][1])/KB;
      ktaup=M*g_materials[material].cb.mstar[1]*MIU0*g_config->lattice_temp/Q;
      taup=ktaup/t;
-     u2d[i][j][4]+=-g_config->dt/50.*(Q*(u2d[i][j][2]*E[i-1][j-1][0]
-                  +u2d[i][j][3]*E[i-1][j-1][1])
+     u2d[i][j][4]+=-g_config->dt/50.*(Q*(u2d[i][j][2]*g_mesh->nodes[i-1][j-1].efield.x
+                  +u2d[i][j][3]*g_mesh->nodes[i-1][j-1].efield.y)
                   +u2d[i][j][1]*1.5*KB*(t-g_config->lattice_temp)/tauwi(1.5*KB*t));
-     u2d[i][j][2]+=-g_config->dt/50.*(u2d[i][j][1]*Q*E[i-1][j-1][0]/(M*g_materials[material].cb.mstar[1])
+     u2d[i][j][2]+=-g_config->dt/50.*(u2d[i][j][1]*Q*g_mesh->nodes[i-1][j-1].efield.x/(M*g_materials[material].cb.mstar[1])
                   +u2d[i][j][2]/taup);
-     u2d[i][j][3]+=-g_config->dt/50.*(u2d[i][j][1]*Q*E[i-1][j-1][1]/(M*g_materials[material].cb.mstar[1])
+     u2d[i][j][3]+=-g_config->dt/50.*(u2d[i][j][1]*Q*g_mesh->nodes[i-1][j-1].efield.y/(M*g_materials[material].cb.mstar[1])
                   +u2d[i][j][3]/taup);
    }
 }

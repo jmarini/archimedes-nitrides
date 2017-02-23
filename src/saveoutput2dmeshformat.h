@@ -169,10 +169,10 @@ else{
        fprintf(Qp,"%g\n",u2d[i][j][0]);
    for(j=1;j<=ny+1;j++)
      for(i=1;i<=nx+1;i++)
-       fprintf(pop,"%g\n",PSI[i][j]);
+       fprintf(pop,"%g\n",g_mesh->nodes[i][j].potential);
    for(j=1;j<=ny+1;j++)
      for(i=1;i<=nx+1;i++)
-       fprintf(fM,"%g\n",B[i][j]);
+       fprintf(fM,"%g\n",g_mesh->nodes[i][j].magnetic_field);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
        fprintf(fp,"%g\n",u2d[i][j][1]);
@@ -187,10 +187,10 @@ else{
        fprintf(ep,"%g\n",u2d[i][j][4]/g_config->avg_steps); //energy (eV)
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(Xp,"%g\n",E[i][j][0]);
+       fprintf(Xp,"%g\n",g_mesh->nodes[i][j].efield.x);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(Yp,"%g\n",E[i][j][1]);
+       fprintf(Yp,"%g\n",g_mesh->nodes[i][j].efield.y);
 
 // Save the file "variable.mesh"
 // =============================
@@ -216,10 +216,10 @@ else{
        fprintf(Qp,"%g\n",u2d[i][j][0]);
    for(j=1;j<=ny+1;j++)
      for(i=1;i<=nx+1;i++)
-       fprintf(pop,"%g\n",PSI[i][j]);
+       fprintf(pop,"%g\n",g_mesh->nodes[i][j].potential);
    for(j=1;j<=ny+1;j++)
      for(i=1;i<=nx+1;i++)
-       fprintf(fM,"%g\n",B[i][j]);
+       fprintf(fM,"%g\n",g_mesh->nodes[i][j].magnetic_field);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
        fprintf(fp,"%g\n",u2d[i+2][j+2][1]);
@@ -234,10 +234,10 @@ else{
        fprintf(ep,"%g\n",u2d[i+2][j+2][4]/u2d[i+2][j+2][1]/Q); //energy (eV)
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(Xp,"%g\n",E[i][j][0]);
+       fprintf(Xp,"%g\n",g_mesh->nodes[i][j].efield.x);
    for(j=1;j<=ny+1;j++)
     for(i=1;i<=nx+1;i++)
-       fprintf(Yp,"%g\n",E[i][j][1]);
+       fprintf(Yp,"%g\n",g_mesh->nodes[i][j].efield.y);
 
 // Save the file "variable.mesh"
 // =============================

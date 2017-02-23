@@ -170,12 +170,12 @@ SaveOutput2DHole_MeshFormat(int je)
        fprintf(Qp,"%g\n",u2d[i][j][0]);
    for(j=1;j<=ny;j++)
      for(i=1;i<=nx;i++)
-       fprintf(pop,"%g\n",PSI[i][j]);
+       fprintf(pop,"%g\n",g_mesh->nodes[i][j].potential);
     for(i=1;i<=nx;i++)
-       fprintf(Xp,"%g\n",E[i][j][0]);
+       fprintf(Xp,"%g\n",g_mesh->nodes[i][j].efield.x);
    for(j=1;j<=ny;j++)
     for(i=1;i<=nx;i++)
-       fprintf(Yp,"%g\n",E[i][j][1]);
+       fprintf(Yp,"%g\n",g_mesh->nodes[i][j].efield.y);
 
 // Save the output file "variable.mesh"
 // ====================================

@@ -61,7 +61,7 @@ typedef struct {
     Carrier_Info e;     // electrons
     Carrier_Info h;     // holes
 
-    double qep;             // quantum effective potential
+    double qep;         // quantum effective potential
     double potential;
     Vec2 efield;         // electric field
     double magnetic_field;

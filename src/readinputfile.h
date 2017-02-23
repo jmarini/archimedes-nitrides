@@ -125,7 +125,6 @@ Read_Input_File(void)
       h2d[i][j][1]=NI;
       u2d[i][j][2]=u2d[i][j][3]=0.;
       h2d[i][j][2]=h2d[i][j][3]=0.;
-      B[i][j]=0.; // no magnetic field as default
    }
 
 // =====================
@@ -339,7 +338,6 @@ Read_Input_File(void)
         u2d[i][j][4]=(real)(dum*Q*u2d[i][j][1]);
         g_mesh->nodes[i][j].e.energy = (real)(dum * Q * g_mesh->nodes[i][j].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
-        PSI[i][j]=(real)(dum);
         g_mesh->nodes[i][j].potential = (real)dum;
        }
     }
@@ -354,7 +352,6 @@ Read_Input_File(void)
         u2d[i+2][j+2][4]=(real)(dum*Q*u2d[i+2][j+2][1]);
         g_mesh->nodes[i+2][j+2].e.energy = (real)(dum * Q * g_mesh->nodes[i+2][j+2].e.density);
         fscanf(pp,"%lf %lf %lf",&dum0,&dum1,&dum);
-        PSI[i][j]=(real)(dum);
         g_mesh->nodes[i][j].potential = (real)dum;
        }
     }
@@ -753,7 +750,6 @@ Read_Input_File(void)
       for(j=1;j<=g_mesh->ny+1;j++)
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
-           B[i][j]=value;
            g_mesh->nodes[i][j].magnetic_field = value;
         }
     printf("Constant Magnetic Field %f %f %f %f %f ---> Ok\n",xi,yi,xf,yf,value);

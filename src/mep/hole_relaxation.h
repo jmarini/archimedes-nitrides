@@ -48,14 +48,14 @@ void MEP_hole_relaxation(Mesh *mesh) {
                 double tauw = 0.5 * ktaup / t
                             + 1.5 * ktauw * t / (t + g_config->lattice_temp);
                 h2d[i][j][4] += -g_config->dt / 50.
-                              * (-Q * (h2d[i][j][2] * E[i-1][j-1][0] +
-                                       h2d[i][j][3] * E[i-1][j-1][1])
+                              * (-Q * (h2d[i][j][2] * g_mesh->nodes[i-1][j-1].efield.x +
+                                       h2d[i][j][3] * g_mesh->nodes[i-1][j-1].efield.y)
                                  + h2d[i][j][1] * 1.5 * KB * (t - g_config->lattice_temp) / tauw);
                 h2d[i][j][2] += -g_config->dt / 50.
-                              * (-h2d[i][j][1] * Q * E[i-1][j-1][0] / (M * mstarhole)
+                              * (-h2d[i][j][1] * Q * g_mesh->nodes[i-1][j-1].efield.x / (M * mstarhole)
                                  + h2d[i][j][2] / taup);
                 h2d[i][j][3] += -g_config->dt / 50
-                              * (-h2d[i][j][1] * Q * E[i-1][j-1][1] / (M * mstarhole)
+                              * (-h2d[i][j][1] * Q * g_mesh->nodes[i-1][j-1].efield.y / (M * mstarhole)
                                  + h2d[i][j][3] / taup);
             }
         }

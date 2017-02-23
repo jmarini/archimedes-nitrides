@@ -84,8 +84,6 @@ real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, a
                                     //  type = 2: running sum of hole x-velocity (divide by MEDIA to get average)
                                     //  type = 3: running sum of hole y-velocity (divide by MEDIA to get average)
                                     //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
-real PSI[NXM+1][NYM+1];             // Potential, indexed by mesh node
-real E[NXM+1][NYM+1][2];            // E-field, indexed by mesh node
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real QH;                            // precomputed constant, q / hbar
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
@@ -98,18 +96,8 @@ real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexe
                                     //                                                                 2=contact electron density,
                                     //                                                                 3=contact hole density)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
-real B[NXM+1][NYM+1];         // magnetic field, indexed by mesh node
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
-
-// All structures here...
-time_t binarytime;
-struct tm *nowtm;
-struct option longopts[] =
-{
-    { "version", no_argument, NULL, 'v' },
-    { "help", no_argument, NULL, 'h' }
-};
 
 // All files here...
 FILE *fp;
@@ -173,6 +161,11 @@ int main(int argc, char *argv[]) {
         z = 0,
         lose = 0;
     progname = argv[0];
+
+    struct option longopts[] = {
+        {"version", no_argument, NULL, 'v'},
+        {"help", no_argument, NULL, 'h'},
+    };
 
     while((optc = getopt_long(argc, argv, "hv", longopts, (int *) 0)) != EOF) {
         switch (optc) {
@@ -253,7 +246,6 @@ int main(int argc, char *argv[]) {
     // We reset the some arrays
     // ========================
     memset(&u2d, 0, sizeof(u2d));
-    memset(&E, 0, sizeof(E));
     memset(&EDGE, 0, sizeof(EDGE));
 
     // Read the geometrical and physical description of the MESFET
@@ -288,8 +280,8 @@ int main(int argc, char *argv[]) {
 
     // Loading of the initial runtime
     // ==============================
-    binarytime = time(NULL);
-    nowtm = localtime(&binarytime);
+    time_t binarytime = time(NULL);
+    struct tm *nowtm = localtime(&binarytime);
 
     printf("\n\nComputation Started at %s\n", asctime(nowtm));
 
@@ -301,7 +293,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         if(g_config->faraday_flag) {
-            FaradayBCs();
+            faraday_boundary_conditions( );
         }
         printf("Boundary conditions calculated...\n");
     }

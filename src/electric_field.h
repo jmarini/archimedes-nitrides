@@ -67,9 +67,9 @@ int electric_field(void) {
                 Node *node = mc_node(i, j);
                 real kappa = node->mat->eps_static * EPS0 / Q;
                 real deltat = (factor / kappa) * (dx2 * dy2)
-                            / ((2 * (dx2 + dy2)) + dx2 * dy2 * g_config->screening_length);
+                            / ((2 * (dx2 + dy2)) + dx2 * dy2);
                 real rho = (node->e.density - node->donor_conc)
-                         - (node->h.density - node->acceptor_conc) + node->fixed_charge; // charge neutrality eqn.
+                         - (node->h.density - node->acceptor_conc); // charge neutrality eqn.
 
                 // here we are calculating the difference in potential
                 // between nearest neighbors
@@ -130,14 +130,6 @@ int electric_field(void) {
         // set electric field at edges
         g_mesh->nodes[i][     1].efield.y = g_mesh->nodes[i][ 2].efield.y;
         g_mesh->nodes[i][ny + 1].efield.y = g_mesh->nodes[i][ny].efield.y;
-    }
-
-    // compatability
-    for(int i = 1; i <= nx + 1; ++i) {
-        for(int j = 1; j <= ny + 1; ++j) {
-            E[i][j][0] = g_mesh->nodes[i][j].efield.x;
-            E[i][j][1] = g_mesh->nodes[i][j].efield.y;
-        }
     }
 
     return 0;

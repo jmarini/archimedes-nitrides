@@ -200,21 +200,21 @@ void SaveOutput2DGNUPLOT(int je) {
 // =======================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
-      fprintf(lp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,PSI[i][j]);
+      fprintf(lp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,g_mesh->nodes[i][j].potential);
     fprintf(lp,"\n");
   }
 // X-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
-      fprintf(lxp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][0]);
+      fprintf(lxp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,g_mesh->nodes[i][j].efield.x);
     fprintf(lxp,"\n");
   }
 // Y-component of electric field
 // =============================
   for(j=1;j<=ny+1;j++){
     for(i=1;i<=nx+1;i++)
-      fprintf(lyp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,E[i][j][1]);
+      fprintf(lyp,"%g %g %g\n",1.e6*(i-1.)*dx,1.e6*(j-1.)*dy,g_mesh->nodes[i][j].efield.y);
     fprintf(lyp,"\n");
   }
 // Electron Energy (in eV)
