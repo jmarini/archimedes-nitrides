@@ -76,37 +76,35 @@ typedef struct {
 } particle_info_t;
 
 
-inline int mc_does_particle_exist(Particle *particle) {
-    return particle->valley != 9;
+inline int mc_does_particle_exist(Particle *p) { return p->valley != 9; }
+
+
+inline void mc_remove_particle(Particle *p) { p->valley = 9; }
+
+
+inline double mc_particle_ksquared(Particle *p) {
+    return (p->kx * p->kx +
+            p->ky * p->ky +
+            p->kz * p->kz);
 }
 
 
-inline void mc_remove_particle(Particle *particle) {
-    particle->valley = 9;
+inline double mc_particle_k(Particle *p) {
+    return sqrt(mc_particle_ksquared(p));
 }
 
 
-inline double mc_particle_ksquared(Particle *particle) {
-    return (particle->kx * particle->kx +
-            particle->ky * particle->ky +
-            particle->kz * particle->kz);
-}
+int mc_calculate_isotropic_k(Particle *p, double new_energy);
 
+double mc_particle_energy(Particle *p);
+double mc_particle_norm_energy(Particle *p, int axis);
 
-inline double mc_particle_k(Particle *particle) {
-    return sqrt(mc_particle_ksquared(particle));
-}
+Index mc_particle_coords(Particle *p);
+Index mc_particle_edge_coords(Particle *p);
 
+Node * mc_get_particle_node(Particle *p);
 
-int mc_calculate_isotropic_k(Particle *particle, double new_energy);
-
-double mc_particle_energy(Particle *particle);
-double mc_particle_norm_energy(Particle *particle, int axis);
-
-Index mc_particle_coords(Particle *particle);
-Index mc_particle_edge_coords(Particle *particle);
-
-Node * mc_get_particle_node(Particle *particle);
+particle_info_t mc_calculate_particle_info(Particle *p);
 
 long long int mc_next_particle_id( );
 

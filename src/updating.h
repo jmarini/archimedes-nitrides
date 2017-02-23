@@ -30,7 +30,7 @@
 // The solution is writted in the array named u2d.
 
 
-int updating(int model) {
+int updating(int iteration, int model) {
     if(model == MEPE || model == MEPH || model == MEPEH) {
         printf("Error: MEP simulation is deprecated.\n");
         return 1;
@@ -57,7 +57,7 @@ int updating(int model) {
 
 
     // Output on some usefull informations about the simulation
-    printf("%5d   TIME = %10.4g  (picosec)\n", c, g_config->time * 1.e12);
+    printf("%5d   TIME = %10.4g  (picosec)\n", iteration, g_config->time * 1.e12);
     if(g_config->max_min_output){
         // Compute the maximum and minimum of various macroscopic variables
         int i = 0,
@@ -112,14 +112,14 @@ int updating(int model) {
 
     // Here we save at each step if this option has been choosed
     if(g_config->save_step_output) {
-        SaveOutputFiles(g_config->output_format, c);
-        printf("Output number %d has been saved\n", c);
+        SaveOutputFiles(g_config->output_format, iteration);
+        printf("Output number %d has been saved\n", iteration);
     }
 
     if(fabs(g_config->time - g_config->tf) / fabs(g_config->tf) < SMALL) {
         // Compute the various currents on the various defined contacts
         Compute_Currents( );
-        c = ITMAX + 10;
+        return 1;
     }
 
     return 0;

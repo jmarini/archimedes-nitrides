@@ -51,8 +51,8 @@ void drift(Particle *particle, real tau) {
         thesquareroot = sqrt(1. + 4. * node->mat->cb.alpha[particle->valley] * gk);
         v.x = particle->kx * g_materials[material].cb.hm[particle->valley] / thesquareroot;
         v.y = particle->ky * g_materials[material].cb.hm[particle->valley] / thesquareroot;
-        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
-        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
+        dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
+        dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         particle->x += hmt * (particle->kx + 0.5 * dk.x) / thesquareroot;
         particle->y += hmt * (particle->ky + 0.5 * dk.y) / thesquareroot;
         particle->kx += dk.x;
@@ -61,8 +61,8 @@ void drift(Particle *particle, real tau) {
     else if(g_config->conduction_band == PARABOLIC) {
         v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
         v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
-        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
-        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
+        dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
+        dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         particle->x += hmt * (particle->kx + 0.5 * dk.x);
         particle->y += hmt * (particle->ky + 0.5 * dk.y);
         particle->kx += dk.x;
@@ -73,8 +73,8 @@ void drift(Particle *particle, real tau) {
         real dx, dy, d;
         v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
         v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
-        dk.x = -QH * (node->efield.x + v.y * node->magnetic_field) * tau;
-        dk.y = -QH * (node->efield.y - v.x * node->magnetic_field) * tau;
+        dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
+        dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         k2 = (particle->kx + 0.5 * dk.x) * (particle->kx + 0.5 * dk.x)
            + (particle->ky + 0.5 * dk.y) * (particle->ky + 0.5 * dk.y)
            +  particle->kz               *  particle->kz;
@@ -93,8 +93,8 @@ void drift(Particle *particle, real tau) {
           +       CB_FULL[material][9];
         ks *= 1.e+12 * 2.  * PI;
         d  *= 1.e-12 * 0.5 / PI;
-        dx = QH * d * tau * (particle->kx + 0.5 * dk.x) / ks;
-        dy = QH * d * tau * (particle->ky + 0.5 * dk.y) / ks;
+        dx = Q * d * tau * (particle->kx + 0.5 * dk.x) / ks / HBAR;
+        dy = Q * d * tau * (particle->ky + 0.5 * dk.y) / ks / HBAR;
         particle->kx += dk.x;
         particle->ky += dk.y;
         particle->x += dx;

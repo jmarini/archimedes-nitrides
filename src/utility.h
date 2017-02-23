@@ -79,7 +79,7 @@ inline int mc_is_boundary_contact(int direction, int index) {
 }
 
 
-inline char* mc_material_name(int material) {
+char* mc_material_name(int material) {
     switch(material) {
         case SILICON: return "Si";
         case GAAS: return "GaAs";
@@ -103,103 +103,13 @@ inline char* mc_material_name(int material) {
 }
 
 
-inline char* mc_band_model_name(int model) {
+char* mc_band_model_name(int model) {
     switch(model) {
         case PARABOLIC: return "Parabolic";
         case KANE: return "Kane";
         case FULL: return "Full";
         default: return "Unknown Band Model";
     }
-}
-
-
-particle_info_t mc_calculate_particle_info(Particle *p) {
-    // calculate particle coordinates
-    int i = 0,
-        j = 0;
-    int nx = g_mesh->nx,
-        ny = g_mesh->ny;
-    real dx = g_mesh->dx,
-         dy = g_mesh->dy;
-
-    i = (int)(p->x / dx + 1.5);
-    if(i <= 1) { i = 1; }
-    if(i >= nx + 1) { i = nx + 1; }
-
-    j = (int)(p->y / dy + 1.5);
-    if(j <= 1) { j = 1; }
-    if(j >= ny + 1) { j = ny + 1; }
-
-    int material = g_mesh->nodes[i][j].material;
-
-    // calculate particle energy and velocity
-    real ksquared = mc_particle_ksquared(p);
-    real energy = 0.;
-    real xvelocity = 0.,
-         yvelocity = 0.;
-
-    if(g_config->conduction_band == PARABOLIC) {
-        energy = g_materials[material].cb.hhm[p->valley] * ksquared;
-        xvelocity = p->kx * g_materials[material].cb.hm[p->valley];
-        yvelocity = p->ky * g_materials[material].cb.hm[p->valley];
-    }
-    else if(g_config->conduction_band == KANE) {
-        real sq = sqrt(1. + 4. * g_materials[material].cb.alpha[p->valley] * g_materials[material].cb.hhm[p->valley] * ksquared);
-        energy = (sq - 1.) / (2. * g_materials[material].cb.alpha[p->valley]);
-        xvelocity = p->kx * g_materials[material].cb.hm[p->valley] / sq;
-        yvelocity = p->ky * g_materials[material].cb.hm[p->valley] / sq;
-    }
-    else if(g_config->conduction_band == FULL) {
-        real k, k2, k4;
-        real d;
-        k = sqrt(ksquared) * 0.5 / PI * 1.e-12;
-        // periodicity on reciprocal lattice
-        k2 = k * k;
-        k4 = k2 * k2;
-        energy = CB_FULL[material][0] * k4 * k4 * k2
-               + CB_FULL[material][1] * k4 * k4 * k
-               + CB_FULL[material][2] * k4 * k4
-               + CB_FULL[material][3] * k4 * k2 * k
-               + CB_FULL[material][4] * k4 * k2
-               + CB_FULL[material][5] * k4 * k
-               + CB_FULL[material][6] * k4
-               + CB_FULL[material][7] * k2 * k
-               + CB_FULL[material][8] * k2
-               + CB_FULL[material][9] * k
-               + CB_FULL[material][10]; // in eV
-
-        d = 10. * CB_FULL[material][0] * k4 * k4 * k
-          +  9. * CB_FULL[material][1] * k4 * k4
-          +  8. * CB_FULL[material][2] * k4 * k2 * k
-          +  7. * CB_FULL[material][3] * k4 * k2
-          +  6. * CB_FULL[material][4] * k4 * k
-          +  5. * CB_FULL[material][5] * k4
-          +  4. * CB_FULL[material][6] * k2 * k
-          +  3. * CB_FULL[material][7] * k2
-          +  2. * CB_FULL[material][8] * k
-          +       CB_FULL[material][9];
-        k *= 1.e+12 * 2. * PI;
-        d *= 1.e-12 * 0.5 / PI;
-        xvelocity = QH * d * p->kx / k;
-        yvelocity = QH * d * p->ky / k;
-    }
-
-
-    return (particle_info_t){
-        .id=p->id,
-        .valley=p->valley,
-        .kx=p->kx,
-        .ky=p->ky,
-        .kz=p->kz,
-        .energy=energy,
-        .t=p->t,
-        .x=p->x,
-        .y=p->y,
-        .i=i,
-        .j=j,
-        .vx=xvelocity,
-        .vy=yvelocity
-    };
 }
 
 

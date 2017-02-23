@@ -59,13 +59,8 @@ extern inline int mc_does_particle_exist(Particle *particle);
 extern inline void mc_remove_particle(Particle *particle);
 extern inline real mc_particle_ksquared(Particle *particle);
 extern inline real mc_particle_k(Particle *particle);
-// ===============================
 
 
-// All integers here...
-int c;                   // iteration number
-
-// All "real"'s here...
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
                                           //  type = 0: unused
                                           //  type = 1: unused
@@ -85,7 +80,6 @@ real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, a
                                     //  type = 3: running sum of hole y-velocity (divide by MEDIA to get average)
                                     //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
-real QH;                            // precomputed constant, q / hbar
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 Particle P[NPMAX+1];              // particle information, array indexed by particle
@@ -99,13 +93,11 @@ real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * c
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
 
-// All files here...
 FILE *fp;
 FILE *emitted_fp;
 FILE *tracking_fp;
 FILE *valley_occupation_fp;
 
-// All strings here...
 static char *progname;
 
 
@@ -150,7 +142,6 @@ extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline int mc_is_boundary_vacuum(int direction, int index);
 extern inline char* mc_material_name(int material);
 extern inline char* mc_band_model_name(int model);
-particle_info_t mc_calculate_particle_info(Particle *p);
 
 
 int main(int argc, char *argv[]) {
@@ -303,7 +294,7 @@ int main(int argc, char *argv[]) {
     double transistion_rate[NOAMTIA][DIME][3];
     if(g_config->simulation_model == MCE || g_config->simulation_model == MCEH) {
         for(int i = 0; i < NOAMTIA; i++) {
-            calc_scattering_rates(i);
+            calculate_scattering_rates(&g_materials[i]);
             calc_absorption_rates(g_materials[i], transistion_rate);
         }
         printf("Scattering rates calculated...\n");
@@ -350,16 +341,18 @@ int main(int argc, char *argv[]) {
     // HERE IS THE SIMULATION
     // ======================
     int valley_occupation[10];
-    for(c = 1; c <= ITMAX; c++) {
+    for(int it = 1; it <= ITMAX; it++) {
         memset(&valley_occupation, 0, sizeof(valley_occupation));
         for(int n = 0; n < g_config->num_particles; ++n) {
             valley_occupation[P[n].valley] += 1;
         }
-        fprintf(valley_occupation_fp, "%d %g %d %d\n", c, g_config->time, valley_occupation[1], valley_occupation[2]);
+        fprintf(valley_occupation_fp, "%d %g %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2]);
 
-        fprintf(particles_fp, "%d %g %lld\n", c, g_config->time, g_config->num_particles);
+        fprintf(particles_fp, "%d %g %lld\n", it, g_config->time, g_config->num_particles);
 
-        updating(g_config->simulation_model);
+        if(updating(it, g_config->simulation_model) != 0) {
+            break;
+        }
     }
 
     fclose(particles_fp);

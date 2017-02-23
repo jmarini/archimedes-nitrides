@@ -3,6 +3,7 @@
 #include "configuration.h"
 #include "constants.h"
 #include "global_defines.h"
+#include "material.h"
 #include "random.h"
 #include "vec.h"
 
@@ -14,33 +15,24 @@ static inline int clamp(int value, int min, int max) {
 }
 
 
-Index mc_particle_coords(Particle *particle) {
-    // uses globabl variables dx & dy
-    int i = clamp((int)(particle->x / g_mesh->dx) + 1, 1, g_mesh->nx);
-    // int i = (int)(particle->x / g_mesh->dx) + 1;
-    // if(i < 1) { i = 1; }
-    // else if(i > g_mesh->nx ) { i = g_mesh->nx; }
-
-    int j = clamp((int)(particle->y / g_mesh->dy) + 1, 1, g_mesh->ny);
-    // int j = (int)(particle->y / g_mesh->dy) + 1;
-    // if(j < 1) { j = 1; }
-    // else if(j > g_mesh->ny ) { j = g_mesh->ny; }
+Index mc_particle_coords(Particle *p) {
+    int i = clamp((int)(p->x / g_mesh->dx) + 1, 1, g_mesh->nx);
+    int j = clamp((int)(p->y / g_mesh->dy) + 1, 1, g_mesh->ny);
 
     return (Index){.i=i, .j=j};
 }
 
 
-Index mc_particle_edge_coords(Particle *particle) {
-    // uses globabl variables dx & dy
-    int i = (int)(particle->x / g_mesh->dx + 1.5);
-    int j = (int)(particle->y / g_mesh->dy + 1.5);
+Index mc_particle_edge_coords(Particle *p) {
+    int i = (int)(p->x / g_mesh->dx + 1.5);
+    int j = (int)(p->y / g_mesh->dy + 1.5);
 
     return (Index){.i=i, .j=j};
 }
 
 
-Node * mc_get_particle_node(Particle *particle) {
-    return mc_node_s(mc_particle_coords(particle));
+Node * mc_get_particle_node(Particle *p) {
+    return mc_node_s(mc_particle_coords(p));
 }
 
 
@@ -50,15 +42,15 @@ long long int mc_next_particle_id( ) {
 }
 
 
-double mc_particle_energy(Particle *particle) {
-    Node *node = mc_get_particle_node(particle);
+double mc_particle_energy(Particle *p) {
+    Material *material = mc_get_particle_node(p)->mat;
 
     if(g_config->conduction_band == PARABOLIC) {
-        return node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
+        return material->cb.hhm[p->valley] * mc_particle_ksquared(p);
     }
     else if(g_config->conduction_band == KANE) {
-        real alpha = node->mat->cb.alpha[particle->valley];
-        real gamma = node->mat->cb.hhm[particle->valley] * mc_particle_ksquared(particle);
+        real alpha = material->cb.alpha[p->valley];
+        real gamma = material->cb.hhm[p->valley] * mc_particle_ksquared(p);
         return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
     }
     else {
@@ -67,27 +59,27 @@ double mc_particle_energy(Particle *particle) {
 }
 
 
-double mc_particle_norm_energy(Particle *particle, int axis) {
-    Node *node = mc_get_particle_node(particle);
+double mc_particle_norm_energy(Particle *p, int axis) {
+    Material *material = mc_get_particle_node(p)->mat;
 
     double ksquared = 0.;
     switch(axis) {
         case 0: // x
-            ksquared = particle->kx * particle->kx; break;
+            ksquared = p->kx * p->kx; break;
         case 1: // y
-            ksquared = particle->ky * particle->ky; break;
+            ksquared = p->ky * p->ky; break;
         case 2: // z
-            ksquared = particle->kz * particle->kz; break;
+            ksquared = p->kz * p->kz; break;
         default:
-            ksquared = mc_particle_ksquared(particle);
+            ksquared = mc_particle_ksquared(p);
     }
 
     if(g_config->conduction_band == PARABOLIC) {
-        return node->mat->cb.hhm[particle->valley] * ksquared;
+        return material->cb.hhm[p->valley] * ksquared;
     }
     else if(g_config->conduction_band == KANE) {
-        real alpha = node->mat->cb.alpha[particle->valley];
-        real gamma = node->mat->cb.hhm[particle->valley] * ksquared;
+        real alpha = material->cb.alpha[p->valley];
+        real gamma = material->cb.hhm[p->valley] * ksquared;
         return (-1.0 + sqrt(1.0 + 4.0 * alpha * gamma)) / (2.0 * alpha);
     }
     else {
@@ -96,25 +88,83 @@ double mc_particle_norm_energy(Particle *particle, int axis) {
 }
 
 
-int mc_calculate_isotropic_k(Particle *particle, double new_energy) {
+int mc_calculate_isotropic_k(Particle *p, double new_energy) {
+    Material *material = mc_get_particle_node(p)->mat;
+
     double k = 0.;
-    Node *node = mc_get_particle_node(particle);
     if(g_config->conduction_band == KANE) {
-        k = node->mat->cb.smh[particle->valley]
-          * sqrt(new_energy * (1. + node->mat->cb.alpha[particle->valley] * new_energy));
+        k = material->cb.smh[p->valley]
+          * sqrt(new_energy * (1. + material->cb.alpha[p->valley] * new_energy));
     }
     else if(g_config->conduction_band == PARABOLIC) {
-        k = node->mat->cb.smh[particle->valley] * sqrt(new_energy);
+        k = material->cb.smh[p->valley] * sqrt(new_energy);
     }
-    else { return 0; }
+    else { return 1; }
 
     double cs  = 1. - 2. * rnd( );
     double sn  = sqrt(1. - cs * cs);
     double fai = 2. * PI * rnd( );
 
-    particle->kx = k * cs;
-    particle->ky = k * sn * cos(fai);
-    particle->kz = k * sn * sin(fai);
+    p->kx = k * cs;
+    p->ky = k * sn * cos(fai);
+    p->kz = k * sn * sin(fai);
 
-    return 1;
+    return 0;
+}
+
+
+particle_info_t mc_calculate_particle_info(Particle *p) {
+    // calculate particle coordinates
+    int i = 0,
+        j = 0;
+    int nx = g_mesh->nx,
+        ny = g_mesh->ny;
+    double dx = g_mesh->dx,
+           dy = g_mesh->dy;
+
+    i = (int)(p->x / dx + 1.5);
+    if(i <= 1) { i = 1; }
+    if(i >= nx + 1) { i = nx + 1; }
+
+    j = (int)(p->y / dy + 1.5);
+    if(j <= 1) { j = 1; }
+    if(j >= ny + 1) { j = ny + 1; }
+
+    Material *material = g_mesh->nodes[i][j].mat;
+
+    // calculate particle energy and velocity
+    double ksquared = mc_particle_ksquared(p);
+    double energy = 0.;
+    double xvelocity = 0.,
+           yvelocity = 0.;
+
+    if(g_config->conduction_band == PARABOLIC) {
+        energy = material->cb.hhm[p->valley] * ksquared;
+        xvelocity = p->kx * material->cb.hm[p->valley];
+        yvelocity = p->ky * material->cb.hm[p->valley];
+    }
+    else if(g_config->conduction_band == KANE) {
+        double sq = sqrt(1. + 4. * material->cb.alpha[p->valley]
+                                 * material->cb.hhm[p->valley] * ksquared);
+        energy = (sq - 1.) / (2. * material->cb.alpha[p->valley]);
+        xvelocity = p->kx * material->cb.hm[p->valley] / sq;
+        yvelocity = p->ky * material->cb.hm[p->valley] / sq;
+    }
+
+
+    return (particle_info_t){
+        .id=p->id,
+        .valley=p->valley,
+        .kx=p->kx,
+        .ky=p->ky,
+        .kz=p->kz,
+        .energy=energy,
+        .t=p->t,
+        .x=p->x,
+        .y=p->y,
+        .i=i,
+        .j=j,
+        .vx=xvelocity,
+        .vy=yvelocity
+    };
 }
