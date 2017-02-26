@@ -82,19 +82,19 @@ inline Particle creation(int i, real t, int edge) {
     if( j <= 1) {  j = 1; }
     if(ii >= nx + 1) { ii = nx + 1; }
     if( j >= ny + 1) {  j = ny + 1; }
-    int material = g_mesh->nodes[ii][j].material;
-    if(g_materials[material].cb.num_valleys == 1) {
+    Material *material = g_mesh->nodes[ii][j].mat;
+    if(material->cb.num_valleys == 1) {
         iv = 1;
         iaux = 0;
     }
-    else if(g_materials[material].cb.num_valleys >= 2) {
+    else if(material->cb.num_valleys >= 2) {
         iv = iaux = 1;
         // 20% of the created particles belongs to the L-valley
         if(rnd() >= 0.8) { iv = iaux = 2; }
     }
     c1 = log(rnd());
-    c2 = g_materials[material].cb.smh[iaux]
-       * sqrt(-1.5 * BKTQ * c1 * (1. - g_materials[material].cb.alpha[iv] * 1.5 * BKTQ * c1));
+    c2 = material->cb.smh[iaux]
+       * sqrt(-1.5 * BKTQ * c1 * (1. - material->cb.alpha[iv] * 1.5 * BKTQ * c1));
     c3 = rnd();
     c4 = sqrt(1. - c3 * c3);
     c5 = 2. * PI * rnd();
@@ -103,7 +103,7 @@ inline Particle creation(int i, real t, int edge) {
     kx = c2 * c3;
     ky = c2 * c4 * c6;
     kz = c2 * c4 * c7;
-    ts = t - log(rnd()) / GM[material];
+    ts = t - log(rnd()) / GM[material->id];
     if(edge == direction_t.TOP)   { ky *= -1.; }
     if(edge == direction_t.RIGHT) { kx *= -1.; }
 
@@ -111,5 +111,3 @@ inline Particle creation(int i, real t, int edge) {
 
     return (Particle){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y};
 }
-
-// =================================================

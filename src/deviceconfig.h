@@ -42,7 +42,8 @@ void MCdevice_config(Mesh *mesh) {
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j){
             Node *node = mc_node(i, j);
-            int material = node->material;
+            Material *material = node->mat;
+
             int np = 0; // number of superparticles in the (i,j)-th cell
             if(g_config->load_initial_data == ON) {
                 np = (int)(u2d[i][j][1] * dx * dy / g_config->carriers_per_superparticle + 0.5);
@@ -79,15 +80,15 @@ void MCdevice_config(Mesh *mesh) {
                         // loaded from precedent simulations and have nothing to
                         // do with the lattice energy.
                         double c1=-u2d[i][j][4]/u2d[i][j][1]/Q;
-                        if(g_materials[material].cb.num_valleys == 1) {
-                            kf=g_materials[material].cb.smh[0]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[1]*1.5*c1));
+                        if(material->cb.num_valleys == 1) {
+                            kf=material->cb.smh[0]*sqrt(-1.5*c1*(1.-material->cb.alpha[1]*1.5*c1));
                         }
-                        else if(g_materials[material].cb.num_valleys >= 2) {
+                        else if(material->cb.num_valleys >= 2) {
                             valley=1;
-                            kf=g_materials[material].cb.smh[valley]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[1]*1.5*c1));
+                            kf=material->cb.smh[valley]*sqrt(-1.5*c1*(1.-material->cb.alpha[1]*1.5*c1));
                             if(rnd()>0.8){
                                 valley=2;
-                                kf=g_materials[material].cb.smh[valley]*sqrt(-1.5*c1*(1.-g_materials[material].cb.alpha[2]*1.5*c1));
+                                kf=material->cb.smh[valley]*sqrt(-1.5*c1*(1.-material->cb.alpha[2]*1.5*c1));
                             }
                         }
                     }
@@ -111,7 +112,7 @@ void MCdevice_config(Mesh *mesh) {
                     P[n].kx = kf * c3 * c6;
                     P[n].ky = kf * c4 * c6;
                     P[n].kz = kf * c7;
-                    P[n].t  = -log(rnd()) / GM[material];
+                    P[n].t  = -log(rnd()) / GM[material->id];
                     P[n].x  = dx * (rnd() + (double)(i) - 1.5);
                     P[n].y  = dy * (rnd() + (double)(j) - 1.5);
 
