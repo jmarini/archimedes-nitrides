@@ -33,51 +33,6 @@
 #ifndef ARCHIMEDES_UTILITY_H
 #define ARCHIMEDES_UTILITY_H
 
-#include "particle.h"
-#include "mesh.h"
-
-
-struct {
-    int BOTTOM;
-    int RIGHT;
-    int TOP;
-    int LEFT;
-} direction_t = {.BOTTOM=0, .RIGHT=1, .TOP=2, .LEFT=3};
-
-
-struct {
-    int INSULATOR;
-    int SCHOTTKY;
-    int OHMIC;
-    int VACUUM;
-} boundary_t = {.INSULATOR=0, .SCHOTTKY=1, .OHMIC=2, .VACUUM=3};
-
-
-inline int mc_is_boundary_insulator(int direction, int index) {
-    return g_mesh->edges[direction][index].boundary == boundary_t.INSULATOR;
-}
-
-
-inline int mc_is_boundary_schottky(int direction, int index) {
-    return g_mesh->edges[direction][index].boundary == boundary_t.SCHOTTKY;
-}
-
-
-inline int mc_is_boundary_ohmic(int direction, int index) {
-    return g_mesh->edges[direction][index].boundary == boundary_t.OHMIC;
-}
-
-
-inline int mc_is_boundary_vacuum(int direction, int index) {
-    return g_mesh->edges[direction][index].boundary == boundary_t.VACUUM;
-}
-
-
-inline int mc_is_boundary_contact(int direction, int index) {
-    return mc_is_boundary_schottky(direction, index)
-        || mc_is_boundary_ohmic(direction, index);
-}
-
 
 char* mc_band_model_name(int model) {
     switch(model) {

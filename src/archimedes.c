@@ -54,6 +54,8 @@
 Configuration *g_config;
 Mesh *g_mesh;
 Material g_materials[NOAMTIA];
+Direction direction_t = {.BOTTOM=0, .RIGHT=1, .TOP=2, .LEFT=3};
+Boundary boundary_t = {.INSULATOR=0, .SCHOTTKY=1, .OHMIC=2, .VACUUM=3};
 
 
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
@@ -109,11 +111,6 @@ static char *progname;
 extern inline int mc_does_particle_exist(Particle *particle);
 extern inline void mc_remove_particle(Particle *particle);
 extern inline Particle creation(int i, real t, int edge);
-extern inline int mc_is_boundary_insulator(int direction, int index);
-extern inline int mc_is_boundary_schottky(int direction, int index);
-extern inline int mc_is_boundary_ohmic(int direction, int index);
-extern inline int mc_is_boundary_contact(int direction, int index);
-extern inline int mc_is_boundary_vacuum(int direction, int index);
 extern inline char* mc_band_model_name(int model);
 
 

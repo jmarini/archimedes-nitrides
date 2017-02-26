@@ -79,6 +79,32 @@ int mc_save_mesh(Mesh *mesh, char *filename) {
 }
 
 
+int mc_is_boundary_insulator(int direction, int index) {
+    return g_mesh->edges[direction][index].boundary == boundary_t.INSULATOR;
+}
+
+
+int mc_is_boundary_schottky(int direction, int index) {
+    return g_mesh->edges[direction][index].boundary == boundary_t.SCHOTTKY;
+}
+
+
+int mc_is_boundary_ohmic(int direction, int index) {
+    return g_mesh->edges[direction][index].boundary == boundary_t.OHMIC;
+}
+
+
+int mc_is_boundary_vacuum(int direction, int index) {
+    return g_mesh->edges[direction][index].boundary == boundary_t.VACUUM;
+}
+
+
+int mc_is_boundary_contact(int direction, int index) {
+    return mc_is_boundary_schottky(direction, index)
+        || mc_is_boundary_ohmic(direction, index);
+}
+
+
 Node * mc_node(int i, int j)  { return &(g_mesh->nodes[i][j]); }
 
 

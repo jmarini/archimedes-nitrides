@@ -99,10 +99,31 @@ typedef struct {
 } Mesh;
 
 
+typedef struct {
+    int BOTTOM;
+    int RIGHT;
+    int TOP;
+    int LEFT;
+} Direction;
+
+
+typedef struct {
+    int INSULATOR;
+    int SCHOTTKY;
+    int OHMIC;
+    int VACUUM;
+} Boundary;
 
 
 int mc_build_mesh(Mesh *mesh);
 int mc_save_mesh(Mesh *mesh, char *filename);
+
+
+int mc_is_boundary_insulator(int direction, int index);
+int mc_is_boundary_schottky(int direction, int index);
+int mc_is_boundary_ohmic(int direction, int index);
+int mc_is_boundary_vacuum(int direction, int index);
+int mc_is_boundary_contact(int direction, int index);
 
 
 Node * mc_node(int i, int j);
@@ -114,6 +135,8 @@ Vec2 mc_random_location_in_node(Node *node);
 
 // define global extern variable
 extern Mesh *g_mesh;
+extern Direction direction_t;
+extern Boundary boundary_t;
 
 
 #endif
