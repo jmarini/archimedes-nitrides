@@ -62,28 +62,10 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 2: particle x-velocity
                                           //  type = 3: particle y-velocity
                                           //  type = 4: particle energy
-real u2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for electrons per cell, array indexed by mesh node and value type:
-                                    //  type = 0: quantum effective potential
-                                    //  type = 1: electron density
-                                    //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
-                                    //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
-                                    //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
-real h2d[NXM+1][NYM+1][MN3+1];      // Hold summary values for holes per cell, array indexed by mesh node and value type:
-                                    //  type = 0: quantum effective potential
-                                    //  type = 1: hole density
-                                    //  type = 2: running sum of hole x-velocity (divide by MEDIA to get average)
-                                    //  type = 3: running sum of hole y-velocity (divide by MEDIA to get average)
-                                    //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 Particle P[NPMAX+1];              // particle information, array indexed by particle
-real EDGE[4][NXM+NYM+1][4];         // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
-                                    //                                               cell index (i or j),
-                                    //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
-                                    //                                                                 1=potential,
-                                    //                                                                 2=contact electron density,
-                                    //                                                                 3=contact hole density)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
@@ -224,11 +206,6 @@ int main(int argc, char *argv[]) {
 
     g_config = malloc(sizeof *g_config);
     g_mesh = malloc(sizeof *g_mesh);
-
-    // We reset the some arrays
-    // ========================
-    memset(&u2d, 0, sizeof(u2d));
-    memset(&EDGE, 0, sizeof(EDGE));
 
     // Read the geometrical and physical description of the MESFET
     // ===========================================================

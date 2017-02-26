@@ -49,14 +49,14 @@ int poisson_boundary_conditions(void) {
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
-            if(EDGE[direction_t.BOTTOM][i][1] != 0.0) {
-                g_mesh->nodes[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
+            if(g_mesh->edges[direction_t.BOTTOM][i].potential != 0.0) {
+                g_mesh->nodes[i][1].potential = g_mesh->edges[direction_t.BOTTOM][i].potential;
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.BOTTOM, i)) {
-            g_mesh->nodes[i][1].potential = EDGE[direction_t.BOTTOM][i][1];
+            g_mesh->nodes[i][1].potential = g_mesh->edges[direction_t.BOTTOM][i].potential;
         }
 
         // Upper Edge
@@ -69,14 +69,14 @@ int poisson_boundary_conditions(void) {
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
-            if(EDGE[direction_t.TOP][i][1] != 0.0) {
-                g_mesh->nodes[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
+            if(g_mesh->edges[direction_t.TOP][i].potential != 0.0) {
+                g_mesh->nodes[i][ny + 1].potential = g_mesh->edges[direction_t.TOP][i].potential;
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.TOP, i)) {
-            g_mesh->nodes[i][ny + 1].potential = EDGE[direction_t.TOP][i][1];
+            g_mesh->nodes[i][ny + 1].potential = g_mesh->edges[direction_t.TOP][i].potential;
         }
 
     }
@@ -92,14 +92,14 @@ int poisson_boundary_conditions(void) {
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
-            if(EDGE[direction_t.LEFT][j][1] != 0.0) {
-                g_mesh->nodes[1][j].potential = EDGE[direction_t.LEFT][j][1];
+            if(g_mesh->edges[direction_t.LEFT][j].potential != 0.0) {
+                g_mesh->nodes[1][j].potential = g_mesh->edges[direction_t.LEFT][j].potential;
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.LEFT, j)) {
-            g_mesh->nodes[1][j].potential = EDGE[direction_t.LEFT][j][1];
+            g_mesh->nodes[1][j].potential = g_mesh->edges[direction_t.LEFT][j].potential;
         }
 
         // Right Edge
@@ -111,14 +111,14 @@ int poisson_boundary_conditions(void) {
 
             // if there is potential on the insulator
             //   set the potential on the first two nodes
-            if(EDGE[direction_t.RIGHT][j][1] != 0.0) {
-                g_mesh->nodes[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
+            if(g_mesh->edges[direction_t.RIGHT][j].potential != 0.0) {
+                g_mesh->nodes[nx + 1][j].potential = g_mesh->edges[direction_t.RIGHT][j].potential;
             }
         }
         // schottky or ohmic contact
         //   set potential of first two nodes to that of contact
         else if(mc_is_boundary_contact(direction_t.RIGHT, j)) {
-            g_mesh->nodes[nx + 1][j].potential = EDGE[direction_t.RIGHT][j][1];
+            g_mesh->nodes[nx + 1][j].potential = g_mesh->edges[direction_t.RIGHT][j].potential;
         }
 
     }

@@ -69,6 +69,14 @@ typedef struct {
 
 
 typedef struct {
+    int boundary;
+    double potential;
+    double n;
+    double p;
+} Edge;
+
+
+typedef struct {
     int nx; // number of cells in x-direction
     int ny; //                    y-direction
 
@@ -84,15 +92,16 @@ typedef struct {
     int num_triangles;
 
     Node nodes[NXM + 1][NYM + 1];
+    Edge edges[4][NXM + 1]; // edges, indexed by direction and index (i or j)
 
     Vec2 coordinates[NXM * NYM];
     int triangles[NXM * NYM][3];
 } Mesh;
 
 
+
+
 int mc_build_mesh(Mesh *mesh);
-
-
 int mc_save_mesh(Mesh *mesh, char *filename);
 
 

@@ -112,6 +112,30 @@ Read_Input_File(void)
         }
     }
 
+    for(i = 1; i <= g_mesh->nx + 1; ++i) {
+        g_mesh->edges[0][i].boundary = 0;
+        g_mesh->edges[0][i].potential = 0.;
+        g_mesh->edges[0][i].n = 0.;
+        g_mesh->edges[0][i].p = 0.;
+
+        g_mesh->edges[2][i].boundary = 0;
+        g_mesh->edges[2][i].potential = 0.;
+        g_mesh->edges[2][i].n = 0.;
+        g_mesh->edges[2][i].p = 0.;
+    }
+    for(j = 1; j <= g_mesh->nx + 1; ++j) {
+        g_mesh->edges[1][j].boundary = 0;
+        g_mesh->edges[1][j].potential = 0.;
+        g_mesh->edges[1][j].n = 0.;
+        g_mesh->edges[1][j].p = 0.;
+
+        g_mesh->edges[3][j].boundary = 0;
+        g_mesh->edges[3][j].potential = 0.;
+        g_mesh->edges[3][j].n = 0.;
+        g_mesh->edges[3][j].p = 0.;
+    }
+
+
 // Thess are the default values
 // i.e. if nothing is specified
 // in the input file we have
@@ -631,25 +655,41 @@ Read_Input_File(void)
     fin=(int)(fpos/delt)+2;
     for(j=ini;j<=fin;j++){
       EDGE[i][j][0]=k;
+      g_mesh->edges[i][j].boundary = k;
       if(k==0 || k==1){
         EDGE[i][j][1]=potential;
         EDGE[i][j][2]=0;
-        if(k==1) EDGE[i][j][2]=NGATE;
+        g_mesh->edges[i][j].potential = potential;
+        g_mesh->edges[i][j].n = 0.;
+        g_mesh->edges[i][j].p = 0.;
+        if(k==1) {
+          EDGE[i][j][2]=NGATE;
+          g_mesh->edges[i][j].n = NGATE;
+        }
         if(k==1 && (g_config->simulation_model==MCH || g_config->simulation_model==MEPH
-                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH))
+                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)) {
           EDGE[i][j][3]=NI*NI/NGATE;
+          g_mesh->edges[i][j].p = NI * NI / NGATE;
+        }
       }
       else if(k==2){
         EDGE[i][j][1]=potential;
         EDGE[i][j][2]=dens;
+        g_mesh->edges[i][j].potential = potential;
+        g_mesh->edges[i][j].n = dens;
+        g_mesh->edges[i][j].p = 0.;
         if(g_config->simulation_model==MCH || g_config->simulation_model==MEPH
           || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)
          EDGE[i][j][3]=denshole;
+          g_mesh->edges[i][j].p = denshole;
       }
       else if(k == 3) {
         EDGE[i][j][1] = potential;
         EDGE[i][j][2] = 0.;
         EDGE[i][j][3] = 0.;
+        g_mesh->edges[i][j].potential = potential;
+        g_mesh->edges[i][j].n = 0.;
+        g_mesh->edges[i][j].p = 0.;
       }
     }
 

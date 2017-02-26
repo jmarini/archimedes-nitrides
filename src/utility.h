@@ -54,22 +54,22 @@ struct {
 
 
 inline int mc_is_boundary_insulator(int direction, int index) {
-    return EDGE[direction][index][0] == boundary_t.INSULATOR;
+    return g_mesh->edges[direction][index].boundary == boundary_t.INSULATOR;
 }
 
 
 inline int mc_is_boundary_schottky(int direction, int index) {
-    return EDGE[direction][index][0] == boundary_t.SCHOTTKY;
+    return g_mesh->edges[direction][index].boundary == boundary_t.SCHOTTKY;
 }
 
 
 inline int mc_is_boundary_ohmic(int direction, int index) {
-    return EDGE[direction][index][0] == boundary_t.OHMIC;
+    return g_mesh->edges[direction][index].boundary == boundary_t.OHMIC;
 }
 
 
 inline int mc_is_boundary_vacuum(int direction, int index) {
-    return EDGE[direction][index][0] == boundary_t.VACUUM;
+    return g_mesh->edges[direction][index].boundary == boundary_t.VACUUM;
 }
 
 
