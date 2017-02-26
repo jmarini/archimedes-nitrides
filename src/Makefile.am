@@ -30,10 +30,9 @@ archimedes_SOURCES = \
 	constants.h \
 	deviceconfig.h \
 	drift.h \
-	electric_field.h \
+	electrostatics.c \
+	electrostatics.h \
 	ensemblemontecarlo.h \
-	faraday.h \
-	faradaybcs.h \
 	global_defines.h \
 	material.c \
 	material.h \
@@ -47,8 +46,6 @@ archimedes_SOURCES = \
 	particle.c \
 	particlecreation.h \
 	particles_per_cell.h \
-	poissonbcs.h \
-	quantumeffectivepotential.h \
 	random.c \
 	random.h \
 	readinputfile.h \

@@ -83,17 +83,13 @@ static char *progname;
 #include "mep/mep.h"
 
 #include "utility.h"
-#include "poissonbcs.h"
-#include "faradaybcs.h"
+#include "electrostatics.h"
 #include "media.h"
 #include "saveoutput2dmeshformat.h"
 #include "saveoutput2dgnuplot.h"
 #include "saveoutput2dholegnuplot.h"
 #include "saveoutput2dholemeshformat.h"
 #include "saveoutputfiles.h"
-#include "quantumeffectivepotential.h"
-#include "electric_field.h"
-#include "faraday.h"
 #include "random.h"
 #include "scattering_rates.h"
 #include "optical_absorption.h"
@@ -244,12 +240,12 @@ int main(int argc, char *argv[]) {
     if(g_config->poisson_flag == ON) {
         // Boundary conditions for the model simulated
         // ===========================================
-        if(poisson_boundary_conditions( ) != 0) {
+        if(poisson_boundary_conditions(g_mesh) != 0) {
             printf("Error: Unknown error calculating Poisson boundary conditions.\n");
             return 1;
         }
         if(g_config->faraday_flag) {
-            faraday_boundary_conditions( );
+            faraday_boundary_conditions(g_mesh);
         }
         printf("Boundary conditions calculated...\n");
     }

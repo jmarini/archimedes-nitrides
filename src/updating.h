@@ -37,11 +37,7 @@ int updating(int iteration, int model) {
     }
 
     // Computation of the electric field
-    // =================================
-    if(g_config->poisson_flag == ON) {
-        electric_field( );
-        if(g_config->faraday_flag) { faraday( ); }
-    }
+    electrostatics(g_mesh);
 
 
     // Monte Carlo Simulation
