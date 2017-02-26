@@ -95,16 +95,18 @@ int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DI
 Particle create_photoexcited_carrier(Node *node, double photon_energy,
                                      double total_scattering_rate[NOAMTIA+1],
                                      int conduction_band, int valence_band) {
-    double mc = node->mat->cb.mstar[conduction_band],
-           mv = node->mat->vb.mstar[valence_band];
+    Material *material = node->mat;
+
+    double mc = material->cb.mstar[conduction_band],
+           mv = material->vb.mstar[valence_band];
     double mr = mc * mv / (mc + mv);
 
-    double e2 = (mr / mc) * (photon_energy - node->mat->Eg - node->mat->vb.emin[valence_band]);
+    double e2 = (mr / mc) * (photon_energy - material->Eg - material->vb.emin[valence_band]);
 
     Vec2 loc = mc_random_location_in_node(node);
 
-    double kf = node->mat->cb.smh[conduction_band]
-              * sqrt(e2 * (1. + node->mat->cb.alpha[conduction_band] * e2));
+    double kf = material->cb.smh[conduction_band]
+              * sqrt(e2 * (1. + material->cb.alpha[conduction_band] * e2));
     double cs  = 1. - 2. * rnd();     // random number -1 -> 1
     double sn  = sqrt(1. - cs * cs);
     double fai = 2. * PI * rnd();     // random angle (radians) 0 -> 2pi
@@ -112,7 +114,7 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
            ky = kf * sn * cos(fai),
            kz = kf * sn * sin(fai);
     long long int id = mc_next_particle_id( );
-    double time = -log(rnd()) / total_scattering_rate[node->material];
+    double time = -log(rnd()) / total_scattering_rate[material->id];
 
     return (Particle){.id=id,
                       .t=time,
@@ -121,8 +123,7 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
                       .y=loc.y,
                       .kx=kx,
                       .ky=ky,
-                      .kz=kz,
-                      .photoemission_flag=1};
+                      .kz=kz};
 }
 
 
@@ -145,6 +146,10 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
                 for(int v = 0; v < 3; ++v) {
                     if(r <= transistion_rate[node->material][e][v]) {
                         particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
+                        if(g_config->tracking_output == ON
+                           && particles[p].id % g_config->tracking_mod == 0) {
+                          mc_print_tracking(0, &particles[p]);
+                        }
                         ++p;
                         break;
                     }

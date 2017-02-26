@@ -37,7 +37,7 @@
 // From version 1.1.0 on, the scattering effects can be excluded
 // to simulate ballistic transport.
 
-void scatter(Particle *particle, int material) {
+int scatter(Particle *particle, Material *material) {
     int has_scattered = 0,
         i  = 0,
         ie = 0;
@@ -71,13 +71,13 @@ void scatter(Particle *particle, int material) {
          ki  = 0.,
          kf  = 0.;
 
-    if(!mc_does_particle_exist(particle)) { return; }
+    if(!mc_does_particle_exist(particle)) { return has_scattered; }
 
 
     // ########################################
     // One-valley material Scattering Selection
     // ########################################
-    if(g_materials[material].cb.num_valleys == 1) {
+    if(material->cb.num_valleys == 1) {
         ksquared = mc_particle_ksquared(particle);
 
         if(g_config->conduction_band==FULL){
@@ -87,27 +87,27 @@ void scatter(Particle *particle, int material) {
             k = sqrt(k2); // why??
 
             // periodicity on reciprocal lattice
-            superparticle_energy = CB_FULL[material][0] * k4 * k4 * k2
-                                 + CB_FULL[material][1] * k4 * k4 * k
-                                 + CB_FULL[material][2] * k4 * k4
-                                 + CB_FULL[material][3] * k4 * k2 * k
-                                 + CB_FULL[material][4] * k4 * k2
-                                 + CB_FULL[material][5] * k4 * k
-                                 + CB_FULL[material][6] * k4
-                                 + CB_FULL[material][7] * k2 * k
-                                 + CB_FULL[material][8] * k2
-                                 + CB_FULL[material][9] * k
-                                 + CB_FULL[material][10]; // in eV
+            superparticle_energy = CB_FULL[material->id][0] * k4 * k4 * k2
+                                 + CB_FULL[material->id][1] * k4 * k4 * k
+                                 + CB_FULL[material->id][2] * k4 * k4
+                                 + CB_FULL[material->id][3] * k4 * k2 * k
+                                 + CB_FULL[material->id][4] * k4 * k2
+                                 + CB_FULL[material->id][5] * k4 * k
+                                 + CB_FULL[material->id][6] * k4
+                                 + CB_FULL[material->id][7] * k2 * k
+                                 + CB_FULL[material->id][8] * k2
+                                 + CB_FULL[material->id][9] * k
+                                 + CB_FULL[material->id][10]; // in eV
         }
         if(g_config->conduction_band == KANE) {
-            thesquareroot = sqrt(1. + 4. * g_materials[material].cb.alpha[1] * g_materials[material].cb.hhm[0] * ksquared);
-            superparticle_energy = (thesquareroot - 1.) / (2. * g_materials[material].cb.alpha[1]);
+            thesquareroot = sqrt(1. + 4. * material->cb.alpha[1] * material->cb.hhm[0] * ksquared);
+            superparticle_energy = (thesquareroot - 1.) / (2. * material->cb.alpha[1]);
         }
         if(g_config->conduction_band == PARABOLIC) {
-            superparticle_energy = g_materials[material].cb.hhm[0] * ksquared; // in eV
+            superparticle_energy = material->cb.hhm[0] * ksquared; // in eV
         }
 
-        if(superparticle_energy <= 0.) { return; }
+        if(superparticle_energy <= 0.) { return has_scattered; }
         ie = ((int)(superparticle_energy / DE)) + 1;
         if(ie > DIME) { ie = DIME; }
 
@@ -122,29 +122,29 @@ void scatter(Particle *particle, int material) {
         for(i = 1; i <= 6; i++) {
 
             // Emission of an optical phonon
-            if(r1 <= SWK[material][0][i*2-1][ie] && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[i-1];
-                if(finalenergy <= 0.) { return; }
+            if(r1 <= SWK[material->id][0][i*2-1][ie] && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[i-1];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
             }
 
             // Absorption of an optical phonon
-            if((r1 <= SWK[material][0][i*2][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[i-1];
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][0][i*2][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[i-1];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
             }
         }
 
         // =========================
         // Acoustic phonon
-        if((r1 <= SWK[material][0][13][ie]) && !has_scattered) {
+        if((r1 <= SWK[material->id][0][13][ie]) && !has_scattered) {
             finalenergy = superparticle_energy;
-            if(finalenergy <= 0.) { return; }
+            if(finalenergy <= 0.) { return has_scattered; }
             has_scattered = 1;
         }
 
-        if((finalenergy <= 0.) || !has_scattered) { return; }
+        if((finalenergy <= 0.) || !has_scattered) { return has_scattered; }
 
 
         // =================================
@@ -155,7 +155,7 @@ void scatter(Particle *particle, int material) {
             // bisection algorithm, probably not best but at least something to start from..
             real x = 0.0,
                  a = 0.0,
-                 b = 1.0 / g_materials[material].lattice_const * 1.e-12;
+                 b = 1.0 / material->lattice_const * 1.e-12;
             real a2, a4, x4;
             real fx, fa;
             int k = 0;
@@ -167,29 +167,29 @@ void scatter(Particle *particle, int material) {
                 a2 = a * a;
                 a4 = a2 * a2;
 
-                fa = (CB_FULL[material][0] * a4 * a4 * a2
-                   +  CB_FULL[material][1] * a4 * a4 * a
-                   +  CB_FULL[material][2] * a4 * a4
-                   +  CB_FULL[material][3] * a4 * a2 * a
-                   +  CB_FULL[material][4] * a4 * a2
-                   +  CB_FULL[material][5] * a4 * a
-                   +  CB_FULL[material][6] * a4
-                   +  CB_FULL[material][7] * a2 * a
-                   +  CB_FULL[material][8] * a2
-                   +  CB_FULL[material][9] * a
-                   +  CB_FULL[material][10])
+                fa = (CB_FULL[material->id][0] * a4 * a4 * a2
+                   +  CB_FULL[material->id][1] * a4 * a4 * a
+                   +  CB_FULL[material->id][2] * a4 * a4
+                   +  CB_FULL[material->id][3] * a4 * a2 * a
+                   +  CB_FULL[material->id][4] * a4 * a2
+                   +  CB_FULL[material->id][5] * a4 * a
+                   +  CB_FULL[material->id][6] * a4
+                   +  CB_FULL[material->id][7] * a2 * a
+                   +  CB_FULL[material->id][8] * a2
+                   +  CB_FULL[material->id][9] * a
+                   +  CB_FULL[material->id][10])
                    -  finalenergy;
-                fx = (CB_FULL[material][0] * x4 * x4 * x2
-                   +  CB_FULL[material][1] * x4 * x4 * x
-                   +  CB_FULL[material][2] * x4 * x4
-                   +  CB_FULL[material][3] * x4 * x2 * x
-                   +  CB_FULL[material][4] * x4 * x2
-                   +  CB_FULL[material][5] * x4 * x
-                   +  CB_FULL[material][6] * x4
-                   +  CB_FULL[material][7] * x2 * x
-                   +  CB_FULL[material][8] * x2
-                   +  CB_FULL[material][9] * x
-                   +  CB_FULL[material][10])
+                fx = (CB_FULL[material->id][0] * x4 * x4 * x2
+                   +  CB_FULL[material->id][1] * x4 * x4 * x
+                   +  CB_FULL[material->id][2] * x4 * x4
+                   +  CB_FULL[material->id][3] * x4 * x2 * x
+                   +  CB_FULL[material->id][4] * x4 * x2
+                   +  CB_FULL[material->id][5] * x4 * x
+                   +  CB_FULL[material->id][6] * x4
+                   +  CB_FULL[material->id][7] * x2 * x
+                   +  CB_FULL[material->id][8] * x2
+                   +  CB_FULL[material->id][9] * x
+                   +  CB_FULL[material->id][10])
                    -  finalenergy;
                 if((fa * fx) < 0.) { b = x; }
                 else { a = x; }
@@ -197,11 +197,11 @@ void scatter(Particle *particle, int material) {
             finalk = x * 1.e12 * 2. * PI;
         }
         if(g_config->conduction_band == KANE) {
-            finalk = g_materials[material].cb.smh[0]
-                   * sqrt(finalenergy * (1. + g_materials[material].cb.alpha[1] * finalenergy));
+            finalk = material->cb.smh[0]
+                   * sqrt(finalenergy * (1. + material->cb.alpha[1] * finalenergy));
         }
         if(g_config->conduction_band == PARABOLIC) {
-            finalk = g_materials[material].cb.smh[0] * sqrt(finalenergy);
+            finalk = material->cb.smh[0] * sqrt(finalenergy);
         }
 
         cosinus = 1. - 2. * rnd();
@@ -210,20 +210,20 @@ void scatter(Particle *particle, int material) {
         particle->kx = finalk * cosinus;
         particle->ky = finalk * sinus * cos(fai);
         particle->kz = finalk * sinus * sin(fai);
-        return;
+        return has_scattered;
     }
 
 
     // ########################################
     // Two-valley material Scattering Selection
     // ########################################
-    if(g_materials[material].cb.num_valleys == 2) {
+    if(material->cb.num_valleys == 2) {
         ksquared = mc_particle_ksquared(particle);
         ki = sqrt(ksquared);
 
         superparticle_energy = mc_particle_energy(particle);
 
-        if(superparticle_energy <= 0.) { return; }
+        if(superparticle_energy <= 0.) { return has_scattered; }
         ie = ((int)(superparticle_energy / DE)) + 1;
         if(ie > DIME) { ie = DIME; }
 
@@ -235,21 +235,21 @@ void scatter(Particle *particle, int material) {
             r1 = rnd();
 
             // NPOP Emission
-            if(r1 <= SWK[material][1][1][ie] && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if(r1 <= SWK[material->id][1][1][ie] && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 if(g_config->conduction_band == KANE) {
-                    kf = g_materials[material].cb.smh[particle->valley]
-                       * sqrt(finalenergy * (1. + g_materials[material].cb.alpha[particle->valley] * finalenergy));
+                    kf = material->cb.smh[particle->valley]
+                       * sqrt(finalenergy * (1. + material->cb.alpha[particle->valley] * finalenergy));
                 }
                 if(g_config->conduction_band == PARABOLIC) {
-                    kf = g_materials[material].cb.smh[particle->valley] * sqrt(finalenergy);
+                    kf = material->cb.smh[particle->valley] * sqrt(finalenergy);
                 }
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
-                if(f <= 0.) { return; }
+                if(f <= 0.) { return has_scattered; }
                 cb = (1. + f - pow(1. + 2. * f, rnd())) / f;
 
                 // determination of the final states
@@ -273,25 +273,25 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
             // NPOP Absorption
-            if((r1 <= SWK[material][1][2][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][1][2][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 if(g_config->conduction_band == KANE) {
-                    kf = g_materials[material].cb.smh[particle->valley]
-                       * sqrt(finalenergy * (1. + g_materials[material].cb.alpha[particle->valley] * finalenergy));
+                    kf = material->cb.smh[particle->valley]
+                       * sqrt(finalenergy * (1. + material->cb.alpha[particle->valley] * finalenergy));
                 }
                 if(g_config->conduction_band == PARABOLIC) {
-                    kf=g_materials[material].cb.smh[particle->valley] * sqrt(finalenergy);
+                    kf=material->cb.smh[particle->valley] * sqrt(finalenergy);
                 }
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
-                if(f <= 0.) { return; }
+                if(f <= 0.) { return has_scattered; }
                 cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
                 // determination of the final states
                 sb=sqrt(1.-cb*cb);
@@ -314,59 +314,59 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
             // POP Emission 1->1 (not allowed)
-            if((r1 <= SWK[material][1][3][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][1][3][ie]) && !has_scattered) {
                 printf("Invalid Scatter!\n");
-                return;
+                return has_scattered;
             }
             // POP Absorption 1->1 (not allowed)
-            if((r1 <= SWK[material][1][4][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][1][4][ie]) && !has_scattered) {
                 printf("Invalid Scatter!\n");
-                return;
+                return has_scattered;
             }
 
             // POP Emission 1->2
-            if((r1 <= SWK[material][1][5][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[0]
-                            + (g_materials[material].cb.emin[1] - g_materials[material].cb.emin[2]);
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][1][5][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[0]
+                            + (material->cb.emin[1] - material->cb.emin[2]);
+                if(finalenergy <= 0.) { return has_scattered; }
                 particle->valley = 2;
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // POP Absorption 1->2
-            if((r1 <= SWK[material][1][6][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[0]
-                            + (g_materials[material].cb.emin[1] - g_materials[material].cb.emin[2]);
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][1][6][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[0]
+                            + (material->cb.emin[1] - material->cb.emin[2]);
+                if(finalenergy <= 0.) { return has_scattered; }
                 particle->valley = 2;
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // Acoustic phonon
-            if((r1 <= SWK[material][1][7][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][1][7][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 finalk = sqrt(ksquared);
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // Impurity scattering
-            if((r1 <= SWK[material][1][8][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][1][8][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 r2 = rnd();
@@ -394,21 +394,21 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
             // Piezoelectric scattering
-            if((r1 <= SWK[material][1][9][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][1][9][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 finalk = sqrt(ksquared);
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
-            if((finalenergy <= 0.) || !has_scattered) { return; }
+            if((finalenergy <= 0.) || !has_scattered) { return has_scattered; }
         }
 
 
@@ -419,21 +419,21 @@ void scatter(Particle *particle, int material) {
             r1 = rnd();
 
             // NPOP Emission
-            if(r1 <= SWK[material][2][1][ie] && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if(r1 <= SWK[material->id][2][1][ie] && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 if(g_config->conduction_band == KANE) {
-                    kf = g_materials[material].cb.smh[particle->valley]
-                       * sqrt(finalenergy * (1. + g_materials[material].cb.alpha[particle->valley] * finalenergy));
+                    kf = material->cb.smh[particle->valley]
+                       * sqrt(finalenergy * (1. + material->cb.alpha[particle->valley] * finalenergy));
                 }
                 if(g_config->conduction_band == PARABOLIC) {
-                    kf = g_materials[material].cb.smh[particle->valley] * sqrt(finalenergy);
+                    kf = material->cb.smh[particle->valley] * sqrt(finalenergy);
                 }
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
-                if(f <= 0.) { return; }
+                if(f <= 0.) { return has_scattered; }
                 cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
 
                 // determination of the final states
@@ -457,25 +457,25 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
             // NPOP Absorption
-            if((r1 <= SWK[material][2][2][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][2][2][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 if(g_config->conduction_band == KANE) {
-                    kf = g_materials[material].cb.smh[particle->valley]
-                       * sqrt(finalenergy * (1. + g_materials[material].cb.alpha[particle->valley] * finalenergy));
+                    kf = material->cb.smh[particle->valley]
+                       * sqrt(finalenergy * (1. + material->cb.alpha[particle->valley] * finalenergy));
                 }
                 if(g_config->conduction_band == PARABOLIC) {
-                    kf = g_materials[material].cb.smh[particle->valley] * sqrt(finalenergy);
+                    kf = material->cb.smh[particle->valley] * sqrt(finalenergy);
                 }
 
                 f = 2. * ki * kf / (ki - kf) / (ki - kf);
-                if(f <= 0.) { return; }
+                if(f <= 0.) { return has_scattered; }
                 cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
 
                 // determination of the final states
@@ -499,68 +499,68 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
 
             // POP Emission 2->1
-            if((r1 <= SWK[material][2][3][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[0]
-                            + (g_materials[material].cb.emin[2] - g_materials[material].cb.emin[1]);
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][2][3][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[0]
+                            + (material->cb.emin[2] - material->cb.emin[1]);
+                if(finalenergy <= 0.) { return has_scattered; }
                 particle->valley = 1;
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // POP Absorption 2->1
-            if((r1 <= SWK[material][2][4][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[0]
-                            + (g_materials[material].cb.emin[2] - g_materials[material].cb.emin[1]);
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][2][4][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[0]
+                            + (material->cb.emin[2] - material->cb.emin[1]);
+                if(finalenergy <= 0.) { return has_scattered; }
                 particle->valley = 1;
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // POP Emission 2->2
-            if((r1 <= SWK[material][2][5][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy - g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][2][5][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy - material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // POP Absorption 2->2
-            if((r1 <= SWK[material][2][6][ie]) && !has_scattered) {
-                finalenergy = superparticle_energy + g_materials[material].hwo[0];
-                if(finalenergy <= 0.) { return; }
+            if((r1 <= SWK[material->id][2][6][ie]) && !has_scattered) {
+                finalenergy = superparticle_energy + material->hwo[0];
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // Acoustic phonon
-            if((r1 <= SWK[material][2][7][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][2][7][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
             // Impurity scattering
-            if((r1 <= SWK[material][2][8][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][2][8][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 has_scattered = 1;
 
                 r2 = rnd();
@@ -588,21 +588,23 @@ void scatter(Particle *particle, int material) {
                 particle->kx = a11 * x1 + a12 * x2 + a13 * x3;
                 particle->ky = a21 * x1 + a22 * x2 + a23 * x3;
                 particle->kz =            a32 * x2 + a33 * x3;
-                return;
+                return has_scattered;
             }
 
             // Piezoelectric scattering
-            if((r1 <= SWK[material][2][9][ie]) && !has_scattered) {
+            if((r1 <= SWK[material->id][2][9][ie]) && !has_scattered) {
                 finalenergy = superparticle_energy;
-                if(finalenergy <= 0.) { return; }
+                if(finalenergy <= 0.) { return has_scattered; }
                 finalk = sqrt(ksquared);
                 has_scattered = 1;
 
                 mc_calculate_isotropic_k(particle, finalenergy);
-                return;
+                return has_scattered;
             }
 
-            if((finalenergy <= 0.) || !has_scattered) { return; }
+            if((finalenergy <= 0.) || !has_scattered) { return has_scattered; }
         }
     }
+
+    return has_scattered;
 }

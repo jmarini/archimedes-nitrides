@@ -30,7 +30,7 @@
 
 
 // Ensemble Monte Carlo method
-void EMC(void) {
+void EMC(int iteration) {
     int i = 0,
         j = 0;
     real tdt = g_config->time + g_config->dt,
@@ -55,23 +55,26 @@ void EMC(void) {
             tau = particle->t - ti;                // the dt for the current step
             drift(particle, tau);                  // drift for dt
             node = mc_get_particle_node(particle);
-            scatter(particle, node->material);        // scatter particle
+
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(iteration, particle);
+            }
+            int s = scatter(particle, node->mat);        // scatter particle
+
+
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0
+               && s) {
+                mc_print_tracking(iteration, particle);
+            }
+
             ti = particle->t;                      // update the time
             particle->t = ti - log(rnd()) / GM[node->material]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step
 
-        if(g_config->tracking_output == ON
-           && particle->id % g_config->tracking_mod == 0) {
-            fprintf(tracking_fp, "%lld %g %g %g %g %d\n",
-                    particle->id,
-                    tdt,
-                    particle->x,
-                    particle->y,
-                    mc_particle_energy(particle),
-                    particle->valley);
-        }
 
         // check if a particle is going out from the right edge of the device
         int direction = direction_t.RIGHT;
@@ -155,6 +158,18 @@ void EMC(void) {
             --g_config->num_particles;
         }
     } while(n < g_config->num_particles);
+
+    // if(iteration <= 100) {
+    //     char s[150];
+    //     sprintf(s, "tracking%03d.bin", iteration);
+    //     FILE *fp = fopen(s, "wb");
+    //     fwrite(PTRACK, sizeof(particle_tracking_t) * n, 1, fp);
+    //     fclose(fp);
+    // }
+    // else {
+    //     exit(0);
+    // }
+
 
     // create particles at ohmic contacts of the bottom edge
     for(i=1; i<=nx+1; i++) {

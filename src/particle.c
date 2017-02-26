@@ -1,5 +1,7 @@
 #include "particle.h"
 
+#include <stdio.h>
+
 #include "configuration.h"
 #include "constants.h"
 #include "global_defines.h"
@@ -167,4 +169,25 @@ particle_info_t mc_calculate_particle_info(Particle *p) {
         .vx=xvelocity,
         .vy=yvelocity
     };
+}
+
+
+void mc_print_tracking(int it, Particle *p) {
+    particle_tracking_t pt = (particle_tracking_t){
+        .time=(float)p->t,
+        .x=(float)p->x,
+        .y=(float)p->y,
+        .energy=(float)mc_particle_energy(p),
+        .valley=(int)p->valley
+    };
+
+    char s[150];
+    sprintf(s, "tracking%06lld.bin", p->id);
+
+    FILE *fp = NULL;
+    if(it == 0.) { fp = fopen(s, "wb"); }
+    else {         fp = fopen(s, "ab"); }
+
+    fwrite(&pt, sizeof(particle_tracking_t), 1, fp);
+    fclose(fp);
 }

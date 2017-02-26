@@ -38,19 +38,19 @@ void drift(Particle *particle, real tau) {
     if(!mc_does_particle_exist(particle)) { return; }
 
     Node *node = mc_get_particle_node(particle);
-    int material = node->material;
+    Material *material = node->mat;
 
     // Electron drift process
     // second order Runge-Kutta method
-    real hmt = g_materials[material].cb.hm[particle->valley] * tau;
+    real hmt = material->cb.hm[particle->valley] * tau;
     real ksquared = mc_particle_ksquared(particle);
 
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
-        gk = g_materials[material].cb.hhm[particle->valley] * ksquared;
+        gk = material->cb.hhm[particle->valley] * ksquared;
         thesquareroot = sqrt(1. + 4. * node->mat->cb.alpha[particle->valley] * gk);
-        v.x = particle->kx * g_materials[material].cb.hm[particle->valley] / thesquareroot;
-        v.y = particle->ky * g_materials[material].cb.hm[particle->valley] / thesquareroot;
+        v.x = particle->kx * material->cb.hm[particle->valley] / thesquareroot;
+        v.y = particle->ky * material->cb.hm[particle->valley] / thesquareroot;
         dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
         dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         particle->x += hmt * (particle->kx + 0.5 * dk.x) / thesquareroot;
@@ -59,8 +59,8 @@ void drift(Particle *particle, real tau) {
         particle->ky += dk.y;
     }
     else if(g_config->conduction_band == PARABOLIC) {
-        v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
-        v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
+        v.x = particle->kx * material->cb.hm[particle->valley];
+        v.y = particle->ky * material->cb.hm[particle->valley];
         dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
         dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         particle->x += hmt * (particle->kx + 0.5 * dk.x);
@@ -71,8 +71,8 @@ void drift(Particle *particle, real tau) {
     else if(g_config->conduction_band == FULL) {
         real k4, k2, ks;
         real dx, dy, d;
-        v.x = particle->kx * g_materials[material].cb.hm[particle->valley];
-        v.y = particle->ky * g_materials[material].cb.hm[particle->valley];
+        v.x = particle->kx * material->cb.hm[particle->valley];
+        v.y = particle->ky * material->cb.hm[particle->valley];
         dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
         dk.y = -Q * (node->efield.y - v.x * node->magnetic_field) * tau / HBAR;
         k2 = (particle->kx + 0.5 * dk.x) * (particle->kx + 0.5 * dk.x)
@@ -81,16 +81,16 @@ void drift(Particle *particle, real tau) {
         ks = sqrt(k2) * 1.e-12 * 0.5 / PI;
         k2 = ks * ks;
         k4 = k2 * k2;
-        d = 10. * CB_FULL[material][0] * k4 * k4 * ks
-          +  9. * CB_FULL[material][1] * k4 * k4
-          +  8. * CB_FULL[material][2] * k4 * k2 * ks
-          +  7. * CB_FULL[material][3] * k4 * k2
-          +  6. * CB_FULL[material][4] * k4 * ks
-          +  5. * CB_FULL[material][5] * k4
-          +  4. * CB_FULL[material][6] * k2 * ks
-          +  3. * CB_FULL[material][7] * k2
-          +  2. * CB_FULL[material][8] * ks
-          +       CB_FULL[material][9];
+        d = 10. * CB_FULL[material->id][0] * k4 * k4 * ks
+          +  9. * CB_FULL[material->id][1] * k4 * k4
+          +  8. * CB_FULL[material->id][2] * k4 * k2 * ks
+          +  7. * CB_FULL[material->id][3] * k4 * k2
+          +  6. * CB_FULL[material->id][4] * k4 * ks
+          +  5. * CB_FULL[material->id][5] * k4
+          +  4. * CB_FULL[material->id][6] * k2 * ks
+          +  3. * CB_FULL[material->id][7] * k2
+          +  2. * CB_FULL[material->id][8] * ks
+          +       CB_FULL[material->id][9];
         ks *= 1.e+12 * 2.  * PI;
         d  *= 1.e-12 * 0.5 / PI;
         dx = Q * d * tau * (particle->kx + 0.5 * dk.x) / ks / HBAR;
@@ -114,6 +114,10 @@ void drift(Particle *particle, real tau) {
     if(particle->x <= 0. && mc_is_boundary_insulator(direction_t.LEFT, node->j)) {
         particle->x  *= -1.;
         particle->kx *= -1.;
+        if(g_config->tracking_output == ON
+           && particle->id % g_config->tracking_mod == 0) {
+            mc_print_tracking(1, particle);
+        }
         return;
     }
     // ---Schottky or ohmic contact---
@@ -122,16 +126,24 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x <= 0. && mc_is_boundary_vacuum(direction_t.LEFT, node->j)) {
-        double e2 = mc_particle_norm_energy(particle, 0) + node->mat->cb.emin[particle->valley];
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
         double energy = node->mat->affinity - e2;
         if(energy <= 0.) { // emitted
-            particle->valley = 9;
-            particle->photoemission_flag = 2;
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
+            particle->x = 0.0;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
+            particle->valley = 9;
         }
         else { // not emitted, reflect off boundary
             particle->x  *= -1;
             particle->kx *= -1;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
         }
         return;
     }
@@ -142,6 +154,10 @@ void drift(Particle *particle, real tau) {
     if(particle->x >= g_mesh->width && mc_is_boundary_insulator(direction_t.RIGHT, node->j)) {
         particle->x = g_mesh->width - (particle->x - g_mesh->width);
         particle->kx *= -1.;
+        if(g_config->tracking_output == ON
+           && particle->id % g_config->tracking_mod == 0) {
+            mc_print_tracking(1, particle);
+        }
         return;
     }
     // ---Schottky or ohmic contact---
@@ -150,16 +166,24 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x >= g_mesh->width && mc_is_boundary_vacuum(direction_t.RIGHT, node->j)) {
-        double e2 = mc_particle_norm_energy(particle, 0) + node->mat->cb.emin[particle->valley];
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
         double energy = node->mat->affinity - e2;
         if(energy <= 0.) { // emitted
-            particle->valley = 9;
-            particle->photoemission_flag = 2;
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
+            particle->x = g_mesh->width;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
+            particle->valley = 9;
         }
         else { // not emitted, reflect off boundary
             particle->x = g_mesh->width - (particle->x - g_mesh->width);
             particle->kx *= -1.;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
         }
         return;
     }
@@ -170,6 +194,10 @@ void drift(Particle *particle, real tau) {
     if(particle->y <= 0. && mc_is_boundary_insulator(direction_t.BOTTOM, node->i)) {
         particle->y  *= -1.;
         particle->ky *= -1.;
+        if(g_config->tracking_output == ON
+           && particle->id % g_config->tracking_mod == 0) {
+            mc_print_tracking(1, particle);
+        }
         return;
     }
     // ---Schottky or ohmic contact---
@@ -178,16 +206,24 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y <= 0. && mc_is_boundary_vacuum(direction_t.BOTTOM, node->i)) {
-        double e2 = mc_particle_norm_energy(particle, 1) + node->mat->cb.emin[particle->valley];
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
         double energy = node->mat->affinity - e2;
         if(energy <= 0.) { // emitted
-            particle->valley = 9;
-            particle->photoemission_flag = 2;
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
+            particle->y = 0.0;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
+            particle->valley = 9;
         }
         else { // not emitted, reflect off boundary
             particle->y  *= -1.;
             particle->ky *= -1.;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
         }
         return;
     }
@@ -198,6 +234,10 @@ void drift(Particle *particle, real tau) {
     if(particle->y >= g_mesh->height && mc_is_boundary_insulator(direction_t.TOP, node->i)) {
         particle->y = g_mesh->height - (particle->y - g_mesh->height);
         particle->ky *= -1.;
+        if(g_config->tracking_output == ON
+           && particle->id % g_config->tracking_mod == 0) {
+            mc_print_tracking(1, particle);
+        }
         return;
     }
     // ---Schottky or ohmic contact---
@@ -206,16 +246,24 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y >= g_mesh->height && mc_is_boundary_vacuum(direction_t.TOP, node->i)) {
-        double e2 = mc_particle_norm_energy(particle, 1) + node->mat->cb.emin[particle->valley];
+        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
         double energy = node->mat->affinity - e2;
         if(energy <= 0.) { // emitted
-            particle->valley = 9;
-            particle->photoemission_flag = 2;
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
+            particle->y = g_mesh->height;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
+            particle->valley = 9;
         }
         else { // not emitted, reflect off boundary
             particle->y = g_mesh->height - (particle->y - g_mesh->height);
             particle->ky *= -1.;
+            if(g_config->tracking_output == ON
+               && particle->id % g_config->tracking_mod == 0) {
+                mc_print_tracking(1, particle);
+            }
         }
         return;
     }

@@ -46,7 +46,7 @@ int updating(int iteration, int model) {
 
     // Monte Carlo Simulation
     // ======================
-    EMC( );
+    EMC(iteration);
     calculate_particles_per_cell( );
     media( );
     // If timestep would put simulation time after ending time, adjust step

@@ -109,7 +109,7 @@ inline Particle creation(int i, real t, int edge) {
 
     long long int id = mc_next_particle_id( );
 
-    return (Particle){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y, .photoemission_flag=0};
+    return (Particle){.id=id, .valley=iv, .t=ts, .kx=kx, .ky=ky, .kz=kz, .x=x, .y=y};
 }
 
 // =================================================

@@ -114,7 +114,6 @@ void MCdevice_config(Mesh *mesh) {
                     P[n].t  = -log(rnd()) / GM[material];
                     P[n].x  = dx * (rnd() + (double)(i) - 1.5);
                     P[n].y  = dy * (rnd() + (double)(j) - 1.5);
-                    P[n].photoemission_flag = 0;
 
                     if(i == 1) { P[n].x = dx * 0.5 * rnd(); }
                     if(j == 1) { P[n].y = dy * 0.5 * rnd(); }

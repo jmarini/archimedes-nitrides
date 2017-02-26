@@ -46,16 +46,11 @@ typedef struct {
         struct Vec2;    //   - provides particle.x/y
         Vec2 position;  //   - provides particle.position
     };
-
-    int photoemission_flag; // flag tracking state of electron through photoemission
-                            //   0: normal electron (default)
-                            //   1: photoexcited carrier
-                            //   2: photoemitted carrier
 } Particle;
 
 
 typedef struct {
-    long long int id;         // unique identifier used to track particle
+    long long int id;         // unique identifier used to track particles
     int valley;     // valley the particle is in
     real kx;        // momentum coordinates - relative to valley minimum
     real ky;
@@ -68,12 +63,15 @@ typedef struct {
     int j;
     real vx;        // real-space velocity
     real vy;
-
-    int photoemission_flag; // flag tracking state of electron through photoemission
-                            //   0: normal electron (default)
-                            //   1: photoexcited carrier
-                            //   2: photoemitted carrier
 } particle_info_t;
+
+typedef struct {
+    float time;
+    float x;
+    float y;
+    float energy;
+    int valley;
+} particle_tracking_t;
 
 
 inline int mc_does_particle_exist(Particle *p) { return p->valley != 9; }
@@ -107,5 +105,7 @@ Node * mc_get_particle_node(Particle *p);
 particle_info_t mc_calculate_particle_info(Particle *p);
 
 long long int mc_next_particle_id( );
+
+void mc_print_tracking(int iteration, Particle *p);
 
 #endif
