@@ -93,6 +93,7 @@ inline double mc_particle_k(Particle *p) {
 
 
 int mc_calculate_isotropic_k(Particle *p, double new_energy);
+int mc_calculate_anisotropic_k(Particle *p, double ki, double kf, double cb);
 
 double mc_particle_energy(Particle *p);
 double mc_particle_norm_energy(Particle *p, int axis);

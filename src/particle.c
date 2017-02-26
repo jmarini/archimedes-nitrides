@@ -115,6 +115,31 @@ int mc_calculate_isotropic_k(Particle *p, double new_energy) {
 }
 
 
+int mc_calculate_anisotropic_k(Particle *p, double ki, double kf, double cb) {
+    double sb  = sqrt(1. - cb * cb);
+    double fai = 2. * PI * rnd();
+    double skk = sqrt(p->kx * p->kx +
+                      p->ky * p->ky);
+    double a11 =  p->ky / skk;
+    double a12 =  p->kx * p->kz / skk / ki;
+    double a13 =  p->kx / ki;
+    double a21 = -p->kx / skk;
+    double a22 =  p->ky * p->kz / skk / ki;
+    double a23 =  p->ky / ki;
+    double a32 = -skk / ki;
+    double a33 =  p->kz / ki;
+    double x1 = kf * sb * cos(fai);
+    double x2 = kf * sb * sin(fai);
+    double x3 = kf * cb;
+
+    p->kx = a11 * x1 + a12 * x2 + a13 * x3;
+    p->ky = a21 * x1 + a22 * x2 + a23 * x3;
+    p->kz =            a32 * x2 + a33 * x3;
+
+    return 0;
+}
+
+
 particle_info_t mc_calculate_particle_info(Particle *p) {
     // calculate particle coordinates
     int i = 0,
