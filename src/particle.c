@@ -61,6 +61,18 @@ double mc_particle_energy(Particle *p) {
 }
 
 
+double mc_particle_ksquared(Particle *p) {
+    return (p->kx * p->kx +
+            p->ky * p->ky +
+            p->kz * p->kz);
+}
+
+
+double mc_particle_k(Particle *p) {
+    return sqrt(mc_particle_ksquared(p));
+}
+
+
 double mc_particle_norm_energy(Particle *p, int axis) {
     Material *material = mc_get_particle_node(p)->mat;
 

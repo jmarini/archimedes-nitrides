@@ -123,7 +123,7 @@ int calculate_scattering_rates(Material *material) {
         //   9: Piezoelectric Scattering
 
         char *f_band_model = mc_band_model_name(g_config->conduction_band);
-        char *f_material = mc_material_name(material->id);
+        char *f_material = mc_material_name(material);
 
         FILE * scattering_rates[10][MAX_VALLEYS];
         if(g_config->scattering_output) {
@@ -404,7 +404,7 @@ int calculate_scattering_rates(Material *material) {
 // Material = one valley
 // #####################
  if(num_valleys==1){
-        char *f_material = mc_material_name(material->id);
+        char *f_material = mc_material_name(material);
 // Density of states
   real dos=pow((sqrt(2.*material->cb.mstar[1]*M)*sqrt(Q)/HBAR),3.)/(4.*PI*PI);
 // constant for the acoustic phonon

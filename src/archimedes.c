@@ -55,11 +55,6 @@ Configuration *g_config;
 Mesh *g_mesh;
 Material g_materials[NOAMTIA];
 
-extern inline int mc_does_particle_exist(Particle *particle);
-extern inline void mc_remove_particle(Particle *particle);
-extern inline real mc_particle_ksquared(Particle *particle);
-extern inline real mc_particle_k(Particle *particle);
-
 
 real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
                                           //  type = 0: unused
@@ -129,18 +124,14 @@ static char *progname;
 #include "updating.h"
 
 // provide extern declarations of functions to fix compiler error
+extern inline int mc_does_particle_exist(Particle *particle);
+extern inline void mc_remove_particle(Particle *particle);
 extern inline Particle creation(int i, real t, int edge);
-extern inline real MM(real a, real b);
-extern inline real MM2(real x, real a, real b);
-extern inline real sign(real a, real b);
-extern inline real minimus(real x, real y);
-extern inline real maximus(real x, real y);
 extern inline int mc_is_boundary_insulator(int direction, int index);
 extern inline int mc_is_boundary_schottky(int direction, int index);
 extern inline int mc_is_boundary_ohmic(int direction, int index);
 extern inline int mc_is_boundary_contact(int direction, int index);
 extern inline int mc_is_boundary_vacuum(int direction, int index);
-extern inline char* mc_material_name(int material);
 extern inline char* mc_band_model_name(int model);
 
 

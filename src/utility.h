@@ -79,30 +79,6 @@ inline int mc_is_boundary_contact(int direction, int index) {
 }
 
 
-char* mc_material_name(int material) {
-    switch(material) {
-        case SILICON: return "Si";
-        case GAAS: return "GaAs";
-        case GERMANIUM: return "Ge";
-        case INSB: return "InSb";
-        case ALSB: return "AlSb";
-        case ALXINXSB: return "AlxInxSb";
-        case ALXIN1XSB: return "AlxIn1xSb";
-        case ALAS: return "AlAs";
-        case ALP: return "AlP";
-        case GAP: return "GaP";
-        case GASB: return "GaSb";
-        case INAS: return "InAs";
-        case INP: return "InP";
-        case INXGA1XAS: return "InxGa1xAs";
-        case INXAL1XAS: return "InxAl1xAs";
-        case INXGAXXAS: return "InxGaXxAs";
-        case GAN: return "GaN";
-        default: return "Unknown Material";
-    }
-}
-
-
 char* mc_band_model_name(int model) {
     switch(model) {
         case PARABOLIC: return "Parabolic";

@@ -75,21 +75,11 @@ typedef struct {
 
 
 inline int mc_does_particle_exist(Particle *p) { return p->valley != 9; }
-
-
 inline void mc_remove_particle(Particle *p) { p->valley = 9; }
 
 
-inline double mc_particle_ksquared(Particle *p) {
-    return (p->kx * p->kx +
-            p->ky * p->ky +
-            p->kz * p->kz);
-}
-
-
-inline double mc_particle_k(Particle *p) {
-    return sqrt(mc_particle_ksquared(p));
-}
+double mc_particle_ksquared(Particle *p);
+double mc_particle_k(Particle *p);
 
 
 int mc_calculate_isotropic_k(Particle *p, double new_energy);

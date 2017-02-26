@@ -79,5 +79,7 @@ extern Material g_materials[NOAMTIA];
 
 Material material_node(int i, int j);
 
+char* mc_material_name(Material *material);
+
 
 #endif

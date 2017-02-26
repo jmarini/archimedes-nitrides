@@ -68,4 +68,10 @@ double h2d[NXM+1][NYM+1][MN3+1];    // Hold summary values for holes per cell, a
 #include "mep/hole_relaxation.h"
 #include "mep/hole_mep.h"
 
+extern inline real MM(real a, real b);
+extern inline real MM2(real x, real a, real b);
+extern inline real sign(real a, real b);
+extern inline real minimus(real x, real y);
+extern inline real maximus(real x, real y);
+
 #endif
