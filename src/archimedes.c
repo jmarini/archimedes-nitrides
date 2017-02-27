@@ -51,6 +51,7 @@
 #include "particle.h"
 #include "material.h"
 
+// Extern variables
 Configuration *g_config;
 Mesh *g_mesh;
 Material g_materials[NOAMTIA];
@@ -103,7 +104,7 @@ static char *progname;
 #include "readinputfile.h"
 #include "updating.h"
 
-// provide extern declarations of functions to fix compiler error
+// extern declarations of functions
 extern inline int mc_does_particle_exist(Particle *particle);
 extern inline void mc_remove_particle(Particle *particle);
 extern inline Particle creation(int i, real t, int edge);
