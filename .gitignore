@@ -35,6 +35,10 @@
 *.xyz
 *.csv
 archimedes
+**/examples/*/reference/
+**/examples/*/results/
+**/examples/*/scripts/
+**/examples/*/img/
 
 # Autotools
 Makefile
