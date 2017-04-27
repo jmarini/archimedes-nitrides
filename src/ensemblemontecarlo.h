@@ -26,6 +26,7 @@
 
 
 #include "particle.h"
+#include "particle_creation.h"
 #include "mesh.h"
 
 
@@ -182,7 +183,7 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -200,7 +201,7 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -218,7 +219,7 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -236,7 +237,7 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++){
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
                 g_config->num_particles += ni;
             }

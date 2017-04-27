@@ -35,6 +35,7 @@
 int populate_superparticles(Mesh *mesh, double upper_valley, double total_scattering_rate[NOAMTIA+1]);
 
 Particle create_particle(Mesh *mesh, Node *node, double upper_valley, double total_scattering_rate[NOAMTIA+1]);
+Particle create_edge_particle(Mesh *mesh, int index, int direction, double start_time, double upper_valley, double total_scattering_rate[NOAMTIA+1]);
 
 
 #endif

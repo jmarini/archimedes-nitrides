@@ -94,7 +94,6 @@ static char *progname;
 #include "scattering_rates.h"
 #include "optical_absorption.h"
 #include "deviceconfig.h"
-#include "particlecreation.h"
 #include "drift.h"
 #include "scattering.h"
 #include "ensemblemontecarlo.h"
@@ -106,7 +105,6 @@ static char *progname;
 // extern declarations of functions
 extern inline int mc_does_particle_exist(Particle *particle);
 extern inline void mc_remove_particle(Particle *particle);
-extern inline Particle creation(int i, real t, int edge);
 extern inline char* mc_band_model_name(int model);
 
 
