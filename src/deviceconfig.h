@@ -42,7 +42,7 @@ void MCdevice_config(Mesh *mesh) {
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j){
             Node *node = mc_node(i, j);
-            Material *material = node->mat;
+            Material *material = node->material;
 
             int np = 0; // number of superparticles in the (i,j)-th cell
             if(g_config->load_initial_data == ON) {
@@ -95,11 +95,11 @@ void MCdevice_config(Mesh *mesh) {
                     else {
                         double tmp = 1.5 * BKTQ * log(rnd());;
                         valley = 1;
-                        if(node->mat->cb.num_valleys >= 2 && rnd() > 0.8) {
+                        if(node->material->cb.num_valleys >= 2 && rnd() > 0.8) {
                             valley = 2; // 80% of particles in 1st valley, 20% in 2nd valley
                         }
-                        kf = node->mat->cb.smh[valley]
-                           * sqrt(-tmp * (1. - node->mat->cb.alpha[valley] * tmp));
+                        kf = node->material->cb.smh[valley]
+                           * sqrt(-tmp * (1. - node->material->cb.alpha[valley] * tmp));
                     }
 
                     double c3 = 1. - 2. * rnd();

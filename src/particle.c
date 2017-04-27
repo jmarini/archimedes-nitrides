@@ -45,7 +45,7 @@ long long int mc_next_particle_id( ) {
 
 
 double mc_particle_energy(Particle *p) {
-    Material *material = mc_get_particle_node(p)->mat;
+    Material *material = mc_get_particle_node(p)->material;
 
     if(g_config->conduction_band == PARABOLIC) {
         return material->cb.hhm[p->valley] * mc_particle_ksquared(p);
@@ -74,7 +74,7 @@ double mc_particle_k(Particle *p) {
 
 
 double mc_particle_norm_energy(Particle *p, int axis) {
-    Material *material = mc_get_particle_node(p)->mat;
+    Material *material = mc_get_particle_node(p)->material;
 
     double ksquared = 0.;
     switch(axis) {
@@ -103,7 +103,7 @@ double mc_particle_norm_energy(Particle *p, int axis) {
 
 
 int mc_calculate_isotropic_k(Particle *p, double new_energy) {
-    Material *material = mc_get_particle_node(p)->mat;
+    Material *material = mc_get_particle_node(p)->material;
 
     double k = 0.;
     if(g_config->conduction_band == KANE) {
@@ -169,7 +169,7 @@ particle_info_t mc_calculate_particle_info(Particle *p) {
     if(j <= 1) { j = 1; }
     if(j >= ny + 1) { j = ny + 1; }
 
-    Material *material = g_mesh->nodes[i][j].mat;
+    Material *material = g_mesh->nodes[i][j].material;
 
     // calculate particle energy and velocity
     double ksquared = mc_particle_ksquared(p);

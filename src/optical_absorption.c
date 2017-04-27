@@ -62,7 +62,7 @@ int electrons_in_cell(Mesh *mesh, Node *node, double photon_energy) {
     double xmin = mesh->dx * (double)(node->i - 1),
            xmax = mesh->dx * (double)(node->i);
 
-    double alpha = absorption_coefficient(*(node->mat), photon_energy);
+    double alpha = absorption_coefficient(*(node->material), photon_energy);
     double n = g_config->particles_per_cell / (double)g_mesh->ny;
 
     return (int)(n * (exp(-alpha * xmin) - exp(-alpha * xmax)));
@@ -95,7 +95,7 @@ int calc_absorption_rates(Material material, double transistion_rate[NOAMTIA][DI
 Particle create_photoexcited_carrier(Node *node, double photon_energy,
                                      double total_scattering_rate[NOAMTIA+1],
                                      int conduction_band, int valence_band) {
-    Material *material = node->mat;
+    Material *material = node->material;
 
     double mc = material->cb.mstar[conduction_band],
            mv = material->vb.mstar[valence_band];
@@ -138,13 +138,13 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
     for(int j = 1; j <= mesh->ny + 1; ++j) {
         for(int i = 1; i <= mesh->nx + 1; ++i) {
             Node *node = mc_node(i, j);
-            int e = (int)((photon_energy - node->mat->Eg) / DE);
+            int e = (int)((photon_energy - node->material->Eg) / DE);
             int num_carriers = electrons_in_cell(mesh, node, photon_energy);
 
             for(int n = 0; n < num_carriers; ++n) {
                 double r = rnd();
                 for(int v = 0; v < 3; ++v) {
-                    if(r <= transistion_rate[node->material][e][v]) {
+                    if(r <= transistion_rate[node->material_id][e][v]) {
                         particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
                         if(g_config->tracking_output == ON
                            && particles[p].id % g_config->tracking_mod == 0) {

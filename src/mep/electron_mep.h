@@ -111,7 +111,7 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
 // Compute the fluxes f and g
    for(j=ND-2;j<=NYE+3;j++)
      for(i=ND-2;i<=NXE+3;i++){
-       material = g_mesh->nodes[i][j].material;
+       material = g_mesh->nodes[i][j].material_id;
        den=u2d[i][j][1];
        xmt=u2d[i][j][2];
        ymt=u2d[i][j][3];
@@ -144,7 +144,7 @@ void ParabMEP2D(int nx,int ny,real dx,real dy,real cfl,real theta)
 // Compute the flux values of f, g at the center of the four faces
    for(j=ND;j<=NYE+1;j++)
      for(i=ND;i<=NXE+1;i++){
-       material = g_mesh->nodes[i][j].material;
+       material = g_mesh->nodes[i][j].material_id;
        den=u2d[i][j][1]-dtodx2*fx2d[i][j][1]-dtody2*gy2d[i][j][1];
        xmt=u2d[i][j][2]-dtodx2*fx2d[i][j][2]-dtody2*gy2d[i][j][2];
        ymt=u2d[i][j][3]-dtodx2*fx2d[i][j][3]-dtody2*gy2d[i][j][3];

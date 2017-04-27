@@ -82,7 +82,7 @@ inline Particle creation(int i, real t, int edge) {
     if( j <= 1) {  j = 1; }
     if(ii >= nx + 1) { ii = nx + 1; }
     if( j >= ny + 1) {  j = ny + 1; }
-    Material *material = g_mesh->nodes[ii][j].mat;
+    Material *material = g_mesh->nodes[ii][j].material;
     if(material->cb.num_valleys == 1) {
         iv = 1;
         iaux = 0;

@@ -229,7 +229,7 @@ int calculate_potential(Mesh *mesh) {
                 double dx2 = mesh->dx * mesh->dx,
                        dy2 = mesh->dy * mesh->dy;
                 Node *node = mc_node(i, j);
-                real kappa = node->mat->eps_static * EPS0 / Q;
+                real kappa = node->material->eps_static * EPS0 / Q;
                 real deltat = (factor / kappa) * (dx2 * dy2)
                             / ((2 * (dx2 + dy2)) + dx2 * dy2);
                 real rho = (node->e.density - node->donor_conc)
@@ -256,7 +256,7 @@ int calculate_potential(Mesh *mesh) {
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j) {
             Node *node = mc_node(i, j);
-            node->potential -= node->mat->cb.emin[1];
+            node->potential -= node->material->cb.emin[1];
         }
     }
 

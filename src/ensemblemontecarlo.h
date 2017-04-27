@@ -60,7 +60,7 @@ void EMC(int iteration) {
                && particle->id % g_config->tracking_mod == 0) {
                 mc_print_tracking(iteration, particle);
             }
-            int s = scatter(particle, node->mat);        // scatter particle
+            int s = scatter(particle, node->material);        // scatter particle
 
 
             if(g_config->tracking_output == ON
@@ -70,7 +70,7 @@ void EMC(int iteration) {
             }
 
             ti = particle->t;                      // update the time
-            particle->t = ti - log(rnd()) / GM[node->material]; // update particle time
+            particle->t = ti - log(rnd()) / GM[node->material_id]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step

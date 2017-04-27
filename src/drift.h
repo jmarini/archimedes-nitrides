@@ -38,7 +38,7 @@ void drift(Particle *particle, real tau) {
     if(!mc_does_particle_exist(particle)) { return; }
 
     Node *node = mc_get_particle_node(particle);
-    Material *material = node->mat;
+    Material *material = node->material;
 
     // Electron drift process
     // second order Runge-Kutta method
@@ -48,7 +48,7 @@ void drift(Particle *particle, real tau) {
     if(g_config->conduction_band == KANE) {
         real thesquareroot, gk;
         gk = material->cb.hhm[particle->valley] * ksquared;
-        thesquareroot = sqrt(1. + 4. * node->mat->cb.alpha[particle->valley] * gk);
+        thesquareroot = sqrt(1. + 4. * node->material->cb.alpha[particle->valley] * gk);
         v.x = particle->kx * material->cb.hm[particle->valley] / thesquareroot;
         v.y = particle->ky * material->cb.hm[particle->valley] / thesquareroot;
         dk.x = -Q * (node->efield.x + v.y * node->magnetic_field) * tau / HBAR;
@@ -126,8 +126,8 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x <= 0. && mc_is_boundary_vacuum(direction_t.LEFT, node->j)) {
-        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
-        double energy = node->mat->affinity - e2;
+        double e2 = mc_particle_energy(particle) + node->material->cb.emin[particle->valley];
+        double energy = node->material->affinity - e2;
         if(energy <= 0.) { // emitted
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
             particle->x = 0.0;
@@ -166,8 +166,8 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->x >= g_mesh->width && mc_is_boundary_vacuum(direction_t.RIGHT, node->j)) {
-        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
-        double energy = node->mat->affinity - e2;
+        double e2 = mc_particle_energy(particle) + node->material->cb.emin[particle->valley];
+        double energy = node->material->affinity - e2;
         if(energy <= 0.) { // emitted
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
             particle->x = g_mesh->width;
@@ -206,8 +206,8 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y <= 0. && mc_is_boundary_vacuum(direction_t.BOTTOM, node->i)) {
-        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
-        double energy = node->mat->affinity - e2;
+        double e2 = mc_particle_energy(particle) + node->material->cb.emin[particle->valley];
+        double energy = node->material->affinity - e2;
         if(energy <= 0.) { // emitted
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
             particle->y = 0.0;
@@ -246,8 +246,8 @@ void drift(Particle *particle, real tau) {
         return;
     }
     else if(particle->y >= g_mesh->height && mc_is_boundary_vacuum(direction_t.TOP, node->i)) {
-        double e2 = mc_particle_energy(particle) + node->mat->cb.emin[particle->valley];
-        double energy = node->mat->affinity - e2;
+        double e2 = mc_particle_energy(particle) + node->material->cb.emin[particle->valley];
+        double energy = node->material->affinity - e2;
         if(energy <= 0.) { // emitted
             fprintf(emitted_fp, "%lld %g %lf\n", particle->id, g_config->time, -energy);
             particle->y = g_mesh->height;

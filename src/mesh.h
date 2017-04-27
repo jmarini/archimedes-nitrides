@@ -51,8 +51,8 @@ typedef struct {
         Index index;
     };
 
-    Material *mat;
-    int material;
+    Material *material;
+    int material_id;
 
     double donor_conc;
     double acceptor_conc;
