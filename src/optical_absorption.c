@@ -131,8 +131,7 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
 // carriers
 int photoexcite_carriers(Mesh *mesh, double photon_energy,
                          double transistion_rate[NOAMTIA][DIME][3],
-                         double total_scattering_rate[NOAMTIA+1],
-                         Particle particles[NPMAX+1]) {
+                         double total_scattering_rate[NOAMTIA+1]) {
     int p = g_config->num_particles;
 
     for(int j = 1; j <= mesh->ny + 1; ++j) {
@@ -145,10 +144,10 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
                 double r = rnd();
                 for(int v = 0; v < 3; ++v) {
                     if(r <= transistion_rate[node->material_id][e][v]) {
-                        particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
+                        mesh->particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
                         if(g_config->tracking_output == ON
-                           && particles[p].id % g_config->tracking_mod == 0) {
-                          mc_print_tracking(0, &particles[p]);
+                           && mesh->particles[p].id % g_config->tracking_mod == 0) {
+                          mc_print_tracking(0, &(mesh->particles[p]));
                         }
                         ++p;
                         break;

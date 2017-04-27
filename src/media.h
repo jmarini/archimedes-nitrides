@@ -20,12 +20,10 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// ######################################################
-// Created on 05 Oct.2004, Siracusa, J.M.Sellier
-// Last modif. : 02 Sep. 2011, Carry le Rouet, J.M.Sellier
-// ######################################################
+#include "mesh.h"
 
-void media(void) {
+
+void media(Mesh *mesh) {
     printf("Computation of macroscopic observables\n");
 
     int i = 0,
@@ -45,7 +43,7 @@ void media(void) {
 
     // calculate info for each particle
     for(n = 1; n <= g_config->num_particles; n++) {
-        particle_info_t info = mc_calculate_particle_info(&P[n]);
+        particle_info_t info = mc_calculate_particle_info(&(mesh->particles[n]));
         i = info.i;
         j = info.j;
 

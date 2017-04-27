@@ -67,8 +67,7 @@ Particle create_photoexcited_carrier(Node *node, double photon_energy,
 
 int photoexcite_carriers(Mesh *mesh, double photon_energy,
                          double transistion_rate[NOAMTIA][DIME][3],
-                         double total_scattering_rate[NOAMTIA+1],
-                         Particle particles[NPMAX+1]);
+                         double total_scattering_rate[NOAMTIA+1]);
 
 
 #endif

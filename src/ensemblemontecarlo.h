@@ -30,15 +30,15 @@
 
 
 // Ensemble Monte Carlo method
-void EMC(int iteration) {
+void EMC(Mesh *mesh, int iteration) {
     int i = 0,
         j = 0;
     real tdt = g_config->time + g_config->dt,
          tau = 0.;
-    int nx = g_mesh->nx,
-        ny = g_mesh->ny;
-    real dx = g_mesh->dx,
-         dy = g_mesh->dy;
+    int nx = mesh->nx,
+        ny = mesh->ny;
+    real dx = mesh->dx,
+         dy = mesh->dy;
     Node *node = NULL;
 
     int npt[NXM+NYM+1][4];
@@ -46,7 +46,7 @@ void EMC(int iteration) {
 
     long int n = 1;  // index of current particle
     do {
-        Particle *particle = &P[n];
+        Particle *particle = &(mesh->particles[n]);
         // information about particle n is set up in easy access variables
         real ti = g_config->time;
 
@@ -154,7 +154,7 @@ void EMC(int iteration) {
             // move the last particle to the now empty spot to keep
             // a dense array in constant time. Entries beyond num_particles
             // can be assumed to be "empty"
-            P[n] = P[g_config->num_particles - 1];
+            mesh->particles[n] = mesh->particles[g_config->num_particles - 1];
             --g_config->num_particles;
         }
     } while(n < g_config->num_particles);
@@ -182,7 +182,7 @@ void EMC(int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -200,7 +200,7 @@ void EMC(int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -218,7 +218,7 @@ void EMC(int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    P[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = creation(i, g_config->time, direction);
                 }
             g_config->num_particles += ni;
             }
@@ -236,7 +236,7 @@ void EMC(int iteration) {
             if(ni > 0) {
                 for(j=1;j<=ni;j++){
                     n=g_config->num_particles+j;
-                    P[n] = creation(i, g_config->time, direction);
+                    mesh->particles[n] = creation(i, g_config->time, direction);
                 }
                 g_config->num_particles += ni;
             }

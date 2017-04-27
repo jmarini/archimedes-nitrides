@@ -30,6 +30,7 @@
 
 
 #include "material.h"
+#include "particle.h"
 #include "vec.h"
 
 
@@ -96,6 +97,8 @@ typedef struct {
 
     Vec2 coordinates[NXM * NYM];
     int triangles[NXM * NYM][3];
+
+    Particle particles[NPMAX + 1];
 } Mesh;
 
 
@@ -130,6 +133,7 @@ Node * mc_node(int i, int j);
 Node * mc_node_s(Index index);
 
 
+Node * mc_get_particle_node(Particle *p);
 Vec2 mc_random_location_in_node(Node *node);
 
 

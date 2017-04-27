@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "global_defines.h"
 #include "material.h"
+#include "mesh.h"
 #include "random.h"
 #include "vec.h"
 
@@ -30,11 +31,6 @@ Index mc_particle_edge_coords(Particle *p) {
     int j = (int)(p->y / g_mesh->dy + 1.5);
 
     return (Index){.i=i, .j=j};
-}
-
-
-Node * mc_get_particle_node(Particle *p) {
-    return mc_node_s(mc_particle_coords(p));
 }
 
 

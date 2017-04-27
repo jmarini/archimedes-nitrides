@@ -31,7 +31,6 @@
 #include <math.h>
 
 #include "global_defines.h"
-#include "mesh.h"
 #include "vec.h"
 
 
@@ -91,8 +90,6 @@ double mc_particle_norm_energy(Particle *p, int axis);
 
 Index mc_particle_coords(Particle *p);
 Index mc_particle_edge_coords(Particle *p);
-
-Node * mc_get_particle_node(Particle *p);
 
 particle_info_t mc_calculate_particle_info(Particle *p);
 

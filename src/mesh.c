@@ -111,6 +111,11 @@ Node * mc_node(int i, int j)  { return &(g_mesh->nodes[i][j]); }
 Node * mc_node_s(Index index) { return &(g_mesh->nodes[index.i][index.j]); }
 
 
+Node * mc_get_particle_node(Particle *p) {
+    return mc_node_s(mc_particle_coords(p));
+}
+
+
 Vec2 mc_random_location_in_node(Node *node) {
     double x = g_mesh->dx * ((double)node->i - rnd());
     double y = g_mesh->dy * ((double)node->j - rnd());

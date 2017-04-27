@@ -68,7 +68,6 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
 real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
-Particle P[NPMAX+1];              // particle information, array indexed by particle
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
@@ -262,7 +261,7 @@ int main(int argc, char *argv[]) {
         printf("Scattering rates calculated...\n");
 
         if(g_config->photoexcitation_flag == ON) {
-            int num = photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM, P);
+            int num = photoexcite_carriers(g_mesh, g_config->photon_energy, transistion_rate, GM);
             printf("Photoexcited %d carriers\n", num);
         }
         else {
@@ -279,7 +278,7 @@ int main(int argc, char *argv[]) {
         FILE *excited_fp = fopen("photoexcited_particles.csv", "w");
         fprintf(excited_fp, "id x y energy\n");
         for(int n = 0; n < g_config->num_particles; ++n) {
-            Particle *p = &P[n];
+            Particle *p = &g_mesh->particles[n];
             fprintf(excited_fp, "%lld %g %g %g\n", p->id, p->x, p->y, mc_particle_energy(p));
         }
         fclose(excited_fp);
@@ -306,7 +305,7 @@ int main(int argc, char *argv[]) {
     for(int it = 1; it <= ITMAX; it++) {
         memset(&valley_occupation, 0, sizeof(valley_occupation));
         for(int n = 0; n < g_config->num_particles; ++n) {
-            valley_occupation[P[n].valley] += 1;
+            valley_occupation[g_mesh->particles[n].valley] += 1;
         }
         fprintf(valley_occupation_fp, "%d %g %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2]);
 

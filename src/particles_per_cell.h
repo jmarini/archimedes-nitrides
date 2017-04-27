@@ -27,11 +27,11 @@
 
 
 // calculate electron density per cell using particle in cell method
-int calculate_particles_per_cell(void) {
-    int nx  = g_mesh->nx,
-        ny  = g_mesh->ny;
-    real dx = g_mesh->dx,
-         dy = g_mesh->dy;
+int calculate_particles_per_cell(Mesh *mesh) {
+    int nx  = mesh->nx,
+        ny  = mesh->ny;
+    real dx = mesh->dx,
+         dy = mesh->dy;
 
 
     // resetting of the electronic density
@@ -44,8 +44,8 @@ int calculate_particles_per_cell(void) {
 
     // cloud in cell method
     for(int n = 1; n <= g_config->num_particles; ++n) {
-        real x = P[n].x / dx;
-        real y = P[n].y / dy;
+        real x = mesh->particles[n].x / dx;
+        real y = mesh->particles[n].y / dy;
         int i = (int)(x + 1.);
         int j = (int)(y + 1.);
 

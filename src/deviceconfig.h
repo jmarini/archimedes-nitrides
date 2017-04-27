@@ -107,19 +107,19 @@ void MCdevice_config(Mesh *mesh) {
                     double c5 = 2. * PI * rnd();
                     double c6 = sin(c5);
                     double c7 = cos(c5);
-                    P[n].id = mc_next_particle_id( );
-                    P[n].valley = valley;
-                    P[n].kx = kf * c3 * c6;
-                    P[n].ky = kf * c4 * c6;
-                    P[n].kz = kf * c7;
-                    P[n].t  = -log(rnd()) / GM[material->id];
-                    P[n].x  = dx * (rnd() + (double)(i) - 1.5);
-                    P[n].y  = dy * (rnd() + (double)(j) - 1.5);
+                    mesh->particles[n].id = mc_next_particle_id( );
+                    mesh->particles[n].valley = valley;
+                    mesh->particles[n].kx = kf * c3 * c6;
+                    mesh->particles[n].ky = kf * c4 * c6;
+                    mesh->particles[n].kz = kf * c7;
+                    mesh->particles[n].t  = -log(rnd()) / GM[material->id];
+                    mesh->particles[n].x  = dx * (rnd() + (double)(i) - 1.5);
+                    mesh->particles[n].y  = dy * (rnd() + (double)(j) - 1.5);
 
-                    if(i == 1) { P[n].x = dx * 0.5 * rnd(); }
-                    if(j == 1) { P[n].y = dy * 0.5 * rnd(); }
-                    if(i == nx + 1) { P[n].x = mesh->width  - dx * 0.5 * rnd(); }
-                    if(j == ny + 1) { P[n].y = mesh->height - dy * 0.5 * rnd(); }
+                    if(i == 1) { mesh->particles[n].x = dx * 0.5 * rnd(); }
+                    if(j == 1) { mesh->particles[n].y = dy * 0.5 * rnd(); }
+                    if(i == nx + 1) { mesh->particles[n].x = mesh->width  - dx * 0.5 * rnd(); }
+                    if(j == ny + 1) { mesh->particles[n].y = mesh->height - dy * 0.5 * rnd(); }
                 }
             }
         }
