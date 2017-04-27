@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "mesh.h"
+#include "particle_creation.h"
 #include "vec.h"
 
 
@@ -42,7 +43,6 @@ void MCdevice_config(Mesh *mesh) {
     for(int i = 1; i <= nx + 1; ++i) {
         for(int j = 1; j <= ny + 1; ++j){
             Node *node = mc_node(i, j);
-            Material *material = node->material;
 
             int np = 0; // number of superparticles in the (i,j)-th cell
             if(g_config->load_initial_data == ON) {
@@ -64,62 +64,7 @@ void MCdevice_config(Mesh *mesh) {
                         exit(EXIT_FAILURE);
                     }
 
-                    // We assume that the particles are initially
-                    // at near thermal equilibrium
-
-                    // In the case of two-valleys materials, 80% of the electrons are considered in the Gamma
-                    // valley in the starting simulation time, while the other 20% are
-                    // in the L-valley.
-                    int valley = 1;
-                    double kf = 0.;
-
-                    // The following is in case of precendtly loaded initial data.
-                    if(g_config->load_initial_data == ON) {
-                        valley = 1;
-                        // In this case c1 represents the mean electron energy
-                        // loaded from precedent simulations and have nothing to
-                        // do with the lattice energy.
-                        double c1=-u2d[i][j][4]/u2d[i][j][1]/Q;
-                        if(material->cb.num_valleys == 1) {
-                            kf=material->cb.smh[0]*sqrt(-1.5*c1*(1.-material->cb.alpha[1]*1.5*c1));
-                        }
-                        else if(material->cb.num_valleys >= 2) {
-                            valley=1;
-                            kf=material->cb.smh[valley]*sqrt(-1.5*c1*(1.-material->cb.alpha[1]*1.5*c1));
-                            if(rnd()>0.8){
-                                valley=2;
-                                kf=material->cb.smh[valley]*sqrt(-1.5*c1*(1.-material->cb.alpha[2]*1.5*c1));
-                            }
-                        }
-                    }
-                    else {
-                        double tmp = 1.5 * BKTQ * log(rnd());;
-                        valley = 1;
-                        if(node->material->cb.num_valleys >= 2 && rnd() > 0.8) {
-                            valley = 2; // 80% of particles in 1st valley, 20% in 2nd valley
-                        }
-                        kf = node->material->cb.smh[valley]
-                           * sqrt(-tmp * (1. - node->material->cb.alpha[valley] * tmp));
-                    }
-
-                    double c3 = 1. - 2. * rnd();
-                    double c4 = sqrt(1. - c3 * c3);
-                    double c5 = 2. * PI * rnd();
-                    double c6 = sin(c5);
-                    double c7 = cos(c5);
-                    mesh->particles[n].id = mc_next_particle_id( );
-                    mesh->particles[n].valley = valley;
-                    mesh->particles[n].kx = kf * c3 * c6;
-                    mesh->particles[n].ky = kf * c4 * c6;
-                    mesh->particles[n].kz = kf * c7;
-                    mesh->particles[n].t  = -log(rnd()) / GM[material->id];
-                    mesh->particles[n].x  = dx * (rnd() + (double)(i) - 1.5);
-                    mesh->particles[n].y  = dy * (rnd() + (double)(j) - 1.5);
-
-                    if(i == 1) { mesh->particles[n].x = dx * 0.5 * rnd(); }
-                    if(j == 1) { mesh->particles[n].y = dy * 0.5 * rnd(); }
-                    if(i == nx + 1) { mesh->particles[n].x = mesh->width  - dx * 0.5 * rnd(); }
-                    if(j == ny + 1) { mesh->particles[n].y = mesh->height - dy * 0.5 * rnd(); }
+                    mesh->particles[n] = create_particle(mesh, node, 0.8, GM);
                 }
             }
         }

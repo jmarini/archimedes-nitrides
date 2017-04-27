@@ -45,6 +45,8 @@ archimedes_SOURCES = \
 	particle.h \
 	particle.c \
 	particlecreation.h \
+	particle_creation.c \
+	particle_creation.h \
 	particles_per_cell.h \
 	random.c \
 	random.h \
