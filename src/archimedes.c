@@ -93,7 +93,7 @@ static char *progname;
 #include "random.h"
 #include "scattering_rates.h"
 #include "optical_absorption.h"
-#include "deviceconfig.h"
+#include "particle_creation.h"
 #include "drift.h"
 #include "scattering.h"
 #include "ensemblemontecarlo.h"
@@ -263,7 +263,7 @@ int main(int argc, char *argv[]) {
             printf("Photoexcited %d carriers\n", num);
         }
         else {
-            MCdevice_config(g_mesh);
+            populate_superparticles(g_mesh, 0.8, GM);
         }
         printf("Device configuration complete...\n");
     }

@@ -1,6 +1,8 @@
 #include "particle_creation.h"
 
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "configuration.h"
 #include "constants.h"
@@ -19,11 +21,6 @@ static int superparticles_per_cell(Mesh *mesh, Node *node) {
     if(g_config->load_initial_data == ON || g_config->tcad_data == ON) {
         return (int)ceil(node->e.density * mesh->dx * mesh->dy
                          / g_config->carriers_per_superparticle);
-    }
-    // Photoexcite superparticles
-    else if(g_config->photoexcitation_flag == ON) {
-        // ...
-        return 0;
     }
     // Populate from doping
     else {
@@ -244,12 +241,22 @@ int populate_superparticles(Mesh *mesh, double upper_valley, double total_scatte
             Node *node = &(mesh->nodes[i][j]);
 
             int sppc = superparticles_per_cell(mesh, node);
+            if((i == 1) || (i == mesh->nx + 1)) { sppc /= 2; }
+            if((j == 1) || (j == mesh->ny + 1)) { sppc /= 2; }
+
+            if(index + sppc > NPMAX) {
+                printf("ERROR: Number of particles exceeds maximum (%d)\n", NPMAX);
+                exit(EXIT_FAILURE);
+            }
+
             for(int n = 0; n < sppc; ++n) {
                 ++index;
                 mesh->particles[index] = create_particle(mesh, node, upper_valley, total_scattering_rate);
             }
         }
     }
+
+    g_config->num_particles = index;
 
     return 0;
 }

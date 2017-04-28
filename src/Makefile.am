@@ -28,7 +28,6 @@ archimedes_SOURCES = \
 	computecurrents.h \
 	configuration.h \
 	constants.h \
-	deviceconfig.h \
 	drift.h \
 	electrostatics.c \
 	electrostatics.h \
