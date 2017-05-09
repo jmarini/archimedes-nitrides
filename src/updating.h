@@ -44,7 +44,7 @@ int updating(int iteration, int model) {
     // ======================
     EMC(g_mesh, iteration);
     calculate_particles_per_cell(g_mesh);
-    media(g_mesh);
+    media(g_mesh, iteration);
     // If timestep would put simulation time after ending time, adjust step
     if(g_config->time + g_config->dt >= g_config->tf) {
         g_config->dt = g_config->tf - g_config->time;

@@ -23,7 +23,7 @@
 #include "mesh.h"
 
 
-void media(Mesh *mesh) {
+void media(Mesh *mesh, int iteration) {
     printf("Computation of macroscopic observables\n");
 
     int i = 0,
