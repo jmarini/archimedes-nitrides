@@ -227,6 +227,7 @@ g_materials[GASB].eps_static      = 15.69;      // see http://www.ioffe.ru/SVA/N
 g_materials[INAS].eps_static      = 15.15;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InAs/basic.html
 g_materials[INP].eps_static       = 12.50;      // see http://www.ioffe.ru/SVA/NSM/Semicond/InP/basic.html
 g_materials[GAN].eps_static       = 9.7;        // E. Bellotti & F. Bertazzi
+//g_materials[GAN].eps_static       = 8.9;        // Naylor
 
 // HIGH FREQUENCY
 // ==============

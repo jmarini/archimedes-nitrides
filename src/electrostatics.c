@@ -327,3 +327,48 @@ int magnetic_field(Mesh *mesh) {
 
     return 0;
 }
+
+
+static double depletion_width(Mesh *mesh, Node *node, double delV, double doping) {
+    return sqrt(2. * node->material->eps_static * EPS0 * delV / (Q * doping)); // in m
+}
+
+
+int surface_band_bending(Mesh *mesh, Node *node, double delV, int direction) {
+    double doping = node->donor_conc > node->acceptor_conc ? node->donor_conc : node->acceptor_conc;
+    double wdep = depletion_width(mesh, node, delV, doping);
+    Vec2 pos = {mesh->dx * node->i, mesh->dy * node->j};
+
+    double z = 0.;
+    if(direction == direction_t.LEFT)   { z = pos.x; }
+    if(direction == direction_t.RIGHT)  { z = mesh->width - pos.x; }
+    if(direction == direction_t.BOTTOM) { z = pos.y; }
+    if(direction == direction_t.TOP)    { z = mesh->height - pos.y; }
+
+    double potential = 0.;
+    if(z <= wdep) {
+        double delz = z - wdep;
+        potential = Q * doping * delz * delz / (2. * node->material->eps_static * EPS0);
+    }
+
+    node->potential = potential;
+
+    return 0;
+}
+
+
+int constant_efield(Mesh *mesh, double potential) {
+    Vec2 efield = {0., -potential / mesh->height};
+    double dV = potential / (double)mesh->ny;
+
+    double V = 0.;
+    for(int j = 1; j <= mesh->ny + 1; ++j) {
+        for(int i = 1; i <= mesh->nx + 1; ++i) {
+            mesh->nodes[i][j].potential = V;
+            mesh->nodes[i][j].efield = efield;
+        }
+        V += dV;
+    }
+
+    return 0;
+}

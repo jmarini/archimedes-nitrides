@@ -235,6 +235,20 @@ int main(int argc, char *argv[]) {
 
     printf("\n\nComputation Started at %s\n", asctime(nowtm));
 
+    if(g_config->surface_bb_flag == ON) {
+        for(int i = 1; i <= g_mesh->nx + 1; ++i) {
+            for(int j = 1; j <= g_mesh->ny + 1; ++j) {
+                Node *node = mc_node(i, j);
+                surface_band_bending(g_mesh, node, g_config->surface_bb_delV, g_config->surface_bb_direction);
+            }
+        }
+
+        electric_field(g_mesh);
+    }
+    else if(g_config->constant_efield_flag == ON) {
+        constant_efield(g_mesh, g_mesh->edges[direction_t.TOP][1].potential);
+    }
+
     if(g_config->poisson_flag == ON) {
         // Boundary conditions for the model simulated
         // ===========================================

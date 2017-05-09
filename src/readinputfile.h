@@ -81,6 +81,11 @@ Read_Input_File(void)
     g_config->load_initial_data = OFF; // leid_flag
     g_config->tcad_data = OFF;
     g_config->num_particles = 0;
+    g_config->surface_bb_flag = OFF;
+    g_config->surface_bb_direction = direction_t.LEFT;
+    g_config->surface_bb_delV = 0.;
+    g_config->constant_efield_flag = OFF;
+
 
     g_mesh->nx = NXM - 1;
     g_mesh->ny = NYM - 1;
@@ -943,6 +948,11 @@ Read_Input_File(void)
         g_config->tracking_mod = mod;
         printf("ELECTRON TRACKING = id %% %d ---> Ok\n", g_config->tracking_mod);
     }
+    else if(strcmp(s, "EFIELD") == 0) {
+        g_config->constant_efield_flag = ON;
+        g_config->poisson_flag = OFF;
+        printf("CONSTANT EFIELD = ON ---> Ok\n");
+    }
     else if(strcmp(s, "POISSON") == 0) {
         fscanf(fp, "%s", s);
         if(strcmp(s, "ON") == 0) {
@@ -996,6 +1006,23 @@ Read_Input_File(void)
         }
         fclose(input);
         g_config->tcad_data = ON;
+    }
+    else if(strcmp(s, "SURFACEBB") == 0) {
+        double delV = 0.;
+        int direction = 0;
+        fscanf(fp, "%lf", &delV);
+        fscanf(fp, "%s", s);
+
+        if(strcmp(s, "LEFT")        == 0) { direction = direction_t.LEFT; }
+        else if(strcmp(s, "RIGHT")  == 0) { direction = direction_t.RIGHT; }
+        else if(strcmp(s, "TOP")    == 0) { direction = direction_t.TOP; }
+        else if(strcmp(s, "BOTTOM") == 0) { direction = direction_t.BOTTOM; }
+
+        g_config->surface_bb_flag = ON;
+        g_config->surface_bb_direction = direction;
+        g_config->surface_bb_delV = delV;
+
+        printf("SURFACE BAND BENDING: %s %g eV ---> Ok\n", s, delV);
     }
 // elseif(strcmp(s,"")==0){
  }while(!feof(fp));

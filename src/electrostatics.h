@@ -42,5 +42,8 @@ int poisson_boundary_conditions(Mesh *mesh);
 int magnetic_field(Mesh *mesh);
 int faraday_boundary_conditions(Mesh *mesh);
 
+int surface_band_bending(Mesh *mesh, Node *node, double delV, int direction);
+int constant_efield(Mesh *mesh, double potential);
+
 
 #endif

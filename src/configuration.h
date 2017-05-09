@@ -55,6 +55,12 @@ typedef struct {
     double screening_length;
     int poisson_flag;
 
+    int constant_efield_flag;
+
+    int surface_bb_flag;
+    int surface_bb_direction;
+    double surface_bb_delV;
+
     double lattice_temp;
     double impurity_conc;
 
