@@ -56,7 +56,6 @@ typedef struct {
 
     double donor_conc;
     double acceptor_conc;
-    double fixed_charge;
 
     Carrier_Info e;     // electrons
     Carrier_Info h;     // holes

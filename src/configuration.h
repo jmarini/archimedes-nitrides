@@ -52,7 +52,6 @@ typedef struct {
     double photon_energy;
 
     int faraday_flag;
-    double screening_length;
     int poisson_flag;
 
     int constant_efield_flag;

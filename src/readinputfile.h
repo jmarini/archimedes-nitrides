@@ -63,7 +63,6 @@ Read_Input_File(void)
     g_config->tauw = 0.4e-12;
     g_config->faraday_flag = OFF;
     g_config->poisson_flag = ON;
-    g_config->screening_length = 0.;
     g_config->photon_energy = 0.;
     g_config->photoexcitation_flag = OFF;
     g_config->impurity_conc = 1.0e20; // cimp
@@ -103,7 +102,6 @@ Read_Input_File(void)
 
             g_mesh->nodes[i][j].donor_conc = NI;
             g_mesh->nodes[i][j].acceptor_conc = NI;
-            g_mesh->nodes[i][j].fixed_charge = 0.;
 
             g_mesh->nodes[i][j].e.density = NI;
             g_mesh->nodes[i][j].e.velocity = (Vec2){.x=0., .y=0.};
@@ -918,25 +916,11 @@ Read_Input_File(void)
    g_config->save_mesh = ON;
    printf("SAVE THE MESH --> Ok\n");
   }
-    else if(strcmp(s, "SCREENING_LENGTH") == 0) {
-        fscanf(fp, "%lf", &num);
-        g_config->screening_length = num;
-        printf("SCREENING LENGTH = %g ---> Ok\n", g_config->screening_length);
-    }
     else if(strcmp(s, "PHOTON") == 0) {
         fscanf(fp, "%lf", &num);
         g_config->photon_energy = num;
         g_config->photoexcitation_flag = ON;
         printf("PHOTON ENERGY = %g ---> Ok\n", g_config->photon_energy);
-    }
-    else if(strcmp(s, "FIXED_CHARGE") == 0) {
-        int index = 0;
-        fscanf(fp, "%d", &index);
-        fscanf(fp, "%lf", &num);
-        for(int j = 1; j <= g_mesh->nx + 1; ++j) {
-            g_mesh->nodes[index][j].fixed_charge = num;
-        }
-        printf("FIXED CHARGE %d %g ---> Ok\n", index, num);
     }
     else if(strcmp(s, "TRACKING") == 0) {
         int mod = 0;
