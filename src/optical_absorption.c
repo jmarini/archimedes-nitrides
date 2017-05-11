@@ -143,7 +143,7 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
             for(int n = 0; n < num_carriers; ++n) {
                 double r = rnd();
                 for(int v = 0; v < 3; ++v) {
-                    if(r <= transistion_rate[node->material_id][e][v]) {
+                    if(r <= transistion_rate[node->material->id][e][v]) {
                         mesh->particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
                         if(g_config->tracking_output == ON
                            && mesh->particles[p].id % g_config->tracking_mod == 0) {

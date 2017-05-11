@@ -53,7 +53,6 @@ typedef struct {
     };
 
     Material *material;
-    int material_id;
 
     double donor_conc;
     double acceptor_conc;

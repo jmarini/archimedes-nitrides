@@ -71,7 +71,7 @@ void EMC(Mesh *mesh, int iteration) {
             }
 
             ti = particle->t;                      // update the time
-            particle->t = ti - log(rnd()) / GM[node->material_id]; // update particle time
+            particle->t = ti - log(rnd()) / GM[node->material->id]; // update particle time
         }
         tau = tdt - ti;              // calculate unused time in step
         drift(particle, tau);        // drift for unused time in step

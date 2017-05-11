@@ -52,7 +52,7 @@ void electron_relaxation_step(void)
  for(c=1;c<=50;c++)
   for(i=ND;i<=g_mesh->nx+ND;i++)
    for(j=ND;j<=g_mesh->ny+ND;j++){
-     int material = g_mesh->nodes[i][j].material_id;
+     int material = g_mesh->nodes[i][j].material->id;
      t=(2./3.)*(u2d[i][j][4]/u2d[i][j][1])/KB;
      ktaup=M*g_materials[material].cb.mstar[1]*MIU0*g_config->lattice_temp/Q;
      taup=ktaup/t;

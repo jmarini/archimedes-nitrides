@@ -96,8 +96,6 @@ Read_Input_File(void)
 
     for(i = 1; i <= g_mesh->nx + 1; ++i) {
         for(j = 1; j <= g_mesh->ny + 1; ++j) {
-            g_mesh->nodes[i][j].material_id = SILICON;
-
             g_mesh->nodes[i][j].qep = 0.;
             g_mesh->nodes[i][j].potential = 0.;
             g_mesh->nodes[i][j].efield = (Vec2){.x=0., .y=0.};
@@ -214,7 +212,6 @@ Read_Input_File(void)
       for(j=0;j<=g_mesh->ny+4;j++){
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
-           g_mesh->nodes[i][j].material_id = type;
            g_mesh->nodes[i][j].material = &(g_materials[type]);
         }
       }
