@@ -57,7 +57,7 @@ g_materials[GAN].id       = GAN;
 // Number of valleys
 g_materials[SILICON].cb.num_valleys   = 1;  // X-valley
 g_materials[GERMANIUM].cb.num_valleys = 1;  // G-valley
-g_materials[GAAS].cb.num_valleys      = 1;  // G and L-valleys
+g_materials[GAAS].cb.num_valleys      = 2;  // G and L-valleys
 g_materials[INSB].cb.num_valleys      = 1;  // G valley
 g_materials[ALSB].cb.num_valleys      = 1;  // G-valley
 g_materials[ALXINXSB].cb.num_valleys  = 1;  // G-valley
@@ -71,7 +71,7 @@ g_materials[INP].cb.num_valleys       = 1;  // G-valley
 g_materials[INXGA1XAS].cb.num_valleys = 1;  // only G-valley
 g_materials[INXAL1XAS].cb.num_valleys = 1;  // G-valley
 g_materials[INXGAXXAS].cb.num_valleys = 1;  // only G-valley
-g_materials[GAN].cb.num_valleys       = 2;  // G-1, M-L(U), G-3
+g_materials[GAN].cb.num_valleys       = 3;  // G-1, M-L(U), G-3
 
 g_materials[SILICON].vb.num_valleys   = 1;
 g_materials[GERMANIUM].vb.num_valleys = 1;
@@ -297,6 +297,7 @@ g_materials[INAS].dtk[0]      = 3.59e11;  // see ???
 g_materials[INP].dtk[0]       = 2.46e11;  // see ???
 g_materials[GAN].dtk[0]       = 1.0e11;   // E. Bellotti & F. Bertazzi
 g_materials[GAN].dtk[1]       = 1.0e11;   // E. Bellotti & F. Bertazzi
+g_materials[GAN].dtk[2]       = 1.0e11;   // E. Bellotti & F. Bertazzi
 
 // Optical phonon Z-factor
 g_materials[SILICON].zf[0]   = 1.;  // Sellier
@@ -317,6 +318,8 @@ g_materials[INAS].zf[0]      = 1.;  // see ???
 g_materials[INP].zf[0]       = 1.;  // see ???
 g_materials[GAN].zf[0]       = 1.;  // guess for correct value
 g_materials[GAN].zf[1]       = 1.;  // guess for correct value
+g_materials[GAN].zf[2]       = 1.;  // guess for correct value
+
 
 // Crystal Density (Kg/m^3)
 g_materials[SILICON].rho   = 2.33e3;  // Fischetti conversations
@@ -470,21 +473,23 @@ g_materials[GAN].kav  = 0.137;
         // non-parabolicity coefficient for InP in the GAMMA-valley
         g_materials[INP].cb.alpha[1]=pow(1.-g_materials[INP].cb.mstar[1],2.)/(g_materials[INP].Eg+g_materials[INP].cb.emin[1]);
         printf("alphaK_gamma[InP] = %g\n",g_materials[INP].cb.alpha[1]);
-        g_materials[GAN].cb.alpha[1] = pow(1. - g_materials[GAN].cb.mstar[1], 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb.emin[1]); // expected value = 0.189
-        printf("alphaK_gamma1[GAN] = %g\n", g_materials[GAN].cb.alpha[1]);
+        for(int i = 1; i <= g_materials[GAN].cb.num_valleys; ++i) {
+          g_materials[GAN].cb.alpha[i] = pow(1. - g_materials[GAN].cb.mstar[i], 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb.emin[i]); // expected value = 0.189
+          printf("alphaK_[%d][GAN] = %g\n", i, g_materials[GAN].cb.alpha[i]);
+        }
 
 
-        g_materials[GAAS].cb.alpha[1] = pow(1.-g_materials[GAAS].cb.mstar[1],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[1]);//expected value = 0.611
-        g_materials[GAAS].cb.alpha[2] = pow(1.-g_materials[GAAS].cb.mstar[2],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[2]);//expected value = 0.242;
-        g_materials[INSB].cb.alpha[1] = pow(1.-g_materials[INSB].cb.mstar[1],2.)/(g_materials[INSB].Eg+g_materials[INSB].cb.emin[1]);//5.59;
-        g_materials[ALSB].cb.alpha[1] = pow(1.-g_materials[ALSB].cb.mstar[1],2.)/(g_materials[ALSB].Eg+g_materials[ALSB].cb.emin[1]);//0.321;
-        g_materials[ALAS].cb.alpha[1] = pow(1.-g_materials[ALAS].cb.mstar[1],2.)/(g_materials[ALAS].Eg+g_materials[ALAS].cb.emin[1]);
-        g_materials[ALP].cb.alpha[1]  = pow(1.-g_materials[ALP].cb.mstar[1],2.)/(g_materials[ALP].Eg+g_materials[ALP].cb.emin[1]);
-        g_materials[GAP].cb.alpha[1]  = pow(1.-g_materials[GAP].cb.mstar[1],2.)/(g_materials[GAP].Eg+g_materials[GAP].cb.emin[1]);
-        g_materials[GASB].cb.alpha[1] = pow(1.-g_materials[GASB].cb.mstar[1],2.)/(g_materials[GASB].Eg+g_materials[GASB].cb.emin[1]);
-        g_materials[INAS].cb.alpha[1] = pow(1.-g_materials[INAS].cb.mstar[1],2.)/(g_materials[INAS].Eg+g_materials[INAS].cb.emin[1]);
-        g_materials[INP].cb.alpha[1]  = pow(1.-g_materials[INP].cb.mstar[1],2.)/(g_materials[INP].Eg+g_materials[INP].cb.emin[1]);
-        g_materials[GAN].cb.alpha[1]  = pow(1. - g_materials[GAN].cb.mstar[1], 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb.emin[1]); // expected value = 0.189
+        // g_materials[GAAS].cb.alpha[1] = pow(1.-g_materials[GAAS].cb.mstar[1],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[1]);//expected value = 0.611
+        // g_materials[GAAS].cb.alpha[2] = pow(1.-g_materials[GAAS].cb.mstar[2],2.)/(g_materials[GAAS].Eg+g_materials[GAAS].cb.emin[2]);//expected value = 0.242;
+        // g_materials[INSB].cb.alpha[1] = pow(1.-g_materials[INSB].cb.mstar[1],2.)/(g_materials[INSB].Eg+g_materials[INSB].cb.emin[1]);//5.59;
+        // g_materials[ALSB].cb.alpha[1] = pow(1.-g_materials[ALSB].cb.mstar[1],2.)/(g_materials[ALSB].Eg+g_materials[ALSB].cb.emin[1]);//0.321;
+        // g_materials[ALAS].cb.alpha[1] = pow(1.-g_materials[ALAS].cb.mstar[1],2.)/(g_materials[ALAS].Eg+g_materials[ALAS].cb.emin[1]);
+        // g_materials[ALP].cb.alpha[1]  = pow(1.-g_materials[ALP].cb.mstar[1],2.)/(g_materials[ALP].Eg+g_materials[ALP].cb.emin[1]);
+        // g_materials[GAP].cb.alpha[1]  = pow(1.-g_materials[GAP].cb.mstar[1],2.)/(g_materials[GAP].Eg+g_materials[GAP].cb.emin[1]);
+        // g_materials[GASB].cb.alpha[1] = pow(1.-g_materials[GASB].cb.mstar[1],2.)/(g_materials[GASB].Eg+g_materials[GASB].cb.emin[1]);
+        // g_materials[INAS].cb.alpha[1] = pow(1.-g_materials[INAS].cb.mstar[1],2.)/(g_materials[INAS].Eg+g_materials[INAS].cb.emin[1]);
+        // g_materials[INP].cb.alpha[1]  = pow(1.-g_materials[INP].cb.mstar[1],2.)/(g_materials[INP].Eg+g_materials[INP].cb.emin[1]);
+        // g_materials[GAN].cb.alpha[1]  = pow(1. - g_materials[GAN].cb.mstar[1], 2.) / (g_materials[GAN].Eg + g_materials[GAN].cb.emin[1]); // expected value = 0.189
 
     }
 

@@ -125,22 +125,26 @@ int calculate_scattering_rates(Material *material) {
         char *f_band_model = mc_band_model_name(g_config->conduction_band);
         char *f_material = mc_material_name(material);
 
-        FILE * scattering_rates[10][MAX_VALLEYS];
+        int imax = 5 + 2 * num_valleys;
+
+        FILE * scattering_rates[12][MAX_VALLEYS];
         if(g_config->scattering_output) {
             char *f_scattering[] = {
                 "unknown",
+                "imp_elastic",
+                "ac_elastic",
+                "piezo_elastic",
                 "pop_emission",  "pop_absorption",
                 "npop_emission", "npop_absorption",
                 "npop_emission", "npop_absorption",
-                "ac_elastic",    "imp_elastic",
-                "piezo_elastic"
+                "npop_emission", "npop_absorption"
             };
             char filename[150];
 
-            for(int s = 1; s <= 9; ++s ) {
+            for(int s = 1; s <= imax; ++s ) {
                 for(int v = 1; v <= num_valleys; ++v) {
-                    if(s >= 3 && s <= 6) {
-                        int v2 = (int)((s - 1) / 2);
+                    if(s >= 6) {
+                        int v2 = (int)((s - 4) / 2);
                         sprintf(filename, "%s_%d-%d-%s-%s.csv", f_scattering[s], v, v2, f_material, f_band_model);
                         scattering_rates[s][v] = fopen(filename, "w");
                     }
@@ -156,6 +160,98 @@ int calculate_scattering_rates(Material *material) {
             initialenergy = DE * (real)(ie);
 
             for(int v = 1; v <= num_valleys; ++v) {
+                SWK[material->id][v][0][ie] = 0.;
+
+                // =========================
+                // == Impurity Scattering ==
+                // =========================
+                if(g_config->impurity_scattering == ON) {
+                    int i = 1;
+                    finalenergy = initialenergy; // elastic scattering
+
+                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    real prefactor = 2 * PI * g_config->impurity_conc * Q * Q * Q * Q / ( HBAR * eps * eps);
+                    real qd2 = QD2;
+                    real k2 = 2 * material->cb.mstar[v] * M * gamma / (HBAR * HBAR);
+                    real screening = qd2 * (4. * k2 + qd2);
+
+                    rate = prefactor * sqgamma * gamma2 * dos[v] / screening;
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    }
+                }
+                else { // no impurity scattering
+                    int i = 1;
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
+                    }
+                }
+
+                // ================================
+                // == Acoustic Phonon Scattering ==
+                // ================================
+                if(g_config->acoustic_phonon_scattering == ON) {
+                    int i = 2;
+                    finalenergy = initialenergy; // elastic scattering assumption
+
+                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    overlapA = gamma1 * gamma1;
+                    overlapB = (material->cb.alpha[v] * material->cb.alpha[v] * finalenergy * finalenergy) / 3;
+                    overlapC = gamma2 * gamma2;
+                    overlap = (overlapA + overlapB) / overlapC;
+
+                    rate = aco * Q * dos[v] * sqgamma * gamma2 * overlap;
+
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    }
+                }
+                else { // no acoustic phonon scattering
+                    int i = 2;
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
+                    }
+                }
+
+
+                if(g_config->piezoelectric_scattering == ON) {
+                    int i = 3;
+                    finalenergy = initialenergy; // elastic scattering
+
+                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
+                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
+                    real gamma = finalenergy * Q * gamma1;
+                    real sqgamma = sqrt(gamma);
+
+                    real prefactor = Q*Q * material->kav * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
+                    real qd2 = Q * Q * material->cb.mstar[v] * M * pow(3.0 * g_config->impurity_conc, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
+                    real a = material->cb.mstar[v] * M * finalenergy * Q / (HBAR * HBAR * qd2);
+                    real screening = log(1. + a) - a / (1. + a);
+                    real rate = prefactor * sqrt(material->cb.mstar[v] * M / 2.) * gamma2 * screening / sqgamma;
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    }
+                }
+                else {
+                    int i = 3;
+                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
+                    }
+                }
 
                 // ===============================
                 // == Optical Phonon Scattering ==
@@ -165,23 +261,23 @@ int calculate_scattering_rates(Material *material) {
 
                     // Polar Optical Phonons
                     // ---------------------
-                    for(int i = 1; i <= 2; ++i) {
+                    for(int i = 4; i <= 5; ++i) {
                         SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
 
                         real prefactor = 0.;
                         // Emission
-                        if(i == 1) {
+                        if(i == 4) {
                             finalenergy = initialenergy - material->hwo[0];
                             prefactor = poe;
                         }
                         // Absorption
-                        if(i == 2) {
+                        if(i == 5) {
                             finalenergy = initialenergy + material->hwo[0];
                             prefactor = poa;
                         }
 
                         if(finalenergy <= 0.) { // Negative energy, ignore
-                            SWK[material->id][1][i][ie] += 0.;
+                            SWK[material->id][v][i][ie] += 0.;
                             if(g_config->scattering_output) {
                                 fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
                             }
@@ -224,19 +320,19 @@ int calculate_scattering_rates(Material *material) {
                     for(int v2 = 1; v2 <= num_valleys; ++v2) {
                         // scatter from valley v -> v2
                         // when v == v2, scattering to equivalent valley
-                        for(int n = 1; n <=2; ++n) {
-                            int i = 2 * v2 + n;
+                        for(int n = 0; n <= 1; ++n) {
+                            int i = 2 * v2 + n + 4;
                             SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
 
                             real prefactor = 0.;
 
                             // Emission
-                            if(n == 1) {
+                            if(n == 0) {
                                 finalenergy = initialenergy - hwij + (material->cb.emin[v] - material->cb.emin[v2]);
                                 prefactor = ope * Q;
                             }
                             // Absorption
-                            if(n == 2) {
+                            if(n == 1) {
                                 finalenergy = initialenergy + hwij + (material->cb.emin[v] - material->cb.emin[v2]);
                                 prefactor = opa * Q;
                             }
@@ -269,100 +365,11 @@ int calculate_scattering_rates(Material *material) {
                     } // secondary loop over valleys
                 }
                 else { // no optical phonon scattering
-                    for(int i = 1; i <= 2 * num_valleys + 2; ++i) {
-                        SWK[material->id][v][i][ie] = 0.;
+                    for(int i = 6; i < 6 + 2 * num_valleys; ++i) {
+                        SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie];
                     }
                 } // optical phonon scattering
 
-                // ================================
-                // == Acoustic Phonon Scattering ==
-                // ================================
-                if(g_config->acoustic_phonon_scattering == ON) {
-                    int i = 7;
-                    finalenergy = initialenergy; // elastic scattering assumption
-
-                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
-                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
-                    real gamma = finalenergy * Q * gamma1;
-                    real sqgamma = sqrt(gamma);
-
-                    overlapA = gamma1 * gamma1;
-                    overlapB = (material->cb.alpha[v] * material->cb.alpha[v] * finalenergy * finalenergy) / 3;
-                    overlapC = gamma2 * gamma2;
-                    overlap = (overlapA + overlapB) / overlapC;
-
-                    rate = aco * Q * dos[v] * sqgamma * gamma2 * overlap;
-
-                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
-                    }
-                }
-                else { // no acoustic phonon scattering
-                    int i = 7;
-                    SWK[material->id][v][i][ie] = 0.;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
-                    }
-                } // acoustic phonon scattering
-
-                // =========================
-                // == Impurity Scattering ==
-                // =========================
-                if(g_config->impurity_scattering == ON) {
-                    int i = 8;
-                    finalenergy = initialenergy; // elastic scattering
-
-                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
-                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
-                    real gamma = finalenergy * Q * gamma1;
-                    real sqgamma = sqrt(gamma);
-
-                    real prefactor = 2 * PI * g_config->impurity_conc * Q * Q * Q * Q / ( HBAR * eps * eps);
-                    real qd2 = QD2;
-                    real k2 = 2 * material->cb.mstar[v] * M * gamma / (HBAR * HBAR);
-                    real screening = qd2 * (4. * k2 + qd2);
-
-                    rate = prefactor * sqgamma * gamma2 * dos[v] / screening;
-                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
-                    }
-                }
-                else { // no impurity scattering
-                    int i = 8;
-                    SWK[material->id][v][i][ie] = 0.;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
-                    }
-                } // impurity scattering
-
-                if(g_config->piezoelectric_scattering == ON) {
-                    int i = 9;
-                    finalenergy = initialenergy; // elastic scattering
-
-                    real gamma1 = 1. +      material->cb.alpha[v] * finalenergy;
-                    real gamma2 = 1. + 2. * material->cb.alpha[v] * finalenergy;
-                    real gamma = finalenergy * Q * gamma1;
-                    real sqgamma = sqrt(gamma);
-
-                    real prefactor = Q*Q * material->kav * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
-                    real qd2 = Q * Q * material->cb.mstar[v] * M * pow(3.0 * g_config->impurity_conc, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
-                    real a = material->cb.mstar[v] * M * finalenergy * Q / (HBAR * HBAR * qd2);
-                    real screening = log(1. + a) - a / (1. + a);
-                    real rate = prefactor * sqrt(material->cb.mstar[v] * M / 2.) * gamma2 * screening / sqgamma;
-                    SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
-                    }
-                }
-                else {
-                    int i = 9;
-                    SWK[material->id][v][i][ie] = 0.;
-                    if(g_config->scattering_output) {
-                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
-                    }
-                }
 
             } // loop over valleys
         } // loop over energy
@@ -372,22 +379,22 @@ int calculate_scattering_rates(Material *material) {
         GM[material->id] = 0.0;
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= num_valleys; ++v) {
-                if(SWK[material->id][v][9][ie] > GM[material->id]) {
-                    GM[material->id] = SWK[material->id][v][9][ie];
+                if(SWK[material->id][v][imax][ie] > GM[material->id]) {
+                    GM[material->id] = SWK[material->id][v][imax][ie];
                 }
             }
         }
         printf("GAMMA[%s] = %g\n", f_material, GM[material->id]);
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= num_valleys; ++v) {
-                for(i = 1; i <= 9; i++) {
+                for(i = 1; i <= imax; i++) {
                     SWK[material->id][v][i][ie] /= GM[material->id];
                 }
             }
         }
 
         if(g_config->scattering_output) {
-            for(int i = 1; i <= 9; ++i) {
+            for(int i = 1; i <= imax; ++i) {
                 for(int v = 1; v <= num_valleys; ++v) {
                     fclose(scattering_rates[i][v]);
                 }

@@ -67,7 +67,7 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 4: particle energy
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
-real SWK[NOAMTIA+1][3][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
+real SWK[NOAMTIA+1][4][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
     fprintf(particles_fp, "timestep time count\n");
 
     valley_occupation_fp = fopen("valley_occupation.csv", "w");
-    fprintf(valley_occupation_fp, "timestep time c1 c2\n");
+    fprintf(valley_occupation_fp, "timestep time c1 c2 c3\n");
 
     velocity_fp = fopen("velocity.csv", "w");
     fprintf(velocity_fp, "timestep x y\n");
@@ -322,7 +322,7 @@ int main(int argc, char *argv[]) {
         for(int n = 0; n < g_config->num_particles; ++n) {
             valley_occupation[g_mesh->particles[n].valley] += 1;
         }
-        fprintf(valley_occupation_fp, "%d %g %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2]);
+        fprintf(valley_occupation_fp, "%d %g %d %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2], valley_occupation[3]);
 
         fprintf(particles_fp, "%d %g %lld\n", it, g_config->time, g_config->num_particles);
         if(it % 10 == 0) {
