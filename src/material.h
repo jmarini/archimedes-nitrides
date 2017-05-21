@@ -25,11 +25,6 @@
 */
 
 
-// ######################################################
-// Created on 21 apr.2016, J. Marini
-// Last modif. : 21 apr.2016, J. Marini
-// ######################################################
-
 #ifndef ARCHIMEDES_MATERIAL_H
 #define ARCHIMEDES_MATERIAL_H
 
@@ -38,12 +33,13 @@
 
 typedef struct {
     int num_valleys;
+
     double emin[MAX_VALLEYS];
     double mstar[MAX_VALLEYS];
     double alpha[MAX_VALLEYS];
 
     // precomputed constants
-    double smh[MAX_VALLEYS];  // sqrt(2 * m* * m_e * q)
+    double smh[MAX_VALLEYS];  // sqrt(2 * m* * m_e * q) / hbar
     double hhm[MAX_VALLEYS];  // hbar^2 / (2 * m* * m_e * q)
     double hm[MAX_VALLEYS];   // hbar / (m* * m_e)
 } Band_Info;
