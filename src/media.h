@@ -42,6 +42,7 @@ void media(Mesh *mesh, int iteration) {
     memset(ener,    0, sizeof(ener[0][0])    * (NXM + 1) * (NYM + 1));
 
     // calculate info for each particle
+    Vec2 velocity = {0., 0.};
     for(n = 1; n <= g_config->num_particles; n++) {
         particle_info_t info = mc_calculate_particle_info(&(mesh->particles[n]));
         i = info.i;
@@ -52,6 +53,8 @@ void media(Mesh *mesh, int iteration) {
         ener[i][j] += material_node(i, j).cb.emin[info.valley];
         xvel[i][j] += info.vx;
         yvel[i][j] += info.vy;
+        velocity.x += info.vx;
+        velocity.y += info.vy;
     }
 
     // Mean Value of the macroscopic variables
@@ -84,5 +87,11 @@ void media(Mesh *mesh, int iteration) {
                 moving_average[i][j][4] = g_config->avg_alpha * ener[i][j] + (1. - g_config->avg_alpha) * moving_average[i][j][4];
             }
         }
+    }
+    velocity.x /= (double)g_config->num_particles;
+    velocity.y /= (double)g_config->num_particles;
+    fprintf(velocity_fp, "%d %g %g\n", iteration, velocity.x, velocity.y);
+    if(iteration % 10 == 0) {
+      fflush(velocity_fp);
     }
 }

@@ -76,6 +76,7 @@ FILE *fp;
 FILE *emitted_fp;
 FILE *tracking_fp;
 FILE *valley_occupation_fp;
+FILE *velocity_fp;
 
 static char *progname;
 
@@ -310,6 +311,8 @@ int main(int argc, char *argv[]) {
     valley_occupation_fp = fopen("valley_occupation.csv", "w");
     fprintf(valley_occupation_fp, "timestep time c1 c2\n");
 
+    velocity_fp = fopen("velocity.csv", "w");
+    fprintf(velocity_fp, "timestep x y\n");
 
     // HERE IS THE SIMULATION
     // ======================
@@ -322,6 +325,9 @@ int main(int argc, char *argv[]) {
         fprintf(valley_occupation_fp, "%d %g %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2]);
 
         fprintf(particles_fp, "%d %g %lld\n", it, g_config->time, g_config->num_particles);
+        if(it % 10 == 0) {
+            fflush(valley_occupation_fp);
+        }
 
         if(updating(it, g_config->simulation_model) != 0) {
             break;
@@ -331,6 +337,7 @@ int main(int argc, char *argv[]) {
     fclose(particles_fp);
     fclose(emitted_fp);
     fclose(valley_occupation_fp);
+    fclose(velocity_fp);
     if(g_config->tracking_output == ON) {
         fclose(tracking_fp);
     }
