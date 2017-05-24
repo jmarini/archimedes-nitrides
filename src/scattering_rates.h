@@ -175,7 +175,8 @@ int calculate_scattering_rates(Material *material) {
                     real sqgamma = sqrt(gamma);
 
                     real prefactor = 2 * PI * g_config->impurity_conc * Q * Q * Q * Q / ( HBAR * eps * eps);
-                    real qd2 = QD2;
+                    real Nlh = g_config->impurity_conc / (1. + pow(material->vb.mstar[0] / material->vb.mstar[1], 1.5));
+                    real qd2 = Q * Q * material->vb.mstar[1] * M * pow(3.0 * Nlh, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
                     real k2 = 2 * material->cb.mstar[v] * M * gamma / (HBAR * HBAR);
                     real screening = qd2 * (4. * k2 + qd2);
 
@@ -236,7 +237,8 @@ int calculate_scattering_rates(Material *material) {
                     real sqgamma = sqrt(gamma);
 
                     real prefactor = Q*Q * material->kav * BKTQ * Q / (HBAR * HBAR * eps * 4 * PI);
-                    real qd2 = Q * Q * material->cb.mstar[v] * M * pow(3.0 * g_config->impurity_conc, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
+                    real Nlh = g_config->impurity_conc / (1. + pow(material->vb.mstar[0] / material->vb.mstar[1], 1.5));
+                    real qd2 = Q * Q * material->vb.mstar[1] * M * pow(3.0 * Nlh, 0.33) / (pow(PI, 1.33) * eps * HBAR * HBAR);
                     real a = material->cb.mstar[v] * M * finalenergy * Q / (HBAR * HBAR * qd2);
                     real screening = log(1. + a) - a / (1. + a);
                     real rate = prefactor * sqrt(material->cb.mstar[v] * M / 2.) * gamma2 * screening / sqgamma;
