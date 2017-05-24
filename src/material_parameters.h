@@ -135,10 +135,10 @@ g_materials[INP].cb.emin[1]       = 0.0;
 g_materials[GAN].cb.emin[1]       = 0.0;    // G-1
 // second valley
 g_materials[GAAS].cb.emin[2]      = 0.323;  // L
-g_materials[GAN].cb.emin[2]       = 1.34;   // L-M (U-3) - see Bulutay et al. Phys.Rev.B v62 p15454 (2000)
+g_materials[GAN].cb.emin[2]       = 1.34;   // L-M (U-3) - see Bulutay et al. Phys.Rev.B v62 p15754 (2000)
 // third valley
 g_materials[GAAS].cb.emin[3]      = 0.48;   // X
-g_materials[GAN].cb.emin[3]       = 2.14;   // G-3 - see Bulutay et al. Phys.Rev.B v62 p15454 (2000)
+g_materials[GAN].cb.emin[3]       = 2.14;   // G-3 - see Bulutay et al. Phys.Rev.B v62 p15754 (2000)
 
 
 // Definition of effective mass for all materials in all valleys
