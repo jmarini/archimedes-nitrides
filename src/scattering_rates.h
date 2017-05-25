@@ -79,7 +79,7 @@ int calculate_scattering_rates(Material *material) {
         real dos[MAX_VALLEYS];
         // band structure parameters
         for(int v = 1; v <= num_valleys; v++) {
-            dos[v] = pow(sqrt(2. * material->cb.mstar[v] * M) / HBAR, 3.) / (2. * PI * PI);
+            dos[v] = pow(sqrt(2. * material->cb.mstar[v] * M) / HBAR, 3.) / (4. * PI * PI);
         }
 
 

@@ -376,7 +376,8 @@ g_materials[GASB].lattice_const      = 609.59e-12;   // CODATA
 g_materials[INP].lattice_const       = 586.87e-12;   // CODATA
 g_materials[INAS].lattice_const      = 605.83e-12;   // CODATA
 g_materials[INSB].lattice_const      = 647.9e-12;    // CODATA
-g_materials[GAN].lattice_const       = 318.9e-12;    // a lattice constant
+// g_materials[GAN].lattice_const       = 318.9e-12;    // a lattice constant
+g_materials[GAN].lattice_const       = 518.6e-12;    // c lattice constant
 
 // electro-mechanical coupling constant
 g_materials[GAAS].kav = 0.0252;
