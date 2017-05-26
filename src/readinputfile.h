@@ -66,6 +66,7 @@ Read_Input_File(void)
     g_config->photon_energy = 0.;
     g_config->photoexcitation_flag = OFF;
     g_config->impurity_conc = 1.0e20; // cimp
+    g_config->thomas_fermi_screening = OFF;
     g_config->lattice_temp = 300.0;
     g_config->particles_per_cell = 2500; // np1 aka statistical weight
     g_config->avg_steps = 500;
@@ -946,6 +947,21 @@ Read_Input_File(void)
         }
         else {
             printf("%s: command POISSON accept ON or OFF, given '%s'.\n", progname, s);
+            exit(0);
+        }
+    }
+    else if(strcmp(s, "THOMASFERMI") == 0) {
+        fscanf(fp, "%s", s);
+        if(strcmp(s, "ON") == 0) {
+            g_config->thomas_fermi_screening = ON;
+            printf("THOMAS FERMI SCREENING = ON ---> Ok\n");
+        }
+        else if(strcmp(s, "OFF") == 0) {
+            g_config->thomas_fermi_screening = OFF;
+            printf("THOMAS FERMI SCREENING = OFF ---> Ok\n");
+        }
+        else {
+            printf("%s: command THOMASFERMI accept ON or OFF, given '%s'.\n", progname, s);
             exit(0);
         }
     }

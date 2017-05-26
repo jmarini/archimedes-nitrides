@@ -62,6 +62,7 @@ typedef struct {
 
     double lattice_temp;
     double impurity_conc;
+    int thomas_fermi_screening;
 
     // averaging
     int particles_per_cell;
