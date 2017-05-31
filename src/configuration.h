@@ -39,6 +39,7 @@ typedef struct {
     int optical_phonon_scattering;
     int acoustic_phonon_scattering;
     int impurity_scattering;
+    int neutral_impurity_scattering;
     int piezoelectric_scattering;
 
     // band structure & quantum correction models
@@ -62,6 +63,7 @@ typedef struct {
 
     double lattice_temp;
     double impurity_conc;
+    double neutral_impurity_conc;
     int thomas_fermi_screening;
 
     // averaging

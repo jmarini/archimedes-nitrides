@@ -168,6 +168,9 @@ g_materials[GAN].cb.alpha[2]       = 0.065;  // L-M -- Bhapkar & Shur
 g_materials[GAN].cb.alpha[3]       = 0.029;  // G-2 -- Bhapkar & Shur
 
 
+g_materials[GAAS].vb.mstar[0] = 0.45; // heavy hole
+g_materials[GAAS].vb.alpha[0] = 0.0; // heavy hole
+
 g_materials[GAN].vb.mstar[0] = 1.4; // heavy hole
 g_materials[GAN].vb.mstar[1] = 0.3; // light hole
 g_materials[GAN].vb.mstar[2] = 0.6; // split-off

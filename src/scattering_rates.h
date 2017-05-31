@@ -130,8 +130,8 @@ int calculate_scattering_rates(Material *material) {
         FILE * scattering_rates[12][MAX_VALLEYS];
         if(g_config->scattering_output) {
             char *f_scattering[] = {
-                "unknown",
-                "imp_elastic",
+                "neutral_imp",
+                "charged_imp",
                 "ac_elastic",
                 "piezo_elastic",
                 "pop_emission",  "pop_absorption",
@@ -141,7 +141,7 @@ int calculate_scattering_rates(Material *material) {
             };
             char filename[150];
 
-            for(int s = 1; s <= imax; ++s ) {
+            for(int s = 0; s <= imax; ++s ) {
                 for(int v = 1; v <= num_valleys; ++v) {
                     if(s >= 6) {
                         int v2 = (int)((s - 4) / 2);
@@ -165,6 +165,28 @@ int calculate_scattering_rates(Material *material) {
                 // =========================
                 // == Impurity Scattering ==
                 // =========================
+                if(g_config->neutral_impurity_scattering == ON) {
+                    int i = 0;
+                    finalenergy = initialenergy; // elastic scattering
+
+                    double bohr = 4. * PI * eps * HBAR * HBAR / (material->vb.mstar[0] * M * Q * Q);
+                    double a = 12.5 + HBAR*HBAR / (2. * material->cb.mstar[v] * M * KB * g_config->lattice_temp * bohr * bohr);
+                    double c = 3.4 * g_config->neutral_impurity_conc * HBAR / (material->cb.mstar[v] * M) * pow(HBAR*HBAR / (2 * material->cb.mstar[v] * M * KB), 3. / 2.);
+
+                    rate = c * pow(g_config->lattice_temp * a, -3. / 2.) / (bohr * bohr);
+                    SWK[material->id][v][i][ie] = 0. + rate;
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);
+                    }
+                }
+                else {
+                    int i = 0;
+                    SWK[material->id][v][i][ie] = 0.;
+                    if(g_config->scattering_output) {
+                        fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, 0.);
+                    }
+                }
+
                 if(g_config->impurity_scattering == ON) {
                     int i = 1;
                     finalenergy = initialenergy; // elastic scattering
@@ -395,14 +417,14 @@ int calculate_scattering_rates(Material *material) {
         printf("GAMMA[%s] = %g\n", f_material, GM[material->id]);
         for(ie = 1; ie <= DIME; ie++) {
             for(int v = 1; v <= num_valleys; ++v) {
-                for(i = 1; i <= imax; i++) {
+                for(i = 0; i <= imax; i++) {
                     SWK[material->id][v][i][ie] /= GM[material->id];
                 }
             }
         }
 
         if(g_config->scattering_output) {
-            for(int i = 1; i <= imax; ++i) {
+            for(int i = 0; i <= imax; ++i) {
                 for(int v = 1; v <= num_valleys; ++v) {
                     fclose(scattering_rates[i][v]);
                 }

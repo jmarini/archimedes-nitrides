@@ -47,10 +47,11 @@ Read_Input_File(void)
 
 
     // setting defaults using configuration object
-    g_config->optical_phonon_scattering = ON;  // Optical phonons scattering ON by default
-    g_config->acoustic_phonon_scattering = ON; // Acoustic phonons scattering ON by default
-    g_config->impurity_scattering = ON;        // Impurity phonons scattering ON by default
-    g_config->piezoelectric_scattering = ON;   // Piezoelectric scattering OFF by default
+    g_config->optical_phonon_scattering = ON;     // Optical phonons scattering ON by default
+    g_config->acoustic_phonon_scattering = ON;    // Acoustic phonons scattering ON by default
+    g_config->impurity_scattering = ON;           // Charged impurity scattering ON by default
+    g_config->neutral_impurity_scattering = OFF;  // Neutral impurity scattering OFF by default
+    g_config->piezoelectric_scattering = ON;     // Piezoelectric scattering OFF by default
     g_config->conduction_band = KANE;
     g_config->qep_alpha = 0.5;
     g_config->qep_gamma = 1.0;
@@ -65,7 +66,8 @@ Read_Input_File(void)
     g_config->poisson_flag = ON;
     g_config->photon_energy = 0.;
     g_config->photoexcitation_flag = OFF;
-    g_config->impurity_conc = 1.0e20; // cimp
+    g_config->impurity_conc = 1e17; // cimp
+    g_config->neutral_impurity_conc = 1e15; // cimp
     g_config->thomas_fermi_screening = OFF;
     g_config->lattice_temp = 300.0;
     g_config->particles_per_cell = 2500; // np1 aka statistical weight
@@ -396,6 +398,15 @@ Read_Input_File(void)
     }
     printf("CIMP = %g ---> Ok\n",g_config->impurity_conc);
   }
+  else if(strcmp(s,"NIMP")==0){
+    fscanf(fp,"%lf",&num);
+    g_config->neutral_impurity_conc = num;
+    if(g_config->neutral_impurity_conc<0.){
+      printf("%s: not valid impurity concentration\n",progname);
+      exit(EXIT_FAILURE);
+    }
+    printf("NIMP = %g ---> Ok\n",g_config->neutral_impurity_conc);
+  }
 
 // read the x length of the device
   else if(strcmp(s,"XLENGTH")==0){
@@ -572,9 +583,9 @@ Read_Input_File(void)
 // Definition of an eventual contact
   else if(strcmp(s,"CONTACT")==0){
     char pos[80],kind[80];
-    real ipos,fpos,delt,dens = 0.,denshole = 0.;
+    real ipos,fpos,delt = 0.,dens = 0.,denshole = 0.;
     real potential = 0.;
-    int i,j,k;
+    int i = 0,j,k;
 // read and check the "qualitative" position of the contact
     fscanf(fp,"%s",pos);
     if(strcmp(pos,"UP")!=0 && strcmp(pos,"DOWN")!=0
@@ -856,6 +867,22 @@ Read_Input_File(void)
    }
    else {
     printf("%s : command PIEZOELECTRIC accept ON or OFF.\n",progname);
+    exit(0);
+   }
+  }
+  else if(strcmp(s,"NEUTRALIMPURITY")==0){
+// specify if the Acoustic phonons scattering has to be taken into account
+   fscanf(fp,"%s",s);
+   if(strcmp(s,"ON")==0){
+    g_config->neutral_impurity_scattering = ON;
+    printf("NEUTRAL IMPURITY SCATTERING = ON ---> Ok\n");
+   }
+   else if(strcmp(s,"OFF")==0){
+    g_config->neutral_impurity_scattering = OFF;
+    printf("NEUTRAL IMPURITY SCATTERING = OFF ---> Ok\n");
+   }
+   else {
+    printf("%s : command NEUTRALIMPURITY accept ON or OFF.\n",progname);
     exit(0);
    }
   }

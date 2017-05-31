@@ -124,6 +124,16 @@ int scatter(Particle *particle, Material *material) {
         // ===================================================
         double r1 = rnd();
 
+        // Neutral Impurity scattering
+        if((r1 <= SWK[material->id][particle->valley][0][ie]) && !has_scattered) {
+            finalenergy = superparticle_energy;
+            if(finalenergy <= 0.) { return has_scattered; }
+            has_scattered = 1;
+
+            mc_calculate_isotropic_k(particle, finalenergy);
+            return has_scattered;
+        }
+
         // Impurity scattering
         if((r1 <= SWK[material->id][particle->valley][1][ie]) && !has_scattered) {
             finalenergy = superparticle_energy;
