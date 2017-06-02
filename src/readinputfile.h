@@ -51,7 +51,8 @@ Read_Input_File(void)
     g_config->acoustic_phonon_scattering = ON;    // Acoustic phonons scattering ON by default
     g_config->impurity_scattering = ON;           // Charged impurity scattering ON by default
     g_config->neutral_impurity_scattering = OFF;  // Neutral impurity scattering OFF by default
-    g_config->piezoelectric_scattering = ON;     // Piezoelectric scattering OFF by default
+    g_config->piezoelectric_scattering = ON;      // Piezoelectric scattering OFF by default
+    g_config->electron_hole_scattering = OFF;     // Electron-hole scattering OFF by default
     g_config->conduction_band = KANE;
     g_config->qep_alpha = 0.5;
     g_config->qep_gamma = 1.0;
@@ -871,7 +872,6 @@ Read_Input_File(void)
    }
   }
   else if(strcmp(s,"NEUTRALIMPURITY")==0){
-// specify if the Acoustic phonons scattering has to be taken into account
    fscanf(fp,"%s",s);
    if(strcmp(s,"ON")==0){
     g_config->neutral_impurity_scattering = ON;
@@ -883,6 +883,21 @@ Read_Input_File(void)
    }
    else {
     printf("%s : command NEUTRALIMPURITY accept ON or OFF.\n",progname);
+    exit(0);
+   }
+  }
+  else if(strcmp(s,"ELECTRONHOLE")==0){
+   fscanf(fp,"%s",s);
+   if(strcmp(s,"ON")==0){
+    g_config->electron_hole_scattering = ON;
+    printf("ELECTRON HOLE SCATTERING = ON ---> Ok\n");
+   }
+   else if(strcmp(s,"OFF")==0){
+    g_config->electron_hole_scattering = OFF;
+    printf("ELECTRON HOLE SCATTERING = OFF ---> Ok\n");
+   }
+   else {
+    printf("%s : command ELECTRONHOLE accept ON or OFF.\n",progname);
     exit(0);
    }
   }

@@ -205,7 +205,11 @@ int calculate_scattering_rates(Material *material) {
                     real k2 = 2 * material->cb.mstar[v] * M * gamma / (HBAR * HBAR);
                     real screening = qd2 * (4. * k2 + qd2);
 
-                    rate = prefactor * sqgamma * gamma2 * dos[v] / screening;
+                    double eh_mult = 1.;
+                    if(g_config->electron_hole_scattering == ON) {
+                        eh_mult = 2.; // e-h scattering treated as impurity scattering
+                    }
+                    rate = eh_mult * prefactor * sqgamma * gamma2 * dos[v] / screening;
                     SWK[material->id][v][i][ie] = SWK[material->id][v][i-1][ie] + rate;
                     if(g_config->scattering_output) {
                         fprintf(scattering_rates[i][v], "%g,%g\n", initialenergy, rate);

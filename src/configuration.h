@@ -41,6 +41,7 @@ typedef struct {
     int impurity_scattering;
     int neutral_impurity_scattering;
     int piezoelectric_scattering;
+    int electron_hole_scattering;
 
     // band structure & quantum correction models
     int conduction_band;
