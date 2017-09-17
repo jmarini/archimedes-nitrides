@@ -35,15 +35,12 @@
 #include "vec.h"
 #include <stdio.h>
 
-void
-Read_Input_File(void)
-{
- char s[180];
- double num,num0;
- int ini,fin;
- int i,j;
- int LXflag=0, LYflag=0;
- int transportflag=0;
+void read_input_file(FILE *fp) {
+    char s[180];
+    double num,num0;
+    int ini,fin;
+    int LXflag=0, LYflag=0;
+    int transportflag=0;
 
 
     // setting defaults using configuration object
@@ -97,8 +94,8 @@ Read_Input_File(void)
     g_mesh->width = 0.;
     g_mesh->height = 0.;
 
-    for(i = 1; i <= g_mesh->nx + 1; ++i) {
-        for(j = 1; j <= g_mesh->ny + 1; ++j) {
+    for(int i = 1; i <= g_mesh->nx + 1; ++i) {
+        for(int j = 1; j <= g_mesh->ny + 1; ++j) {
             g_mesh->nodes[i][j].qep = 0.;
             g_mesh->nodes[i][j].potential = 0.;
             g_mesh->nodes[i][j].efield = (Vec2){.x=0., .y=0.};
@@ -117,7 +114,7 @@ Read_Input_File(void)
         }
     }
 
-    for(i = 1; i <= g_mesh->nx + 1; ++i) {
+    for(int i = 1; i <= g_mesh->nx + 1; ++i) {
         g_mesh->edges[0][i].boundary = 0;
         g_mesh->edges[0][i].potential = 0.;
         g_mesh->edges[0][i].n = 0.;
@@ -128,7 +125,7 @@ Read_Input_File(void)
         g_mesh->edges[2][i].n = 0.;
         g_mesh->edges[2][i].p = 0.;
     }
-    for(j = 1; j <= g_mesh->nx + 1; ++j) {
+    for(int j = 1; j <= g_mesh->nx + 1; ++j) {
         g_mesh->edges[1][j].boundary = 0;
         g_mesh->edges[1][j].potential = 0.;
         g_mesh->edges[1][j].n = 0.;
@@ -148,8 +145,8 @@ Read_Input_File(void)
 // ============================
  XVAL[ALXINXSB]=XVAL[ALXIN1XSB]=XVAL[INXGA1XAS]=XVAL[INXAL1XAS]=XVAL[INXGAXXAS]=0.5;
 // standard doping concentration
- for(i=1;i<=g_mesh->nx+1;i++)
-   for(j=1;j<=g_mesh->ny+1;j++){
+ for(int i=1;i<=g_mesh->nx+1;i++)
+   for(int j=1;j<=g_mesh->ny+1;j++){
       u2d[i][j][1]=NI;
       h2d[i][j][1]=NI;
       u2d[i][j][2]=u2d[i][j][3]=0.;
@@ -210,8 +207,8 @@ Read_Input_File(void)
       printf("%s : unknown specified material!\n",progname);
       exit(0);
     }
-    for(i=0;i<=g_mesh->nx+4;i++)
-      for(j=0;j<=g_mesh->ny+4;j++){
+    for(int i=0;i<=g_mesh->nx+4;i++)
+      for(int j=0;j<=g_mesh->ny+4;j++){
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
            g_mesh->nodes[i][j].material = &(g_materials[type]);
@@ -357,8 +354,8 @@ Read_Input_File(void)
      }
 // Load the initial data for electrons in case of Monte Carlo method
     if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH){
-      for(j=1;j<=g_mesh->ny+1;j++)
-       for(i=1;i<=g_mesh->nx+1;i++){
+      for(int j=1;j<=g_mesh->ny+1;j++)
+       for(int i=1;i<=g_mesh->nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i][j][1]=(real)(dum);
         g_mesh->nodes[i][j].e.density = (real)dum;
@@ -371,8 +368,8 @@ Read_Input_File(void)
     }
 // Load the initial data for electrons in case of Simplified MEP model
     if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH){
-      for(j=1;j<=g_mesh->ny+1;j++)
-       for(i=1;i<=g_mesh->nx+1;i++){
+      for(int j=1;j<=g_mesh->ny+1;j++)
+       for(int i=1;i<=g_mesh->nx+1;i++){
         fscanf(dp,"%lf %lf %lf",&dum0,&dum1,&dum);
         u2d[i+2][j+2][1]=(real)(dum);
         g_mesh->nodes[i+2][j+2].e.density = (real)dum;
@@ -474,8 +471,8 @@ Read_Input_File(void)
       exit(EXIT_FAILURE);
     }
     if(g_config->simulation_model==MCE || g_config->simulation_model==MCEH)
-    for(i=1;i<=g_mesh->nx+1;i++)
-      for(j=1;j<=g_mesh->ny+1;j++)
+    for(int i=1;i<=g_mesh->nx+1;i++)
+      for(int j=1;j<=g_mesh->ny+1;j++)
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          &&(j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            u2d[i][j][1]=conc;
@@ -483,8 +480,8 @@ Read_Input_File(void)
            g_mesh->nodes[i][j].e.density = conc;
         }
     if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH)
-    for(i=1;i<=g_mesh->nx+1;i++)
-      for(j=1;j<=g_mesh->ny+1;j++){
+    for(int i=1;i<=g_mesh->nx+1;i++)
+      for(int j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            u2d[i+2][j+2][1]=conc;
@@ -537,8 +534,8 @@ Read_Input_File(void)
       exit(EXIT_FAILURE);
     }
     if(g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH || g_config->simulation_model==MCEH)
-    for(i=1;i<=g_mesh->nx+1;i++)
-      for(j=1;j<=g_mesh->ny+1;j++){
+    for(int i=1;i<=g_mesh->nx+1;i++)
+      for(int j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
          && (j-0.5)*g_mesh->dy>=ymin && (j-1.5)*g_mesh->dy<=ymax){
            h2d[i+2][j+2][1]=conc;
@@ -799,8 +796,8 @@ Read_Input_File(void)
       printf("%s : %f > %f in CONSTANTMAGNETICFIELD.\n",progname,yi,yf);
       exit(0);
     }
-    for(i=1;i<=g_mesh->nx+1;i++)
-      for(j=1;j<=g_mesh->ny+1;j++)
+    for(int i=1;i<=g_mesh->nx+1;i++)
+      for(int j=1;j<=g_mesh->ny+1;j++)
         if((i-0.5)*g_mesh->dx>=xi && (i-1.5)*g_mesh->dx<=xf
          &&(j-0.5)*g_mesh->dy>=yi && (j-1.5)*g_mesh->dy<=yf){
            g_mesh->nodes[i][j].magnetic_field = value;
@@ -1067,8 +1064,8 @@ Read_Input_File(void)
  }while(!feof(fp));
 // computation of the maximum doping density
  g_config->max_doping = 0.;
- for(i=1;i<=g_mesh->nx+1;i++)
-   for(j=1;j<=g_mesh->ny+1;j++){
+ for(int i=1;i<=g_mesh->nx+1;i++)
+   for(int j=1;j<=g_mesh->ny+1;j++){
      if(g_config->max_doping<=g_mesh->nodes[i][j].donor_conc) {
         g_config->max_doping = g_mesh->nodes[i][j].donor_conc;
     }

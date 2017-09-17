@@ -184,9 +184,9 @@ int scatter(Particle *particle, Material *material) {
                 kf = material->cb.smh[particle->valley] * sqrt(finalenergy);
             }
 
-            double f = 2. * ki * kf / (ki - kf) / (ki - kf);
-            if(f <= 0.) { return has_scattered; }
-            double cb = (1. + f - pow(1. + 2. * f, rnd())) / f;
+            double r = 2. * ki * kf / (ki - kf) / (ki - kf);
+            if(r <= 0.) { return has_scattered; }
+            double cb = (1. + r - pow(1. + 2. * r, rnd())) / r;
 
             mc_calculate_anisotropic_k(particle, ki, kf, cb);
             return has_scattered;
@@ -206,9 +206,9 @@ int scatter(Particle *particle, Material *material) {
                 kf=material->cb.smh[particle->valley] * sqrt(finalenergy);
             }
 
-            double f = 2. * ki * kf / (ki - kf) / (ki - kf);
-            if(f <= 0.) { return has_scattered; }
-            double cb = (1. + f - pow((1. + 2. * f), rnd())) / f;
+            double r = 2. * ki * kf / (ki - kf) / (ki - kf);
+            if(r <= 0.) { return has_scattered; }
+            double cb = (1. + r - pow((1. + 2. * r), rnd())) / r;
 
             mc_calculate_anisotropic_k(particle, ki, kf, cb);
             return has_scattered;

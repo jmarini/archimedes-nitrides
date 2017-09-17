@@ -186,10 +186,10 @@ g_materials[GAN].vb.alpha[2] = 0.0;
 
 // precomputed constants
 for(int m = 0; m < NOAMTIA; ++m) {
-    for(int v = 1; v <= g_materials[m].cb.num_valleys; ++v) {
-        g_materials[m].cb.smh[v] = sqrt(2. * g_materials[m].cb.mstar[v] * M * Q) / HBAR;
-        g_materials[m].cb.hhm[v] = HBAR * HBAR / (2. * g_materials[m].cb.mstar[v] * M  * Q);
-        g_materials[m].cb.hm[v]  = HBAR / (g_materials[m].cb.mstar[v] * M);
+    for(int n = 1; n <= g_materials[m].cb.num_valleys; ++n) {
+        g_materials[m].cb.smh[n] = sqrt(2. * g_materials[m].cb.mstar[n] * M * Q) / HBAR;
+        g_materials[m].cb.hhm[n] = HBAR * HBAR / (2. * g_materials[m].cb.mstar[n] * M  * Q);
+        g_materials[m].cb.hm[n]  = HBAR / (g_materials[m].cb.mstar[n] * M);
     }
 }
 
@@ -246,10 +246,8 @@ g_materials[INP].eps_hf  = 9.61;        // see http://www.ioffe.ru/SVA/NSM/Semic
 g_materials[GAN].eps_hf  = 5.28;        // E. Bellotti & F. Bertazzi
 
 
-int m = 0,
-    i = 0;
-for(m = 0; m < NOAMTIA; m++) {
-   for(i = 0; i < 6; i++){
+for(int m = 0; m < NOAMTIA; m++) {
+   for(int i = 0; i < 6; i++){
        g_materials[m].hwo[i] = 0.;
        g_materials[m].dtk[i] = 0.;
        g_materials[m].zf[i]  = 0;

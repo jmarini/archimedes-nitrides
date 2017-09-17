@@ -72,7 +72,7 @@ real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * c
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
 real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
 
-FILE *fp;
+FILE *input_fp;
 FILE *emitted_fp;
 FILE *tracking_fp;
 FILE *valley_occupation_fp;
@@ -188,9 +188,9 @@ int main(int argc, char *argv[]) {
 
     // In case of filename specified
     // =============================
-    fp = fopen(argv[1], "r"); // here we open the input file...
+    input_fp = fopen(argv[1], "r"); // here we open the input file...
     // File Control, just in case the file does not exist...
-    if(fp == NULL) {
+    if(input_fp == NULL) {
         printf("%s: fatal error in opening the input file %s\n",
                progname, argv[1]);
         exit(EXIT_FAILURE);
@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
 
     // Read the geometrical and physical description of the MESFET
     // ===========================================================
-    Read_Input_File();
+    read_input_file(input_fp);
     // ===========================================================
 
     // Construction of the mesh for the electrostatic potential
@@ -219,7 +219,7 @@ int main(int argc, char *argv[]) {
 
     // Closure of the input file
     // =========================
-    fclose(fp);
+    fclose(input_fp);
     printf("\nInput file read...\n");
 
     // material constants definition

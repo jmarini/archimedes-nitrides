@@ -32,8 +32,6 @@
 
 // Ensemble Monte Carlo method
 void EMC(Mesh *mesh, int iteration) {
-    int i = 0,
-        j = 0;
     real tdt = g_config->time + g_config->dt,
          tau = 0.;
     int nx = mesh->nx,
@@ -99,8 +97,8 @@ void EMC(Mesh *mesh, int iteration) {
         // check if a particle is going out from the left edge of the device
         direction = direction_t.LEFT;
         if(mc_does_particle_exist(particle)) {
-            i = (int)(particle->x / dx + 1.5);
-            j = (int)(particle->y / dy + 1.5);
+            int i = (int)(particle->x / dx + 1.5);
+            int j = (int)(particle->y / dy + 1.5);
             if(i<=1 && mc_is_boundary_contact(direction, j)) {
                 mc_remove_particle(particle);
                 if(npt[j][direction]<(g_config->particles_per_cell/2) && j>1 && j<ny+1){
@@ -117,8 +115,8 @@ void EMC(Mesh *mesh, int iteration) {
         // check if a particle is going out from the bottom edge of the device
         direction = direction_t.BOTTOM;
         if(mc_does_particle_exist(particle)) {
-            i = (int)(particle->x / dx + 1.5);
-            j = (int)(particle->y / dy + 1.5);
+            int i = (int)(particle->x / dx + 1.5);
+            int j = (int)(particle->y / dy + 1.5);
             if(j<=1 && mc_is_boundary_contact(direction, i)) {
                 mc_remove_particle(particle);
                 if(npt[i][direction]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
@@ -135,8 +133,8 @@ void EMC(Mesh *mesh, int iteration) {
         // check if a particle is going out from the upper edge of the device
         direction = direction_t.TOP;
         if(mc_does_particle_exist(particle)) {
-            i = (int)(particle->x / dx + 1.5);
-            j = (int)(particle->y / dy + 1.5);
+            int i = (int)(particle->x / dx + 1.5);
+            int j = (int)(particle->y / dy + 1.5);
             if(j>=ny+1 && mc_is_boundary_contact(direction, i)) {
                 mc_remove_particle(particle);
                 if(npt[i][direction]<(g_config->particles_per_cell/2) && (i>1 || i<nx+1)){
@@ -173,7 +171,7 @@ void EMC(Mesh *mesh, int iteration) {
 
 
     // create particles at ohmic contacts of the bottom edge
-    for(i=1; i<=nx+1; i++) {
+    for(int i=1; i<=nx+1; i++) {
         int direction = direction_t.BOTTOM;
         if(mc_is_boundary_ohmic(direction, i)) {
             int ni=(g_config->particles_per_cell/2)-npt[i][direction];
@@ -181,7 +179,7 @@ void EMC(Mesh *mesh, int iteration) {
                 ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
-                for(j=1;j<=ni;j++) {
+                for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
                     mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
@@ -191,7 +189,7 @@ void EMC(Mesh *mesh, int iteration) {
     }
 
     // create particles at ohmic contacts of the upper edge
-    for(i=1; i<=nx+1; i++) {
+    for(int i=1; i<=nx+1; i++) {
         int direction = direction_t.TOP;
         if(mc_is_boundary_ohmic(direction, i)) {
             int ni=(g_config->particles_per_cell/2)-npt[i][direction];
@@ -199,7 +197,7 @@ void EMC(Mesh *mesh, int iteration) {
                 ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
-                for(j=1;j<=ni;j++) {
+                for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
                     mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
@@ -209,7 +207,7 @@ void EMC(Mesh *mesh, int iteration) {
     }
 
     // create particles at ohmic contacts of the right edge
-    for(i=1; i<=ny+1; i++) {
+    for(int i=1; i<=ny+1; i++) {
         int direction = direction_t.RIGHT;
         if(mc_is_boundary_ohmic(direction, i)) {
             int ni=(g_config->particles_per_cell/2)-npt[i][direction];
@@ -217,7 +215,7 @@ void EMC(Mesh *mesh, int iteration) {
                 ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
-                for(j=1;j<=ni;j++) {
+                for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
                     mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }
@@ -227,7 +225,7 @@ void EMC(Mesh *mesh, int iteration) {
     }
 
     // create particles at ohmic contacts of the left edge
-    for(i=1; i<=ny+1; i++) {
+    for(int i=1; i<=ny+1; i++) {
         int direction = direction_t.LEFT;
         if(mc_is_boundary_ohmic(direction, i)) {
             int ni=(g_config->particles_per_cell/2)-npt[i][direction];
@@ -235,7 +233,7 @@ void EMC(Mesh *mesh, int iteration) {
                 ni=g_config->particles_per_cell/4-npt[i][direction];
             }
             if(ni > 0) {
-                for(j=1;j<=ni;j++){
+                for(int j=1;j<=ni;j++){
                     n=g_config->num_particles+j;
                     mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
                 }

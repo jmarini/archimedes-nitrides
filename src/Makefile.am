@@ -60,4 +60,4 @@ archimedes_SOURCES = \
 	vec.h
 
 archimedes_LDADD = -lm
-archimedes_CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -pedantic -std=c11 -O3 -fms-extensions
+archimedes_CFLAGS = -Wall -Wextra -pedantic -std=c11 -O3 -fms-extensions -Wno-unused-parameter -Wno-unused-result -Wduplicated-cond  -Wduplicated-branches  -Wlogical-op -Wrestrict -Wnull-dereference  -Wjump-misses-init -Wdouble-promotion -Wshadow -Wformat=2
