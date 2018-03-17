@@ -59,7 +59,8 @@ Direction direction_t = {.BOTTOM=0, .RIGHT=1, .TOP=2, .LEFT=3};
 Boundary boundary_t = {.INSULATOR=0, .SCHOTTKY=1, .OHMIC=2, .VACUUM=3};
 
 
-real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values, array indexed by mesh node and value type:
+real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated values,
+                                          //    array indexed by mesh node and value type:
                                           //  type = 0: unused
                                           //  type = 1: unused
                                           //  type = 2: particle x-velocity
@@ -67,10 +68,12 @@ real moving_average[NXM+1][NYM+1][MN3+1]; // Holds moving average of calculated 
                                           //  type = 4: particle energy
 real BKTQ;                          // precomputed constant, k * T_lattice / Q [eV]
 real GM[NOAMTIA+1];                 // total scattering rate, Gamma=1/t0, array indexed by material
-real SWK[NOAMTIA+1][4][14][DIME+1]; // scattering rate, indexed by material, valley, phonon mode/scattering type, energy step (i*DE)
+real SWK[NOAMTIA+1][4][14][DIME+1]; // scattering rate, indexed by material, valley,
+                                    //    phonon mode/scattering type, energy step (i*DE)
 real QD2;                           // precomputed constant, qd^2, qd=sqrt(q * cimp / ktq / eps)
 real XVAL[NOAMTIA+1];         // x-mole fraction, array indexed by material
-real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure, array indexed by material
+real CB_FULL[NOAMTIA+1][11];  // polynomial coefficients (up to 9th order) for full band structure,
+                              //   array indexed by material
 
 FILE *input_fp;
 FILE *emitted_fp;
@@ -240,7 +243,9 @@ int main(int argc, char *argv[]) {
         for(int i = 1; i <= g_mesh->nx + 1; ++i) {
             for(int j = 1; j <= g_mesh->ny + 1; ++j) {
                 Node *node = mc_node(i, j);
-                surface_band_bending(g_mesh, node, g_config->surface_bb_delV, g_config->surface_bb_direction);
+                surface_band_bending(g_mesh, node,
+                                     g_config->surface_bb_delV,
+                                     g_config->surface_bb_direction);
             }
         }
 
@@ -322,7 +327,12 @@ int main(int argc, char *argv[]) {
         for(int n = 0; n < g_config->num_particles; ++n) {
             valley_occupation[g_mesh->particles[n].valley] += 1;
         }
-        fprintf(valley_occupation_fp, "%d %g %d %d %d\n", it, g_config->time, valley_occupation[1], valley_occupation[2], valley_occupation[3]);
+        fprintf(valley_occupation_fp, "%d %g %d %d %d\n",
+                it,
+                g_config->time,
+                valley_occupation[1],
+                valley_occupation[2],
+                valley_occupation[3]);
 
         fprintf(particles_fp, "%d %g %lld\n", it, g_config->time, g_config->num_particles);
         if(it % 10 == 0) {
@@ -350,7 +360,9 @@ int main(int argc, char *argv[]) {
     int after = g_config->num_particles;
     if(g_config->photoexcitation_flag == ON) {
         printf("%d -> %d\n", before, after);
-        printf("%d (%lf%%) Particles emitted\n", before - after, 100.0 * (double)(before - after) / (double)before);
+        printf("%d (%lf%%) Particles emitted\n",
+               before - after,
+               100.0 * (double)(before - after) / (double)before);
     }
 
     binarytime=time(NULL);

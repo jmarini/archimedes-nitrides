@@ -479,7 +479,9 @@ void read_input_file(FILE *fp) {
            g_mesh->nodes[i][j].donor_conc = conc;
            g_mesh->nodes[i][j].e.density = conc;
         }
-    if(g_config->simulation_model==MEPE || g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH)
+    if(g_config->simulation_model==MEPE ||
+       g_config->simulation_model==MEPEH ||
+       g_config->simulation_model==MEPH)
     for(int i=1;i<=g_mesh->nx+1;i++)
       for(int j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
@@ -533,7 +535,9 @@ void read_input_file(FILE *fp) {
       printf("%s: not valid acceptor density\n",progname);
       exit(EXIT_FAILURE);
     }
-    if(g_config->simulation_model==MEPEH || g_config->simulation_model==MEPH || g_config->simulation_model==MCEH)
+    if(g_config->simulation_model==MEPEH ||
+       g_config->simulation_model==MEPH ||
+       g_config->simulation_model==MCEH)
     for(int i=1;i<=g_mesh->nx+1;i++)
       for(int j=1;j<=g_mesh->ny+1;j++){
         if((i-0.5)*g_mesh->dx>=xmin && (i-1.5)*g_mesh->dx<=xmax
@@ -640,8 +644,10 @@ void read_input_file(FILE *fp) {
     }
 // read the hole density for the reservoir at contact
 // if and only if the contact is ohmic
-    if(k==2 && (g_config->simulation_model==MCH || g_config->simulation_model==MEPH
-                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)){
+    if(k==2 && (g_config->simulation_model==MCH ||
+                g_config->simulation_model==MEPH ||
+                g_config->simulation_model==MCEH ||
+                g_config->simulation_model==MEPEH)) {
       fscanf(fp,"%lf",&num);
       denshole=num;
     }
@@ -676,8 +682,10 @@ void read_input_file(FILE *fp) {
           EDGE[i][j][2]=NGATE;
           g_mesh->edges[i][j].n = NGATE;
         }
-        if(k==1 && (g_config->simulation_model==MCH || g_config->simulation_model==MEPH
-                   || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)) {
+        if(k==1 && (g_config->simulation_model==MCH ||
+                    g_config->simulation_model==MEPH ||
+                    g_config->simulation_model==MCEH ||
+                    g_config->simulation_model==MEPEH)) {
           EDGE[i][j][3]=NI*NI/NGATE;
           g_mesh->edges[i][j].p = NI * NI / NGATE;
         }
@@ -688,8 +696,10 @@ void read_input_file(FILE *fp) {
         g_mesh->edges[i][j].potential = potential;
         g_mesh->edges[i][j].n = dens;
         g_mesh->edges[i][j].p = 0.;
-        if(g_config->simulation_model==MCH || g_config->simulation_model==MEPH
-          || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH)
+        if(g_config->simulation_model==MCH ||
+           g_config->simulation_model==MEPH ||
+           g_config->simulation_model==MCEH ||
+           g_config->simulation_model==MEPEH)
          EDGE[i][j][3]=denshole;
           g_mesh->edges[i][j].p = denshole;
       }
@@ -711,8 +721,10 @@ void read_input_file(FILE *fp) {
     else if(k==2){
      printf("CONTACT %s %g %g %s %g %g ",
             pos,ipos,fpos,kind,potential,dens);
-     if(g_config->simulation_model==MCH || g_config->simulation_model==MEPH
-        || g_config->simulation_model==MCEH || g_config->simulation_model==MEPEH) printf("%g ",denshole);
+     if(g_config->simulation_model==MCH ||
+        g_config->simulation_model==MEPH ||
+        g_config->simulation_model==MCEH ||
+        g_config->simulation_model==MEPEH) printf("%g ",denshole);
      printf("---> Ok\n");
     }
   }
@@ -927,7 +939,8 @@ void read_input_file(FILE *fp) {
    g_config->qep_alpha = tmp;
    fscanf(fp,"%lf",&tmp);
    g_config->qep_gamma = tmp;
-   printf("QUAT. EFF. POT. PARAMETERS\nALPHA = %f --> Ok\nGAMMA = %f --> Ok\n",g_config->qep_alpha,g_config->qep_gamma);
+   printf("QUAT. EFF. POT. PARAMETERS\nALPHA = %f --> Ok\n"
+          "GAMMA = %f --> Ok\n",g_config->qep_alpha,g_config->qep_gamma);
   }
   else if(strcmp(s,"QEP_MODEL")==0){
 // Specify the QEP model to be simulated
@@ -1070,7 +1083,9 @@ void read_input_file(FILE *fp) {
         g_config->max_doping = g_mesh->nodes[i][j].donor_conc;
     }
    }
- g_config->carriers_per_superparticle = g_config->max_doping * g_mesh->dx * g_mesh->dy / g_config->particles_per_cell;
+ g_config->carriers_per_superparticle = g_config->max_doping
+                                      * g_mesh->dx * g_mesh->dy
+                                      / g_config->particles_per_cell;
  printf("Max Doping: %.2e\n"
         "Carriers per Superparticle: %.2e\n",
         g_config->max_doping, g_config->carriers_per_superparticle);

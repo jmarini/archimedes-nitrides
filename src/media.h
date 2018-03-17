@@ -82,9 +82,12 @@ void media(Mesh *mesh, int iteration) {
                 moving_average[i][j][4] = ener[i][j];
             }
             else {
-                moving_average[i][j][2] = g_config->avg_alpha * xvel[i][j] + (1. - g_config->avg_alpha) * moving_average[i][j][2];
-                moving_average[i][j][3] = g_config->avg_alpha * yvel[i][j] + (1. - g_config->avg_alpha) * moving_average[i][j][3];
-                moving_average[i][j][4] = g_config->avg_alpha * ener[i][j] + (1. - g_config->avg_alpha) * moving_average[i][j][4];
+                moving_average[i][j][2] = g_config->avg_alpha * xvel[i][j]
+                                        + (1. - g_config->avg_alpha) * moving_average[i][j][2];
+                moving_average[i][j][3] = g_config->avg_alpha * yvel[i][j]
+                                        + (1. - g_config->avg_alpha) * moving_average[i][j][3];
+                moving_average[i][j][4] = g_config->avg_alpha * ener[i][j]
+                                        + (1. - g_config->avg_alpha) * moving_average[i][j][4];
             }
         }
     }

@@ -107,7 +107,8 @@ int poisson_boundary_conditions(Mesh *mesh) {
         // ===========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.BOTTOM, i) || mc_is_boundary_vacuum(direction_t.BOTTOM, i)) {
+        if(mc_is_boundary_insulator(direction_t.BOTTOM, i) ||
+           mc_is_boundary_vacuum(direction_t.BOTTOM, i)) {
             // if there is no potential on insulator
             mesh->nodes[i][1].potential = mesh->nodes[i][2].potential;
 
@@ -127,7 +128,8 @@ int poisson_boundary_conditions(Mesh *mesh) {
         // ==========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.TOP, i) || mc_is_boundary_vacuum(direction_t.TOP, i)) {
+        if(mc_is_boundary_insulator(direction_t.TOP, i) ||
+           mc_is_boundary_vacuum(direction_t.TOP, i)) {
             // if there is no potential on insulator
             mesh->nodes[i][ny + 1].potential = mesh->nodes[i][ny    ].potential;
 
@@ -151,7 +153,8 @@ int poisson_boundary_conditions(Mesh *mesh) {
         // =========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.LEFT, j) || mc_is_boundary_vacuum(direction_t.LEFT, j)) {
+        if(mc_is_boundary_insulator(direction_t.LEFT, j) ||
+           mc_is_boundary_vacuum(direction_t.LEFT, j)) {
             mesh->nodes[1][j].potential = mesh->nodes[2][j].potential;
 
             // if there is potential on the insulator
@@ -170,7 +173,8 @@ int poisson_boundary_conditions(Mesh *mesh) {
         // ==========
 
         // insulator
-        if(mc_is_boundary_insulator(direction_t.RIGHT, j) || mc_is_boundary_vacuum(direction_t.RIGHT, j)) {
+        if(mc_is_boundary_insulator(direction_t.RIGHT, j) ||
+           mc_is_boundary_vacuum(direction_t.RIGHT, j)) {
             mesh->nodes[nx + 1][j].potential = mesh->nodes[nx - 1][j].potential;
 
             // if there is potential on the insulator
@@ -315,8 +319,10 @@ int electric_field(Mesh *mesh) {
 int magnetic_field(Mesh *mesh) {
     for(int i = 2; i <= mesh->nx; ++i) {
         for(int j = 2; j <= mesh->ny; ++j) {
-            double delEx = 0.5 * (mesh->nodes[i  ][j+1].efield.x - mesh->nodes[i  ][j-1].efield.x) / mesh->dy;
-            double delEy = 0.5 * (mesh->nodes[i+1][  j].efield.y - mesh->nodes[i-1][  j].efield.y) / mesh->dx;
+            double delEx = 0.5 * (mesh->nodes[i  ][j+1].efield.x
+                         - mesh->nodes[i  ][j-1].efield.x) / mesh->dy;
+            double delEy = 0.5 * (mesh->nodes[i+1][  j].efield.y
+                         - mesh->nodes[i-1][  j].efield.y) / mesh->dx;
 
             mesh->nodes[i][j].magnetic_field = 0.25
                 * (mesh->nodes[i+1][j].magnetic_field + mesh->nodes[i][j+1].magnetic_field +
@@ -335,7 +341,8 @@ static double depletion_width(Mesh *mesh, Node *node, double delV, double doping
 
 
 int surface_band_bending(Mesh *mesh, Node *node, double delV, int direction) {
-    double doping = node->donor_conc > node->acceptor_conc ? node->donor_conc : node->acceptor_conc;
+    double doping = node->donor_conc > node->acceptor_conc
+                  ? node->donor_conc : node->acceptor_conc;
     double wdep = depletion_width(mesh, node, delV, doping);
     Vec2 pos = {mesh->dx * node->i, mesh->dy * node->j};
 

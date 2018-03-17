@@ -1,3 +1,28 @@
+/* particle_creation.c -- This file is part of Archimedes release 1.2.0.
+   Archimedes is a simulator for Submicron 2D III-V semiconductor
+   Devices. It implements the Monte Carlo method
+   for the simulation of the semiclassical Boltzmann equation for both
+   electrons and holes. It includes some quantum effects by means
+   of effective potential method. It is also able to simulate applied
+   magnetic fields along with self consistent Faraday equation.
+
+   Copyright (C) 2004-2011 Jean Michel Sellier
+   <jeanmichel.sellier@gmail.com>
+   <jsellier@purdue.edu>
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "particle_creation.h"
 
 #include <math.h>
@@ -179,7 +204,8 @@ static double select_time(Material *material, double total_scattering_rate[NOAMT
 
 /* Create particle at node
  */
-Particle create_particle(Mesh *mesh, Node *node, double upper_valley, double total_scattering_rate[NOAMTIA+1]) {
+Particle create_particle(Mesh *mesh, Node *node,
+                         double upper_valley, double total_scattering_rate[NOAMTIA+1]) {
     double energy = select_energy(node);
     int valley = select_valley(node->material, upper_valley);
     Vec3 k = select_isotropic_k(node->material, energy, valley);
@@ -201,7 +227,9 @@ Particle create_particle(Mesh *mesh, Node *node, double upper_valley, double tot
 
 /* Create particle at edge
  */
-Particle create_edge_particle(Mesh *mesh, int index, int direction, double start_time, double upper_valley, double total_scattering_rate[NOAMTIA+1]) {
+Particle create_edge_particle(Mesh *mesh, int index, int direction,
+                              double start_time, double upper_valley,
+                              double total_scattering_rate[NOAMTIA+1]) {
     Vec2 pos = select_edge_position(mesh, index, direction);
     int i = (int)(pos.x / mesh->dx + 1.5);
     int j = (int)(pos.y / mesh->dy + 1.5);

@@ -87,7 +87,8 @@ void EMC(Mesh *mesh, int iteration) {
                     npt[j][direction]++;
                     particle->valley = 1;
                 }
-                else if(npt[j][direction] < (g_config->particles_per_cell/4) && (j <= 1 || j >= ny+1)){
+                else if(npt[j][direction] < (g_config->particles_per_cell/4) &&
+                        (j <= 1 || j >= ny+1)){
                     npt[j][direction]++;
                     particle->valley = 1;
                 }
@@ -105,7 +106,8 @@ void EMC(Mesh *mesh, int iteration) {
                     npt[j][direction]++;
                     particle->valley = 1;
                 }
-                else if(npt[j][direction]<(g_config->particles_per_cell/4) && (j<=1 || j>=ny+1)){
+                else if(npt[j][direction]<(g_config->particles_per_cell/4) &&
+                        (j<=1 || j>=ny+1)){
                     npt[j][direction]++;
                     particle->valley = 1;
                 }
@@ -181,7 +183,8 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
+                    mesh->particles[n] = create_edge_particle(
+                        mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -199,7 +202,8 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
+                    mesh->particles[n] = create_edge_particle(
+                        mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -217,7 +221,8 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(int j=1;j<=ni;j++) {
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
+                    mesh->particles[n] = create_edge_particle(
+                        mesh, i, direction, g_config->time, 0.8, GM);
                 }
             g_config->num_particles += ni;
             }
@@ -235,7 +240,8 @@ void EMC(Mesh *mesh, int iteration) {
             if(ni > 0) {
                 for(int j=1;j<=ni;j++){
                     n=g_config->num_particles+j;
-                    mesh->particles[n] = create_edge_particle(mesh, i, direction, g_config->time, 0.8, GM);
+                    mesh->particles[n] = create_edge_particle(
+                        mesh, i, direction, g_config->time, 0.8, GM);
                 }
                 g_config->num_particles += ni;
             }

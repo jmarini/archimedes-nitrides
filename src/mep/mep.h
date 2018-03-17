@@ -46,24 +46,37 @@ double gy2d[NXM+1][NYM+1][MN3+1];
 double c11[7],c12[7],c21[7],c22[7];
 double u[7],f[7],g[7],cw[7];
 
-double u2d[NXM+1][NYM+1][MN3+1];    // Hold summary values for electrons per cell, array indexed by mesh node and value type:
+double u2d[NXM+1][NYM+1][MN3+1];    // Hold summary values for electrons per cell,
+                                    //    array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: electron density
-                                    //  type = 2: running sum of electron x-velocity (divide by MEDIA to get average)
-                                    //  type = 3: running sum of electron y-velocity (divide by MEDIA to get average)
-                                    //  type = 4: running sum of electron energy     (divide by MEDIA to get average)
-double h2d[NXM+1][NYM+1][MN3+1];    // Hold summary values for holes per cell, array indexed by mesh node and value type:
+                                    //  type = 2: running sum of electron x-velocity
+                                    //              divide by MEDIA to get average
+                                    //  type = 3: running sum of electron y-velocity
+                                    //              divide by MEDIA to get average
+                                    //  type = 4: running sum of electron energy
+                                    //              divide by MEDIA to get average
+double h2d[NXM+1][NYM+1][MN3+1];    // Hold summary values for holes per cell,
+                                    //    array indexed by mesh node and value type:
                                     //  type = 0: quantum effective potential
                                     //  type = 1: hole density
-                                    //  type = 2: running sum of hole x-velocity (divide by MEDIA to get average)
-                                    //  type = 3: running sum of hole y-velocity (divide by MEDIA to get average)
-                                    //  type = 4: running sum of hole energy     (divide by MEDIA to get average)
-double EDGE[4][NXM+NYM+1][4];       // stores information on edges, array indexed by edge type (0=bottom, 1=right, 2=top, 3=left),
-                                    //                                               cell index (i or j),
-                                    //                                               information type (0=boundary type (0=insulator, 1=schottky, 2=ohmic),
-                                    //                                                                 1=potential,
-                                    //                                                                 2=contact electron density,
-                                    //                                                                 3=contact hole density)
+                                    //  type = 2: running sum of hole x-velocity
+                                    //              divide by MEDIA to get average
+                                    //  type = 3: running sum of hole y-velocity
+                                    //              divide by MEDIA to get average
+                                    //  type = 4: running sum of hole energy
+                                    //              divide by MEDIA to get average
+double EDGE[4][NXM+NYM+1][4];       // stores information on edges, array indexed by edge type
+                                    //   (0=bottom, 1=right, 2=top, 3=left),
+                                    //   cell index (i or j),
+                                    //   information type:
+                                    //      0 = boundary type
+                                    //        0 = insulator
+                                    //        1 = schottky
+                                    //        2 = ohmic,
+                                    //      1 = potential
+                                    //      2 = contact electron density,
+                                    //      3 = contact hole density)
 
 #include "mep/mep_interpolation.h"
 #include "mep/electron_bcs.h"

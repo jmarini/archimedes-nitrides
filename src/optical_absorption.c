@@ -1,3 +1,29 @@
+/* optical_absorption.c -- This file is part of Archimedes release 1.2.0.
+   Archimedes is a simulator for Submicron 2D III-V semiconductor
+   Devices. It implements the Monte Carlo method
+   for the simulation of the semiclassical Boltzmann equation for both
+   electrons and holes. It includes some quantum effects by means
+   of effective potential method. It is also able to simulate applied
+   magnetic fields along with self consistent Faraday equation.
+
+   Copyright (C) 2004-2011 Jean Michel Sellier
+   <jeanmichel.sellier@gmail.com>
+   <jsellier@purdue.edu>
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 3, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "optical_absorption.h"
 
 #include "configuration.h"
@@ -32,13 +58,16 @@ double optical_joint_DOS(Material material, int conduction_band, int valence_ban
 // energy
 double optical_transition_rate(Material material, int conduction_band,
                                int valence_band, double photon_energy) {
-    if(photon_energy < material.Eg + material.cb.emin[conduction_band] + material.vb.emin[valence_band]) {
+    if(photon_energy < material.Eg
+                     + material.cb.emin[conduction_band]
+                     + material.vb.emin[valence_band]) {
         return 0.; // photon energy too small
     }
 
     double prefactor = PI * HBAR * Q * Q * material.Eg
                      / (3. * material.eps_static * EPS0 * M * photon_energy);
-    double rate = prefactor * optical_joint_DOS(material, conduction_band, valence_band, photon_energy);
+    double rate = prefactor
+                * optical_joint_DOS(material, conduction_band, valence_band, photon_energy);
     return rate;
 }
 
@@ -48,7 +77,8 @@ double optical_transition_rate(Material material, int conduction_band,
 double absorption_coefficient(Material material, double photon_energy) {
     double rate = 0.;
     for(int v = 0; v < 3; ++v) {
-        rate += optical_transition_rate(material, 1, v, photon_energy) * sqrt(material.eps_static) / VLIGHT;
+        rate += optical_transition_rate(material, 1, v, photon_energy)
+              * sqrt(material.eps_static) / VLIGHT;
     }
 
     return rate * material.abs_correction;
@@ -144,9 +174,11 @@ int photoexcite_carriers(Mesh *mesh, double photon_energy,
                 double r = rnd();
                 for(int v = 0; v < 3; ++v) {
                     if(r <= transistion_rate[node->material->id][e][v]) {
-                        mesh->particles[p] = create_photoexcited_carrier(node, photon_energy, total_scattering_rate, 1, v);
-                        if(g_config->tracking_output == ON
-                           && mesh->particles[p].id % g_config->tracking_mod == 0) {
+                        mesh->particles[p] = create_photoexcited_carrier(
+                          node, photon_energy, total_scattering_rate, 1, v);
+
+                        if(g_config->tracking_output == ON &&
+                           mesh->particles[p].id % g_config->tracking_mod == 0) {
                           mc_print_tracking(0, &(mesh->particles[p]));
                         }
                         ++p;
